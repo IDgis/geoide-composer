@@ -13,33 +13,65 @@
             <tr class="service-row {{#if isSelectedService}}selected{{/if}}">
               <td>{{label}}</td>
               <td>{{service_type}}</td>
-              <td style="width: 70px">{{> quickRemoveButton collection=Services _id=this._id class="btn btn-warning delete"}}</td>
+              <td style='white-space: nowrap'>
+	              <button class="btn btn-default edit-service" >
+						<a class="glyphicon glyphicon-edit" ></a>
+				  </button>
+	              <a class="btn btn-warning delete">
+						<span class="glyphicon glyphicon-remove"></span>
+				  </a>  
+			  </td>
             </tr>
           {{/each}}
         </tbody>
+
       </table>
- 	  <div class="form-group">
-        <label><input type="checkbox" class="autosave-toggle" value="" checked="{{autoSaveMode}}"> autosave?</label>
-      </div>
-      <div class="panel panel-default">
+      <div type="button" class="btn btn-success col-sm-12 insert-service">
+		<span class="glyphicon glyphicon-plus"></span> Maak een nieuwe service ...
+	  </div>
+ 	  <div id="service-update">
+		 <div class="form-group">
+		      <label><input type="checkbox" class="autosave-toggle" value="" checked="{{autoSaveMode}}"> autosave?</label>
+		  </div>
+	      <div class="panel panel-default" id="service-update-panel">
+	        <div class="panel-heading">
+	          <h4>Wijzig service</h4>
+	        </div>
+	        <div class="panel-body">
+		    	{{#autoForm collection="Services" doc=selectedServiceDoc id="updateServiceForm" type="update" autosave=autoSaveMode}}
+			        <fieldset>
+			            {{> afQuickField name="label"}}
+			        	{{> afQuickField name="service_endpoint"}}
+			        	{{> afQuickField name='service_type'}}
+			        	{{> afQuickField name='version'}}
+			        </fieldset>
+			        {{#unless autoSaveMode}}
+						  <div class="form-group">
+						    <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
+						    <button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
+						  </div>
+					{{/unless}}
+		
+				{{/autoForm}}
+			</div>
+		</div>	
+	</div>	
+	<div class="panel panel-default" id="service-insert-panel">
         <div class="panel-heading">
-          <h4>Wijzig service</h4>
+          <h4>Voeg service toe</h4>
         </div>
         <div class="panel-body">
-	    	{{#autoForm collection="Services" doc=selectedServiceDoc id="updateServiceForm" type="update" autosave=autoSaveMode}}
+	    	{{#autoForm collection="Services" doc=this id="insertServiceForm" type="insert" autosave=autoSaveMode}}
 		        <fieldset>
 		            {{> afQuickField name="label"}}
 		        	{{> afQuickField name="service_endpoint"}}
 		        	{{> afQuickField name='service_type'}}
 		        	{{> afQuickField name='version'}}
 		        </fieldset>
-		        {{#unless autoSaveMode}}
-					  <div class="form-group">
-					    <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
-					    <button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
-					  </div>
-				{{/unless}}
-	
+				  <div class="form-group">
+				    <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
+				    <button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
+				  </div>
 			{{/autoForm}}
 		</div>
 	</div>	

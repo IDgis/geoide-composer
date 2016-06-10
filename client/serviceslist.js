@@ -29,9 +29,11 @@ Template.serviceslist.helpers({
 });
 
 Template.serviceslist.events({
-  'click .service-row': function () {
-	  console.log("hallo");
+  'click .edit-service': function () { 
     Session.set("selectedServiceId", this._id);
+  },
+  'click .delete': function() {
+	  console.log('hallo'); 
   },
   'change .autosave-toggle': function () {
 	  console.log("ook hallo");
