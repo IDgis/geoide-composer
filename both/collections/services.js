@@ -11,17 +11,23 @@ Services.attachSchema(new SimpleSchema({
 	service_type: {
 		type: String,
 		label: "Type",
-		allowedValues: ["WMS", "WFS", "TMS"],
+		allowedValues: ['WMS', 'WFS', 'TMS'],
 		autoform: {
             options: [
                 {label: "WMS", value: "WMS"},
-                {label: "TMS", value: "TMS"},
-                {label: "WFS", value: "WFS"}
+                {label: "WFS", value: "WFS"},
+                {label: "TMS", value: "TMS"}
             ]
         }
 	},
 	version: {
 		type: String,
-		label: "Type"
+		label: "Version"
 	}
 }));
+
+Services.allow({
+	  insert: function () { return true; },
+	  update: function () { return true; },
+	  remove: function () { return true; }
+})

@@ -1,0 +1,13 @@
+<template name="service">
+    <h1>Edit Service</h1>
+    {{#autoForm collection="Services" doc=this id="updateServiceForm" type="update"}}
+        <fieldset>
+            {{> afQuickField name="label"}}
+        	{{> afQuickField name="service_endpoint"}}
+        	{{> afQuickField name='service_type'}}
+        	{{> afQuickField name='version'}}
+        </fieldset>
+        <button type="submit" class="btn btn-primary">Opslaan</button>
+    {{/autoForm}}
+    <a class="btn" href="/">Terug</a>
+</template>
