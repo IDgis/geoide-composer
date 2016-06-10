@@ -1,0 +1,48 @@
+<template name="serviceslist">
+       <h2>Service List</h2>
+      <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <td>Naam</td>
+            <td>Type</td>
+            <td style="width: 70px"></td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each services}}
+            <tr class="service-row {{#if isSelectedService}}selected{{/if}}">
+              <td>{{label}}</td>
+              <td>{{service_type}}</td>
+              <td style="width: 70px">{{> quickRemoveButton collection=Services _id=this._id class="btn btn-warning delete"}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+ 	  <div class="form-group">
+        <label><input type="checkbox" class="autosave-toggle" value="" checked="{{autoSaveMode}}"> autosave?</label>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>Wijzig service</h4>
+        </div>
+        <div class="panel-body">
+	    	{{#autoForm collection="Services" doc=selectedServiceDoc id="updateServiceForm" type="update" autosave=autoSaveMode}}
+		        <fieldset>
+		            {{> afQuickField name="label"}}
+		        	{{> afQuickField name="service_endpoint"}}
+		        	{{> afQuickField name='service_type'}}
+		        	{{> afQuickField name='version'}}
+		        </fieldset>
+		        {{#unless autoSaveMode}}
+					  <div class="form-group">
+					    <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
+					    <button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
+					  </div>
+				{{/unless}}
+	
+			{{/autoForm}}
+		</div>
+	</div>	
+		
+
+</template>
