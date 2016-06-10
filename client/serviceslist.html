@@ -42,8 +42,16 @@
 			        <fieldset>
 			            {{> afQuickField name="label"}}
 			        	{{> afQuickField name="service_endpoint"}}
-			        	{{> afQuickField name='service_type'}}
-			        	{{> afQuickField name='version'}}
+			        	{{> afQuickField name='service_type' options="allowed" noselect=true}}
+		        	{{#if afFieldValueIs name="service_type" value="WMS"}}
+			        	{{> afFieldInput name='version' type='select' options=wmsVersions }}
+  					{{/if}}
+		        	{{#if afFieldValueIs name="service_type" value="WFS"}}
+			        	{{> afFieldInput name='version' type='select' options=wfsVersions }}
+  					{{/if}}
+		        	{{#if afFieldValueIs name="service_type" value="TMS"}}
+			        	{{> afFieldInput name='version' type='select' options=tmsVersions }}
+					{{/if}}
 			        </fieldset>
 			        {{#unless autoSaveMode}}
 						  <div class="form-group">
@@ -65,8 +73,17 @@
 		        <fieldset>
 		            {{> afQuickField name="label"}}
 		        	{{> afQuickField name="service_endpoint"}}
-		        	{{> afQuickField name='service_type'}}
-		        	{{> afQuickField name='version'}}
+		        	{{> afQuickField name='service_type' options="allowed" noselect=true}}
+		        	{{#if afFieldValueIs name="service_type" value="WMS"}}
+			        	{{> afFieldInput name='version' type='select' noselect=true options=wmsVersions }}
+  					{{/if}}
+		        	{{#if afFieldValueIs name="service_type" value="WFS"}}
+			        	{{> afFieldInput name='version' type='select' noselect=true options=wfsVersions }}
+  					{{/if}}
+		        	{{#if afFieldValueIs name="service_type" value="TMS"}}
+			        	{{> afFieldInput name='version' type='select' noselect=true options=tmsVersions }}
+					{{/if}}
+		        	
 		        </fieldset>
 				  <div class="form-group">
 				    <button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
