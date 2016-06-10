@@ -1,8 +1,8 @@
 Services = new Mongo.Collection("services");
 Services.attachSchema(new SimpleSchema({
 	label: {
-			type: String,
-			label: "Naam"
+		type: String,
+		label: "Naam"
 	},
 	service_endpoint: {
 		type: String,
@@ -13,7 +13,7 @@ Services.attachSchema(new SimpleSchema({
 		label: "Type",
 		allowedValues: ['WMS', 'WFS', 'TMS'],
 	  autoform: {
-      defaultValue: 'WFS',
+      defaultValue: 'WMS',
       afFieldInput: {type: 'select-radio-inline'},
 	  }
 	},
