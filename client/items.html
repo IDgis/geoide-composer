@@ -1,0 +1,18 @@
+<template name="items">
+    <h1>Add Item</h1>
+    {{#autoForm collection="Items" id="insertItemForm" type="insert"}}
+    <fieldset>
+        {{> afQuickField name="name"}}
+        {{> afQuickField name="description" rows=6}}
+        {{> afQuickField name='status'}}
+        {{> afQuickField name='tags' type='text'}}
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Insert</button>
+    {{/autoForm}}
+
+    <ul>
+        {{#each items}}
+            <li><a href="{{pathFor 'items.show'}}">{{name}}</a> - {{description}}</li>
+        {{/each}}
+    </ul>
+</template>
