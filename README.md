@@ -8,14 +8,14 @@ Link to tutorial http://www.webtempest.com/meteor-js-autoform-tutorial
 Main change: I use "Items" instead of "Posts" for the main collection in the tutorial and I changed the field names.
 
 
-##RS:
+## RS:
 
 * doc=this has to be added to the update autoform
 * meteor remove accounts-google
 * meteor add accounts-password
 * meteor add msavin:mongol (ctrl-m to get a mongo db popup)
 
-##TODO
+## TODO
 * layout in main.html
 * routing
 * structuur opzet
@@ -27,8 +27,8 @@ Main change: I use "Items" instead of "Posts" for the main collection in the tut
 
 ## structure
 ### old
-* both
-  * collections 
+* both/
+  * collections/ 
       * items.js (schema)
   * router.js (Iron router code )
 * client/
@@ -40,9 +40,17 @@ Main change: I use "Items" instead of "Posts" for the main collection in the tut
   * main.html  (main entrance)
   
 ### new
-* both
-  * collections 
-      * service.js (schema)
+* both/
+  * collections/ 
+      * items.js (schema)
   * router.js (Iron router code )
+* client/
+  * autoformHooks/
+    * items.js
+  * item-add.html (was items.html)
+  * item-edit.html (was item.html)
+  * items-list.html (was items.html)
+  * items-helpers.js (was items.js)
+  
 
   
