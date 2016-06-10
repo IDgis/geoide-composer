@@ -1,0 +1,18 @@
+<template name="services">
+    <h1>Add Service</h1>
+    {{#autoForm collection="Services" id="insertServiceForm" type="insert"}}
+    <fieldset>
+        {{> afQuickField name="label"}}
+        {{> afQuickField name="service_endpoint"}}
+        {{> afQuickField name='service_type'}}
+        {{> afQuickField name='version'}}
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Insert</button>
+    {{/autoForm}}
+
+    <ul>
+        {{#each services}}
+            <li><a href="{{pathFor 'services.show'}}">{{label}}</a> - {{type}}</li>
+        {{/each}}
+    </ul>
+</template>

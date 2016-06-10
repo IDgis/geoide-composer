@@ -1,11 +1,10 @@
 Router.configure({
     layoutTemplate: 'main'
 });
-Router.route('/', 'items');
-Router.route('/items/:_id', function () {
-    var item = Items.findOne({_id: this.params._id});
-    console.log("id: " +this.params._id + ", item: " + item.name);
-    this.render('item', {data: item});
+Router.route('/', 'services');
+Router.route('/services/:_id', function () {
+    var service = Services.findOne({_id: this.params._id});
+    this.render('service', {data: service});
 }, {
-    name: 'items.show'
+    name: 'services.show'
 });
