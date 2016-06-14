@@ -1,0 +1,13 @@
+<template name="servicelayerlist">  
+	{{#each servicelayers}}
+		<a class="update-servicelayer">{{label}}</a>
+		<a class="btn btn-sm btn-warning delete">
+				<span class="glyphicon glyphicon-remove"></span>
+		</a>  
+	{{/each}}
+	<div type="button" class="btn btn-success insert-servicelayer">
+		<span class="glyphicon glyphicon-plus"></span> 
+		Voeg een servicelaag toe ...
+	</div> 
+{{>subtemplate}}	
+</template>      
