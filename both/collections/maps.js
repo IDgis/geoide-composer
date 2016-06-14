@@ -2,19 +2,30 @@ Maps = new Mongo.Collection("maps");
 
 
 Maps.attachSchema(new SimpleSchema({
-	label: {
+	text: {
 		type: String,
 		label: "Label"
+	}, 
+	id: {
+		type: String,
 	}, 
 	initial_extent: {
 		type: [Number],
 		label: "Initieel extent"
 	}, 
-	map_layers: {
-		type: [String]
+	children: {
+		type: [Object]
 	}
 
 }));
+
+Maps.insert ({
+	text:  "Afdelingen" ,
+	id: 2,
+	initial_extent: [
+	1,1,1,1],
+	children: [{text: "map-layers"},{text: "test2"}]
+});
 
 //map_layer Object bestaat uit layer, state en map_layers
 //layer is verwijzing naar layer
