@@ -8,3 +8,6 @@ Router.route('/services/:_id', function () {
 }, {
     name: 'services.show'
 });
+Router.route('/js-data', 'js-data');
+Router.route('/reactive-data', 'reactive-data');
+Router.route('/layer', 'layer');
