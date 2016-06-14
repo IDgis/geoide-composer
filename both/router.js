@@ -1,6 +1,7 @@
 Router.configure({
     layoutTemplate: 'main'
 });
+Router.route('/i18n', 'international');
 Router.route('/', 'serviceslist');
 Router.route('/services/:_id', function () {
     var service = Services.findOne({_id: this.params._id});
