@@ -1,9 +1,9 @@
-<template name="servicelayers">
-    {{#autoForm collection="ServiceLayers" doc=this id="updateServiceForm" type="insert"}}
+<template name="servicelayer">
+    {{#autoForm collection="ServiceLayers" doc=selectedServicelayerDoc id="serviceLayerForm" type=formType}}
         <fieldset>
             {{> afQuickField name="label"}}
-        	{{> afQuickField name="name"}}
         	{{> afQuickField name='service' type='select' options=services}}
+        	{{> afQuickField name="name"}}
         </fieldset>
         <button type="submit" class="btn btn-primary">Opslaan</button>
     {{/autoForm}}

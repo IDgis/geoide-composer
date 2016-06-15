@@ -13,8 +13,8 @@ Services.attachSchema(new SimpleSchema({
 		label: "Type",
 		allowedValues: ['WMS', 'WFS', 'TMS'],
 	  autoform: {
-      defaultValue: 'WMS',
-      afFieldInput: {type: 'select-radio-inline'},
+		  defaultValue: 'WMS',
+		  afFieldInput: {type: 'select-radio-inline'},
 	  }
 	},
 	version: {

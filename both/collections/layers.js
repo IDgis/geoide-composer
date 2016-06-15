@@ -12,16 +12,22 @@ Layers.attachSchema(new SimpleSchema({
 	}, 
 	service_layers: {
 		type: [String],
-		label: "servicelagen"
+		label: "servicelagen",
+		optional: true
 	}, 
 	state_visible: {
-		type: Boolean
+		type: Boolean,
+		optional: true,
+		label: "Standaard zichtbaar"
 	},
 	state_query: {
-		type: String
+		type: String,
+		optional: true,
 	},
 	property_applayer: {
-		type: Boolean
+		type: Boolean,
+		optional: true,
+		label: "CRS2 laag"
 	}
 }));
 

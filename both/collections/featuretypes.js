@@ -1,0 +1,1 @@
+FeatureTypes = new Mongo.Collection("featuretypes");

@@ -1,4 +1,5 @@
 ServiceLayers = new Mongo.Collection("servicelayers");
+
 ServiceLayers.attachSchema(new SimpleSchema({
 	label: {
 		type: String,

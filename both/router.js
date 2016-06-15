@@ -12,3 +12,4 @@ Router.route('/services/:_id', function () {
 Router.route('/js-data', 'js-data');
 Router.route('/reactive-data', 'reactive-data');
 Router.route('/layer', 'layer');
+Router.route('/servicelayer', 'servicelayer');
