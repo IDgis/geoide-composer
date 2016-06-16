@@ -1,4 +1,12 @@
 <template name="jsData">
+
+{{#autoForm collection="Tree" id="treeform" type="update" doc=selectedMapDoc}}
+ 		<fieldset>
+            {{> afQuickField name="text"}}
+        </fieldset>   
+ {{/autoForm}}
+
+{{selectedMapId}}
  <div class="row">
 	<div class="col-md-4 col-sm-8 col-xs-8">
 		<button id="createlayer" class="btn btn-success btn-sm"></button>
@@ -12,7 +20,7 @@
   <div class="tree"></div>
   <div class="form-group">
     <button type="submit" id="submit-button" class="btn btn-primary" >Submit</button>
-    <button type="reset" id="reset-button" class="btn btn-default" >Reset Form</button>
+    <button type="reset" id="reset-button" class="btn btn-default" data-mapId='{{selectedMapId}}'>Reset Form</button>
   </div>
   
 </template>

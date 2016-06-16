@@ -1,6 +1,17 @@
 Template.layer.helpers({
-	layer_servicelayer: function() {
-		return Layers.find({},{fields:{service_layers:1}}).fetch();
-	}	
+	selectedLayerDoc: function () {
+		return Layers.findOne({_id: 'mhBkfxmNuNHrE3zMp'});
+	},
+	
+	services: function(){
+		var serv = Services.find({},{fields:{label:1,_id:1}}).fetch();
+		var servoptions = [];
+		serv.forEach(function(entry) {
+			servoptions.push({label:entry.label, value:entry._id});
+		});
+		return servoptions;
+	}
+	
+	
 });
 

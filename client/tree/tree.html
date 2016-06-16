@@ -1,0 +1,11 @@
+<template name="tree">
+ {{#autoForm collection="Tree" doc=this id="treeForm" type="insert"}}
+        <fieldset>
+            {{> afQuickField name="text"}}
+        	{{> afQuickField name="children"}}
+        </fieldset>    
+        <button type="submit" id="submit-button" class="btn btn-primary" >Submit</button>
+ {{/autoForm}}
+  
+
+</template>

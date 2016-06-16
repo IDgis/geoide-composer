@@ -1,17 +1,17 @@
 <template name="layer">
-<h1>Dit is een laag</h1>
- {{#autoForm collection="Layers" doc=this id="updateLayerForm" type="insert"}}
+ {{#autoForm collection="Layers" doc=selectedLayerDoc id="updateLayerForm" type="update"}}
         <fieldset>
             {{> afQuickField name="label"}}
         	{{> afQuickField name="layer_type"}}
-        	{{> afQuickField name="state_visible"}}
-        </fieldset>     
+        	{{> afQuickField name="state"}}
+        	{{> afQuickField name="properties"}}
+        	{{> afQuickField name="service_layers"}}
+        </fieldset>  
+        <button type="submit" class="btn btn-primary">Laag Opslaan</button>     
  {{/autoForm}}
   
 <div>Servicelagen</div>
-<div>
-	{{> servicelayerlist(layer_servicelayer)}} 	
-</div>
 
-<button type="submit" class="btn btn-primary">Laag Opslaan</button>  
+
+
 </template>
