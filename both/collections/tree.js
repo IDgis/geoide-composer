@@ -5,9 +5,21 @@ Tree.attachSchema(new SimpleSchema({
 	text: {
 		type: String,
 	}, 
+	state: {
+		type: Object
+	},
+	type: {
+		type: String,
+		defaultValue: 'map'
+	},
 	children: {
 		type: [Object]
 	}, 
+	//visible
+	'state.checked': {
+		type: Boolean,
+		optional: true
+	},
 	'children.$.id': {
         type: String,
     },

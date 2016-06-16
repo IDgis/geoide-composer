@@ -18,7 +18,7 @@ Router.route('/tree', 'tree');
 Router.route('/maps', 'maplist');
 Router.route('/map/:_id', function () {
     var map = Tree.findOne({_id: this.params._id});
-    this.render('map', {data: map});
+    this.render('map', {'selectedMapId': this.params._id});
 }, {
     name: 'map.show'
 });

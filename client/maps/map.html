@@ -1,0 +1,20 @@
+<template name="map">
+ {{selectedMapId}}
+  <div class="row">
+	<div class="col-md-4 col-sm-8 col-xs-8">
+		<button id="createlayer" class="btn btn-success btn-sm"></button>
+		<button id="renamelayer" class="btn btn-warning btn-sm"></button>
+		<button id="removelayer" class="btn btn-danger btn-sm" ></button>
+	</div>
+	<div class="col-md-2 col-sm-4 col-xs-4" style="text-align:right;">
+		<input id="demo_q" type="text" placeholder="Search" style="box-shadow:inset 0 0 4px #eee; width:120px; margin:0; padding:6px 12px; border-radius:4px; border:1px solid silver; font-size:1.1em;" value="">
+	</div>
+</div>
+  <div class="tree"></div>
+  <div class="form-group">
+    <button type="submit" id="submit-button" class="btn btn-primary" >Submit</button>
+    <button type="reset" id="reset-button" class="btn btn-default" data-mapId='{{selectedMapId}}'>Reset Form</button>
+  </div>
+  
+</template>
+
