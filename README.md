@@ -28,6 +28,8 @@ Main change: I use "Items" instead of "Posts" for the main collection in the tut
 	          |
 	          |  startup.js
 
+in startup.js:   
+
 		Meteor.startup(function() {
 		  return i18n.setDefaultLanguage('en');
 		});
@@ -41,6 +43,7 @@ Main change: I use "Items" instead of "Posts" for the main collection in the tut
 	                 |  en.js 
 	                 |  nl.js
 voor *nl*:    
+
 		i18n.map('nl', {   
 		  sleutel: 'waarde',
 		  main: 'Menu en logo',    
@@ -48,6 +51,7 @@ voor *nl*:
 		});   
   
 voor *en*:    
+
 		i18n.map('en', {   
 		  key: 'value',
 		  main: 'Menu and Logo',    
