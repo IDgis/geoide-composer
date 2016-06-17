@@ -8,49 +8,53 @@ Link to tutorial http://www.webtempest.com/meteor-js-autoform-tutorial
 Main change: I use "Items" instead of "Posts" for the main collection in the tutorial and I changed the field names.
 
 
-## RS:
+## remarks for autoform example used:
 
 * doc=this has to be added to the update autoform
 * meteor remove accounts-google
 * meteor add accounts-password
 * meteor add msavin:mongol (ctrl-m to get a mongo db popup)
-
-## TODO
-* layout in main.html
-* routing
-* structuur opzet
-* items > services
-* related collections e.g. services < > layers
-* remove user login
-* central mongo db (e.g. seine:4000)
-* 
-
-## structure
-### old
-* both/
-  * collections/ 
-      * items.js (schema)
-  * router.js (Iron router code )
-* client/
-  * autoformHooks/
-    * items.js
-  * item.html  (edit form, update)
-  * items.html  (add form, insert)
-  * items.js  (template helper for edit form)
-  * main.html  (main entrance)
   
-### new
-* both/
-  * collections/ 
-      * items.js (schema)
-  * router.js (Iron router code )
-* client/
-  * autoformHooks/
-    * items.js
-  * item-add.html (was items.html)
-  * item-edit.html (was item.html)
-  * items-list.html (was items.html)
-  * items-helpers.js (was items.js)
-  
+## i18n
 
+### package anti:i18n   
+ "meteor add anti:i18n"   
+ 
+#### voorbeelden
+
+##### taal bestanden
+	     |-- lib\ 
+	          |
+	          |-- i18n\ 
+	                 |
+	                 |  en.js 
+	                 |  nl.js
+voor nl:    
+i18n.map('nl', {   
+  sleutel: 'waarde',
+  **main**: 'Menu en logo',    
+  },   
+});   
   
+voor en:    
+i18n.map('en', {   
+  key: 'value',
+  **main**: 'Menu and Logo',    
+  },   
+});   
+  
+  
+##### gebruik in html
+
+Blaze functie {{i18n 'key'}}   
+
+<template name="main">   
+	<h1>{{i18n '**main**'}}</h1>   
+	.....
+
+##### gebruik in javascript
+
+functie i18n('key');   
+
+console.log('main: ' + i18n('**main**'));     
+
