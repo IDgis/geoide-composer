@@ -22,39 +22,51 @@ Main change: I use "Items" instead of "Posts" for the main collection in the tut
  
 #### voorbeelden
 
+##### intieel
+
+	     |-- lib\ 
+	          |
+	          |  startup.js
+
+		Meteor.startup(function() {
+		  return i18n.setDefaultLanguage('en');
+		});
+
 ##### taal bestanden
+
 	     |-- lib\ 
 	          |
 	          |-- i18n\ 
 	                 |
 	                 |  en.js 
 	                 |  nl.js
-voor nl:    
-i18n.map('nl', {   
-  sleutel: 'waarde',
-  **main**: 'Menu en logo',    
-  },   
-});   
+voor *nl*:    
+		i18n.map('nl', {   
+		  sleutel: 'waarde',
+		  main: 'Menu en logo',    
+		  },   
+		});   
   
-voor en:    
-i18n.map('en', {   
-  key: 'value',
-  **main**: 'Menu and Logo',    
-  },   
-});   
+voor *en*:    
+		i18n.map('en', {   
+		  key: 'value',
+		  main: 'Menu and Logo',    
+		  },   
+		});   
   
   
 ##### gebruik in html
 
 Blaze functie {{i18n 'key'}}   
 
-<template name="main">   
-	<h1>{{i18n '**main**'}}</h1>   
-	.....
+		<template name="main">   
+			<h1>{{i18n 'main'}}\</h1>   
+			.....
+		</template>
 
 ##### gebruik in javascript
 
 functie i18n('key');   
 
-console.log('main: ' + i18n('**main**'));     
+		console.log('main: ' + i18n('main'));     
 
