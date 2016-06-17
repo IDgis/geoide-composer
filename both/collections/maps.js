@@ -58,7 +58,7 @@ SimpleSchema.child = new SimpleSchema ({
 
 
 
-Tree.attachSchema(new SimpleSchema({
+Maps.attachSchema(new SimpleSchema({
 	text: {
 		type: String,
 	}, 
@@ -120,7 +120,7 @@ Tree.attachSchema(new SimpleSchema({
 	 }
 }));
 
-Tree.allow({
+Maps.allow({
 	  insert: function () { return true; },
 	  update: function () { return true; },
 	  remove: function () { return true; }
