@@ -11,11 +11,13 @@ Template.international.helpers({
 
 Template.international.events({
   'click .english': function () { 
-    console.log('english lang set'); 
+    console.log('english lang set');
+    i18n.setDefaultLanguage('en');
     i18n.setLanguage('en');
   },
   'click .nederlands': function() {
     console.log('nederlandse taal gezet'); 
+    i18n.setDefaultLanguage('nl');
     i18n.setLanguage('nl');
   },
 });
