@@ -1,7 +1,6 @@
 <template name="services">
       <h2>Services</h2>
-      {{pathFor route='service.show'}}
-      <table class="table table-bordered table-condensed">
+      <table class="table table-condensed">
         <thead>
           <tr>
             <td>Naam</td>
@@ -18,7 +17,7 @@
 	              <button class="btn btn-default edit-service" >
 						<a class="glyphicon glyphicon-edit" href="{{pathFor route='service.show' }}"></a>
 				  </button>
-	              <a class="btn btn-warning delete">
+	              <a class="btn btn-warning delete-service">
 						<span class="glyphicon glyphicon-remove"></span>
 				  </a>  
 			  </td>
