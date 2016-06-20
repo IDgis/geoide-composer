@@ -1,7 +1,9 @@
 <template name="maplist">
 <h2>Kaarten</h2>
+	<a href="{{pathFor 'map.new'}}" class="btn btn-success" role="button">Maak een nieuwe kaart</a>
 <table class="table table-condensed">
   <tbody>
+        
 	{{#each maps}}
 	  <tr class="map-row {{#if isSelectedMap}}selected{{/if}}">
 	    <td>{{text}}</td>
@@ -16,6 +18,5 @@
 	  </tr>
   	{{/each}}
   </tbody>
-
  </table>
 </template>      

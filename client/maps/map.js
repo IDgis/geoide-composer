@@ -1,26 +1,48 @@
 Template.map.helpers({
 	selectedMapId: function () {
-		console.log(Router.current().params);
 		return Router.current().params._id;
+  },
+  currentDoc: function () {
+	  if (Router.current().params._id==="new") {
+		  return this;
+	  } else {
+		  return Maps.findOne(Router.current().params._id);
+	  } 	  
+  },
+  formType: function () {
+	    if (Router.current().params._id==="new") {
+	    	return "insert";
+	    } else {
+	      	return "update";
+	    }
+  },
+  buildTree: function() {
+		
   }
-})
+});
 
 Template.map.events({
+	
+	'submit #mapForm': function (event) {
+		console.log("submit");
+		Router.path('map');
+	},
+
 	'click .jstree': function () {
 		console.log("geklikt");
 	},
-	'click #submit-button': function () {
-		console.log($.jstree.reference('.tree').get_json('#')[0]);
-		Tree.insert ($.jstree.reference('.tree').get_json('#')[0]);
+	
+	'click #save-tree': function () {
+		console.log("hallo");
+		//console.log($.jstree.reference('.tree').get_json('#')[0]);
+		//Maps.insert ($.jstree.reference('.tree').get_json('#')[0]);
 	},
-	'click #reset-button': function (eventObj) {
-		
-		var selectedMapId = eventObj.target.dataset.mapid;
-		var map =  Tree.find ({_id: selectedMapId }).fetch()[0];
-		
+	
+	'click #reset-tree': function (eventObj) {
+		console.log("reset");
+		var map =  Maps.find ({_id: Router.current().params._id }).fetch()[0];
 		//map = {text: 'Afdelingen', type:'map', 'children': [{text: 'Topografie groep',children: [{ text: 'luchtfoto', type: 'layer'}, {text: 'top10 nl',type: 'layer'}], type: 'default' }, { text: 'percelen', type: 'layer' }],type: 'map'};
-
-		$('.tree').jstree ({
+		$('.maptree').jstree ({
 		    core: {
 		      data: [
 		            map
@@ -35,7 +57,8 @@ Template.map.events({
 			},
 		    map : {
 		      "icon" : "glyphicon glyphicon-tree-deciduous",
-		      "valid_children" : ["default", "layer"]
+		      "valid_children" : ["default", "layer"],
+		      //"li-attr" : []
 		    },
 		    "default" : {
 		      "valid_children" : ["default", "layer"]
@@ -56,7 +79,7 @@ Template.map.events({
 	},
 	
 	'click #createlayer': function () {
-		var ref = $.jstree.reference('.tree'),
+		var ref = $.jstree.reference('.maptree'),
 			sel = ref.get_selected();
 		if(!sel.length) { return false; }
 		sel = sel[0];
@@ -65,23 +88,85 @@ Template.map.events({
 			ref.edit(sel);
 		}
 	},
+	
+	'click #creategroup': function () {
+		var ref = $.jstree.reference('.maptree'),
+			sel = ref.get_selected();
+		if(!sel.length) { return false; }
+		sel = sel[0];
+		sel = ref.create_node(sel, {"type":"default"});
+		if(sel) {
+			ref.edit(sel);
+		}
+	},
+	
 	'click #renamelayer': function () {
-		var ref = $.jstree.reference('.tree'),
+		var ref = $.jstree.reference('.maptree'),
 			sel = ref.get_selected();
 		if(!sel.length) { return false; }
 		sel = sel[0];
 		ref.edit(sel);
 	},
+	
 	'click #removelayer': function () {
 		console.log("verwijder");
-		var ref = $.jstree.reference('.tree'),
+		var ref = $.jstree.reference('.maptree'),
 			sel = ref.get_selected();
 		if(!sel.length) { return false; }
 		ref.delete_node(sel);
 	},
-	'keyup #demo_q': function () {
-		var v = $('#demo_q').val();
-		$.jstree.reference('.tree').search(v);
+	'keyup #search-tree': function () {
+		var v = $('#search-tree').val();
+		$.jstree.reference('.maptree').search(v);
 	}
-		
 });
+
+
+
+
+Template.map.rendered = function() {
+   	var mapId = Router.current().params._id;
+    if (mapId!=="new") {
+    	console.log("vul de tree");
+	    var map =  Maps.find ({_id: mapId }).fetch()[0];
+		//map = {text: 'Afdelingen', type:'map', 'children': [{text: 'Topografie groep',children: [{ text: 'luchtfoto', type: 'layer'}, {text: 'top10 nl',type: 'layer'}], type: 'default' }, { text: 'percelen', type: 'layer' }],type: 'map'};
+		$('.maptree').jstree ({
+		    core: {
+		      data: [
+		            map
+		       ],
+		       check_callback : true
+		},
+		types : {
+			"#" : {
+			      "max_children" : 1,
+			      "max_depth" : 4,
+			      "valid_children" : ["map"]
+			},
+		    map : {
+		      "icon" : "glyphicon glyphicon-tree-deciduous",
+		      "valid_children" : ["default", "layer"],
+		      //"li-attr" : []
+		    },
+		    "default" : {
+		      "valid_children" : ["default", "layer"]
+		    },
+		    layer : {
+		      "icon" : "glyphicon glyphicon-file",
+		      "valid_children" : []
+		    },
+		   
+		  },
+		  checkbox : {
+			    three_state : false,
+			    tie_selection : false,
+			    whole_node : false
+			},
+		plugins : ["dnd", "search","state", "types", "checkbox"]
+		});
+    }
+}
+
+
+
+
