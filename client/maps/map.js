@@ -1,31 +1,29 @@
 Template.map.helpers({
-	selectedMapId: function () {
-		return Router.current().params._id;
-  },
-  currentDoc: function () {
-	  if (Router.current().params._id==="new") {
-		  return this;
-	  } else {
-		  return Maps.findOne(Router.current().params._id);
-	  } 	  
-  },
-  formType: function () {
-	    if (Router.current().params._id==="new") {
-	    	return "insert";
-	    } else {
-	      	return "update";
-	    }
-  },
-  buildTree: function() {
+	formType: function () {
+		if (Session.get("selectedMapId")) {
+		    return "update";
+		 } else {
+		    return "insert";
+		 }
+	},
+	serviceDoc: function () {
+		if (Session.get("selectedMapId")) {
+		    return this;
+		 } else {
+		    return null ;
+		 }
+	},
+	
+   buildTree: function() {
 		
-  }
+   }
 });
 
 Template.map.events({
 	
 	'submit #mapForm': function (event) {
 		console.log("submit");
-		Router.path('map');
+		//Router.path('map');
 	},
 
 	'click .jstree': function () {
@@ -33,7 +31,7 @@ Template.map.events({
 	},
 	
 	'click #save-tree': function () {
-		console.log("hallo");
+		console.log("save tree");
 		//console.log($.jstree.reference('.tree').get_json('#')[0]);
 		//Maps.insert ($.jstree.reference('.tree').get_json('#')[0]);
 	},
@@ -100,7 +98,7 @@ Template.map.events({
 		}
 	},
 	
-	'click #renamelayer': function () {
+	'click #renamenode': function () {
 		var ref = $.jstree.reference('.maptree'),
 			sel = ref.get_selected();
 		if(!sel.length) { return false; }
@@ -108,7 +106,7 @@ Template.map.events({
 		ref.edit(sel);
 	},
 	
-	'click #removelayer': function () {
+	'click #removenode': function () {
 		console.log("verwijder");
 		var ref = $.jstree.reference('.maptree'),
 			sel = ref.get_selected();
