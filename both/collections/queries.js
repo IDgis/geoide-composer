@@ -1,6 +1,8 @@
 Queries = new Mongo.Collection("queries");
+//wfs service
+//ft property label
 
-Maps.attachSchema(new SimpleSchema({
+Queries.attachSchema(new SimpleSchema({
 	label: {
 		type: String,
 		label: "Label"

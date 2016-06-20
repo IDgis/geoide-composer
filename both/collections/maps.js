@@ -14,24 +14,28 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	type: Number,
     	min: 0,
     	max: 300000,
+    	defaultValue: 0,
     	label: 'minX'
     },
     "miny": {
     	type: Number,
     	min: 300000,
     	max: 620000,
+    	defaultValue: 300000,
     	label: 'minY'
      },
      "maxx": {
     	type: Number,
     	min: 0,
     	max: 300000,
+    	defaultValue: 300000,
     	label: 'maxX'
     },
     "maxy":  {
       	type: Number,
        	min: 300000,
        	max: 620000,
+       	defaultValue: 620000,
        	label: 'maxY'
     }
 });
@@ -61,6 +65,7 @@ SimpleSchema.child = new SimpleSchema ({
 Maps.attachSchema(new SimpleSchema({
 	text: {
 		type: String,
+		label: "Kaartnaam"
 	}, 
 	type: {
 		type: String,
@@ -72,19 +77,24 @@ Maps.attachSchema(new SimpleSchema({
 		optional: true
 	},
 	children: {
-		type: [Object]
+		type: [Object],
+		optional: true
 	}, 
 	'children.$.id': {
         type: String,
+        optional: true
     },
     'children.$.text': {
-        type: String
+        type: String,
+        optional: true
     },
     'children.$.state': {
     	type: SimpleSchema.mapLayerState,
+    	optional: true
 	},
     'children.$.type': {
-   	   type: String
+   	   type: String,
+   	   optional: true
     },
     'children.$.children': {
         type: [Object],
@@ -92,31 +102,39 @@ Maps.attachSchema(new SimpleSchema({
     },
     'children.$.children.$.id': {
          type: String,
+         optional: true
      },
 	'children.$.children.$.text': {
-	     type: String
+	     type: String,
+	     optional: true
 	 },
 	 'children.$.children.$.state': {
 		 type: SimpleSchema.mapLayerState,
+		 optional: true
 	 },
 	'children.$.children.$.type': {
-		 type: String
+		 type: String,
+		 optional: true
 	 },
 	 'children.$.children.$.children': {
 	     type: [Object],
-	 	 optional: true
+	     optional: true
 	 },
 	'children.$.children.$.children.$.id': {
 	     type: String,
+	     optional: true
 	 },
 	 'children.$.children.$.children.$.text': {
-	     type: String
+	     type: String,
+	     optional: true
 	 },
 	 'children.$.children.$.children.$.state': {
 		 type: SimpleSchema.mapLayerState,
+		 optional: true
 	 },
 	 'children.$.children.$.children.$.type': {
-		 type: String
+		 type: String,
+		 optional: true
 	 }
 }));
 
