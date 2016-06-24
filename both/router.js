@@ -6,14 +6,15 @@ Router.route('/i18n', 'international');
 //service routes
 Router.route('/services', 'services');
 
-Router.route('/service/add','service'), {
-	name: 'service.add'
+Router.route('/service/insert','service'), {
+	name: 'service.insert'
 };
+
 Router.route('/service/:_id', function () {
     var service = Services.findOne({_id: this.params._id});
     this.render('service', {data: service});
 }, {
-    name: 'service.show'
+    name: 'service.edit'
 });
 
 //map routes

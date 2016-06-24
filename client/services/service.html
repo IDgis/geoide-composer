@@ -1,5 +1,23 @@
 <template name="service">
-    <h1>Edit Service{{serviceDoc}}{{formType}}</h1>
-     {{> quickForm collection="Services" doc=serviceDoc id="serviceForm" type=formType buttonContent="Opslaan"}}
-     <a class="btn btn-primary" href="/services">Annuleren</a>
+ <h1>Service Configuratie</h1>
+{{#autoForm collection="Services" id="serviceform" doc=serviceDoc type=formType}}
+      <fieldset>
+		{{> afQuickField name="label"}}
+		{{> afQuickField name="service_endpoint"}}
+		{{> afQuickField name="service_type" type='select-radio-inline' defaultValue='WMS' options=serviceTypes}}
+		{{#if afFieldValueIs name="service_type" value="WMS"}}
+       		{{> afFieldInput name='version' type='select' options=wmsVersions }}
+		{{/if}}
+      	{{#if afFieldValueIs name="service_type" value="WFS"}}
+       		{{> afFieldInput name='version' type='select' options=wfsVersions }}
+		{{/if}}
+      	{{#if afFieldValueIs name="service_type" value="TMS"}}
+       		{{> afFieldInput name='version' type='select' options=tmsVersions }}
+		{{/if}}
+
+
+       </fieldset>  
+       <button id="save" type="submit" class="btn btn-primary">Opslaan</button> 
+       <a id="return" class="btn btn-primary">Annuleren</a>
+ {{/autoForm}}
 </template>

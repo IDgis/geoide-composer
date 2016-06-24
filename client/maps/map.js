@@ -150,7 +150,7 @@ Template.map.rendered = function() {
 		      "valid_children" : ["default", "layer"]
 		    },
 		    layer : {
-		      "icon" : "glyphicon glyphicon-file",
+		      "icon" : "logo.png",
 		      "valid_children" : []
 		    },
 		   

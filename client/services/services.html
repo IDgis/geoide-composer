@@ -15,7 +15,7 @@
               <td>{{service_type}}</td>
               <td style='white-space: nowrap'>
 	              <button class="btn btn-default edit-service" >
-						<a class="glyphicon glyphicon-edit" href="{{pathFor route='service.show' }}"></a>
+						<a class="glyphicon glyphicon-edit"></a>
 				  </button>
 	              <a class="btn btn-warning delete-service">
 						<span class="glyphicon glyphicon-remove"></span>
@@ -26,7 +26,9 @@
         </tbody>
       </table>
       <div type="button" class="btn btn-success col-sm-12 insert-service">
-		<a class="glyphicon glyphicon-plus" href="{{pathFor route='service.add' }}">Maak een nieuwe service ...</a>
+		<a class="glyphicon glyphicon-plus create-btn">
+			<span class="create-btn-label">Maak een nieuwe service</span>
+		</a>
 	  </div>
 </template>
 
