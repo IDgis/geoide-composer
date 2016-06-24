@@ -1,65 +1,75 @@
+
+Template.jsData.created = function () {
+  // here `this` refers to template instance
+  this.selectedMapId = -1;
+};
+
+Template.jsData.helpers({
+	selectedMapId: function () {
+		return 'kehvXCNJC4WfDhQsX';
+  }
+})
+
+
+
 Template.jsData.onRendered(function () {
-  this.$('.tree').jstree({
-    core: {
-      data: [{ 
-        text: 'Afdelingen', 'children': [{
-          text: 'Topografie groep', 
-          children: [
-	          {
-	        	  text: 'luchtfoto',
-	        	  type: 'layer'
-	          },
-	          {
-	        	  text: 'top10 nl',
-	        	  type: 'layer'
-	          }],
-          type: 'default'
-        }, {
-          text: 'percelen',
-          type: 'layer'
-        }],
-        type: 'map'
-      }],
-  	check_callback : true
-    },
-    types : {
-    	"#" : {
-    	      "max_children" : 1,
-    	      "max_depth" : 4,
-    	      "valid_children" : ["map"]
-    	},
-        map : {
-          "icon" : "glyphicon glyphicon-tree-deciduous",
-          "valid_children" : ["default", "layer"]
-        },
-        "default" : {
-          "valid_children" : ["default", "layer"]
-        },
-        layer : {
-          "icon" : "glyphicon glyphicon-file",
-          "valid_children" : []
-        }
-      },
-    
-    plugins : ["contextmenu", "dnd", "search",
-               "state", "types", "wholerow"]
-  });
+	Maps.drop();
+	
+//	maps.forEach(function(entry) {
+	//	mapArray.push({id:entry._id,text:entry.text, children:entry.children});
+	//});
+	
 });
 
 Template.jsData.events({
 	'click .jstree': function () {
+		Maps.drop();
 		console.log("geklikt");
 	},
 	'click #submit-button': function () {
-		console.log($.jstree.reference('.tree').data());
+		Tree.insert ($.jstree.reference('.tree').get_json('#')[0]);
 	},
-	'click #reset-button': function () {
-		var v = $.jstree.reference('.tree').get_json('#');
-		
-		
-		
-		console.log(v);
+	'click #reset-button': function (eventObj) {
+		var selectedMapId = eventObj.target.dataset.mapid;
+		var map =  Tree.find ({_id: selectedMapId }).fetch()[0];
+		//{text: 'Afdelingen', 'children': [{text: 'Topografie groep',children: [{ text: 'luchtfoto', type: 'layer'}, {text: 'top10 nl',type: 'layer'}], type: 'default' }, { text: 'percelen', type: 'layer' }],type: 'map'};
+			console.log(map);
+		$('.tree').jstree ({
+		    core: {
+		      data: [
+		            map
+		       ],
+		       check_callback : true
+		},
+		types : {
+			"#" : {
+			      "max_children" : 1,
+			      "max_depth" : 4,
+			      "valid_children" : ["map"]
+			},
+		    map : {
+		      "icon" : "glyphicon glyphicon-tree-deciduous",
+		      "valid_children" : ["default", "layer"],
+		      
+		    },
+		    "default" : {
+		      "valid_children" : ["default", "layer"]
+		    },
+		    layer : {
+		      "icon" : "glyphicon glyphicon-file",
+		      "valid_children" : []
+		    },
+		   
+		  },
+		  checkbox : {
+			    three_state : false,
+			    tie_selection : false,
+			    whole_node : false
+			  },
+		plugins : ["dnd", "search","state", "types", "checkbox"]
+		});
 	},
+	
 	'click #createlayer': function () {
 		var ref = $.jstree.reference('.tree'),
 			sel = ref.get_selected();
@@ -88,16 +98,6 @@ Template.jsData.events({
 		var v = $('#demo_q').val();
 		$.jstree.reference('.tree').search(v);
 	}
-	
-	
+		
 });
 
-/* listen for event
-.on('changed.jstree', function (e, data) {
-	console.log("ben veranderd");
-  var i, j, r = [];
-  for(i = 0, j = data.selected.length; i < j; i++) {
-    r.push(data.instance.get_node(data.selected[i]).text);
-  }
-  $('#event_result').html('Selected: ' + r.join(', '));
-});*/

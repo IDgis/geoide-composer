@@ -1,28 +1,25 @@
 Template.services.helpers({
-    services: function(){
+	services: function(){
         return Services.find();
-    }
-})
+    },
+    isSelectedService: function () {
+		return Session.equals("selectedServiceId", this._id);
+	},
+});
 
 
-Template.registerHelper("wmsVersions", function() {
-    return [
-        {label: "1", value: 1},
-        {label: "2", value: 2},
-        {label: "3", value: 3}
-    ];
+Template.services.events({
+  'click .edit-service': function () { 
+	  Session.set("selectedServiceId", this._id);
+  },
+  'click .insert-service': function () {
+	  Session.set("selectedServiceId", null);
+  },
+  'click .delete-service': function() {
+	  //zie https://github.com/aldeed/meteor-delete-button
+	 console.log("verwijder service " + this._id); 
+	 Services.remove({_id:this._id})
+  },
 });
-Template.registerHelper("wfsVersions", function() {
-  return [
-      {label: "4", value: 4},
-      {label: "5", value: 5},
-      {label: "6", value: 6}
-  ];
-});
-Template.registerHelper("tmsVersions", function() {
-  return [
-      {label: "7", value: 7},
-      {label: "8", value: 8},
-      {label: "9", value: 9}
-  ];
-});
+
+

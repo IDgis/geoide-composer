@@ -1,19 +1,32 @@
 <template name="services">
-    <h1>Add Service</h1>
-    {{#autoForm collection="Services" id="insertServiceForm" type="insert"}}
-    <fieldset>
-        {{> afQuickField name="label" }}
-        {{> afQuickField name="service_endpoint"}}
-        {{> afQuickField name='service_type'}}
-        {{> afQuickField name='version'}}
-    </fieldset>
-    <button type="submit" class="btn btn-primary">Insert</button>
-    {{/autoForm}}
-
-    <ul>
-        {{#each services}}
-            <li><a href="{{pathFor 'services.show'}}">{{label}}</a> - {{type}}</li>
-        {{/each}}
-    </ul>
+      <h2>Services</h2>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <td>Naam</td>
+            <td>Type</td>
+            <td style="width: 70px"></td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each services}}
+            <tr class="service-row {{#if isSelectedService}}selected{{/if}}">
+              <td>{{label}}</td>
+              <td>{{service_type}}</td>
+              <td style='white-space: nowrap'>
+	              <button class="btn btn-default edit-service" >
+						<a class="glyphicon glyphicon-edit" href="{{pathFor route='service.show' }}"></a>
+				  </button>
+	              <a class="btn btn-warning delete-service">
+						<span class="glyphicon glyphicon-remove"></span>
+				  </a>  
+			  </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <div type="button" class="btn btn-success col-sm-12 insert-service">
+		<a class="glyphicon glyphicon-plus" href="{{pathFor route='service.add' }}">Maak een nieuwe service ...</a>
+	  </div>
 </template>
 
