@@ -34,6 +34,7 @@ Template.map.events({
 			{ _id: this._id}, 
 			{ $set:
 		      {
+				text: "halloki",
 		        children: $.jstree.reference('.tree').get_json('#')[0].children
 		      }
 		   },
@@ -59,7 +60,6 @@ Template.map.events({
 		sel = ref.create_node(sel, {"type":"layer", 
 									"text": layerLabel, 
 									"data": {"layerid":layerId},
-									"state": {checked: false}
 									//"children": [{"type":"servicelayer", "text": "<img src='/images/afdelingen.png'>", "a_attr":{class: "no_checkbox"}}],
 									});
 
@@ -96,6 +96,7 @@ Template.map.events({
 		if(!sel.length || ref.get_type(sel)==="map") { return false; }
 		ref.delete_node(sel);
 	},
+	
 	'keyup #search-tree': function () {
 		var v = $('#search-tree').val();
 		$.jstree.reference('.maptree').search(v);
@@ -142,7 +143,7 @@ Template.map.rendered = function() {
 		    },
 		    group : {
 		      "icon" : "glyphicon glyphicon-duplicate",
-		      "valid_children" : ["default", "layer"]
+		      "valid_children" : ["group", "layer"]
 		    },
 		    layer : {
 		      "icon" : "glyphicon glyphicon-file",

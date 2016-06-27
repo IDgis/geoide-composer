@@ -4,12 +4,11 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 	//visible
 	checked: {
 		type: Boolean,
-		defaultValue: true
+		optional: true
 	}
 });
 
 SimpleSchema.mapLayerData = new SimpleSchema ({
-	//visible
 	layerid: {
 		type: String,
 		optional: true
