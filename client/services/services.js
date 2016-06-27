@@ -11,9 +11,11 @@ Template.services.helpers({
 Template.services.events({
   'click .edit-service': function () { 
 	  Session.set("selectedServiceId", this._id);
+	  Router.go('service.edit', {_id: this._id});
   },
   'click .insert-service': function () {
 	  Session.set("selectedServiceId", null);
+	  Router.go('service.insert');
   },
   'click .delete-service': function() {
 	  //zie https://github.com/aldeed/meteor-delete-button
@@ -21,5 +23,6 @@ Template.services.events({
 	 Services.remove({_id:this._id})
   },
 });
+
 
 

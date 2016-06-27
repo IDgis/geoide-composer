@@ -1,4 +1,4 @@
-Template.maplist.helpers({
+Template.maps.helpers({
 	maps: function(){
 	    return Maps.find();
 	},
@@ -7,12 +7,14 @@ Template.maplist.helpers({
 	},
 });
 
-Template.maplist.events ({
+Template.maps.events ({
   'click .edit-map': function () { 
 	  Session.set("selectedMapId", this._id);
+	  Router.go('map.edit', {_id: this._id});
   },
   'click .insert-map': function () {
 	  Session.set("selectedMapId", null);
+	  Router.go('map.insert');
   },
   'click .delete-map': function() {
 	  //zie https://github.com/aldeed/meteor-delete-button
