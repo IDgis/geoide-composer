@@ -4,3 +4,8 @@
 .create-btn:focus {color:white;text-decoration:none;}
 
 .create-btn-label {font-family:verdana;font-size:16px;}
+
+.no_checkbox>i.jstree-checkbox
+{
+    display:none
+}

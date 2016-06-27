@@ -4,10 +4,18 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 	//visible
 	checked: {
 		type: Boolean,
-		optional: true
-	}	
+		defaultValue: true
+	}
 });
 
+SimpleSchema.mapLayerData = new SimpleSchema ({
+	//visible
+	layerid: {
+		type: String,
+		optional: true
+		
+	}
+});
 //validatie op minx < maxx zie https://github.com/aldeed/meteor-simple-schema#custom-validation
 SimpleSchema.initialExtent = new SimpleSchema ({
     "minx": {
@@ -76,6 +84,10 @@ Maps.attachSchema(new SimpleSchema({
 		label: "Initieel extent",
 		optional: true
 	},
+    state: {
+    	type: SimpleSchema.mapLayerState,
+    	optional: true
+	},
 	children: {
 		type: [Object],
 		optional: true
@@ -96,6 +108,10 @@ Maps.attachSchema(new SimpleSchema({
    	   type: String,
    	   optional: true
     },
+    'children.$.data': {
+		type: SimpleSchema.mapLayerData,
+		optional: true
+	},
     'children.$.children': {
         type: [Object],
         optional: true
@@ -116,6 +132,10 @@ Maps.attachSchema(new SimpleSchema({
 		 type: String,
 		 optional: true
 	 },
+	 'children.$.children.$.data': {
+			type: SimpleSchema.mapLayerData,
+			optional: true
+		},
 	 'children.$.children.$.children': {
 	     type: [Object],
 	     optional: true
@@ -135,6 +155,10 @@ Maps.attachSchema(new SimpleSchema({
 	 'children.$.children.$.children.$.type': {
 		 type: String,
 		 optional: true
+	 },
+	 'children.$.children.$.children.$.data': {
+		 type: SimpleSchema.mapLayerData,
+	     optional: true
 	 }
 }));
 

@@ -1,28 +1,39 @@
 <template name="map">
-   {{#autoForm collection="Maps" id="mapForm" type=formType doc=currentDoc class="form-inline"}}
+   {{currentDoc}}
+   {{formType}}
+   {{#autoForm collection="Maps" id="mapForm" type=formType doc=mapDoc class="form-inline"}}
 	    <fieldset>
 	        {{> afQuickField name="text"}}
-	        {{> afQuickField name="type"}}
 	        {{> afQuickField name="initial_extent"}}
 	    </fieldset>
-	    <button type="submit" class="btn btn-primary" href="{{pathFor 'map.show'}}">Insert</button>
-     {{/autoForm}}
-  <div class="row">
-	<div class="col-md-4 col-sm-8 col-xs-8">
-		<button id="createlayer" class="btn btn-success btn-sm"></button>
-		<button id="creategroup" class="btn btn-sm"></button>
-		<button id="renamenode" class="btn btn-warning btn-sm"></button>
-		<button id="removenode" class="btn btn-danger btn-sm" ></button>
-	</div>
-	<div class="col-md-2 col-sm-4 col-xs-4" style="text-align:right;">
-		<input id="search-tree" type="text" placeholder="Zoek" value="">
-	</div>
-</div>
-  <div class="maptree tree"></div>
-  <div class="form-group">
-    <button id="save-tree" class="btn btn-primary" >Submit</button>
-    <button id="reset-tree" class="btn btn-default">Reset Form</button>
-  </div>
+		<button id="save" type="submit" class="btn btn-primary">Opslaan</button> 
+		<a id="return" class="btn btn-primary">Annuleren</a>
+	{{/autoForm}}
+    <div class="form-group">
+	    <button id="save-tree" class="btn btn-primary" >Opslaan</button>
+	    <button id="reset-tree" class="btn btn-default">Annuleren</button>
+ 	 </div>
+ 	 
+	  <div class="row">
+		<div class="col-md-4 col-sm-8 col-xs-8">
+			<button id="createlayer" class="btn btn-success btn-sm"></button>
+			<button id="creategroup" class="btn btn-sm"></button>
+			<button id="renamenode" class="btn btn-warning btn-sm"></button>
+			<button id="removenode" class="btn btn-danger btn-sm" ></button>
+		</div>
+		<div class="col-md-2 col-sm-4 col-xs-4" style="text-align:right;">
+			<input id="search-tree" type="text" placeholder="Zoek" value="">
+		</div>
+	</div>	
+	<div class="form-group">
+	    <select id="layerselect">
+	    
+	    </select>
+ 	 </div>
+	 
+
+  	<div class="maptree tree"></div>
+	 
  
 </template>
 
