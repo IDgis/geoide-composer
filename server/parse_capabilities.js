@@ -1,16 +1,3 @@
-Router.map(function () {
-  this.route('xmlapi', {
-    path: '/xmlapi',
-    where: 'server',
-    action: function () {
-//      console.log('calling xmlDemo');
-      var res = 'OK';
-      var json = {'data' : res};
-      this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(json));
-    }
-  });
-});
 
 Meteor.methods({
   getCap : function (host, query){
