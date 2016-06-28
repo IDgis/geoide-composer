@@ -38,4 +38,23 @@ Router.route('/layer', 'layer');
 
 
 
-
+Router.route('xmlapi2', function () {
+  console.log('calling http client');
+  Meteor.call('getCap',
+      'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS',
+      'request=GetCapabilities&service=WMS&version=1.3.0'
+  ,
+      function(callError,callResponse){
+        if (callError){
+          console.log('error',callError);
+        } else {
+          console.log('xml',callResponse);
+          Session.set('demoResult', callResponse);
+        }
+      }
+  );
+  this.render('map', {data: Session.get('demoResult')});
+  
+}, {
+  name: 'api.xml'
+});
