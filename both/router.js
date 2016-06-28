@@ -38,18 +38,40 @@ Router.route('/layer', 'layer');
 
 
 
-Router.route('xmlapi2', function () {
+Router.route('xmlapi', function () {
   console.log('calling http client');
-  Meteor.call('getCap',
-      'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS',
-      'request=GetCapabilities&service=WMS&version=1.3.0'
-  ,
-      function(callError,callResponse){
-        if (callError){
-          console.log('error',callError);
+  Meteor.call('getXml',
+//      'http://httpbin.org/post'
+      'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' // host argument
+      , {request: 'GetCapabilities', service:'WMS'} // params argument
+      ,
+      function(xmlError,xmlResponse){
+        if (xmlError){
+          console.log('capError',xmlError);
         } else {
-          console.log('xml',callResponse);
-          Session.set('demoResult', callResponse);
+          console.log('capXml',xmlResponse);
+//          console.log('capXml.content',xmlResponse.content);
+          console.log('calling xml parser');          
+          // parse xml
+          Meteor.call('parseXml', 
+              xmlResponse.content, // xml string argument
+              function(parseError,parseResponse){
+                if (parseError){
+                  console.log('parseError',parseError);
+                } else {
+                  // resultaat: parseResponse Object van van Capabilities
+                  console.log('parseResponse Object:',parseResponse);
+                  console.log('URL:',parseResponse.WMS_Capabilities.Capability.Request.GetCapabilities.DCPType.HTTP.Get.OnlineResource.$['xlink:href']);
+                  console.log('Service:',parseResponse.WMS_Capabilities.Service.Name);
+                  console.log("version:", parseResponse.WMS_Capabilities.$.version);
+                  console.log("title:", parseResponse.WMS_Capabilities.Capability.Layer.Title);
+                  _.each(parseResponse.WMS_Capabilities.Capability.Layer.Layer,function(layer){
+                      console.log('layer:',layer.Title);
+                  });
+                }
+              }
+          );
+          Session.set('demoResult', xmlResponse);
         }
       }
   );
