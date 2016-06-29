@@ -1,7 +1,8 @@
 Router.configure({
     layoutTemplate: 'main'
 });
-Router.route('/i18n', 'international');
+
+Router.route('/', 'services');
 
 //service routes
 Router.route('/services', 'services');
@@ -36,8 +37,11 @@ Router.route('/map/:_id', function () {
 //layer routes
 Router.route('/layer', 'layer');
 
+// temporary routes
+// test i18n
+Router.route('/i18n', 'international');
 
-
+// test xml parsing
 Router.route('xmlapi', function () {
   console.log('calling http client');
   Meteor.call('getXml',
