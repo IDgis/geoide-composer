@@ -66,9 +66,6 @@ SimpleSchema.child = new SimpleSchema ({
 	}	
 });
 
-
-
-
 Maps.attachSchema(new SimpleSchema({
 	text: {
 		type: String,

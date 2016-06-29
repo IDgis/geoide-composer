@@ -23,10 +23,38 @@ Services.attachSchema(new SimpleSchema({
 	version: {
 	    type: String,
 	    label: "Version",
-	    allowedValues: ['1', '2', '3', '4', '5', '6', '7' ],
 	    autoform: {
-			  defaultValue: '1',
-		   }
+    	type: 'select-radio-inline', 
+		  options: function() {
+			  if (this.service_type==='WMS') {
+				  return [{
+		                label: "1.1.1",
+		                value: "1.1.1",
+		            },{
+		            	label: "1.3.0",
+		                value: "1.3.0",
+		            }] 
+			  }
+			  if (this.service_type==='WFS') {
+				  return [{
+		                label: "1.0.0",
+		                value: "1.0.0",
+		            },{
+		                label: "1.1.0",
+		                value: "1.1.0",
+		            },{
+		                label: "2.0.0",
+		                value: "2.0.0",
+		            }] 
+			  } if (this.service_type==='TMS') {
+				  return [{
+		                label: "1.0.0",
+		                value: "1.0.0",
+		            }] 
+			  }
+		  }
+		  
+	   }
 	}
 }));
 
