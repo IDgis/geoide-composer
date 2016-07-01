@@ -1,28 +1,22 @@
 Services = new Mongo.Collection("services");
 Services.attachSchema(new SimpleSchema({
-	label: {
+	name: {
 		type: String,
-		label: "Naam",
-			autoform: {
-				
-			}
+		label: function(){ return i18n('collections.services.name.label'); }
 	},
-	service_endpoint: {
+	endpoint: {
 		type: String,
-		label: "Url"
+		label: function(){ return i18n('collections.services.endpoint.label'); }
 	},
-	service_type: {
+	type: {
 		type: String,
-		label: "Type",
+		label: function(){ return i18n('collections.services.type.label'); },
 		allowedValues: ['WMS', 'WFS', 'TMS'],
-		autoform: {
-		  defaultValue: 'WMS',
-		  afFieldInput: {type: 'select-radio-inline'},
-	   }
+		defaultValue: 'WMS',
 	},
 	version: {
 	    type: String,
-	    label: "Version",
+	    label: function(){ return i18n('collections.services.version.label'); },
 	    autoform: {
     	type: 'select-radio-inline', 
 		  options: function() {
