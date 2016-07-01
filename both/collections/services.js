@@ -1,60 +1,34 @@
 Services = new Mongo.Collection("services");
 Services.attachSchema(new SimpleSchema({
-	label: {
+	name: {
 		type: String,
-		label: "Naam",
-			autoform: {
-				
-			}
+		label: function(){ return i18n('collections.services.name.label'); },
+		unique : true,
 	},
-	service_endpoint: {
+	endpoint: {
 		type: String,
-		label: "Url"
+		label: function(){ return i18n('collections.services.endpoint.label'); }
 	},
-	service_type: {
+	type: {
 		type: String,
-		label: "Type",
+		label: function(){ return i18n('collections.services.type.label'); },
 		allowedValues: ['WMS', 'WFS', 'TMS'],
-		autoform: {
-		  defaultValue: 'WMS',
-		  afFieldInput: {type: 'select-radio-inline'},
-	   }
+		defaultValue: 'WMS',
 	},
 	version: {
 	    type: String,
-	    label: "Version",
-	    autoform: {
-    	type: 'select-radio-inline', 
-		  options: function() {
-			  if (this.service_type==='WMS') {
-				  return [{
-		                label: "1.1.1",
-		                value: "1.1.1",
-		            },{
-		            	label: "1.3.0",
-		                value: "1.3.0",
-		            }] 
-			  }
-			  if (this.service_type==='WFS') {
-				  return [{
-		                label: "1.0.0",
-		                value: "1.0.0",
-		            },{
-		                label: "1.1.0",
-		                value: "1.1.0",
-		            },{
-		                label: "2.0.0",
-		                value: "2.0.0",
-		            }] 
-			  } if (this.service_type==='TMS') {
-				  return [{
-		                label: "1.0.0",
-		                value: "1.0.0",
-		            }] 
-			  }
-		  }
-		  
-	   }
+	    label: function(){ return i18n('collections.services.version.label'); },
+	    allowedValues: function() {
+			if (this.service_type==='WMS') {
+				return ["1.1.1","1.3.0"];
+			}
+			if (this.service_type==='WFS') {
+				return ["1.0.0","1.1.0","2.0.0"];
+			} 
+			if (this.service_type==='TMS') {
+				return ["1.0.0"];
+			}
+	    }
 	}
 }));
 
