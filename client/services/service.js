@@ -33,15 +33,6 @@ Template.service.helpers({
 });
 
 
-
-if (this.service_type==='WFS') {
-	return ["1.0.0","1.1.0","2.0.0"];
-} 
-if (this.service_type==='TMS') {
-	return ["1.0.0"];
-}
-
-
 Template.service.events({
 	'submit #serviceform': function () {
 		//TODO: niet terug naar de lijst wanneer er een validatie fout is opgetreden 
