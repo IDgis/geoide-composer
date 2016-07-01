@@ -44,7 +44,8 @@ if (this.service_type==='TMS') {
 
 Template.service.events({
 	'submit #serviceform': function () {
-		Router.go('services');
+		//TODO: niet terug naar de lijst wanneer er een validatie fout is opgetreden 
+		//Router.go('services');
 	},
 	'click #return': function () {
 		Router.go('services');
