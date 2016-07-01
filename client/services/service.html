@@ -4,7 +4,7 @@
       <fieldset>
 		{{> afQuickField name="name"}}
 		{{> afQuickField name="endpoint"}}
-		{{> afQuickField name="type" type='select-radio-inline' defaultValue='WMS' options=serviceTypes}}
+		{{> afQuickField name="type" type='select-radio-inline' options=serviceTypes}}
 		{{#if afFieldValueIs name="type" value="WMS"}}
        		{{> afFieldInput name='version' type='select' options=wmsVersions }}
 		{{/if}}

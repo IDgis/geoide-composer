@@ -13,7 +13,7 @@ Services.attachSchema(new SimpleSchema({
 		type: String,
 		label: function(){ return i18n('collections.services.type.label'); },
 		allowedValues: ['WMS', 'WFS', 'TMS'],
-		defaultValue: 'WMS',
+//		defaultValue: 'WMS',
 	},
 	version: {
 	    type: String,
