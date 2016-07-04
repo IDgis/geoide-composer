@@ -7,9 +7,15 @@ import { Services,  ServiceSchema } from '/imports/api/collections/services.js';
 import './service.html';
 
 Template.service.helpers({
+  /**
+   * Services collection
+   */
   services: function(){
     return Services;
   },
+  /**
+   * Services schema
+   */
   serviceSchema: function(){
     return ServiceSchema;
   },
@@ -55,12 +61,15 @@ Template.service.events({
 		Router.go('services.list');
 	}
 });
-
+ 
 /**
  * when the autoform is succesfully submitted, then go to the service list
  */
-AutoForm.addHooks(['serviceform'],{
+AutoForm.addHooks('serviceform',{
   onSuccess: function(formType, result) {
     Router.go('services.list');
+  },
+  onError: function(formType, error){
+    console.log("autoform error = " + error);
   }
 });
