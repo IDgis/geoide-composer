@@ -1,6 +1,6 @@
 <template name="service">
  <h1>Service Configuratie</h1>
-{{#autoForm collection="Services" id="serviceform" doc=serviceDoc type=formType}}
+{{#autoForm collection=services id="serviceform" doc=serviceDoc type=formType}}
       <fieldset>
 		{{> afQuickField name="name"}}
 		{{> afQuickField name="endpoint"}}

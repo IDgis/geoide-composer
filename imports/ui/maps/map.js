@@ -7,6 +7,9 @@ import { Maps } from '/imports/api/collections/maps.js';
 import './map.html';
 
 Template.map.helpers({
+  maps: function(){
+    return Maps.find();
+  },
 	formType: function () {
 		if (Session.get("selectedMapId")) {
 		    return "update";

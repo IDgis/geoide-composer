@@ -8,6 +8,9 @@ import './service.html';
 
 
 Template.service.helpers({
+  services: function(){
+    return Services.find();
+  },
 	formType: function () {
 		if (Session.get("selectedServiceId")) {
 		    return "update";
