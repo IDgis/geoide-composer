@@ -3,6 +3,7 @@ import { Router } from 'meteor/iron:router';
 import { Session } from 'meteor/session';
 
 import { Services } from '/imports/api/collections/services.js';
+import { ServiceSchema } from '/imports/api/collections/services.js';
 
 import './service.html';
 
@@ -10,6 +11,9 @@ import './service.html';
 Template.service.helpers({
   services: function(){
     return Services.find();
+  },
+  serviceSchema: function(){
+    return ServiceSchema;
   },
 	formType: function () {
 		if (Session.get("selectedServiceId")) {

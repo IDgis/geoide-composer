@@ -1,6 +1,6 @@
 <template name="service">
  <h1>Service Configuratie</h1>
-{{#autoForm collection=services id="serviceform" doc=serviceDoc type=formType}}
+{{#autoForm collection=services schema=serviceSchema id="serviceform" doc=serviceDoc type=formType}}
       <fieldset>
 		{{> afQuickField name="name"}}
 		{{> afQuickField name="endpoint"}}
@@ -15,7 +15,7 @@
        		{{> afFieldInput name='version' type='select' options=tmsVersions }}
 		{{/if}}
        </fieldset> <br> 
-       <button id="save" type="submit" class="btn btn-primary">Opslaan</button> 
+       <button id="save" type="submit" class="btn btn-primary">X-Opslaan</button> 
        <a id="return" class="btn btn-primary">Annuleren</a>
  {{/autoForm}}
 </template>

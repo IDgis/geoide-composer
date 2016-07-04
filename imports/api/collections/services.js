@@ -2,7 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const Services = new Mongo.Collection("services");
-Services.attachSchema(new SimpleSchema({
+export const ServiceSchema = new SimpleSchema({
 	name: {
 		type: String,
 		label: function(){ return i18n('collections.services.name.label'); },
@@ -33,8 +33,9 @@ Services.attachSchema(new SimpleSchema({
 			}
 	    }
 	}
-}));
+});
 
+Services.attachSchema(ServiceSchema);
  
 Services.allow({
 	  insert: function () { return true; },
