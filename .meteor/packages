@@ -27,6 +27,7 @@ aldeed:simple-schema
 aldeed:template-extension
 ecmascript
 jquery
-meteor-base
 session
 underscore
+meteor-platform
+meteor-base
