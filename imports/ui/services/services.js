@@ -7,7 +7,10 @@ import { Services } from '/imports/api/collections/services.js';
 import './services.html';
 
 Template.services.helpers({
-	services: function(){
+	/**
+	 * List of services
+	 */
+  services: function(){
         return Services.find();
     },
     isSelectedService: function () {
@@ -19,10 +22,12 @@ Template.services.helpers({
 Template.services.events({
   'click .edit-service': function () { 
 	  Session.set("selectedServiceId", this._id);
+    console.log("edit service " + this._id); 
 	  Router.go('service.edit', {_id: this._id});
   },
   'click .insert-service': function () {
 	  Session.set("selectedServiceId", null);
+    console.log("insert service "); 
 	  Router.go('service.insert');
   },
   'click .delete-service': function() {

@@ -1,7 +1,6 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export const Services = new Mongo.Collection("services");
 export const ServiceSchema = new SimpleSchema({
 	name: {
 		type: String,
@@ -35,6 +34,7 @@ export const ServiceSchema = new SimpleSchema({
 	}
 });
 
+export const Services = new Mongo.Collection("services");
 Services.attachSchema(ServiceSchema);
  
 Services.allow({
