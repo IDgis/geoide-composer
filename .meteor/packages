@@ -4,7 +4,6 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-meteor-platform
 mizzao:bootstrap-3
 msavin:mongol
 aldeed:autoform
@@ -24,3 +23,11 @@ anti:i18n
 johdirr:meteor-git-rev
 http
 peerlibrary:xml2js
+aldeed:simple-schema
+aldeed:template-extension
+ecmascript
+jquery
+session
+underscore
+meteor-platform
+meteor-base
