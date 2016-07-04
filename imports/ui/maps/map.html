@@ -1,7 +1,7 @@
 <template name="map">
    {{currentDoc}}
    {{formType}}
-   {{#autoForm collection="Maps" id="mapForm" type=formType doc=mapDoc class="form-inline"}}
+   {{#autoForm collection=maps id="mapForm" type=formType doc=mapDoc class="form-inline"}}
 	    <fieldset>
 	        {{> afQuickField name="text"}}
 	        {{> afQuickField name="initial_extent"}}
