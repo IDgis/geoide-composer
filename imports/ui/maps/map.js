@@ -3,6 +3,7 @@ import { Router } from 'meteor/iron:router';
 import { Session } from 'meteor/session';
 
 import { Maps } from '/imports/api/collections/maps.js';
+import { Layers } from '/imports/api/collections/layers.js';
 
 import './map.html';
 
