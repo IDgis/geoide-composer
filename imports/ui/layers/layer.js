@@ -68,9 +68,10 @@ Template.layer.events({
  */
 AutoForm.addHooks('layerform',{
   onSuccess: function(formType, result) {
+    console.log("submit layer autoform, goto list");
     Router.go('layers.list');
   },
   onError: function(formType, error){
-    console.log("autoform error = " + error);
+    console.log("layer autoform error = " + error);
   }
 });

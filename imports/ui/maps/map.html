@@ -1,25 +1,20 @@
 <template name="map">
-   {{currentDoc}}
-   {{formType}}
-   {{#autoForm collection=maps id="mapForm" type=formType doc=mapDoc class="form-inline"}}
+	<h1>{{ i18n 'maps.autoform.header' }}</h1>
+   {{#autoForm collection=maps schema=mapSchema id="mapForm" doc=mapDoc type=formType class="form-inline"}}
 	    <fieldset>
 	        {{> afQuickField name="text"}}
 	        {{> afQuickField name="initial_extent"}}
 	    </fieldset>
-		<button id="save" type="submit" class="btn btn-primary">Opslaan</button> 
-		<a id="return" class="btn btn-primary">Annuleren</a>
+		<button id="save" type="submit" class="btn btn-primary">{{ i18n 'button.save' }}</button> 
+		<a id="return" class="btn btn-primary">{{ i18n 'button.cancel' }}</a>
 	{{/autoForm}}
-    <div class="form-group">
-	    <button id="save-tree" class="btn btn-primary" >Opslaan</button>
-	    <button id="reset-tree" class="btn btn-default">Annuleren</button>
- 	 </div>
  	 
 	  <div class="row">
 		<div class="col-md-4 col-sm-8 col-xs-8">
-			<button id="createlayer" class="btn btn-success btn-sm"></button>
-			<button id="creategroup" class="btn btn-sm"></button>
-			<button id="renamenode" class="btn btn-warning btn-sm"></button>
-			<button id="removenode" class="btn btn-danger btn-sm" ></button>
+			<button id="createlayer" class="btn btn-success btn-sm">+L</button>
+			<button id="creategroup" class="btn btn-sm">+G</button>
+			<button id="renamenode" class="btn btn-warning btn-sm">~N</button>
+			<button id="removenode" class="btn btn-danger btn-sm" >-N</button>
 		</div>
 		<div class="col-md-2 col-sm-4 col-xs-4" style="text-align:right;">
 			<input id="search-tree" type="text" placeholder="Zoek" value="">
@@ -34,6 +29,9 @@
 
   	<div class="maptree tree"></div>
 	 
- <h1>-{{data}}-</h1>
+    <div class="form-group">
+	    <button id="save-tree" class="btn btn-primary" >{{ i18n 'button.save' }}</button>
+	    <button id="reset-tree" class="btn btn-default">{{ i18n 'button.cancel' }}</button>
+    </div>
 </template>
 
