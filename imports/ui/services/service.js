@@ -2,16 +2,20 @@ import { Template } from 'meteor/templating';
 import { Router } from 'meteor/iron:router';
 import { Session } from 'meteor/session';
 
-import { Services } from '/imports/api/collections/services.js';
-import { ServiceSchema } from '/imports/api/collections/services.js';
+import { Services,  ServiceSchema } from '/imports/api/collections/services.js';
 
 import './service.html';
 
-
 Template.service.helpers({
+  /**
+   * Services collection
+   */
   services: function(){
-    return Services.find();
+    return Services;
   },
+  /**
+   * Services schema
+   */
   serviceSchema: function(){
     return ServiceSchema;
   },
@@ -24,7 +28,8 @@ Template.service.helpers({
 	},
 	serviceDoc: function () {
 		if (Session.get("selectedServiceId")) {
-		    return this;
+		  return Services.findOne({_id: Session.get("selectedServiceId")});
+//		    return this;
 		 } else {
 		    return null ;
 		 }
@@ -48,13 +53,23 @@ Template.service.helpers({
 	}
 });
 
-
+/**
+ * When the Cancel button is pressed go to the service list
+ */
 Template.service.events({
-	'submit #serviceform': function () {
-		//TODO: niet terug naar de lijst wanneer er een validatie fout is opgetreden 
-		//Router.go('services');
-	},
 	'click #return': function () {
-		Router.go('services');
+		Router.go('services.list');
 	}
+});
+ 
+/**
+ * when the autoform is succesfully submitted, then go to the service list
+ */
+AutoForm.addHooks('serviceform',{
+  onSuccess: function(formType, result) {
+    Router.go('services.list');
+  },
+  onError: function(formType, error){
+    console.log("autoform error = " + error);
+  }
 });
