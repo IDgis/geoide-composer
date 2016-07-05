@@ -9,6 +9,7 @@ import '../ui/main.html';
 import '../ui/services/services.js';
 import '../ui/services/service.js';
 
+import '../ui/layers/layers.js';
 import '../ui/layers/layer.js';
 
 import '../ui/maps/map.js';
@@ -26,16 +27,12 @@ Router.route('/', function () {
 });
 
 //service routes
-//Router.route('/services', 'services');
 Router.route('/services', function () {
   this.render('services');
 }, {
   name: 'services.list'
 });
 
-//Router.route('/service/insert','service'), {
-//	name: 'service.insert'
-//};
 Router.route('/service/insert', function () {
   this.render('service');
 }, {
@@ -50,7 +47,6 @@ Router.route('/service/:_id', function () {
 });
 
 //map routes
-//Router.route('/maps', 'maps');
 Router.route('/maps', function () {
   this.render('maps');
 }, {
@@ -72,8 +68,6 @@ Router.route('/map/:_id', function () {
 });
 
 //layer routes
-Router.route('/layer', 'layer');
-//Router.route('/layers', 'layers');
 Router.route('/layers', function () {
   this.render('layers');
 }, {
@@ -96,24 +90,6 @@ Router.route('/layer/:_id', function () {
 // temporary routes
 // test i18n
 Router.route('/i18n', 'international');
-
-// test json
-Router.route('/jsonapi',  function () {
-  var json = Services.find().fetch(); // what ever data you want to return
-  this.response.setHeader('Content-Type', 'application/json');
-  this.response.end(JSON.stringify(json));
-}, {
-  name: 'jsonapi'
-});
-//Router.route('jsonapi', {
-//  path: '/jsonapi',
-//  where: 'server',
-//  action: function () {
-//    var json = Services.find().fetch(); // what ever data you want to return
-//    this.response.setHeader('Content-Type', 'application/json');
-//    this.response.end(JSON.stringify(json));
-//  }
-//});
 
 // test xml parsing
 Router.route('xmlapi', function () {

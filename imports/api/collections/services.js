@@ -21,15 +21,15 @@ export const ServiceSchema = new SimpleSchema({
 	    type: String,
 	    label: function(){ return i18n('collections.services.version.label'); },
 	    allowedValues: function() {
-			if (this.type==='WMS') {
-				return ["1.1.1","1.3.0"];
-			}
-			if (this.type==='WFS') {
-				return ["1.0.0","1.1.0","2.0.0"];
-			} 
-			if (this.type==='TMS') {
-				return ["1.0.0"];
-			}
+  			if (this.type==='WMS') {
+  				return ["1.1.1","1.3.0"];
+  			}
+  			if (this.type==='WFS') {
+  				return ["1.0.0","1.1.0","2.0.0"];
+  			} 
+  			if (this.type==='TMS') {
+  				return ["1.0.0"];
+  			}
 	    }
 	}
 });

@@ -58,6 +58,7 @@ Template.service.helpers({
  */
 Template.service.events({
 	'click #return': function () {
+    console.log("clicked cancel serviceform" );
 		Router.go('services.list');
 	}
 });
