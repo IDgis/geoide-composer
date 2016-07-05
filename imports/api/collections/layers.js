@@ -1,10 +1,8 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export const Layers = new Mongo.Collection("layers");
 
-
-Layers.attachSchema(new SimpleSchema({
+export const LayerSchema = new SimpleSchema({
 	label: {
 		type: String,
 		label: function(){ return i18n('collections.layers.name.label'); },
@@ -23,13 +21,8 @@ Layers.attachSchema(new SimpleSchema({
 		label: function(){ return i18n('collections.layers.properties.label'); },
 	}
 	
-}));
-
-Layers.allow({
-	  insert: function () { return true; },
-	  update: function () { return true; },
-	  remove: function () { return true; }
 });
+
 
 
 SimpleSchema.layerProperties = new SimpleSchema ({
@@ -96,7 +89,7 @@ SimpleSchema.featureType = new SimpleSchema ({
     	label: function(){ return i18n('collections.layers.servicelayer.featureType.searchTemplates.label'); },
     	optional: true,
 	},   
-})
+});
 
 
 SimpleSchema.searchTemplate = new SimpleSchema ({
@@ -113,10 +106,15 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
 		label: function(){ return i18n('collections.layers.servicelayer.featureType.searchTemplate.attribute_namespace.label'); },
 		optional: true
 	}		
-})
+});
 
+export const Layers = new Mongo.Collection("layers");
+Layers.attachSchema(LayerSchema);
 
-
-
+Layers.allow({
+	  insert: function () { return true; },
+	  update: function () { return true; },
+	  remove: function () { return true; }
+});
 
 

@@ -1,7 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
-export const Maps = new Mongo.Collection("maps");
+
 
 SimpleSchema.mapLayerState = new SimpleSchema ({
 	//mapLayer initial visible
@@ -52,7 +52,7 @@ SimpleSchema.initialExtent = new SimpleSchema ({
 });
 
 
-Maps.attachSchema(new SimpleSchema({
+export const MapSchema= new SimpleSchema({
 	//name of map
 	text: {
 		type: String,
@@ -145,7 +145,10 @@ Maps.attachSchema(new SimpleSchema({
 		 type: SimpleSchema.mapLayerData,
 	     optional: true
 	 }
-}));
+});
+
+export const Maps = new Mongo.Collection("maps");
+Maps.attachSchema(MapSchema);
 
 Maps.allow({
 	  insert: function () { return true; },
