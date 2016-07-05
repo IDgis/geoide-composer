@@ -57,6 +57,7 @@ export const MapSchema= new SimpleSchema({
 	text: {
 		type: String,
 		label: function(){ return i18n('collections.maps.name.label'); },
+		unique: true,
 	}, 
 	//type in tree (not relevant for viewerconfig)
 	type: {

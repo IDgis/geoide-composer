@@ -3,9 +3,10 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 
 export const LayerSchema = new SimpleSchema({
-	label: {
+	name: {
 		type: String,
 		label: function(){ return i18n('collections.layers.name.label'); },
+		unique: true,
 	}, 
 	type: {
 		type: String,
