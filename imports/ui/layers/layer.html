@@ -1,5 +1,5 @@
 <template name="layer">
- {{#autoForm collection="Layers" doc=selectedLayerDoc id="updateLayerForm" type="update"}}
+ {{#autoForm collection=layers schema=layerSchema id="layerform" doc=layerDoc type=formType}}
         <fieldset>
             {{> afQuickField name="label"}}
         	{{> afQuickField name="layer_type"}}

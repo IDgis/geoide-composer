@@ -13,7 +13,7 @@ Template.layers.helpers({
   layers: function(){
         return Layers.find();
     },
-    isSelectedLayer: function () {
+  isSelectedLayer: function () {
 		return Session.equals("selectedLayerId", this._id);
 	},
 });
