@@ -1,30 +1,30 @@
 i18n.map('en', {
-  // GUI
-  main : {
-    title : 'Geoide Admin',
-    menu  : {
-      services: 'Services',
-      layers: 'Layers',
-      maps: 'Maps',
-    },
-    messages : 'messages'
-  },
+	// GUI
+	main : {
+		title : 'Geoide Admin',
+		menu : {
+			services : 'Services',
+			layers : 'Layers',
+			maps : 'Maps',
+		},
+		messages : 'messages'
+	},
 
-  services:{
-    
-  },
-  
-  layers: {
-    
-  },
-  
-  maps: {
-    
-  },
-  
-  // Collections
-  collections: {
-	  layers : {
+	services : {
+
+	},
+
+	layers : {
+
+	},
+
+	maps : {
+
+	},
+
+	// Collections
+	collections : {
+		layers : {
 			name : {
 				label : 'Name',
 			},
@@ -89,30 +89,50 @@ i18n.map('en', {
 				},
 			},
 		},
-    
-   	services: {
-      name: {
-        label: 'Name',
-      },
-      endpoint: {
-          label: 'Url',
-      },
-      type: {
-    	  label: 'Type',
-      },
-      version: {
-    	  label: 'Version',
-      },
-    }, 
-  },
 
-  // General
-  version: 'version',
-  
-  // test i18n
-  heading1 : 'Chapter 1',
-  heading2 : {
-    main : 'chapter 2',
-    sub : 'part 2',
-  }
+		services : {
+			name : {
+				label : 'Name',
+			},
+			endpoint : {
+				label : 'Url',
+			},
+			type : {
+				label : 'Type',
+			},
+			version : {
+				label : 'Version',
+			},
+		},
+		maps : {
+			name : {
+				label : "Map name",
+			},
+			initial_extent : {
+				label : "Initial extent",
+				minX : {
+					label : "min X",
+				},
+				minY : {
+					label : "min Y",
+				},
+				maxX : {
+					label : "max X",
+				},
+				maxY : {
+					label : "max Y"
+				},
+			},
+		},
+	},
+
+	// General
+	version : 'version',
+
+	// test i18n
+	heading1 : 'Chapter 1',
+	heading2 : {
+		main : 'chapter 2',
+		sub : 'part 2',
+	}
 });

@@ -4,7 +4,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 export const Maps = new Mongo.Collection("maps");
 
 SimpleSchema.mapLayerState = new SimpleSchema ({
-	//visible
+	//mapLayer initial visible
 	checked: {
 		type: Boolean,
 		optional: true
@@ -12,6 +12,7 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 });
 
 SimpleSchema.mapLayerData = new SimpleSchema ({
+	//id of layer is stored in dataattibute
 	layerid: {
 		type: String,
 		optional: true
@@ -25,89 +26,74 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	min: 0,
     	max: 300000,
     	defaultValue: 0,
-    	label: 'minX'
+    	label:  function(){ return i18n('collections.maps.initial_extent.minX.label'); },
     },
     "miny": {
     	type: Number,
     	min: 300000,
     	max: 620000,
     	defaultValue: 300000,
-    	label: 'minY'
+    	label: function(){ return i18n('collections.maps.initial_extent.minY.label'); },
      },
      "maxx": {
     	type: Number,
     	min: 0,
     	max: 300000,
     	defaultValue: 300000,
-    	label: 'maxX'
+    	label: function(){ return i18n('collections.maps.initial_extent.maxX.label'); },
     },
     "maxy":  {
       	type: Number,
        	min: 300000,
        	max: 620000,
        	defaultValue: 620000,
-       	label: 'maxY'
+       	label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
     }
 });
 
-//dit werkt niet, slecht 1 niveau. children op volgend niveau zijn lege objecten
-SimpleSchema.child = new SimpleSchema ({
-	"id": {
-		type: String,
-	}, 
-	"text": {
-		type: String
-	},
-	"type": {
-		type:String
-	},
-	"state": {
-		type: SimpleSchema.mapLayerState,
-	},
-	"children": {
-		type: [SimpleSchema.child]
-	}	
-});
 
 Maps.attachSchema(new SimpleSchema({
+	//name of map
 	text: {
 		type: String,
-		label: "Kaartnaam"
+		label: function(){ return i18n('collections.maps.name.label'); },
 	}, 
+	//type in tree (not relevant for viewerconfig)
 	type: {
 		type: String,
 		defaultValue: 'map'
 	},
 	initial_extent: {
 		type: SimpleSchema.initialExtent,
-		label: "Initieel extent",
+		label: function(){ return i18n('collections.maps.initial_extent.label'); },
 		optional: true
-	},
-    state: {
-    	type: SimpleSchema.mapLayerState,
-    	optional: true
 	},
 	children: {
 		type: [Object],
 		optional: true
-	}, 
+	},
+	//id in tree (not relevant for viewerconfig)
 	'children.$.id': {
         type: String,
         optional: true
     },
+    //layer name (overrules name in layerconfig)
     'children.$.text': {
         type: String,
         optional: true
     },
     'children.$.state': {
+    	//layer visibility
     	type: SimpleSchema.mapLayerState,
     	optional: true
 	},
     'children.$.type': {
+       //type in tree (not relevant for viewerconfig)
    	   type: String,
    	   optional: true
     },
     'children.$.data': {
+    	//layer_id
 		type: SimpleSchema.mapLayerData,
 		optional: true
 	},

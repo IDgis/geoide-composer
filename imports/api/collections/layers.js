@@ -61,8 +61,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
 		type: String,
 		label: function(){ return i18n('collections.layers.servicelayer.name.label'); },
 	}, 
+	//services_id WMS/TMS
 	service: {
-		//services_id
 		type: String,
 		label: function(){ return i18n('collections.layers.servicelayer.service.label'); },	
 	},
@@ -82,6 +82,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 		type: String,
 		label: function(){ return i18n('collections.layers.servicelayer.featureType.name.label'); },
 	}, 
+	//service_id WFS
 	service: {
 		type: String,
 		label: function(){ return i18n('collections.layers.servicelayer.featureType.service.label'); },
