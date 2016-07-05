@@ -7,7 +7,11 @@ i18n.map('nl', {
       layers: 'Lagen',
       maps: 'Kaarten',
       i18n: 'i18n - test',
-      jsonapi: 'jsonapi - test',
+      jsonapi: {
+        services: 'jsonapi - services',
+        layers: 'jsonapi - layers',
+        maps: 'jsonapi - maps',
+      },
       xmlapi: 'xmlapi - test',
     },
     messages : 'meldingen'
