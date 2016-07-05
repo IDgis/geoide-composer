@@ -66,10 +66,10 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type: {$in: ["WMS","TMS"] }},{fields:{type:1,_id:1}}).fetch();
+          var serv = Services.find({type: {$in: ["WMS","TMS"] }},{fields:{name:1,_id:1}}).fetch();
           var servoptions = [];
           serv.forEach(function(entry) {
-            servoptions.push({label:entry.type, value:entry._id});
+            servoptions.push({label:entry.name, value:entry._id});
           });
           return servoptions;
         }

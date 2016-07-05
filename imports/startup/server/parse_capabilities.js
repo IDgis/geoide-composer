@@ -2,6 +2,9 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { xml2js } from 'meteor/peerlibrary:xml2js';
 
+import { Services } from '/imports/api/collections/services.js';
+
+
 Meteor.methods({
   /**
    * Get result from a server as xml. 
@@ -36,6 +39,7 @@ Meteor.methods({
   parseXml : function(xml){
     return xml2js.parseStringSync(xml, {explicitArray:false, emptyTag:undefined});
   },
+  
   getServiceLayers: function(host){
     console.log('getServiceLayers host:', host);
     var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS'});
@@ -46,10 +50,18 @@ Meteor.methods({
 
     _.each(parseResponse.WMS_Capabilities.Capability.Layer.Layer,function(layer){
         console.log('layer: ',layer.Title);
-        servoptions.push(layer.Title);
+        servoptions.push({name:layer.Name, title:layer.Title});
       });
-    console.log('servoptions: ',servoptions);
+    console.log('Service Layers found: ',servoptions);
     return servoptions;
+  },
+  
+  getService: function(thisid){
+    console.log('getService id:', thisid);
+    var serv = Services.find({_id: thisid}).fetch();
+    console.log('service found: ',serv);
+    return serv;
+    
   },
 });
 
