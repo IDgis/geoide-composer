@@ -1,4 +1,5 @@
 import { Template } from 'meteor/templating';
+import { Router } from 'meteor/iron:router';
 import { Session } from 'meteor/session';
 
 import { Services } from '/imports/api/collections/services.js';
@@ -46,3 +47,30 @@ Template.layer.helpers({
 	
 });
 
+/**
+ * When the Cancel button is pressed go to the layer list
+ */
+Template.layer.events({
+  'click #returnLayer': function () {
+    console.log("clicked cancel layerform" );
+    Router.go('layers.list');
+  },
+  'change select[name$=".service"]' : function(e){
+    console.log("clicked service select by name ");
+    console.log(e);
+    // TODO find service id, get its layers and show them in next element 'nameInService' options 
+    
+  },
+});
+ 
+/**
+ * when the autoform is succesfully submitted, then go to the layer list
+ */
+AutoForm.addHooks('layerform',{
+  onSuccess: function(formType, result) {
+    Router.go('layers.list');
+  },
+  onError: function(formType, error){
+    console.log("autoform error = " + error);
+  }
+});

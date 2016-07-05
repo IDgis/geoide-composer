@@ -1,17 +1,14 @@
 <template name="layer">
+ <h1>Layer Configuratie</h1>
  {{#autoForm collection=layers schema=layerSchema id="layerform" doc=layerDoc type=formType}}
         <fieldset>
-            {{> afQuickField name="label"}}
-        	{{> afQuickField name="layer_type"}}
-        	{{> afQuickField name="state"}}
+            {{> afQuickField name="name"}}
+        	{{> afQuickField name="type"}}
         	{{> afQuickField name="properties"}}
         	{{> afQuickField name="service_layers"}}
         </fieldset>  
         <button type="submit" class="btn btn-primary">Laag Opslaan</button>     
+        <a id="returnLayer" class="btn btn-primary">Annuleren</a>
  {{/autoForm}}
   
-<div>Servicelagen</div>
-
-
-
 </template>
