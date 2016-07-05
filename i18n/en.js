@@ -24,14 +24,71 @@ i18n.map('en', {
   
   // Collections
   collections: {
-    layers: {
-      label: {
-        label: 'Name of the layer',
-      },
-      type: {
-        label: 'Type of the layer',
-      },
-    },
+	  layers : {
+			name : {
+				label : 'Name',
+			},
+			type : {
+				label : 'Type',
+			},
+			service_layers : {
+				label : 'Servicelayers',
+			},
+			properties : {
+				label : 'Properties',
+				initial_visible : {
+					label : 'Initial visible',
+				},
+				initial_query : {
+					label : 'Initial query',
+				},
+				applayer : {
+					label : 'CRS2 layer',
+				},
+			},
+			service_layer : {
+				name : {
+					label : 'Name',
+				},
+				service : {
+					label : 'Service',
+				},
+				nameInService : {
+					label : 'Servicelayername',
+				},
+				wfs_service : {
+					label : 'WFS service',
+				},
+				featureTypes : {
+					label : 'WFS Featuretypes'
+				},
+				featureType : {
+					name : {
+						label : 'Name',
+					},
+					service : {
+						label : 'Service',
+					},
+					nameInService : {
+						label : 'FeatureType name'
+					},
+					searchTemplates : {
+						label : 'Searchtemplates'
+					},
+					searchTemplate : {
+						label : {
+							label : 'Label',
+						},
+						attribute_localname : {
+							label : 'Search field',
+						},
+						attribute_namespace : {
+							label : 'Namespace',
+						},
+					},
+				},
+			},
+		},
     
    	services: {
       name: {
