@@ -13,6 +13,7 @@ i18n.map('nl', {
         maps: 'jsonapi - kaarten',
       },
       xmlapi: 'xmlapi - test',
+      getcaplayersapi: 'getcaplayersapi - test',
     },
     messages : 'meldingen'
   },
