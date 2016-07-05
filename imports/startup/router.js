@@ -92,7 +92,7 @@ Router.route('/layer/:_id', function () {
 Router.route('/i18n', 'international');
 
 // test xml parsing
-Router.route('xmlapi', function () {
+Router.route('/xmlapi', function () {
   console.log('calling http client');
   Meteor.call('getXml',
 //      'http://httpbin.org/post'
@@ -132,4 +132,19 @@ Router.route('xmlapi', function () {
   
 }, {
   name: 'api.xml'
+});
+
+Router.route('/getcaplayersapi', function() {
+  console.log('calling getServiceLayers');
+  Meteor.call('getServiceLayers',
+      'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' // host argument
+      , function(error, response) {
+          if (error) {
+            console.log('getServiceLayers Error ', error);
+          } else {
+            console.log('getServiceLayers result ', response);
+          }
+        });
+}, {
+  name : 'getcaplayers-api.xml'
 });

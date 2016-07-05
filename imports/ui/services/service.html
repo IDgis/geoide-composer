@@ -1,5 +1,5 @@
 <template name="service">
- <h1>Service Configuratie</h1>
+ <h1>{{ i18n 'services.autoform.header' }}</h1>
 {{#autoForm collection=services schema=serviceSchema id="serviceform" doc=serviceDoc type=formType}}
       <fieldset>
 		{{> afQuickField name="name"}}
@@ -15,7 +15,7 @@
        		{{> afFieldInput name='version' type='select' options=tmsVersions }}
 		{{/if}}
        </fieldset> <br> 
-       <button id="save" type="submit" class="btn btn-primary">Opslaan</button> 
-       <a id="return" class="btn btn-primary">Annuleren</a>
+       <button id="save" type="submit" class="btn btn-primary">{{ i18n 'button.save' }}</button> 
+       <a id="return" class="btn btn-primary">{{ i18n 'button.cancel' }}</a>
  {{/autoForm}}
 </template>

@@ -13,6 +13,7 @@ Meteor.methods({
    *   {request: 'GetCapabilities', service:'WMS'} 
    */ 
   getXml : function (host, params){
+    console.log('getXml() host: ', host + ', params: ' + params);
     try {
       var res = HTTP.get(host, {'params' : params, 
         headers:{
@@ -34,6 +35,21 @@ Meteor.methods({
    */
   parseXml : function(xml){
     return xml2js.parseStringSync(xml, {explicitArray:false, emptyTag:undefined});
-  }
+  },
+  getServiceLayers: function(host){
+    console.log('getServiceLayers host:', host);
+    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS'});
+//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+//    console.log('getServiceLayers parseResponse:', parseResponse);
+    var servoptions = [];
+
+    _.each(parseResponse.WMS_Capabilities.Capability.Layer.Layer,function(layer){
+        console.log('layer: ',layer.Title);
+        servoptions.push(layer.Title);
+      });
+    console.log('servoptions: ',servoptions);
+    return servoptions;
+  },
 });
 

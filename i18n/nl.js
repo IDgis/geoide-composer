@@ -9,29 +9,52 @@ i18n.map('nl', {
       i18n: 'i18n - test',
       jsonapi: {
         services: 'jsonapi - services',
-        layers: 'jsonapi - layers',
-        maps: 'jsonapi - maps',
+        layers: 'jsonapi - lagen',
+        maps: 'jsonapi - kaarten',
       },
       xmlapi: 'xmlapi - test',
+      getcaplayersapi: 'getcaplayersapi - test',
     },
     messages : 'meldingen'
   },
   
   services:{
+    autoform: {
+      header:'Service configuratie',
+    },
     
   },
   
   layers: {
-    
+    autoform: {
+      header:'Laag configuratie',
+    },
   },
   
   maps: {
-    
+    autoform: {
+      header:'Kaart configuratie',
+    },
+
   },
   
 //Collections
 	collections : {
-		layers : {
+    services : {
+      name : {
+        label : 'Naam',
+      },
+      endpoint : {
+        label : 'Url',
+      },
+      type : {
+        label : 'Type',
+      },
+      version : {
+        label : 'Versie',
+      },
+    },
+    layers : {
 			name : {
 				label : 'Naam',
 			},
@@ -121,6 +144,10 @@ i18n.map('nl', {
 
   // Generiek
   version: 'versie',
+  button: {
+    save: 'Opslaan',
+    cancel:'Annuleren'
+  },
 
 // test i18n  
   heading1 : 'Hoofdstuk 1',

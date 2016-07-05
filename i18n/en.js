@@ -6,6 +6,13 @@ i18n.map('en', {
 			services : 'Services',
 			layers : 'Layers',
 			maps : 'Maps',
+      i18n: 'i18n - test',
+      jsonapi: {
+        services: 'jsonapi - services',
+        layers: 'jsonapi - layers',
+        maps: 'jsonapi - maps',
+      },
+      xmlapi: 'xmlapi - test',
 		},
 		messages : 'messages'
 	},
@@ -24,7 +31,21 @@ i18n.map('en', {
 
 	// Collections
 	collections : {
-		layers : {
+    services : {
+      name : {
+        label : 'Name',
+      },
+      endpoint : {
+        label : 'Url',
+      },
+      type : {
+        label : 'Type',
+      },
+      version : {
+        label : 'Version',
+      },
+    },
+    layers : {
 			name : {
 				label : 'Name',
 			},
@@ -90,20 +111,6 @@ i18n.map('en', {
 			},
 		},
 
-		services : {
-			name : {
-				label : 'Name',
-			},
-			endpoint : {
-				label : 'Url',
-			},
-			type : {
-				label : 'Type',
-			},
-			version : {
-				label : 'Version',
-			},
-		},
 		maps : {
 			name : {
 				label : "Map name",

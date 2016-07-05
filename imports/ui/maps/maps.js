@@ -18,10 +18,12 @@ Template.maps.helpers({
 Template.maps.events ({
   'click .edit-map': function () { 
 	  Session.set("selectedMapId", this._id);
+    console.log("edit kaart " + this._id); 
 	  Router.go('map.edit', {_id: this._id});
   },
   'click .insert-map': function () {
 	  Session.set("selectedMapId", null);
+    console.log("insert kaart"); 
 	  Router.go('map.insert');
   },
   'click .delete-map': function() {

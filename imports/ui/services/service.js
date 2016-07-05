@@ -68,9 +68,10 @@ Template.service.events({
  */
 AutoForm.addHooks('serviceform',{
   onSuccess: function(formType, result) {
+    console.log("submit service autoform, goto list");
     Router.go('services.list');
   },
   onError: function(formType, error){
-    console.log("autoform error = " + error);
+    console.log("service autoform error = " + error);
   }
 });

@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Router } from 'meteor/iron:router';
 import { Session } from 'meteor/session';
@@ -59,7 +60,15 @@ Template.layer.events({
     console.log("clicked service select by name ");
     console.log(e);
     // TODO find service id, get its layers and show them in next element 'nameInService' options 
-    
+    Meteor.call('getServiceLayers',
+        'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' // host argument
+        , function(error, response) {
+            if (error) {
+              console.log('getServiceLayers Error ', error);
+            } else {
+              console.log('getServiceLayers result ', response);
+            }
+         });
   },
 });
  
@@ -68,9 +77,10 @@ Template.layer.events({
  */
 AutoForm.addHooks('layerform',{
   onSuccess: function(formType, result) {
+    console.log("submit layer autoform, goto list");
     Router.go('layers.list');
   },
   onError: function(formType, error){
-    console.log("autoform error = " + error);
+    console.log("layer autoform error = " + error);
   }
 });
