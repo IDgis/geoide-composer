@@ -5,15 +5,15 @@ import { Services } from '/imports/api/collections/services.js';
 SimpleSchema.searchTemplate = new SimpleSchema ({
   label: {
     type: String,
-    label: function(){ return i18n('collections.layers.servicelayer.featureType.searchTemplate.label.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.label.label'); },
   },
   attribute_localname : {
     type: String,
-    label: function(){ return i18n('collections.layers.servicelayer.featureType.searchTemplate.attribute_localname.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
   },
   attibute_namespace: {
     type: String,
-    label: function(){ return i18n('collections.layers.servicelayer.featureType.searchTemplate.attribute_namespace.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     optional: true
   }		
 });
@@ -21,12 +21,12 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
 SimpleSchema.featureType = new SimpleSchema ({
 	name: {
 		type: String,
-		label: function(){ return i18n('collections.layers.servicelayer.featureType.name.label'); },
+		label: function(){ return i18n('collections.layers.serviceLayer.featureType.name.label'); },
 	}, 
 	//service_id WFS
 	service: {
 		type: String,
-		label: function(){ return i18n('collections.layers.servicelayer.featureType.service.label'); },
+		label: function(){ return i18n('collections.layers.serviceLayer.featureType.service.label'); },
     autoform: {
       options: 
         function(){
@@ -39,16 +39,29 @@ SimpleSchema.featureType = new SimpleSchema ({
         }
     }
 	},
+	
+  selectButton: {
+    type: String,
+    label: ' ',
+    autoform: {
+      afFieldInput: {
+        type: "button",
+        defaultValue: function(){ return i18n('collections.layers.serviceLayer.featureType.selectButton.label'); },
+        class: 'btn btn-warning'
+      }
+    }
+  },
+  
 	nameInService: {
 		type: String,
-		label: function(){ return i18n('collections.layers.servicelayer.featureType.nameInService.label'); },
+		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options:  []    
     }
 	},
 	searchTemplates: {
     	type: [SimpleSchema.searchTemplate],
-    	label: function(){ return i18n('collections.layers.servicelayer.featureType.searchTemplates.label'); },
+    	label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
     	optional: true,
 	},   
 });
@@ -56,12 +69,12 @@ SimpleSchema.featureType = new SimpleSchema ({
 SimpleSchema.serviceLayer = new SimpleSchema ({
   name: {
     type: String,
-    label: function(){ return i18n('collections.layers.servicelayer.name.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.name.label'); },
   }, 
   //services_id WMS/TMS
   service: {
     type: String,
-    label: function(){ return i18n('collections.layers.servicelayer.service.label'); }, 
+    label: function(){ return i18n('collections.layers.serviceLayer.service.label'); }, 
 //    allowedValues:  ['service1', 'WMS'],
     autoform: {
       options: 
@@ -75,13 +88,26 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
         }
     }
   },
+  
+  selectButton: {
+    type: String,
+    label: ' ',
+    autoform: {
+      afFieldInput: {
+        type: "button",
+        defaultValue: function(){ return i18n('collections.layers.serviceLayer.selectButton.label'); },
+        class: 'btn btn-warning'
+      }
+    }
+  },
   nameInService: {
     type: String,
-    label: function(){ return i18n('collections.layers.servicelayer.nameInService.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
       options:  []    
     }
   }, 
+  
   featureType: {
     type: SimpleSchema.featureType,
     optional: true,
@@ -93,7 +119,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
   initial_visible: {
     type: Boolean,
     defaultValue: false,
-    label: function(){ return i18n('collections.layers.properties.initial_visible.label'); },
+    label: function(){ return i18n('collections.layers.properties.initialVisible.label'); },
   },
   initial_query: {
     type: String,
@@ -104,7 +130,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
         return true;
       } 
      },
-     label: function(){ return i18n('collections.layers.properties.initial_query.label'); },
+     label: function(){ return i18n('collections.layers.properties.initialQuery.label'); },
   },  
   applayer: {
     type: Boolean,
@@ -126,7 +152,7 @@ export const LayerSchema = new SimpleSchema({
   }, 
   service_layers: {
     type: [SimpleSchema.serviceLayer],
-    label: function(){ return i18n('collections.layers.service_layers.label'); }, 
+    label: function(){ return i18n('collections.layers.serviceLayers.label'); }, 
   }, 
   properties:  {
     type: SimpleSchema.layerProperties,

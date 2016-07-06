@@ -12,6 +12,14 @@ i18n.map('nl', {
         layers: 'jsonapi - lagen',
         maps: 'jsonapi - kaarten',
       },
+      jsonGvApi: {
+        services: 'jsonapi GV - Services',
+        layers: 'jsonapi GV - Lagen',
+        maps: 'jsonapi GV - Kaarten',
+        featuretypes: 'jsonapi GV - Feaure Types',
+        searchtemplates: 'jsonapi GV - Search Templates',
+        servicelayers: 'jsonapi GV - Service Layers',
+      },
       xmlapi: 'xmlapi - test',
       getcaplayersapi: 'getcaplayersapi - test',
     },
@@ -61,32 +69,35 @@ i18n.map('nl', {
 			type : {
 				label : 'Type',
 			},
-			service_layers : {
+			serviceLayers : {
 				label : 'Servicelagen',
 			},
 			properties : {
 				label : 'Eigenschappen',
-				initial_visible : {
+				initialVisible : {
 					label : 'Initieel zichtbaar',
 				},
-				initial_query : {
+				initialQuery : {
 					label : 'Initiële query',
 				},
 				applayer : {
 					label : 'CRS2 laag',
 				},
 			},
-			service_layer : {
+			serviceLayer : {
 				name : {
 					label : 'Naam',
 				},
 				service : {
 					label : 'Service',
 				},
-				nameInService : {
-					label : 'Servicelaagnaam',
+				selectButton: {
+				  label: 'Voeg servicelagen toe:',
 				},
-				wfs_service : {
+				nameInService : {
+					label : 'Service laagnaam',
+				},
+				wfsService : {
 					label : 'WFS service',
 				},
 				featureTypes : {
@@ -99,6 +110,9 @@ i18n.map('nl', {
 					service : {
 						label : 'Service',
 					},
+	        selectButton: {
+	          label: 'Voeg featuretypen toe:',
+	        },
 					nameInService : {
 						label : 'FeatureType naam'
 					},
@@ -109,10 +123,10 @@ i18n.map('nl', {
 						label : {
 							label : 'Label',
 						},
-						attribute_localname : {
+						attributeLocalname : {
 							label : 'Zoekveld',
 						},
-						attribute_namespace : {
+						attributeNamespace : {
 							label : 'Namespace',
 						},
 					},
@@ -123,7 +137,7 @@ i18n.map('nl', {
 			name: {
 				label: "Kaartnaam",
 			},
-			initial_extent: {
+			initialExtent: {
 				label: "Initiële kaartuitsnede",
 				minX: {
 					label: "min X",

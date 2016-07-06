@@ -9,6 +9,9 @@ import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
 import './layer.html';
 
 Template.layer.helpers({
+  /**
+   * Retrieve a list of services options for a selectbox
+   */
 	services: function(){
 		var serv = Services.find({},{fields:{name:1,_id:1}}).fetch();
 		var servoptions = [];
@@ -17,7 +20,9 @@ Template.layer.helpers({
 		});
 		return servoptions;
 	},
-	
+	/**
+	 * Find a specific service
+	 */
   service: function(thisid){
     var serv = Services.find({_id: thisid}).fetch();
     return serv;
@@ -45,7 +50,6 @@ Template.layer.helpers({
 	  layerDoc: function () {
 	    if (Session.get("selectedLayerId")) {
 	      return Layers.findOne({_id: Session.get("selectedLayerId")});
-//	        return this;
 	     } else {
 	        return null ;
 	     }
@@ -67,20 +71,46 @@ fillLayerSelect = function() {
   });
 };
 
-/**
- * When the Cancel button is pressed go to the layer list
- */
 Template.layer.events({
+  /**
+   *  When the Cancel button is pressed go to the layer list
+   */
   'click #returnLayer': function () {
     console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
   'change select[name$=".service"]' : function(e){
-    console.log("clicked service select by name ");
+    console.log("change on service select ");
     console.log(e);
+  },
+  'click select[name$=".service"]' : function(e){
+    console.log("clicked on service select ");
+    console.log(e);
+  },
+  /**
+   * Fill a selectbox with layernames of a service
+   * 1. listen to click on button near the selectbox 'service' in servicelayer,
+   * 2. get the service layers from the GetCapabilities of the selected service
+   * 3. and put the layer list in selectbox 'nameInService'
+   */
+  'click input[name$="selectButton"]' : function(e){
+    console.log("clicked select button");
+    console.log(e);
+    // get name of button
+    var buttonName = e.target.name;
+    // find select listbox above it (source of serviceId)
+    var srcName = buttonName.replace("selectButton", "service");
+    console.log("Source: " + srcName);
+    var srcSelect = $('select[name="' + srcName + '"] ');
+    console.log(srcSelect);
+    // and the field input below it (destination of layerName)
+    var dstName = buttonName.replace("selectButton", "nameInService");
+    console.log("Destination: " + dstName);
+    var dstSelect = $('select[name="' + dstName + '"] ');
+    console.log(dstSelect);
     // TODO find service id, get its layers and show them in next element 'nameInService' options 
-    // service id
-    var serviceId = e.target.value;
+
+    var serviceId = srcSelect[0].value;
     console.log("service id " + serviceId);
     Meteor.call('getService', serviceId
         , function(sError, sResponse) {
@@ -90,32 +120,48 @@ Template.layer.events({
               // service found
               console.log('getService result ', sResponse);
               console.log('getService endpoint ', sResponse[0].endpoint);
-              Meteor.call('getServiceLayers',
-                  sResponse[0].endpoint
-                  , function(lError, lResponse) {
-                      if (lError) {
-                        console.log('getServiceLayers Error ', lError);
-                      } else {
-                        // service layers found !!
-                        console.log('getServiceLayers result ', lResponse);
-                        // put it in options /  of nameInService
-                        $.each(lResponse, function(count, obj) {   
-                          // TODO this selects all elements with ".nameInService" in the name!! 
-                          $('select[name$=".nameInService"] ')
-                               .append($('<option>', { value : obj.name })
-                               .text(obj.title)); 
-                        });
-//                        lResponse.forEach(function(entry) {
-//                          var layerOption = "<option value=" + entry.name + ">" + entry.title
-//                              + "</option>"
-//                          $('select[name$=".nameInService"] ').append(layerOption);
-//                        });
-
-                      }
-                    });
+              var methodName = '';
+              switch(sResponse[0].type) {
+                case 'WMS':
+                    methodName = 'getWmsLayers';
+                    break;
+                case 'TMS':
+                  methodName = 'getTmsLayers';
+                  break;
+                case 'WFS':
+                  methodName = 'getWfsFeatureTypes';
+                  break;
+                default:
+                  methodName = '';
+              }
+              if (methodName == ''){
+                // error
+              } else {
+                  Meteor.call(methodName,
+                      sResponse[0].endpoint,
+                      sResponse[0].version
+                      , function(lError, lResponse) {
+                          if (lError) {
+                            console.log(methodName + ' Error ', lError);
+                          } else {
+                            // service layers found !!
+                            console.log(methodName + ' result ', lResponse);
+                            // put it in options /  of nameInService
+                            dstSelect.empty();
+                            $.each(lResponse, function(count, obj) {   
+                              dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
+                            });
+    //                        lResponse.forEach(function(entry) {
+    //                          var layerOption = "<option value=" + entry.name + ">" + entry.title
+    //                              + "</option>"
+    //                          $('select[name$=".nameInService"] ').append(layerOption);
+    //                        });
+    
+                          }
+                  });
+              }
             }
          });
-    
   },
 });
  
