@@ -39,29 +39,77 @@ Meteor.methods({
   parseXml : function(xml){
     return xml2js.parseStringSync(xml, {explicitArray:false, emptyTag:undefined});
   },
-  
-  getServiceLayers: function(host){
-    console.log('getServiceLayers host:', host);
-    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS'});
+  /**
+   * Get layers from a WMS
+   */
+  getWmsLayers: function(host, version){
+    console.log('getWmsLayers host: ' + host + ', version: ' + version);
+    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
 //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
 //    console.log('getServiceLayers parseResponse:', parseResponse);
     var servoptions = [];
 
+    // TODO code below depends on version
+    // version 1.3.0
     _.each(parseResponse.WMS_Capabilities.Capability.Layer.Layer,function(layer){
-        console.log('layer: ',layer.Title);
         servoptions.push({name:layer.Name, title:layer.Title});
       });
-    console.log('Service Layers found: ',servoptions);
+    console.log('WMS Layers found: ',servoptions);
     return servoptions;
   },
   
+  /**
+   * Get layers from a TMS
+   */
+  getTmsLayers: function(host, version){
+    console.log('getTmsLayers host: ' + host + ', version: ' + version);
+    var xmlResponse = Meteor.call('getXml', host, {});
+    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    console.log('getServiceLayers parseResponse:', parseResponse);
+    var servoptions = [];
+ 
+    // version 1.0.0
+    _.each(parseResponse.TileMap.TileSets.TileSet,function(tl){
+        servoptions.push({name:tl.$.order, title:tl.$.href});
+      });
+    console.log('TMS Layers found: ',servoptions);
+    return servoptions;
+  },
+  
+  /**
+   * Get feature types from a WFS
+   */
+  getWfsFeatureTypes: function(host, version){
+    console.log('getWfsFeatureTypes host: ' + host + ', version: ' + version);
+    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
+//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+//    console.log('getServiceLayers parseResponse:', parseResponse);
+    var servoptions = [];
+
+    // TODO code below depends on version
+    // version 2.0.0
+    _.each(parseResponse.WFS_Capabilities.FeatureTypeList.FeatureType,function(ft){
+        if (typeof ft.Name === 'object' ){
+          servoptions.push({name:ft.Name._, title:ft.Title});
+        } else {
+          servoptions.push({name:ft.Name, title:ft.Title});
+        }
+      });
+    console.log('WFS FeatureTypes found: ',servoptions);
+    return servoptions;
+  },
+  
+  /**
+   * Get service from collection
+   */
   getService: function(thisid){
     console.log('getService id:', thisid);
     var serv = Services.find({_id: thisid}).fetch();
     console.log('service found: ',serv);
     return serv;
-    
   },
 });
 
