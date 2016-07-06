@@ -9,6 +9,9 @@ import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
 import './layer.html';
 
 Template.layer.helpers({
+  /**
+   * Retrieve a list of services options for a selectbox
+   */
 	services: function(){
 		var serv = Services.find({},{fields:{name:1,_id:1}}).fetch();
 		var servoptions = [];
@@ -17,7 +20,9 @@ Template.layer.helpers({
 		});
 		return servoptions;
 	},
-	
+	/**
+	 * Find a specific service
+	 */
   service: function(thisid){
     var serv = Services.find({_id: thisid}).fetch();
     return serv;
@@ -45,7 +50,6 @@ Template.layer.helpers({
 	  layerDoc: function () {
 	    if (Session.get("selectedLayerId")) {
 	      return Layers.findOne({_id: Session.get("selectedLayerId")});
-//	        return this;
 	     } else {
 	        return null ;
 	     }
@@ -67,14 +71,20 @@ fillLayerSelect = function() {
   });
 };
 
-/**
- * When the Cancel button is pressed go to the layer list
- */
 Template.layer.events({
+  /**
+   *  When the Cancel button is pressed go to the layer list
+   */
   'click #returnLayer': function () {
     console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
+  /**
+   * Fill a selectbox with layernames of a service
+   * 1. listen to changes in the selectbox 'service' in servicelayer,
+   * 2. get the service layers form the GetCapabilities
+   * 3. and put the list in selectbox 'nameInService'
+   */
   'change select[name$=".service"]' : function(e){
     console.log("clicked service select by name ");
     console.log(e);
@@ -100,7 +110,8 @@ Template.layer.events({
                         console.log('getServiceLayers result ', lResponse);
                         // put it in options /  of nameInService
                         $.each(lResponse, function(count, obj) {   
-                          // TODO this selects all elements with ".nameInService" in the name!! 
+                          // TODO this selects all elements with ".nameInService" in the name!!
+                          // we only need to address the one next to selectbox 'service'
                           $('select[name$=".nameInService"] ')
                                .append($('<option>', { value : obj.name })
                                .text(obj.title)); 
@@ -115,7 +126,6 @@ Template.layer.events({
                     });
             }
          });
-    
   },
 });
  

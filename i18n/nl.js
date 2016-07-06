@@ -61,22 +61,22 @@ i18n.map('nl', {
 			type : {
 				label : 'Type',
 			},
-			service_layers : {
+			serviceLayers : {
 				label : 'Servicelagen',
 			},
 			properties : {
 				label : 'Eigenschappen',
-				initial_visible : {
+				initialVisible : {
 					label : 'Initieel zichtbaar',
 				},
-				initial_query : {
+				initialQuery : {
 					label : 'Initiële query',
 				},
 				applayer : {
 					label : 'CRS2 laag',
 				},
 			},
-			service_layer : {
+			serviceLayer : {
 				name : {
 					label : 'Naam',
 				},
@@ -86,7 +86,10 @@ i18n.map('nl', {
 				nameInService : {
 					label : 'Servicelaagnaam',
 				},
-				wfs_service : {
+				chooseLayer: {
+				  label: 'Kies een Laag',
+				},
+				wfsService : {
 					label : 'WFS service',
 				},
 				featureTypes : {
@@ -123,7 +126,7 @@ i18n.map('nl', {
 			name: {
 				label: "Kaartnaam",
 			},
-			initial_extent: {
+			initialExtent: {
 				label: "Initiële kaartuitsnede",
 				minX: {
 					label: "min X",
