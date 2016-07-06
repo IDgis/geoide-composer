@@ -20,7 +20,7 @@ Router.configure({
     layoutTemplate: 'main'
 });
 
-Router.route('/', function () {
+Router.route('/geoide-admin/', function () {
   this.render('services');
 }, {
   name: 'main'
@@ -136,8 +136,9 @@ Router.route('/xmlapi', function () {
 
 Router.route('/getcaplayersapi', function() {
   console.log('calling getServiceLayers');
-  Meteor.call('getServiceLayers',
+  Meteor.call('getWmsLayers',
       'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' // host argument
+      , '1.3.0'
       , function(error, response) {
           if (error) {
             console.log('getServiceLayers Error ', error);

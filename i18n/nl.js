@@ -12,6 +12,14 @@ i18n.map('nl', {
         layers: 'jsonapi - lagen',
         maps: 'jsonapi - kaarten',
       },
+      jsonGvApi: {
+        services: 'jsonapi GV - Services',
+        layers: 'jsonapi GV - Lagen',
+        maps: 'jsonapi GV - Kaarten',
+        featuretypes: 'jsonapi GV - Feaure Types',
+        searchtemplates: 'jsonapi GV - Search Templates',
+        servicelayers: 'jsonapi GV - Service Layers',
+      },
       xmlapi: 'xmlapi - test',
       getcaplayersapi: 'getcaplayersapi - test',
     },
@@ -83,11 +91,11 @@ i18n.map('nl', {
 				service : {
 					label : 'Service',
 				},
-				nameInService : {
-					label : 'Servicelaagnaam',
+				selectButton: {
+				  label: 'Voeg servicelagen toe:',
 				},
-				chooseLayer: {
-				  label: 'Kies een Laag',
+				nameInService : {
+					label : 'Service laagnaam',
 				},
 				wfsService : {
 					label : 'WFS service',
@@ -102,6 +110,9 @@ i18n.map('nl', {
 					service : {
 						label : 'Service',
 					},
+	        selectButton: {
+	          label: 'Voeg featuretypen toe:',
+	        },
 					nameInService : {
 						label : 'FeatureType naam'
 					},

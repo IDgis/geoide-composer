@@ -39,6 +39,19 @@ SimpleSchema.featureType = new SimpleSchema ({
         }
     }
 	},
+	
+  selectButton: {
+    type: String,
+    label: ' ',
+    autoform: {
+      afFieldInput: {
+        type: "button",
+        defaultValue: function(){ return i18n('collections.layers.serviceLayer.featureType.selectButton.label'); },
+        class: 'btn btn-warning'
+      }
+    }
+  },
+  
 	nameInService: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
@@ -75,22 +88,25 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
         }
     }
   },
-  nameInService: {
-    type: String,
-    label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
-  }, 
   
-  chooseLayer: {
+  selectButton: {
     type: String,
-    optional: true,
-    label: function(){ return i18n('collections.layers.serviceLayer.chooseLayer.label'); },
+    label: ' ',
     autoform: {
       afFieldInput: {
         type: "button",
-        text: '...',
+        defaultValue: function(){ return i18n('collections.layers.serviceLayer.selectButton.label'); },
+        class: 'btn btn-warning'
       }
     }
   },
+  nameInService: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
+    autoform: {
+      options:  []    
+    }
+  }, 
   
   featureType: {
     type: SimpleSchema.featureType,
