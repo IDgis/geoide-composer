@@ -112,10 +112,10 @@ i18n.map('nl', {
 						label : {
 							label : 'Label',
 						},
-						attribute_localname : {
+						attributeLocalname : {
 							label : 'Zoekveld',
 						},
-						attribute_namespace : {
+						attributeNamespace : {
 							label : 'Namespace',
 						},
 					},
