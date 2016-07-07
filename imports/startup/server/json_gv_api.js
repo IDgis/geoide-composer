@@ -6,7 +6,7 @@ import { Maps } from '/imports/api/collections/maps.js';
 Router.map(function () {
   var gvServices = {services:[]};
   var gvLayers = {layers:[]};
-  var gvmaps = {maps:[]};
+  var gvMaps = {maps:[]};
   var gvServiceLayers = {serviceLayers:[]};
   var gvSearchTemplates = {searchTemplates:[]};
   var gvFeatureTypes = {featureTypes:[]};
@@ -43,8 +43,8 @@ Router.map(function () {
     path: '/json-gv-api-layers',
     where: 'server',
     action: function () {
-      var cursor = Layers.find(); 
       gvLayers = {layers:[]};// initialize
+      var cursor = Layers.find(); 
       cursor.forEach(function(layer){
         var layerState = {};
         var layerProps = {};
@@ -63,6 +63,7 @@ Router.map(function () {
         _.each(layer.service_layers, function(serviceLayer){
           layerServiceLayers.push(layer.name + '.' + serviceLayer.name);
         });
+        // layers
         gvLayers.layers.push(
             // Geoide-Viewer structuur layers.json
             {
@@ -75,6 +76,55 @@ Router.map(function () {
             }
         );
       });
+      gvMaps = {maps:[]};
+      // get maps
+      var cursor = Maps.find(); 
+      cursor.forEach(function(map){
+        var gvMapLayers1 = [];
+        _.each(map.children, function(child1){
+          if (child1.type == "group"){
+            var gvMapLayers2 = [];
+            _.each(child1.children, function(child2){
+              if (child2.type == "group"){
+                var gvMapLayers3 = [];
+                _.each(child2.children, function(child3){
+                  if (child3.type == "group"){
+                    var gvMapLayers4 = [];
+                    // group layers from map
+                    gvLayers.layers.push(
+                        // Geoide-Viewer structuur layers.json
+                        {
+                          id: child3.id + '_' + child3.text , 
+                          label: child3.text,
+                          layerType: "default",
+                        }
+                    );
+                  }
+                });
+                // group layers from map
+                gvLayers.layers.push(
+                    // Geoide-Viewer structuur layers.json
+                    {
+                      id: child2.id + '_' + child2.text , 
+                      label: child2.text,
+                      layerType: "default",
+                    }
+                );
+              }
+            });
+            // group layers from map
+            gvLayers.layers.push(
+                // Geoide-Viewer structuur layers.json
+                {
+                  id: child1.id + '_' + child1.text , 
+                  label: child1.text,
+                  layerType: "default",
+                }
+            );
+          }
+        });
+      });
+
       // TODO remove this before release
       console.log("gvLayers", JSON.stringify(gvLayers));
       this.response.setHeader('Content-Type', 'application/json');
@@ -173,11 +223,99 @@ Router.map(function () {
     path: '/json-gv-api-maps',
     where: 'server',
     action: function () {
+      // initialize
+      gvMaps = {maps:[]};
+      // get maps
       var cursor = Maps.find(); 
-      gvMaps = {maps:[]};// initialize
-      
-      // TODO get maps
-      
+      cursor.forEach(function(map){
+        var gvMapLayers1 = [];
+        _.each(map.children, function(child1){
+          if (child1.type == "group"){
+            var gvMapLayers2 = [];
+            _.each(child1.children, function(child2){
+              if (child2.type == "group"){
+                var gvMapLayers3 = [];
+                _.each(child2.children, function(child3){
+                  if (child3.type == "group"){
+                    var gvMapLayers4 = [];
+                    // group
+                    gvMapLayers3.push(
+                        {
+                          layer: child3.id + '_' + child3.text,
+                          state: {
+                            visible : child3.state.checked,
+                          },
+                          maplayers: gvMapLayers4,
+                        }
+                    );
+                  } else{
+                    // layer
+                    gvMapLayers3.push(
+                        {
+                          layer: child3.data.layerid,
+                          state: {
+                            visible : child3.state.checked,
+                          },
+                        }
+                    );
+                  }
+                });
+                // group
+                gvMapLayers2.push(
+                    {
+                      layer: child2.id + '_' + child2.text,
+                      state: {
+                        visible : child2.state.checked,
+                      },
+                      maplayers: gvMapLayers3,
+                    }
+                );
+              } else{
+                // layer
+                gvMapLayers2.push(
+                    {
+                      layer: child2.data.layerid,
+                      state: {
+                        visible : child2.state.checked,
+                      },
+                    }
+                );
+              }
+            });
+            // group
+            gvMapLayers1.push(
+                {
+                  layer: child1.id + '_' + child1.text,
+                  state: {
+                    visible : child1.state.checked,
+                  },
+                  maplayers: gvMapLayers2,
+                }
+            );
+          } else {
+            // layer
+            gvMapLayers1.push(
+                {
+                  layer: child1.data.layerid,
+                  state: {
+                    visible : child1.state.checked,
+                  },
+                }
+            );
+            
+          }
+        });
+        gvMaps.maps.push(
+            // Geoide-Viewer structuur maps.json
+            {
+              id: map._id, 
+              label: map.text,
+              "initial-extent": map["initial_extent"],
+              maplayers: gvMapLayers1,
+  //              searchtemplates: ,
+            }
+        );
+      });
       // TODO remove this before release
       console.log("gvServiceLayers", JSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
