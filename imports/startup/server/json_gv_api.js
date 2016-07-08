@@ -21,7 +21,8 @@ Router.map(function () {
         gvServices.services.push(
             // Geoide-Viewer structuur services.json
             {
-              id: service._id, 
+//              id: service._id, 
+              id: service.name, 
               label: service.name,
               identification: {
                 serviceType: service.type,
@@ -67,7 +68,8 @@ Router.map(function () {
         gvLayers.layers.push(
             // Geoide-Viewer structuur layers.json
             {
-              id: layer._id, 
+//              id: layer._id, 
+              id: layer.name, 
               label: layer.name,
               layerType: layer.type,
               serviceLayers: layerServiceLayers,
@@ -181,7 +183,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvFeatureTypes));
+      console.log("gvFeatureTypes", JSON.stringify(gvFeatureTypes));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(JSON.stringify(gvFeatureTypes));
@@ -211,7 +213,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvSearchTemplates));
+      console.log("gvSearchTemplates", JSON.stringify(gvSearchTemplates));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(JSON.stringify(gvSearchTemplates));
@@ -308,7 +310,8 @@ Router.map(function () {
         gvMaps.maps.push(
             // Geoide-Viewer structuur maps.json
             {
-              id: map._id, 
+//              id: map._id, 
+              id: map.text, 
               label: map.text,
               "initial-extent": map["initial_extent"],
               maplayers: gvMapLayers1,
@@ -317,7 +320,7 @@ Router.map(function () {
         );
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvMaps));
+      console.log("gvMaps", JSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(JSON.stringify(gvMaps));
