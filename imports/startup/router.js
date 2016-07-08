@@ -1,10 +1,10 @@
+import { Meteor } from 'meteor/meteor';
 import { Router } from 'meteor/iron:router';
 import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
-import '../ui/main.css';
-import '../ui/main.html';
+import '../ui/main.js';
 
 import '../ui/services/services.js';
 import '../ui/services/service.js';
@@ -20,14 +20,30 @@ Router.configure({
     layoutTemplate: 'main'
 });
 
-Router.route('/geoide-admin/', function () {
+Router.route(Meteor.absoluteUrl() + '', function () {
+  console.log("ABS Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
+  this.render('services');
+}, {
+  name: 'mainAbs'
+});
+
+Router.route('/', function () {
+  console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('services');
 }, {
   name: 'main'
 });
 
 //service routes
+Router.route(Meteor.absoluteUrl() + 'services', function () {
+  console.log("ABS Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
+  this.render('services');
+}, {
+  name: 'services.listAbs'
+});
+
 Router.route('/services', function () {
+  console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('services');
 }, {
   name: 'services.list'
