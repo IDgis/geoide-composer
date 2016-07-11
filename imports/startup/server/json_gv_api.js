@@ -21,7 +21,8 @@ Router.map(function () {
         gvServices.services.push(
             // Geoide-Viewer structuur services.json
             {
-              id: service._id, 
+//              id: service._id, 
+              id: service.name, 
               label: service.name,
               identification: {
                 serviceType: service.type,
@@ -67,7 +68,8 @@ Router.map(function () {
         gvLayers.layers.push(
             // Geoide-Viewer structuur layers.json
             {
-              id: layer._id, 
+//              id: layer._id, 
+              id: layer.name, 
               label: layer.name,
               layerType: layer.type,
               serviceLayers: layerServiceLayers,
@@ -94,7 +96,7 @@ Router.map(function () {
                     gvLayers.layers.push(
                         // Geoide-Viewer structuur layers.json
                         {
-                          id: child3.id + '_' + child3.text , 
+                          id: child3.text , 
                           label: child3.text,
                           layerType: "default",
                         }
@@ -105,7 +107,7 @@ Router.map(function () {
                 gvLayers.layers.push(
                     // Geoide-Viewer structuur layers.json
                     {
-                      id: child2.id + '_' + child2.text , 
+                      id: child2.text , 
                       label: child2.text,
                       layerType: "default",
                     }
@@ -116,7 +118,7 @@ Router.map(function () {
             gvLayers.layers.push(
                 // Geoide-Viewer structuur layers.json
                 {
-                  id: child1.id + '_' + child1.text , 
+                  id: child1.text , 
                   label: child1.text,
                   layerType: "default",
                 }
@@ -181,7 +183,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvFeatureTypes));
+      console.log("gvFeatureTypes", JSON.stringify(gvFeatureTypes));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(JSON.stringify(gvFeatureTypes));
@@ -211,7 +213,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvSearchTemplates));
+      console.log("gvSearchTemplates", JSON.stringify(gvSearchTemplates));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(JSON.stringify(gvSearchTemplates));
@@ -241,7 +243,7 @@ Router.map(function () {
                     // group
                     gvMapLayers3.push(
                         {
-                          layer: child3.id + '_' + child3.text,
+                          layer: child3.text,
                           state: {
                             visible : child3.state.checked,
                           },
@@ -250,9 +252,11 @@ Router.map(function () {
                     );
                   } else{
                     // layer
+                    const aLayer = Layers.findOne({_id: child3.data.layerid});
+//                    console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
                     gvMapLayers3.push(
                         {
-                          layer: child3.data.layerid,
+                          layer: aLayer.name,//child3.data.layerid,
                           state: {
                             visible : child3.state.checked,
                           },
@@ -263,7 +267,7 @@ Router.map(function () {
                 // group
                 gvMapLayers2.push(
                     {
-                      layer: child2.id + '_' + child2.text,
+                      layer: child2.text,
                       state: {
                         visible : child2.state.checked,
                       },
@@ -272,9 +276,11 @@ Router.map(function () {
                 );
               } else{
                 // layer
+                const aLayer = Layers.findOne({_id: child2.data.layerid});
+//                console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
                 gvMapLayers2.push(
                     {
-                      layer: child2.data.layerid,
+                      layer: aLayer.name,//child2.data.layerid,
                       state: {
                         visible : child2.state.checked,
                       },
@@ -285,7 +291,7 @@ Router.map(function () {
             // group
             gvMapLayers1.push(
                 {
-                  layer: child1.id + '_' + child1.text,
+                  layer: child1.text,
                   state: {
                     visible : child1.state.checked,
                   },
@@ -294,9 +300,11 @@ Router.map(function () {
             );
           } else {
             // layer
+            const aLayer = Layers.findOne({_id: child1.data.layerid});
+//            console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
             gvMapLayers1.push(
                 {
-                  layer: child1.data.layerid,
+                  layer: aLayer.name,//child1.data.layerid,
                   state: {
                     visible : child1.state.checked,
                   },
@@ -308,7 +316,8 @@ Router.map(function () {
         gvMaps.maps.push(
             // Geoide-Viewer structuur maps.json
             {
-              id: map._id, 
+//              id: map._id, 
+              id: map.text, 
               label: map.text,
               "initial-extent": map["initial_extent"],
               maplayers: gvMapLayers1,
@@ -317,7 +326,7 @@ Router.map(function () {
         );
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvMaps));
+      console.log("gvMaps", JSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(JSON.stringify(gvMaps));
