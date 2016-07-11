@@ -96,7 +96,7 @@ Router.map(function () {
                     gvLayers.layers.push(
                         // Geoide-Viewer structuur layers.json
                         {
-                          id: child3.id + '_' + child3.text , 
+                          id: child3.text , 
                           label: child3.text,
                           layerType: "default",
                         }
@@ -107,7 +107,7 @@ Router.map(function () {
                 gvLayers.layers.push(
                     // Geoide-Viewer structuur layers.json
                     {
-                      id: child2.id + '_' + child2.text , 
+                      id: child2.text , 
                       label: child2.text,
                       layerType: "default",
                     }
@@ -118,7 +118,7 @@ Router.map(function () {
             gvLayers.layers.push(
                 // Geoide-Viewer structuur layers.json
                 {
-                  id: child1.id + '_' + child1.text , 
+                  id: child1.text , 
                   label: child1.text,
                   layerType: "default",
                 }
@@ -243,7 +243,7 @@ Router.map(function () {
                     // group
                     gvMapLayers3.push(
                         {
-                          layer: child3.id + '_' + child3.text,
+                          layer: child3.text,
                           state: {
                             visible : child3.state.checked,
                           },
@@ -252,9 +252,11 @@ Router.map(function () {
                     );
                   } else{
                     // layer
+                    const aLayer = Layers.findOne({_id: child3.data.layerid});
+//                    console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
                     gvMapLayers3.push(
                         {
-                          layer: child3.data.layerid,
+                          layer: aLayer.name,//child3.data.layerid,
                           state: {
                             visible : child3.state.checked,
                           },
@@ -265,7 +267,7 @@ Router.map(function () {
                 // group
                 gvMapLayers2.push(
                     {
-                      layer: child2.id + '_' + child2.text,
+                      layer: child2.text,
                       state: {
                         visible : child2.state.checked,
                       },
@@ -274,9 +276,11 @@ Router.map(function () {
                 );
               } else{
                 // layer
+                const aLayer = Layers.findOne({_id: child2.data.layerid});
+//                console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
                 gvMapLayers2.push(
                     {
-                      layer: child2.data.layerid,
+                      layer: aLayer.name,//child2.data.layerid,
                       state: {
                         visible : child2.state.checked,
                       },
@@ -287,7 +291,7 @@ Router.map(function () {
             // group
             gvMapLayers1.push(
                 {
-                  layer: child1.id + '_' + child1.text,
+                  layer: child1.text,
                   state: {
                     visible : child1.state.checked,
                   },
@@ -296,9 +300,11 @@ Router.map(function () {
             );
           } else {
             // layer
+            const aLayer = Layers.findOne({_id: child1.data.layerid});
+//            console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
             gvMapLayers1.push(
                 {
-                  layer: child1.data.layerid,
+                  layer: aLayer.name,//child1.data.layerid,
                   state: {
                     visible : child1.state.checked,
                   },
