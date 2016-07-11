@@ -68,12 +68,18 @@ Meteor.methods({
     console.log('getServiceLayers xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
     console.log('getServiceLayers parseResponse:', parseResponse);
-    var servoptions = [];
  
     // version 1.0.0
-    _.each(parseResponse.TileMap.TileSets.TileSet,function(tl){
-        servoptions.push({name:tl.$.order, title:tl.$.href});
+    var tmsLayer = _.find(parseResponse.TileMap.TileSets.TileSet,function(tl){
+        // break after first occurence
+        return true;
       });
+    var href = tmsLayer.$.href;
+    var first = href.indexOf('1.0.0/') + 6;
+    var last = href.lastIndexOf('/');
+    var layername = href.slice(first, last);
+    var servoptions = [];
+    servoptions.push({name:layername, title:layername});
     console.log('TMS Layers found: ',servoptions);
     return servoptions;
   },
