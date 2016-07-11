@@ -143,13 +143,14 @@ Router.map(function () {
       gvServiceLayers = {serviceLayers:[]};// initialize
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
+          const aService = Services.findOne({_id: serviceLayer.service});
           gvServiceLayers.serviceLayers.push(
               // Geoide-Viewer structuur serviceLayers.json
               {
                 id: layer.name + '.' + serviceLayer.name, 
                 label: serviceLayer.name,
                 name: serviceLayer.nameInService,
-                service: serviceLayer.service,
+                service: aService.name, //serviceLayer.service,
                 featureType: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name,
               }
           );
@@ -171,13 +172,14 @@ Router.map(function () {
       gvFeatureTypes = {featureTypes:[]};// initialize
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
+          const aService = Services.findOne({_id: serviceLayer.featureType.service});
           gvFeatureTypes.featureTypes.push(
               // Geoide-Viewer structuur featuretypes.json
               {
                 id: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name, 
                 label: serviceLayer.featureType.name,
                 name: serviceLayer.featureType.nameInService,
-                service: serviceLayer.featureType.service,
+                service: aService.name, //serviceLayer.featureType.service,
               }
           );
         });
