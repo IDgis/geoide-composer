@@ -91,15 +91,16 @@ Meteor.methods({
   getTmsLayers: function(host, version){
     console.log('getTmsLayers host: ' + host + ', version: ' + version);
     var xmlResponse = Meteor.call('getXml', host, {});
-    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+    console.log('getTmsLayers xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    console.log('getServiceLayers parseResponse:', parseResponse);
+    console.log('getTmsLayers parseResponse:', parseResponse);
+    console.log('getTmsLayers TileSets:', parseResponse.TileMap.TileSets[0]);
  
     // version 1.0.0
-    var tmsLayer = _.find(parseResponse.TileMap.TileSets.TileSet,function(tl){
-        // break after first occurence
-        return true;
-      });
+    /**
+     * get the first tileset and extract the layername from the href url
+     */
+    var tmsLayer = parseResponse.TileMap.TileSets[0].TileSet[0];
     var href = tmsLayer.$.href;
     var first = href.indexOf('1.0.0/') + 6;
     var last = href.lastIndexOf('/');
@@ -116,20 +117,26 @@ Meteor.methods({
   getWfsFeatureTypes: function(host, version){
     console.log('getWfsFeatureTypes host: ' + host + ', version: ' + version);
     var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
-//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+//    console.log('getWfsFeatureTypes xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-//    console.log('getServiceLayers parseResponse:', parseResponse);
+//    console.log('getWfsFeatureTypes parseResponse:', parseResponse);
+    console.log('------- WFS Capability -------');
+    console.log(parseResponse.WFS_Capabilities);
+    console.log('--------------------------');
+
     var servoptions = [];
 
     // TODO code below depends on version
     // version 2.0.0
-    _.each(parseResponse.WFS_Capabilities.FeatureTypeList.FeatureType,function(ft){
-        if (typeof ft.Name === 'object' ){
-          servoptions.push({name:ft.Name._, title:ft.Title});
+    _.each(parseResponse.WFS_Capabilities.FeatureTypeList[0].FeatureType,function(ft){
+        console.log(ft);
+        if (ft.Name[0]._){
+          servoptions.push({name:ft.Name[0]._, title:ft.Title[0]});
         } else {
-          servoptions.push({name:ft.Name, title:ft.Title});
+          servoptions.push({name:ft.Name[0], title:ft.Title[0]});
         }
       });
+
     console.log('WFS FeatureTypes found: ',servoptions);
     return servoptions;
   },
