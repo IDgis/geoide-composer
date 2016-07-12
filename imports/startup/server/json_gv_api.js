@@ -171,8 +171,11 @@ Router.map(function () {
       var cursor = Layers.find(); 
       gvFeatureTypes = {featureTypes:[]};// initialize
       cursor.forEach(function(layer){
+        console.log("gvFeatureTypes layer ", layer);
         _.each(layer.service_layers, function(serviceLayer){
+          console.log("gvFeatureTypes serviceLayer ", serviceLayer);
           const aService = Services.findOne({_id: serviceLayer.featureType.service});
+          console.log("gvFeatureTypes aService ", aService);
           gvFeatureTypes.featureTypes.push(
               // Geoide-Viewer structuur featuretypes.json
               {
