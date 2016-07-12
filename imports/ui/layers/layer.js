@@ -179,5 +179,8 @@ AutoForm.addHooks('layerform',{
   },
   onError: function(formType, error){
     console.log("layer autoform error = " + error);
+  },
+  onRendered: function(formType, error){
+    console.log("layer autoform rendered= " + formType);
   }
 });
