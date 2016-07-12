@@ -1,5 +1,5 @@
 <template name="maps">
-<h2>Kaarten</h2>
+<h2>{{i18n 'maps.list.header'}}</h2>
 	<table class="table table-condensed">
 	  <tbody>
 		{{#each maps}}
@@ -19,7 +19,7 @@
 	</table>	
  	<div type="button" class="btn btn-success col-sm-12 insert-map">
 		<a class="glyphicon glyphicon-plus create-btn">
-			<span class="create-btn-label">Maak een nieuwe kaart</span>
+			<span class="create-btn-label">{{i18n 'maps.list.button.create'}}</span>
 		</a>
 	</div>
 </template>      

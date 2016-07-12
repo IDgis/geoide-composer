@@ -17,17 +17,55 @@ i18n.map('en', {
 		messages : 'messages'
 	},
 
-	services : {
-
-	},
-
-	layers : {
-
-	},
-
-	maps : {
-
-	},
+  services:{
+    list: {
+      header: 'Services',
+      table: {
+        name: 'Name',
+        type: 'Type',
+      },
+      button: {
+        create: 'Make a new service'
+      },
+    },
+    autoform: {
+      header:'Service configuration',
+    },
+    
+  },
+  
+  layers: {
+    list: {
+      header: 'Layers',
+      table: {
+        name: 'Name',
+        type: 'Type',
+      },
+      button: {
+        create: 'Make a new layer'
+      },
+    },
+    autoform: {
+      header:'Laag configuration',
+    },
+  },
+  
+  maps: {
+    list: {
+      header: 'Maps',
+      button: {
+        create: 'Make a new map'
+      },
+    },
+    autoform: {
+      header:'Kaart configuration',
+    },
+    tree: {
+      search : {
+        placeholder : 'Search'
+      },
+    },
+  },
 
 	// Collections
 	collections : {
@@ -136,10 +174,4 @@ i18n.map('en', {
 	// General
 	version : 'version',
 
-	// test i18n
-	heading1 : 'Chapter 1',
-	heading2 : {
-		main : 'chapter 2',
-		sub : 'part 2',
-	}
 });

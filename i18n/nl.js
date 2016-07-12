@@ -27,6 +27,16 @@ i18n.map('nl', {
   },
   
   services:{
+    list: {
+      header: 'Services',
+      table: {
+        name: 'Naam',
+        type: 'Type',
+      },
+      button: {
+        create: 'Maak een nieuwe service'
+      },
+    },
     autoform: {
       header:'Service configuratie',
     },
@@ -34,16 +44,36 @@ i18n.map('nl', {
   },
   
   layers: {
+    list: {
+      header: 'Lagen',
+      table: {
+        name: 'Naam',
+        type: 'Type',
+      },
+      button: {
+        create: 'Maak een nieuwe laag'
+      },
+    },
     autoform: {
       header:'Laag configuratie',
     },
   },
   
   maps: {
+    list: {
+      header: 'Kaarten',
+      button: {
+        create: 'Maak een nieuwe kaart'
+      },
+    },
     autoform: {
       header:'Kaart configuratie',
     },
-
+    tree: {
+      search : {
+        placeholder : 'Zoek'
+      },
+    },
   },
   
 //Collections
@@ -75,7 +105,7 @@ i18n.map('nl', {
 			properties : {
 				label : 'Eigenschappen',
 				initialVisible : {
-					label : 'Initieel zichtbaar',
+					label : 'Initiëel zichtbaar',
 				},
 				initialQuery : {
 					label : 'Initiële query',
@@ -163,11 +193,5 @@ i18n.map('nl', {
     cancel:'Annuleren'
   },
 
-// test i18n  
-  heading1 : 'Hoofdstuk 1',
-  heading2 : {
-    main : 'hoofdstuk 2',
-    sub : 'deel 2',
-  }
   
 });
