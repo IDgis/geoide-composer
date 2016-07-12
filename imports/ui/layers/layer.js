@@ -54,6 +54,10 @@ Template.layer.helpers({
 	        return null ;
 	     }
 	  },
+	  layerTypes: function () {
+	    return[{label: "default", value: "default"},
+	           {label: "cosurvey-sql", value: "cosurvey-sql"}];
+	  },
 	
 });
 
