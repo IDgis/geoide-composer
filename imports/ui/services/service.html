@@ -2,17 +2,17 @@
  <h1>{{ i18n 'services.autoform.header' }}</h1>
 {{#autoForm collection=services schema=serviceSchema id="serviceform" doc=serviceDoc type=formType}}
       <fieldset>
-		{{> afQuickField name="name"}}
-		{{> afQuickField name="endpoint"}}
-		{{> afQuickField name="type" type='select-radio-inline' options=serviceTypes}}
+		{{> afQuickField name="name" template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
+		{{> afQuickField name="endpoint" template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
+		{{> afQuickField name="type" type='select-radio-inline' options=serviceTypes template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
 		{{#if afFieldValueIs name="type" value="WMS"}}
-       		{{> afFieldInput name='version' type='select' options=wmsVersions }}
+       		{{> afQuickField name='version' type='select' options=wmsVersions  template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
 		{{/if}}
       	{{#if afFieldValueIs name="type" value="WFS"}}
-       		{{> afFieldInput name='version' type='select' options=wfsVersions }}
+       		{{> afQuickField name='version' type='select' options=wfsVersions  template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
 		{{/if}}
       	{{#if afFieldValueIs name="type" value="TMS"}}
-       		{{> afFieldInput name='version' type='select' options=tmsVersions }}
+       		{{> afQuickField name='version' type='select' options=tmsVersions  template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
 		{{/if}}
        </fieldset> <br> 
        <button id="save" type="submit" class="btn btn-primary">{{ i18n 'button.save' }}</button> 
