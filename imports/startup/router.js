@@ -20,28 +20,13 @@ Router.configure({
     layoutTemplate: 'main'
 });
 
-Router.route(Meteor.absoluteUrl() + '', function () {
-  console.log("ABS Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
-  this.render('services');
-}, {
-  name: 'mainAbs'
-});
-
 Router.route('/', function () {
-  console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('services');
 }, {
   name: 'main'
 });
 
 //service routes
-Router.route(Meteor.absoluteUrl() + 'services', function () {
-  console.log("ABS Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
-  this.render('services');
-}, {
-  name: 'services.listAbs'
-});
-
 Router.route('/services', function () {
   console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('services');
@@ -49,15 +34,7 @@ Router.route('/services', function () {
   name: 'services.list'
 });
 
-Router.route(Meteor.absoluteUrl() + 'service/insert', function () {
-  console.log("ABS Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
-  this.render('service');
-}, {
-  name: 'service.insertAbs'
-});
-
 Router.route('/service/insert', function () {
-  console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('service');
 }, {
   name: 'service.insert'

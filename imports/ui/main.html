@@ -1,63 +1,57 @@
 <template name="main">
-<div class="col-lg-12">
-	<div class="jumbotron">
-		<div class="row">
-			<div class="col-lg-9">
-				<h1>{{i18n 'main.title'}}</h1>
-			</div>
-			<div class="col-lg-3">
-				<a href="http://www.idgis.nl"> <img class="img-responsive"
-					alt="Logo" src="images/logo-idgis-small.png">
-				</a>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-9">
-				<div class="messages"> {{i18n 'main.messages'}}</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row">
-		<div class="col-lg-2">
+	<div class="col-lg-12">
+		<div class="jumbotron">
 			<div class="row">
-				<ul class="nav nav-pills nav-stacked">
-					<li role="presentation"><a href="{{absoluteUrl}}services">ABS {{i18n 'main.menu.services'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}layers">ABS {{i18n 'main.menu.layers'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}maps">ABS {{i18n 'main.menu.maps'}}</a></li>
-					<li role="presentation"><a href="/services">REL {{i18n 'main.menu.services'}}</a></li>
-					<li role="presentation"><a href="/layers">REL {{i18n 'main.menu.layers'}}</a></li>
-					<li role="presentation"><a href="/maps">REL {{i18n 'main.menu.maps'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}jsonapi-services">{{i18n 'main.menu.jsonapi.services'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}jsonapi-layers">{{i18n 'main.menu.jsonapi.layers'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}jsonapi-maps">{{i18n 'main.menu.jsonapi.maps'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-services">{{i18n 'main.menu.jsonGvApi.services'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-layers">{{i18n 'main.menu.jsonGvApi.layers'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-servicelayers">{{i18n 'main.menu.jsonGvApi.servicelayers'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-searchtemplates">{{i18n 'main.menu.jsonGvApi.searchtemplates'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-featuretypes">{{i18n 'main.menu.jsonGvApi.featuretypes'}}</a></li>
-					<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-maps">{{i18n 'main.menu.jsonGvApi.maps'}}</a></li>
-				</ul>
-			</div>
-			<div class="row">
-				<div class="col-lg-4 col-lg-offset-4">
-					<div class="img-container">
-						<a href="http://www.idgis.nl"> <img class="img-responsive"
-							alt="IDgis" src="images/logo-idgis-small.png">
-						</a>
-					</div>
+				<div class="col-lg-9 col-lg-offset-1">
+					<h1>{{i18n 'main.title'}}</h1>
+				</div>
+				<div class="col-lg-2">
+					<a href="http://www.idgis.nl"> <img class="img-responsive"
+						alt="Logo" src="images/logo-idgis-small.png">
+					</a>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-lg-12 col-lg-offset-2">{{i18n 'version'}}: {{gitRev 'tag'}}</div>
+		</div>
+	
+		<div class="row">
+			<div class="col-lg-2">
+				<div class="row">
+					<div class="col-lg-12">
+						<ul class="nav nav-pills nav-stacked">
+							<li role="presentation"><a href="/services">{{i18n 'main.menu.services'}}</a></li>
+							<li role="presentation"><a href="/layers">{{i18n 'main.menu.layers'}}</a></li>
+							<li role="presentation"><a href="/maps">{{i18n 'main.menu.maps'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}jsonapi-services">{{i18n 'main.menu.jsonapi.services'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}jsonapi-layers">{{i18n 'main.menu.jsonapi.layers'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}jsonapi-maps">{{i18n 'main.menu.jsonapi.maps'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-services">{{i18n 'main.menu.jsonGvApi.services'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-layers">{{i18n 'main.menu.jsonGvApi.layers'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-servicelayers">{{i18n 'main.menu.jsonGvApi.servicelayers'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-searchtemplates">{{i18n 'main.menu.jsonGvApi.searchtemplates'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-featuretypes">{{i18n 'main.menu.jsonGvApi.featuretypes'}}</a></li>
+							<li role="presentation"><a href="{{absoluteUrl}}json-gv-api-maps">{{i18n 'main.menu.jsonGvApi.maps'}}</a></li>
+						</ul>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-9 col-lg-offset-1">
+						<div class="img-container">
+							<a href="http://www.idgis.nl"> <img class="img-responsive"
+								alt="IDgis" src="images/logo-idgis-small.png">
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-9 col-lg-offset-1" >{{i18n 'version'}}: {{gitRev 'tag'}}</div>
+				</div>
 			</div>
+			
+			<div class="col-lg-10">
+				<div >{{> yield}}</div>
+			</div>
+			
 		</div>
-		
-		<div class="col-lg-10">
-			<div class="container pre-scrollable">{{> yield}}</div>
-		</div>
-		
+	
 	</div>
-
-</div>
 </template>

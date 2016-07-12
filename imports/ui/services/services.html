@@ -1,10 +1,10 @@
 <template name="services">
-      <h2>Services</h2>
+      <h2>{{i18n 'services.list.header'}}</h2>
       <table class="table table-condensed">
         <thead>
           <tr>
-            <td>Naam</td>
-            <td>Type</td>
+            <td>{{i18n 'services.list.table.name'}}</td>
+            <td>{{i18n 'services.list.table.type'}}</td>
             <td style="width: 70px"></td>
           </tr>
         </thead>
@@ -27,7 +27,7 @@
       </table>
       <div type="button" class="btn btn-success col-sm-12 insert-service">
 		<a class="glyphicon glyphicon-plus create-btn">
-			<span class="create-btn-label">Maak een nieuwe service</span>
+			<span class="create-btn-label">{{i18n 'services.list.button.create'}}</span>
 		</a>
 	  </div>
 </template>
