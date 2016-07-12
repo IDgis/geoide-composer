@@ -49,7 +49,15 @@ Router.route('/services', function () {
   name: 'services.list'
 });
 
+Router.route(Meteor.absoluteUrl() + 'service/insert', function () {
+  console.log("ABS Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
+  this.render('service');
+}, {
+  name: 'service.insertAbs'
+});
+
 Router.route('/service/insert', function () {
+  console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('service');
 }, {
   name: 'service.insert'
