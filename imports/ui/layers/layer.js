@@ -54,6 +54,10 @@ Template.layer.helpers({
 	        return null ;
 	     }
 	  },
+	  layerTypes: function () {
+	    return[{label: "default", value: "default"},
+	           {label: "cosurvey-sql", value: "cosurvey-sql"}];
+	  },
 	
 });
 
@@ -175,5 +179,8 @@ AutoForm.addHooks('layerform',{
   },
   onError: function(formType, error){
     console.log("layer autoform error = " + error);
+  },
+  onRendered: function(formType, error){
+    console.log("layer autoform rendered= " + formType);
   }
 });

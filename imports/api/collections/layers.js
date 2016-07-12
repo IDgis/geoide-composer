@@ -22,11 +22,13 @@ SimpleSchema.featureType = new SimpleSchema ({
 	name: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.name.label'); },
+		optional: true,
 	}, 
 	//service_id WFS
 	service: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.service.label'); },
+		optional: true,
     autoform: {
       options: 
         function(){
@@ -55,6 +57,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 	nameInService: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
+		optional: true,
     autoform: {
       options:  []    
     }
@@ -110,8 +113,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   
   featureType: {
     type: SimpleSchema.featureType,
-    optional: true,
     label: function(){ return i18n('collections.layers.servicelayer.featureTypes.label'); },
+    optional: true,
   },
 });
 
