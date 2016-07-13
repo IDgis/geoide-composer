@@ -257,8 +257,131 @@ Router.map(function () {
   /**
    * Maps
    */
+  /*
+   * groups and layers sorted in reverse order as required by Geoide-Viewer
+   */
   this.route('json-gv-api-maps', {
     path: '/json-gv-api-maps',
+    where: 'server',
+    action: function () {
+      gvMaps = {maps:[]};
+      // get maps
+      var cursor = Maps.find(); 
+      var allMaps = cursor.fetch();
+      // loop over allMaps array in reversed order  
+      for (index = allMaps.length-1; index >= 0; index--)  {
+        var gvMapLayers1 = [];
+        var map = allMaps[index];
+        var mapChildren = map.children;
+        var testIndex1 = mapChildren.length-1;
+        for (var index1 = mapChildren.length-1; index1 >= 0; index1--)  {
+          var child1 = mapChildren[index1];
+          if (child1.type == "group"){
+            var gvMapLayers2 = [];
+            var child1Children = _.toArray(child1.children);
+            for (index2 = child1Children.length-1; index2 >= 0; index2--)  {
+              var child2 = child1Children[index2];
+              if (child2.type == "group"){
+                var gvMapLayers3 = [];
+                var child2Children = _.toArray(child2.children);
+                for (index3 = child2Children.length-1; index3 >= 0; index3--)  {
+                  var child3 = child2Children[index3];
+                  if (child3.type == "group"){
+                    var gvMapLayers4 = [];
+                    // group
+                    gvMapLayers3.push(
+                        {
+                          layer: child3.text,
+                          state: {
+                            visible : child3.state.checked,
+                          },
+                          maplayers: gvMapLayers4,
+                        }
+                    );
+                  } else {
+                    // layer
+                    const aLayer = Layers.findOne({_id: child3.data.layerid});
+                    gvMapLayers3.push(
+                        {
+                          layer: aLayer.name,//child3.data.layerid,
+                          state: {
+                            visible : child3.state.checked,
+                          },
+                        }
+                    );
+                  }
+                }
+                // group
+                gvMapLayers2.push(
+                    {
+                      layer: child2.text,
+                      state: {
+                        visible : child2.state.checked,
+                      },
+                      maplayers: gvMapLayers3,
+                    }
+                );
+              } else {
+                // layer
+                const aLayer = Layers.findOne({_id: child2.data.layerid});
+                gvMapLayers2.push(
+                    {
+                      layer: aLayer.name,//child2.data.layerid,
+                      state: {
+                        visible : child2.state.checked,
+                      },
+                    }
+                );
+              }
+            }
+            // group
+            gvMapLayers1.push(
+                {
+                  layer: child1.text,
+                  state: {
+                    visible : child1.state.checked,
+                  },
+                  maplayers: gvMapLayers2,
+                }
+            );
+          } else {
+            // layer
+            const aLayer = Layers.findOne({_id: child1.data.layerid});
+            gvMapLayers1.push(
+                {
+                  layer: aLayer.name,//child1.data.layerid,
+                  state: {
+                    visible : child1.state.checked,
+                  },
+                }
+            );
+            
+          }
+        }
+        gvMaps.maps.push(
+            {
+//              id: map._id, 
+              id: map.text, 
+              label: map.text,
+              "initial-extent": map["initial_extent"],
+              maplayers: gvMapLayers1,
+  //              searchtemplates: ,
+            }
+        );
+      }
+      // TODO remove this before release
+      console.log("gvMaps", JSON.stringify(gvMaps));
+      this.response.setHeader('Content-Type', 'application/json');
+      // TODO make this streaming instead of pushing the whole object at once ??
+      this.response.end(JSON.stringify(gvMaps));
+    }
+  });
+
+  /*
+   * the same order of groups and layers as shown in Map tree
+   */
+  this.route('json-gv-api-maps-nosort', {
+    path: '/json-gv-api-maps-nosort',
     where: 'server',
     action: function () {
       gvMaps = {maps:[]};
