@@ -73,6 +73,9 @@ i18n.map('en', {
       name : {
         label : 'Name',
       },
+      label : {
+        label : 'Label',
+      },
       endpoint : {
         label : 'Url',
       },
@@ -87,6 +90,9 @@ i18n.map('en', {
 			name : {
 				label : 'Name',
 			},
+      label : {
+        label : 'Label',
+      },
 			type : {
 				label : 'Type',
 			},
@@ -109,6 +115,9 @@ i18n.map('en', {
 				name : {
 					label : 'Name',
 				},
+	      label : {
+	        label : 'Label',
+	      },
 				service : {
 					label : 'Service',
 				},
@@ -125,6 +134,9 @@ i18n.map('en', {
 					name : {
 						label : 'Name',
 					},
+		      label : {
+		        label : 'Label',
+		      },
 					service : {
 						label : 'Service',
 					},
@@ -153,6 +165,9 @@ i18n.map('en', {
 			name : {
 				label : "Map name",
 			},
+      label : {
+        label : 'Label',
+      },
 			initial_extent : {
 				label : "Initial extent",
 				minX : {

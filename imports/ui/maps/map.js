@@ -164,10 +164,7 @@ Template.map.rendered = function() {
   }
 
   console.log(map);
-  // map = {text: 'Afdelingen', type:'map', 'children': [{text: 'Topografie
-  // groep',children: [{ text: 'luchtfoto', type: 'layer'}, {text: 'top10
-  // nl',type: 'layer'}], type: 'default' }, { text: 'percelen', type: 'layer'
-  // }],type: 'map'};
+
   $('.maptree').jstree({
     core : {
       data : [ map ],

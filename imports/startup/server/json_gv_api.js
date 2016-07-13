@@ -1,8 +1,9 @@
+import { EJSON } from 'meteor/ejson';
+
 import { Router } from 'meteor/iron:router';
 import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
-
 
 /**
  *  REST api for delivering json for Geoide-Viewer
@@ -14,7 +15,7 @@ import { Maps } from '/imports/api/collections/maps.js';
  *     The name of such a toplevel object is forced as unique in its schema
  *  2. id of an object at a lower level is assembled by concatenating the names of its parents:
  *     for 'layer.serviceLayer.featureType' the id becomes:
- *     featureType: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name 
+ *     featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType.nameInService 
  *     
  *  The following dependencies are in place:
  *    services.json:        none
@@ -51,7 +52,7 @@ Router.map(function () {
             {
 //              id: service._id, 
               id: service.name, 
-              label: service.name,
+              label: service.label,
               identification: {
                 serviceType: service.type,
                 serviceEndpoint: service.endpoint,
@@ -61,10 +62,10 @@ Router.map(function () {
         );
       });
       // TODO remove this before release
-      console.log("gvServices", JSON.stringify(gvServices));
+      console.log("gvServices", EJSON.stringify(gvServices));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvServices));
+      this.response.end(EJSON.stringify(gvServices, {indent: true}));
     }
   });
   
@@ -96,13 +97,13 @@ Router.map(function () {
         }
         var layerServiceLayers = [];
         _.each(layer.service_layers, function(serviceLayer){
-          layerServiceLayers.push(layer.name + '.' + serviceLayer.name);
+          layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
         });
         gvLayers.layers.push(
             {
 //              id: layer._id, 
               id: layer.name, 
-              label: layer.name,
+              label: layer.label,
               layerType: layer.type,
               serviceLayers: layerServiceLayers,
               state: layerState,
@@ -151,10 +152,10 @@ Router.map(function () {
       });
 
       // TODO remove this before release
-      console.log("gvLayers", JSON.stringify(gvLayers));
+      console.log("gvLayers", EJSON.stringify(gvLayers));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvLayers));
+      this.response.end(EJSON.stringify(gvLayers, {indent: true}));
     }
   });
   
@@ -170,22 +171,33 @@ Router.map(function () {
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
-          gvServiceLayers.serviceLayers.push(
-              {
-                id: layer.name + '.' + serviceLayer.name, 
-                label: serviceLayer.name,
-                name: serviceLayer.nameInService,
-                service: aService.name, //serviceLayer.service,
-                featureType: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name,
-              }
-          );
+          if (serviceLayer.featureType){
+            gvServiceLayers.serviceLayers.push(
+                {
+                  id: layer.name + '.' + serviceLayer.nameInService, 
+                  label: serviceLayer.label,
+                  name: serviceLayer.nameInService,
+                  service: aService.name, //serviceLayer.service,
+                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService,
+                }
+            );
+          } else {
+            gvServiceLayers.serviceLayers.push(
+                {
+                  id: layer.name + '.' + serviceLayer.nameInService, 
+                  label: serviceLayer.label,
+                  name: serviceLayer.nameInService,
+                  service: aService.name, //serviceLayer.service,
+                }
+            );
+          }
         });
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", JSON.stringify(gvServiceLayers));
+      console.log("gvServiceLayers", EJSON.stringify(gvServiceLayers));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvServiceLayers));
+      this.response.end(EJSON.stringify(gvServiceLayers, {indent: true}));
     }
   });
     
@@ -202,23 +214,25 @@ Router.map(function () {
         console.log("gvFeatureTypes layer ", layer);
         _.each(layer.service_layers, function(serviceLayer){
           console.log("gvFeatureTypes serviceLayer ", serviceLayer);
-          const aService = Services.findOne({_id: serviceLayer.featureType.service});
+          const aService = Services.findOne({_id: serviceLayer.featureType[0].service});
           console.log("gvFeatureTypes aService ", aService);
-          gvFeatureTypes.featureTypes.push(
-              {
-                id: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name, 
-                label: serviceLayer.featureType.name,
-                name: serviceLayer.featureType.nameInService,
-                service: aService.name, //serviceLayer.featureType.service,
-              }
-          );
+          if (aService){
+            gvFeatureTypes.featureTypes.push(
+                {
+                  id: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService, 
+                  label: serviceLayer.featureType[0].label,
+                  name: serviceLayer.featureType[0].nameInService,
+                  service: aService.name, //serviceLayer.featureType[0].service,
+                }
+            );
+          }
         });
       });
       // TODO remove this before release
-      console.log("gvFeatureTypes", JSON.stringify(gvFeatureTypes));
+      console.log("gvFeatureTypes", EJSON.stringify(gvFeatureTypes));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvFeatureTypes));
+      this.response.end(EJSON.stringify(gvFeatureTypes, {indent: true}));
     }
   });
 
@@ -233,24 +247,24 @@ Router.map(function () {
       gvSearchTemplates = {searchTemplates:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
-          _.each(serviceLayer.featureType.searchTemplates, function(searchTemplate){
+          _.each(serviceLayer.featureType[0].searchTemplates, function(searchTemplate){
             gvSearchTemplates.searchTemplates.push(
                 {
-                  id: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name + '.' + searchTemplate.label, 
+                  id: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService + '.' + searchTemplate.label, 
                   label: searchTemplate.label,
-                  featureType: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name,
+                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService,
                   attribute: {localName: searchTemplate.attribute_localname, namespace: searchTemplate.attibute_namespace},
-                  serviceLayer: layer.name + '.' + serviceLayer.name,
+                  serviceLayer: layer.name + '.' + serviceLayer.nameInService,
                 }
             );
           });
         });
       });
       // TODO remove this before release
-      console.log("gvSearchTemplates", JSON.stringify(gvSearchTemplates));
+      console.log("gvSearchTemplates", EJSON.stringify(gvSearchTemplates));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvSearchTemplates));
+      this.response.end(EJSON.stringify(gvSearchTemplates, {indent: true}));
     }
   });
 
@@ -362,7 +376,7 @@ Router.map(function () {
             {
 //              id: map._id, 
               id: map.text, 
-              label: map.text,
+              label: map.label,
               "initial-extent": map["initial_extent"],
               maplayers: gvMapLayers1,
   //              searchtemplates: ,
@@ -370,10 +384,10 @@ Router.map(function () {
         );
       }
       // TODO remove this before release
-      console.log("gvMaps", JSON.stringify(gvMaps));
+      console.log("gvMaps", EJSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvMaps));
+      this.response.end(EJSON.stringify(gvMaps, {indent: true}));
     }
   });
 
@@ -472,7 +486,7 @@ Router.map(function () {
             {
 //              id: map._id, 
               id: map.text, 
-              label: map.text,
+              label: map.label,
               "initial-extent": map["initial_extent"],
               maplayers: gvMapLayers1,
   //              searchtemplates: ,
@@ -480,10 +494,10 @@ Router.map(function () {
         );
       });
       // TODO remove this before release
-      console.log("gvMaps", JSON.stringify(gvMaps));
+      console.log("gvMaps", EJSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(JSON.stringify(gvMaps));
+      this.response.end(EJSON.stringify(gvMaps, {indent: true}));
     }
   });
 
