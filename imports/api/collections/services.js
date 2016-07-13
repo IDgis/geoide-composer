@@ -2,11 +2,15 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 export const ServiceSchema = new SimpleSchema({
-	name: {
-		type: String,
-		label: function(){ return i18n('collections.services.name.label'); },
-		unique : true,
-	},
+  name: {
+    type: String,
+    label: function(){ return i18n('collections.services.name.label'); },
+    unique : true,
+  },
+  label: {
+    type: String,
+    label: function(){ return i18n('collections.services.label.label'); },
+  },
 	endpoint: {
 		type: String,
 		label: function(){ return i18n('collections.services.endpoint.label'); }

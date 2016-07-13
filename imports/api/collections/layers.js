@@ -14,21 +14,18 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
   attibute_namespace: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
-    optional: true
   }		
 });
 
 SimpleSchema.featureType = new SimpleSchema ({
-	name: {
-		type: String,
-		label: function(){ return i18n('collections.layers.serviceLayer.featureType.name.label'); },
-		optional: true,
-	}, 
+  label: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.label.label'); },
+  }, 
 	//service_id WFS
 	service: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.service.label'); },
-		optional: true,
     autoform: {
       options: 
         function(){
@@ -39,7 +36,7 @@ SimpleSchema.featureType = new SimpleSchema ({
           });
           return servoptions;
         }
-    }
+    },
 	},
 	
   selectButton: {
@@ -57,7 +54,6 @@ SimpleSchema.featureType = new SimpleSchema ({
 	nameInService: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
-		optional: true,
     autoform: {
       options:  []    
     }
@@ -65,20 +61,21 @@ SimpleSchema.featureType = new SimpleSchema ({
 	searchTemplates: {
     	type: [SimpleSchema.searchTemplate],
     	label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
-    	optional: true,
+      optional: true,
+      minCount: 0,
+      maxCount: 5,
 	},   
 });
 
 SimpleSchema.serviceLayer = new SimpleSchema ({
-  name: {
+  label: {
     type: String,
-    label: function(){ return i18n('collections.layers.serviceLayer.name.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.label.label'); },
   }, 
   //services_id WMS/TMS
   service: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.service.label'); }, 
-//    allowedValues:  ['service1', 'WMS'],
     autoform: {
       options: 
         function(){
@@ -112,9 +109,11 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   }, 
   
   featureType: {
-    type: SimpleSchema.featureType,
+    type: [SimpleSchema.featureType],
     label: function(){ return i18n('collections.layers.servicelayer.featureTypes.label'); },
     optional: true,
+    minCount: 0,
+    maxCount: 1,
   },
 });
 
@@ -147,6 +146,10 @@ export const LayerSchema = new SimpleSchema({
     type: String,
     label: function(){ return i18n('collections.layers.name.label'); },
     unique: true,
+  }, 
+  label: {
+    type: String,
+    label: function(){ return i18n('collections.layers.label.label'); },
   }, 
   type: {
     type: String,

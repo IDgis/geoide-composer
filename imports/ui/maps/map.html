@@ -3,6 +3,7 @@
    {{#autoForm collection=maps schema=mapSchema id="mapForm" doc=mapDoc type=formType class="form-inline"}}
 	    <fieldset>
 	        {{> afQuickField name="text"}}
+	        {{> afQuickField name="label"}}
 	        {{> afQuickField name="initial_extent"}}
 	    </fieldset>
 		<button id="save" type="submit" class="btn btn-primary">{{ i18n 'button.save' }}</button> 

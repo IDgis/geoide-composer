@@ -82,6 +82,9 @@ i18n.map('nl', {
       name : {
         label : 'Naam',
       },
+      label : {
+        label : 'Label',
+      },
       endpoint : {
         label : 'Url',
       },
@@ -93,9 +96,12 @@ i18n.map('nl', {
       },
     },
     layers : {
-			name : {
-				label : 'Naam',
-			},
+      name : {
+        label : 'Naam',
+      },
+      label : {
+        label : 'Label',
+      },
 			type : {
 				label : 'Type',
 			},
@@ -115,9 +121,12 @@ i18n.map('nl', {
 				},
 			},
 			serviceLayer : {
-				name : {
-					label : 'Naam',
-				},
+	      name : {
+	        label : 'Naam',
+	      },
+	      label : {
+	        label : 'Label',
+	      },
 				service : {
 					label : 'Service',
 				},
@@ -134,9 +143,12 @@ i18n.map('nl', {
 					label : 'WFS Featuretypes'
 				},
 				featureType : {
-					name : {
-						label : 'Naam',
-					},
+		      name : {
+		        label : 'Naam',
+		      },
+		      label : {
+		        label : 'Label',
+		      },
 					service : {
 						label : 'Service',
 					},
@@ -164,8 +176,11 @@ i18n.map('nl', {
 			},
 		},
 		maps: {
-			name: {
-				label: "Kaartnaam",
+      name : {
+        label : 'Naam',
+      },
+      label : {
+				label: "Label",
 			},
 			initialExtent: {
 				label: "Initiële kaartuitsnede",
