@@ -11,7 +11,7 @@ Template.services.helpers({
 	 * List of services
 	 */
   services: function(){
-        return Services.find();
+        return Services.find({},{sort:["name", "asc"]});
     },
     isSelectedService: function () {
 		return Session.equals("selectedServiceId", this._id);

@@ -11,7 +11,7 @@ Template.layers.helpers({
 	 * List of layers
 	 */
   layers: function(){
-        return Layers.find();
+        return Layers.find({},{sort:["name", "asc"]});
     },
   isSelectedLayer: function () {
 		return Session.equals("selectedLayerId", this._id);

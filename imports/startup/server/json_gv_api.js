@@ -3,7 +3,33 @@ import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
+
+/**
+ *  REST api for delivering json for Geoide-Viewer
+ *  NOTE:
+ *  Identifiers cannot be represented by Mongo _id's, but must be human readable.
+ *  They are made (as) unique (as possible) in the following way:
+ *  1. id of an object at the highest level is equal to its name:
+ *     'id: service.name' instead of 'id: service._id'
+ *     The name of such a toplevel object is forced as unique in its schema
+ *  2. id of an object at a lower level is assembled by concatenating the names of its parents:
+ *     for 'layer.serviceLayer.featureType' the id becomes:
+ *     featureType: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name 
+ *     
+ *  The following dependencies are in place:
+ *    services.json:        none
+ *    featuretypes.json:    service
+ *    servicelayers.json:   service, featuretype
+ *    layers.json:          servicelayer
+ *    maps.json:            layer
+ *    searchtemplates.json: servicelayer, featuretype
+ *  
+ */
+
 Router.map(function () {
+  /**
+   * Objects for Geoide-Viewer json
+   */
   var gvServices = {services:[]};
   var gvLayers = {layers:[]};
   var gvMaps = {maps:[]};
@@ -11,15 +37,17 @@ Router.map(function () {
   var gvSearchTemplates = {searchTemplates:[]};
   var gvFeatureTypes = {featureTypes:[]};
 
+  /**
+   * Services
+   */
   this.route('json-gv-api-services', {
     path: '/json-gv-api-services',
     where: 'server',
     action: function () {
       var cursor = Services.find(); 
-      gvServices = {services:[]};// initialize
+      gvServices = {services:[]};
       cursor.forEach(function(service){
         gvServices.services.push(
-            // Geoide-Viewer structuur services.json
             {
 //              id: service._id, 
               id: service.name, 
@@ -40,11 +68,17 @@ Router.map(function () {
     }
   });
   
+  /**
+   * Layers, including grouplayers from Maps
+   */
   this.route('json-gv-api-layers', {
     path: '/json-gv-api-layers',
     where: 'server',
     action: function () {
-      gvLayers = {layers:[]};// initialize
+      gvLayers = {layers:[]};
+      /*
+       * Get normal layers from Layers
+       */
       var cursor = Layers.find(); 
       cursor.forEach(function(layer){
         var layerState = {};
@@ -64,9 +98,7 @@ Router.map(function () {
         _.each(layer.service_layers, function(serviceLayer){
           layerServiceLayers.push(layer.name + '.' + serviceLayer.name);
         });
-        // layers
         gvLayers.layers.push(
-            // Geoide-Viewer structuur layers.json
             {
 //              id: layer._id, 
               id: layer.name, 
@@ -78,23 +110,18 @@ Router.map(function () {
             }
         );
       });
-      gvMaps = {maps:[]};
-      // get maps
+      /*
+       * Get grouplayers from maps, 3 levels deep
+       */
       var cursor = Maps.find(); 
       cursor.forEach(function(map){
-        var gvMapLayers1 = [];
         _.each(map.children, function(child1){
           if (child1.type == "group"){
-            var gvMapLayers2 = [];
             _.each(child1.children, function(child2){
               if (child2.type == "group"){
-                var gvMapLayers3 = [];
                 _.each(child2.children, function(child3){
                   if (child3.type == "group"){
-                    var gvMapLayers4 = [];
-                    // group layers from map
                     gvLayers.layers.push(
-                        // Geoide-Viewer structuur layers.json
                         {
                           id: child3.text , 
                           label: child3.text,
@@ -103,9 +130,7 @@ Router.map(function () {
                     );
                   }
                 });
-                // group layers from map
                 gvLayers.layers.push(
-                    // Geoide-Viewer structuur layers.json
                     {
                       id: child2.text , 
                       label: child2.text,
@@ -114,9 +139,7 @@ Router.map(function () {
                 );
               }
             });
-            // group layers from map
             gvLayers.layers.push(
-                // Geoide-Viewer structuur layers.json
                 {
                   id: child1.text , 
                   label: child1.text,
@@ -135,17 +158,19 @@ Router.map(function () {
     }
   });
   
+  /**
+   * ServiceLayers
+   */
   this.route('json-gv-api-servicelayers', {
     path: '/json-gv-api-servicelayers',
     where: 'server',
     action: function () {
       var cursor = Layers.find(); 
-      gvServiceLayers = {serviceLayers:[]};// initialize
+      gvServiceLayers = {serviceLayers:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
           gvServiceLayers.serviceLayers.push(
-              // Geoide-Viewer structuur serviceLayers.json
               {
                 id: layer.name + '.' + serviceLayer.name, 
                 label: serviceLayer.name,
@@ -164,17 +189,22 @@ Router.map(function () {
     }
   });
     
+  /**
+   * FeatureTypes
+   */
   this.route('json-gv-api-featuretypes', {
     path: '/json-gv-api-featuretypes',
     where: 'server',
     action: function () {
       var cursor = Layers.find(); 
-      gvFeatureTypes = {featureTypes:[]};// initialize
+      gvFeatureTypes = {featureTypes:[]};
       cursor.forEach(function(layer){
+        console.log("gvFeatureTypes layer ", layer);
         _.each(layer.service_layers, function(serviceLayer){
+          console.log("gvFeatureTypes serviceLayer ", serviceLayer);
           const aService = Services.findOne({_id: serviceLayer.featureType.service});
+          console.log("gvFeatureTypes aService ", aService);
           gvFeatureTypes.featureTypes.push(
-              // Geoide-Viewer structuur featuretypes.json
               {
                 id: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name, 
                 label: serviceLayer.featureType.name,
@@ -192,17 +222,19 @@ Router.map(function () {
     }
   });
 
+  /**
+   * SearchTemplates
+   */
   this.route('json-gv-api-searchtemplates', {
     path: '/json-gv-api-searchtemplates',
     where: 'server',
     action: function () {
       var cursor = Layers.find(); 
-      gvSearchTemplates = {searchTemplates:[]};// initialize
+      gvSearchTemplates = {searchTemplates:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           _.each(serviceLayer.featureType.searchTemplates, function(searchTemplate){
             gvSearchTemplates.searchTemplates.push(
-                // Geoide-Viewer structuur searchtemplates.json
                 {
                   id: layer.name + '.' + serviceLayer.name + '.' + serviceLayer.featureType.name + '.' + searchTemplate.label, 
                   label: searchTemplate.label,
@@ -222,12 +254,136 @@ Router.map(function () {
     }
   });
 
-  
+  /**
+   * Maps
+   */
+  /*
+   * groups and layers sorted in reverse order as required by Geoide-Viewer
+   */
   this.route('json-gv-api-maps', {
     path: '/json-gv-api-maps',
     where: 'server',
     action: function () {
-      // initialize
+      gvMaps = {maps:[]};
+      // get maps
+      var cursor = Maps.find(); 
+      var allMaps = cursor.fetch();
+      // loop over allMaps array in reversed order  
+      for (index = allMaps.length-1; index >= 0; index--)  {
+        var gvMapLayers1 = [];
+        var map = allMaps[index];
+        var mapChildren = map.children;
+        var testIndex1 = mapChildren.length-1;
+        for (var index1 = mapChildren.length-1; index1 >= 0; index1--)  {
+          var child1 = mapChildren[index1];
+          if (child1.type == "group"){
+            var gvMapLayers2 = [];
+            var child1Children = _.toArray(child1.children);
+            for (index2 = child1Children.length-1; index2 >= 0; index2--)  {
+              var child2 = child1Children[index2];
+              if (child2.type == "group"){
+                var gvMapLayers3 = [];
+                var child2Children = _.toArray(child2.children);
+                for (index3 = child2Children.length-1; index3 >= 0; index3--)  {
+                  var child3 = child2Children[index3];
+                  if (child3.type == "group"){
+                    var gvMapLayers4 = [];
+                    // group
+                    gvMapLayers3.push(
+                        {
+                          layer: child3.text,
+                          state: {
+                            visible : child3.state.checked,
+                          },
+                          maplayers: gvMapLayers4,
+                        }
+                    );
+                  } else {
+                    // layer
+                    const aLayer = Layers.findOne({_id: child3.data.layerid});
+                    gvMapLayers3.push(
+                        {
+                          layer: aLayer.name,//child3.data.layerid,
+                          state: {
+                            visible : child3.state.checked,
+                          },
+                        }
+                    );
+                  }
+                }
+                // group
+                gvMapLayers2.push(
+                    {
+                      layer: child2.text,
+                      state: {
+                        visible : child2.state.checked,
+                      },
+                      maplayers: gvMapLayers3,
+                    }
+                );
+              } else {
+                // layer
+                const aLayer = Layers.findOne({_id: child2.data.layerid});
+                gvMapLayers2.push(
+                    {
+                      layer: aLayer.name,//child2.data.layerid,
+                      state: {
+                        visible : child2.state.checked,
+                      },
+                    }
+                );
+              }
+            }
+            // group
+            gvMapLayers1.push(
+                {
+                  layer: child1.text,
+                  state: {
+                    visible : child1.state.checked,
+                  },
+                  maplayers: gvMapLayers2,
+                }
+            );
+          } else {
+            // layer
+            const aLayer = Layers.findOne({_id: child1.data.layerid});
+            gvMapLayers1.push(
+                {
+                  layer: aLayer.name,//child1.data.layerid,
+                  state: {
+                    visible : child1.state.checked,
+                  },
+                }
+            );
+            
+          }
+        }
+        gvMaps.maps.push(
+            {
+//              id: map._id, 
+              id: map.text, 
+              label: map.text,
+              "initial-extent": map["initial_extent"],
+              maplayers: gvMapLayers1,
+  //              searchtemplates: ,
+            }
+        );
+      }
+      // TODO remove this before release
+      console.log("gvMaps", JSON.stringify(gvMaps));
+      this.response.setHeader('Content-Type', 'application/json');
+      // TODO make this streaming instead of pushing the whole object at once ??
+      this.response.end(JSON.stringify(gvMaps));
+    }
+  });
+
+  /*
+   * the same order of groups and layers as shown in Map tree
+   */
+  this.route('json-gv-api-maps-nosort', {
+    path: '/json-gv-api-maps-nosort',
+    where: 'server',
+    action: function () {
       gvMaps = {maps:[]};
       // get maps
       var cursor = Maps.find(); 
@@ -252,10 +408,9 @@ Router.map(function () {
                           maplayers: gvMapLayers4,
                         }
                     );
-                  } else{
+                  } else {
                     // layer
                     const aLayer = Layers.findOne({_id: child3.data.layerid});
-//                    console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
                     gvMapLayers3.push(
                         {
                           layer: aLayer.name,//child3.data.layerid,
@@ -276,10 +431,9 @@ Router.map(function () {
                       maplayers: gvMapLayers3,
                     }
                 );
-              } else{
+              } else {
                 // layer
                 const aLayer = Layers.findOne({_id: child2.data.layerid});
-//                console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
                 gvMapLayers2.push(
                     {
                       layer: aLayer.name,//child2.data.layerid,
@@ -303,7 +457,6 @@ Router.map(function () {
           } else {
             // layer
             const aLayer = Layers.findOne({_id: child1.data.layerid});
-//            console.log("aLayer: "+JSON.stringify(aLayer) + ", name: " + aLayer.name);
             gvMapLayers1.push(
                 {
                   layer: aLayer.name,//child1.data.layerid,
@@ -316,7 +469,6 @@ Router.map(function () {
           }
         });
         gvMaps.maps.push(
-            // Geoide-Viewer structuur maps.json
             {
 //              id: map._id, 
               id: map.text, 
