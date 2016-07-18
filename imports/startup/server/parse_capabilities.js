@@ -142,11 +142,47 @@ Meteor.methods({
   },
   
   /**
+   * DescribeFeatureType
+   */
+  describeFeatureType: function(serviceId, ftName){
+    var ft = {options:[]}; 
+    console.log('getService id:', serviceId);
+    console.log('FeatureType name:', ftName);
+    var serv = Services.find({_id: serviceId}).fetch();
+    console.log('service found: ',serv);
+    var host = serv[0].endpoint;
+    var version = serv[0].version;
+    var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+//  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    console.log('getWfsDescribeFeatureType parseResponse:', parseResponse);
+    console.log('------- WFS DescribeFeatureType -------');
+    console.log(parseResponse.schema);
+    console.log('targetNamespace: ' + parseResponse.schema.$.targetNamespace);
+    ft.targetNamespace = parseResponse.schema.$.targetNamespace;
+    console.log('=== FeatureType element ==');
+    console.log(parseResponse.schema.element[0] );
+    console.log('==========================');
+    console.log('... FeatureType cxtype ... ');
+    console.log(parseResponse.schema.element[0].complexType[0]);
+    console.log('..........................');
+    _.each(parseResponse.schema.element[0].complexType[0].complexContent[0].extension[0].sequence[0].element,function(ftField){     
+      console.log('*** FeatureType field ****');
+      console.log(ftField.$.name);
+      ft.options.push({name:ftField.$.name, title:ftField.$.name});
+      console.log('**************************');
+    });
+    console.log('--------------------------');
+
+    return ft;
+  },
+  
+  /**
    * Get service from collection
    */
-  getService: function(thisid){
-    console.log('getService id:', thisid);
-    var serv = Services.find({_id: thisid}).fetch();
+  getService: function(serviceId){
+    console.log('getService id:', serviceId);
+    var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
     return serv;
   },

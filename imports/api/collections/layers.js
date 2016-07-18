@@ -10,6 +10,9 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
   attribute_localname : {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
+    autoform: {
+      options:  []    
+    }
   },
   attibute_namespace: {
     type: String,

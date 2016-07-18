@@ -87,6 +87,65 @@ Template.layer.events({
     console.log("change on service select ");
     console.log(e);
   },
+  'change select[name$="featureType.0.nameInService"]' : function(e){
+    console.log("change on featureType select ");
+    console.log(e);
+    // get name of ft select
+    var srcName = e.target.name;
+//    service_layers.0.featureType.0.nameInService
+//    service_layers.0.featureType.0.searchTemplates.0.attribute_localname
+    console.log("Source: " + srcName);
+    var srcSelect = $('select[name="' + srcName + '"] ');
+//    console.log(srcSelect);
+    var ftName = srcSelect[0].value;
+//    console.log("FeatureType Name " + ftName);
+
+    // find searchtemplate localname selectbox 
+    var dstName = srcName.replace("nameInService", "searchTemplates.0.attribute_localname");
+//    console.log("Destination: " + dstName);
+//    var dstSelect = $('select[name="' + dstName + '"] ');
+    var dstSelects = $('select[name$=attribute_localname] ');
+    console.log(dstSelects);
+
+    // find service id from service selectbox
+    var srvName = srcName.replace("nameInService", "service");
+//    console.log("Service: " + srvName);
+    var srvSelect = $('select[name="' + srvName + '"] ');
+//    console.log(srvSelect);
+    var serviceId = srvSelect[0].value;
+//    console.log("service id " + serviceId);
+
+    // find targetnamespace 
+//    var nsName = srcName.replace("nameInService", "searchTemplates.0.attibute_namespace");
+//    console.log("nsInput " + nsName);
+//    var nsInput = $('input[name="' + nsName + '"] ');
+    var nsInputs = $('input[name$=attibute_namespace] ');
+    console.log(nsInputs);
+    
+    Meteor.call('describeFeatureType',
+        serviceId,
+        ftName
+        , function(lError, lResponse) {
+            if (lError) {
+              console.log(' Error ', lError);
+            } else {
+              // service layers found !!
+              console.log(' result ', lResponse);
+              // put it in options /  of nameInService
+//              $(nsInput).val(lResponse.targetNamespace);
+              $.each(nsInputs, function(count, ns){
+                $(ns).val(lResponse.targetNamespace);
+              });
+              $.each(dstSelects, function(count, dstSelect){
+                dstSelect.empty();
+                $.each(lResponse.options, function(count, obj) {   
+                  dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
+                });
+              });
+            }
+    });
+     
+  },
   'click select[name$=".service"]' : function(e){
     console.log("clicked on service select ");
     console.log(e);
@@ -102,7 +161,7 @@ Template.layer.events({
     console.log(e);
     // get name of button
     var buttonName = e.target.name;
-    // find select listbox above it (source of serviceId)
+//     find select listbox above it (source of serviceId)
     var srcName = buttonName.replace("selectButton", "service");
     console.log("Source: " + srcName);
     var srcSelect = $('select[name="' + srcName + '"] ');
