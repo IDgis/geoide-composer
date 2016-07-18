@@ -173,7 +173,7 @@ Router.map(function () {
           const aService = Services.findOne({_id: serviceLayer.service});
           if (serviceLayer.featureType){
             var ft;
-            if  (_isArray(serviceLayer.featureType)){
+            if  (_.isArray(serviceLayer.featureType)){
               ft = serviceLayer.featureType[0];
             } else {
               ft = serviceLayer.featureType;
@@ -222,7 +222,7 @@ Router.map(function () {
           console.log("gvFeatureTypes serviceLayer ", serviceLayer);
           if (serviceLayer.featureType){
             var ft;
-            if  (_isArray(serviceLayer.featureType)){
+            if  (_.isArray(serviceLayer.featureType)){
               ft = serviceLayer.featureType[0];
             } else {
               ft = serviceLayer.featureType;
@@ -263,7 +263,7 @@ Router.map(function () {
         _.each(layer.service_layers, function(serviceLayer){
           if (serviceLayer.featureType){
             var ft;
-            if  (_isArray(serviceLayer.featureType)){
+            if  (_.isArray(serviceLayer.featureType)){
               ft = serviceLayer.featureType[0];
             } else {
               ft = serviceLayer.featureType;
