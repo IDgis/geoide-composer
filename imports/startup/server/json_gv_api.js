@@ -172,13 +172,19 @@ Router.map(function () {
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
           if (serviceLayer.featureType){
+            var ft;
+            if  (_.isArray(serviceLayer.featureType)){
+              ft = serviceLayer.featureType[0];
+            } else {
+              ft = serviceLayer.featureType;
+            }
             gvServiceLayers.serviceLayers.push(
                 {
                   id: layer.name + '.' + serviceLayer.nameInService, 
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService,
+                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService,
                 }
             );
           } else {
@@ -215,15 +221,21 @@ Router.map(function () {
         _.each(layer.service_layers, function(serviceLayer){
           console.log("gvFeatureTypes serviceLayer ", serviceLayer);
           if (serviceLayer.featureType){
-            const aService = Services.findOne({_id: serviceLayer.featureType[0].service});
+            var ft;
+            if  (_.isArray(serviceLayer.featureType)){
+              ft = serviceLayer.featureType[0];
+            } else {
+              ft = serviceLayer.featureType;
+            }
+            const aService = Services.findOne({_id: ft.service});
             console.log("gvFeatureTypes aService ", aService);
             if (aService){
               gvFeatureTypes.featureTypes.push(
                   {
-                    id: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService, 
-                    label: serviceLayer.featureType[0].label,
-                    name: serviceLayer.featureType[0].nameInService,
-                    service: aService.name, //serviceLayer.featureType[0].service,
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService, 
+                    label: ft.label,
+                    name: ft.nameInService,
+                    service: aService.name, //ft.service,
                   }
               );
             }
@@ -249,17 +261,25 @@ Router.map(function () {
       gvSearchTemplates = {searchTemplates:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
-          _.each(serviceLayer.featureType[0].searchTemplates, function(searchTemplate){
-            gvSearchTemplates.searchTemplates.push(
-                {
-                  id: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService + '.' + searchTemplate.label, 
-                  label: searchTemplate.label,
-                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService,
-                  attribute: {localName: searchTemplate.attribute_localname, namespace: searchTemplate.attibute_namespace},
-                  serviceLayer: layer.name + '.' + serviceLayer.nameInService,
-                }
-            );
-          });
+          if (serviceLayer.featureType){
+            var ft;
+            if  (_.isArray(serviceLayer.featureType)){
+              ft = serviceLayer.featureType[0];
+            } else {
+              ft = serviceLayer.featureType;
+            }
+            _.each(ft.searchTemplates, function(searchTemplate){
+              gvSearchTemplates.searchTemplates.push(
+                  {
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService + '.' + searchTemplate.label, 
+                    label: searchTemplate.label,
+                    featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService,
+                    attribute: {localName: searchTemplate.attribute_localname, namespace: searchTemplate.attibute_namespace},
+                    serviceLayer: layer.name + '.' + serviceLayer.nameInService,
+                  }
+              );
+            });
+          }
         });
       });
       // TODO remove this before release
