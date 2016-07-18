@@ -214,17 +214,19 @@ Router.map(function () {
         console.log("gvFeatureTypes layer ", layer);
         _.each(layer.service_layers, function(serviceLayer){
           console.log("gvFeatureTypes serviceLayer ", serviceLayer);
-          const aService = Services.findOne({_id: serviceLayer.featureType[0].service});
-          console.log("gvFeatureTypes aService ", aService);
-          if (aService){
-            gvFeatureTypes.featureTypes.push(
-                {
-                  id: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService, 
-                  label: serviceLayer.featureType[0].label,
-                  name: serviceLayer.featureType[0].nameInService,
-                  service: aService.name, //serviceLayer.featureType[0].service,
-                }
-            );
+          if (serviceLayer.featureType){
+            const aService = Services.findOne({_id: serviceLayer.featureType[0].service});
+            console.log("gvFeatureTypes aService ", aService);
+            if (aService){
+              gvFeatureTypes.featureTypes.push(
+                  {
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType[0].nameInService, 
+                    label: serviceLayer.featureType[0].label,
+                    name: serviceLayer.featureType[0].nameInService,
+                    service: aService.name, //serviceLayer.featureType[0].service,
+                  }
+              );
+            }
           }
         });
       });
