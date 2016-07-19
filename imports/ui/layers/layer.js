@@ -223,6 +223,123 @@ Template.layer.events({
          });
   },
 });
+
+/**
+ * This will be called after the form has been rendered.
+ * Using the form data to fill in all the select options. 
+ * 
+ */
+Template.layer.onRendered(function(){
+  
+  
+  console.log("onRendered");
+  console.log(this);
+  var formData = this.data; // layer data belonging to this form
+  
+  if (formData){
+    var serviceSelects = this.$('select[name$=".service"]');
+    console.log(serviceSelects);
+    
+    $.each(serviceSelects, function(count, obj) {
+      console.log('serviceSelect:');
+      console.log(obj);
+      // get name of service select and service id
+      var selectName = obj.name;
+      console.log('selectName ' + selectName);
+      var serviceId = obj.value;
+      console.log("service id " + serviceId);
+      console.log('selectedIndex ' + obj.selectedIndex);
+  
+      // find nameInService selectbox below it (layerName, featuretype)
+      var dstName = selectName.replace(".service", ".nameInService");
+      console.log("Destination: " + dstName);
+      var dstSelects = $('select[name="' + dstName + '"] ');
+      console.log(dstSelects);
+      var dstSelect = dstSelects[0];
+      console.log(dstSelect);
+  
+    console.log("--------------");
+    
+    /*
+     * Retrieve the layers or featuretypes from the service
+     * and put them in the appropriate nameInService options
+     */
+    Meteor.call('getService', serviceId
+        , function(sError, sResponse) {
+            if (sError) {
+              console.log('getService Error ', sError);
+            } else {
+              // service found
+              console.log('getService result ', sResponse);
+              console.log('getService endpoint ', sResponse[0].endpoint);
+              var methodName = '';
+              switch(sResponse[0].type) {
+                case 'WMS':
+                    methodName = 'getWmsLayers';
+                    break;
+                case 'TMS':
+                  methodName = 'getTmsLayers';
+                  break;
+                case 'WFS':
+                  methodName = 'getWfsFeatureTypes';
+                  break;
+                default:
+                  methodName = '';
+              }
+              if (methodName == ''){
+                // error
+              } else {
+                Meteor.call(methodName,
+                  sResponse[0].endpoint,
+                  sResponse[0].version,
+                  function(lError, lResponse) {
+                    if (lError) {
+                      console.log(methodName + ' Error ', lError);
+                    } else {
+                      // service layers found !!
+                      console.log(methodName + ' result ', lResponse);
+                      // put it in options /  of nameInService
+                      // empty select first (remove existing options)
+                      var len = dstSelect.length;
+                      for (var i = 0; i < len ; i++) {
+                        dstSelect.remove(0);
+                      }
+                      // find the selected element
+                      var name = dstSelect.name;
+                      var subName = name.substr('service_layers.'.length,name.length);
+                      var indexPoint = subName.indexOf('.');
+                      var index = subName.substr(0,indexPoint);
+                      console.log('name ' + name + ' index ' + index);
+                      var selected = ''; // will not exist in real data
+                      if (name.indexOf('.featureType.') > 0){
+                        selected = formData.service_layers[index].featureType[0].nameInService;
+                      } else {
+                        selected = formData.service_layers[index].nameInService;
+                      }
+                      console.log('selected: ' + selected);
+                      // then fill options with the fields found
+                      $.each(lResponse, function(count, obj) {   
+                        var option = document.createElement("option");
+                        option.text = obj.title;
+                        option.value = obj.name;
+                        dstSelect.add(option); 
+                        // set selectIndex if appropriate
+                        if (selected == obj.name){
+                          dstSelect.selectedIndex = count;
+                          console.log('option select: ' + selected + ', index: ' + count);
+                        } else {
+                          console.log('option name  : ' + obj.name + ', index: ' + count);
+                        }
+                      });
+                    }
+                });
+              }
+            }
+         });
+    });
+  }
+});
+/**/
  
 /**
  * when the autoform is succesfully submitted, then go to the layer list
