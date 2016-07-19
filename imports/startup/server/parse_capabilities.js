@@ -143,10 +143,11 @@ Meteor.methods({
   
   /**
    * DescribeFeatureType
+   * Retrieve fields and namespace from a featuretype
    */
   describeFeatureType: function(serviceId, ftName){
     var ft = {options:[]}; 
-    console.log('getService id:', serviceId);
+    console.log('describeFeatureType serviceId: ', serviceId );
     console.log('FeatureType name:', ftName);
     var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
@@ -155,22 +156,12 @@ Meteor.methods({
     var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
 //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    console.log('getWfsDescribeFeatureType parseResponse:', parseResponse);
     console.log('------- WFS DescribeFeatureType -------');
     console.log(parseResponse.schema);
-    console.log('targetNamespace: ' + parseResponse.schema.$.targetNamespace);
     ft.targetNamespace = parseResponse.schema.$.targetNamespace;
-    console.log('=== FeatureType element ==');
-    console.log(parseResponse.schema.element[0] );
-    console.log('==========================');
-    console.log('... FeatureType cxtype ... ');
-    console.log(parseResponse.schema.element[0].complexType[0]);
-    console.log('..........................');
     _.each(parseResponse.schema.element[0].complexType[0].complexContent[0].extension[0].sequence[0].element,function(ftField){     
-      console.log('*** FeatureType field ****');
-      console.log(ftField.$.name);
+      console.log('FeatureType field: ' + ftField.$.name);
       ft.options.push({name:ftField.$.name, title:ftField.$.name});
-      console.log('**************************');
     });
     console.log('--------------------------');
 

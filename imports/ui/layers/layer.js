@@ -90,59 +90,55 @@ Template.layer.events({
   'change select[name$="featureType.0.nameInService"]' : function(e){
     console.log("change on featureType select ");
     console.log(e);
-    // get name of ft select
+    // get name of ft select box
     var srcName = e.target.name;
-//    service_layers.0.featureType.0.nameInService
-//    service_layers.0.featureType.0.searchTemplates.0.attribute_localname
     console.log("Source: " + srcName);
+    // get featuretype name 
     var srcSelect = $('select[name="' + srcName + '"] ');
-//    console.log(srcSelect);
     var ftName = srcSelect[0].value;
-//    console.log("FeatureType Name " + ftName);
-
-    // find searchtemplate localname selectbox 
-    var dstName = srcName.replace("nameInService", "searchTemplates.0.attribute_localname");
-//    console.log("Destination: " + dstName);
-//    var dstSelect = $('select[name="' + dstName + '"] ');
-    var dstSelects = $('select[name$=attribute_localname] ');
-    console.log(dstSelects);
 
     // find service id from service selectbox
     var srvName = srcName.replace("nameInService", "service");
-//    console.log("Service: " + srvName);
     var srvSelect = $('select[name="' + srvName + '"] ');
-//    console.log(srvSelect);
     var serviceId = srvSelect[0].value;
-//    console.log("service id " + serviceId);
 
-    // find targetnamespace 
-//    var nsName = srcName.replace("nameInService", "searchTemplates.0.attibute_namespace");
-//    console.log("nsInput " + nsName);
-//    var nsInput = $('input[name="' + nsName + '"] ');
-    var nsInputs = $('input[name$=attibute_namespace] ');
-    console.log(nsInputs);
+    // find searchtemplate localname selectboxes 
+    var dstSelects = $('select[name$=attribute_localname] ');
     
+    // find searchtemplate namespace fields 
+    var nsInputs = $('input[name$=attibute_namespace] ');
+    
+    // retrieve fields and namespace from a featuretype
+    // and put them in localname selectbox options resp namespace field
     Meteor.call('describeFeatureType',
-        serviceId,
-        ftName
-        , function(lError, lResponse) {
-            if (lError) {
-              console.log(' Error ', lError);
-            } else {
-              // service layers found !!
-              console.log(' result ', lResponse);
-              // put it in options /  of nameInService
-//              $(nsInput).val(lResponse.targetNamespace);
-              $.each(nsInputs, function(count, ns){
-                $(ns).val(lResponse.targetNamespace);
-              });
-              $.each(dstSelects, function(count, dstSelect){
-                dstSelect.empty();
-                $.each(lResponse.options, function(count, obj) {   
-                  dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
-                });
-              });
+      serviceId,
+      ftName,
+      function(lError, lResponse) {
+        if (lError) {
+          console.log(' Error ', lError);
+        } else {
+          // featuretype fields found !!
+          console.log(' result ', lResponse);
+          // fill all searchtemplate.namespace fields 
+          $.each(nsInputs, function(count, ns){
+            $(ns).val(lResponse.targetNamespace);
+          });
+          // fill all searchtemplate.localname options
+          $.each(dstSelects, function(count, dstSelect){
+            // empty select first (remove existing options)
+            var len = dstSelect.length;
+            for (var i = 0; i < len ; i++) {
+              dstSelect.remove(0);
             }
+            // then fill options with the fields found
+            $.each(lResponse.options, function(count, obj) {   
+              var option = document.createElement("option");
+              option.text = obj.title;
+              option.value = obj.name;
+              dstSelect.add(option); 
+            });
+          });
+        }
     });
      
   },
