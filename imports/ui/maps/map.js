@@ -51,26 +51,6 @@ Template.map.events({
     console.log("click .jstree");
   },
 
-  'click #save-tree' : function() {
-    console.log($.jstree.reference('.tree').get_json('#')[0].children)
-    console.log("save tree " + this._id);
-    var err = Maps.update({
-      _id : this._id
-    }, {
-      $set : {
-        // text: this.text,
-        children : $.jstree.reference('.tree').get_json('#')[0].children
-      }
-    }, function(error, nr) {
-      console.log("save tree error: " + error + ", #" + nr);
-    });
-
-  },
-
-  'click #reset-tree' : function(eventObj) {
-    console.log("click #reset-tree");
-  },
-
   'click #createlayer' : function() {
     var ref = $.jstree.reference('.maptree'), sel = ref.get_top_selected();
 
@@ -241,24 +221,13 @@ styleChildren = function(children) {
  * when the autoform is succesfully submitted, then go to the map list
  */
 AutoForm.addHooks('mapForm', {
-  beginSubmit: function() {
-    // save tree first
-//    console.log('beginSubmit --- save tree ---');
-//    console.log(this.currentDoc.children);
-//    console.log("save tree " + this.docId);
-//    this.currentDoc.children = $.jstree.reference('.tree').get_json('#')[0].children;
-//    console.log(this.currentDoc.children);
-//    console.log('-----------------');
-    
-  },
+  /*
+   * after update or insert, update the map with the tree component
+   * and set the tree.text to the name of the map
+   */
   after: {
-    // Replace `formType` with the form `type` attribute to which this hook applies
     update: function(error, result) {
       console.log('after update --- save tree ---');
-      console.log($.jstree.reference('.tree').get_json('#')[0].children)
-      console.log("save tree update " + this.docId);
-      console.log(this.updateDoc);
-
       Maps.update({
         _id : this.docId
       }, {
@@ -272,9 +241,6 @@ AutoForm.addHooks('mapForm', {
     },
     insert: function(error, result) {
       console.log('after insert --- save tree ---');
-      console.log("save tree insert " + this.docId);
-      console.log(this.insertDoc);
-
       Maps.update({
         _id : this.docId
       }, {
