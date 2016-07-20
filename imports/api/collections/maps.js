@@ -70,7 +70,7 @@ export const MapSchema= new SimpleSchema({
 	},
 	initial_extent: {
 		type: SimpleSchema.initialExtent,
-		label: function(){ return i18n('collections.maps.initial_extent.label'); },
+		label: function(){ return i18n('collections.maps.initialExtent.label'); },
 		optional: true
 	},
 	children: {
