@@ -83,10 +83,16 @@ Template.layer.events({
     console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
-  'change select[name$=".service"]' : function(e){
-    console.log("change on service select ");
-    console.log(e);
-  },
+//  'change select[name$=".service"]' : function(e){
+//    console.log("change on service select ");
+//    console.log(e);
+//  },
+  /**
+   * Fill a selectbox with featuretype attributes 
+   * 1. listen to change on selectbox featuretype,
+   * 2. get the attributes from the describeFeatureType of the selected wfs service
+   * 3. and put the attribute list in selectbox 'attribute localname'
+   */
   'change select[name$="featureType.0.nameInService"]' : function(e){
     console.log("change on featureType select ");
     console.log(e);
@@ -152,13 +158,15 @@ Template.layer.events({
    * 2. get the service layers from the GetCapabilities of the selected service
    * 3. and put the layer list in selectbox 'nameInService'
    */
-  'click input[name$="selectButton"]' : function(e){
+//  'click input[name$="selectButton"]' : function(e){
+    'change select[name$=".service"]' : function(e){
     console.log("clicked select button");
     console.log(e);
     // get name of button
     var buttonName = e.target.name;
 //     find select listbox above it (source of serviceId)
     var srcName = buttonName.replace("selectButton", "service");
+//    var srcName = e.target.name;
     console.log("Source: " + srcName);
     var srcSelect = $('select[name="' + srcName + '"] ');
     console.log(srcSelect);
@@ -227,7 +235,10 @@ Template.layer.events({
 /**
  * This will be called after the form has been rendered.
  * The form data (in case of update) is used to fill in all the select options. 
- * 
+ * Select boxes are:
+ * - servicelayer 'nameInService'
+ * - servicelayer.featuretype 'nameInService'
+ * - servicelayer.featuretype.searchtemplate 'attributeLocalname'
  */
 Template.layer.onRendered(function(){
   
