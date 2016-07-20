@@ -83,13 +83,9 @@ Template.layer.events({
     console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
-//  'change select[name$=".service"]' : function(e){
-//    console.log("change on service select ");
-//    console.log(e);
-//  },
   /**
    * Fill a selectbox with featuretype attributes 
-   * 1. listen to change on selectbox featuretype,
+   * 1. listen to change on selectbox nameInService,
    * 2. get the attributes from the describeFeatureType of the selected wfs service
    * 3. and put the attribute list in selectbox 'attribute localname'
    */
@@ -148,87 +144,77 @@ Template.layer.events({
     });
      
   },
-  'click select[name$=".service"]' : function(e){
-    console.log("clicked on service select ");
-    console.log(e);
-  },
   /**
-   * Fill a selectbox with layernames of a service
-   * 1. listen to click on button near the selectbox 'service' in servicelayer,
-   * 2. get the service layers from the GetCapabilities of the selected service
-   * 3. and put the layer list in selectbox 'nameInService'
+   * Fill selectbox 'nameInService' with layer or featuretype names of a service
+   * 1. listen to change on selectbox 'service' in servicelayer/featuretype,
+   * 2. get the service layers/featuretypes from the GetCapabilities of the selected service
+   * 3. and put the layer/featuretype list in selectbox 'nameInService'
    */
-//  'click input[name$="selectButton"]' : function(e){
     'change select[name$=".service"]' : function(e){
-    console.log("clicked select button");
     console.log(e);
-    // get name of button
-    var buttonName = e.target.name;
-//     find select listbox above it (source of serviceId)
-    var srcName = buttonName.replace("selectButton", "service");
-//    var srcName = e.target.name;
-    console.log("Source: " + srcName);
+    // get the name of service selectbox
+    var srcName = e.target.name;
+    console.log("changed select box " + srcName);
     var srcSelect = $('select[name="' + srcName + '"] ');
     console.log(srcSelect);
-    // and the field input below it (destination of layerName)
-    var dstName = buttonName.replace("selectButton", "nameInService");
-    console.log("Destination: " + dstName);
+    // get the name of the nameInService selectbox 
+    var dstName = srcName.replace(".service", ".nameInService");
+    console.log("nameInService select box: " + dstName);
     var dstSelect = $('select[name="' + dstName + '"] ');
     console.log(dstSelect);
-    // TODO find service id, get its layers and show them in next element 'nameInService' options 
-
+    // get the current selected service to use in a GetCapabilities call
     var serviceId = srcSelect[0].value;
     console.log("service id " + serviceId);
-    Meteor.call('getService', serviceId
-        , function(sError, sResponse) {
-            if (sError) {
-              console.log('getService Error ', sError);
-            } else {
-              // service found
-              console.log('getService result ', sResponse);
-              console.log('getService endpoint ', sResponse[0].endpoint);
-              var methodName = '';
-              switch(sResponse[0].type) {
-                case 'WMS':
-                    methodName = 'getWmsLayers';
-                    break;
-                case 'TMS':
-                  methodName = 'getTmsLayers';
+    Meteor.call('getService', 
+      serviceId,
+      function(sError, sResponse) {
+        if (sError) {
+          console.log('getService Error ', sError);
+        } else {
+          // service found
+          console.log('getService result ', sResponse);
+          if (_.isEmpty(sResponse)){
+            console.log('no service found');
+            // TODO do nothing or clear nameInService selectboxes 
+          } else {
+            console.log('getService endpoint ', sResponse[0].endpoint);
+            var methodName = '';
+            switch(sResponse[0].type) {
+              case 'WMS':
+                  methodName = 'getWmsLayers';
                   break;
-                case 'WFS':
-                  methodName = 'getWfsFeatureTypes';
-                  break;
-                default:
-                  methodName = '';
-              }
-              if (methodName == ''){
-                // error
-              } else {
-                  Meteor.call(methodName,
-                      sResponse[0].endpoint,
-                      sResponse[0].version
-                      , function(lError, lResponse) {
-                          if (lError) {
-                            console.log(methodName + ' Error ', lError);
-                          } else {
-                            // service layers found !!
-                            console.log(methodName + ' result ', lResponse);
-                            // put it in options /  of nameInService
-                            dstSelect.empty();
-                            $.each(lResponse, function(count, obj) {   
-                              dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
-                            });
-    //                        lResponse.forEach(function(entry) {
-    //                          var layerOption = "<option value=" + entry.name + ">" + entry.title
-    //                              + "</option>"
-    //                          $('select[name$=".nameInService"] ').append(layerOption);
-    //                        });
-    
-                          }
-                  });
-              }
+              case 'TMS':
+                methodName = 'getTmsLayers';
+                break;
+              case 'WFS':
+                methodName = 'getWfsFeatureTypes';
+                break;
+              default:
+                methodName = '';
             }
-         });
+            if (methodName == ''){
+              // error
+            } else {
+              Meteor.call(methodName,
+                sResponse[0].endpoint,
+                sResponse[0].version,
+                function(lError, lResponse) {
+                  if (lError) {
+                    console.log(methodName + ' Error ', lError);
+                  } else {
+                    // service layers/featuretypes found !!
+                    console.log(methodName + ' result ', lResponse);
+                    // put it in options of nameInService
+                    dstSelect.empty();
+                    $.each(lResponse, function(count, obj) {   
+                      dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
+                    });
+                  }
+              });
+            }
+          }
+        }
+     });
   },
 });
 
@@ -239,10 +225,9 @@ Template.layer.events({
  * - servicelayer 'nameInService'
  * - servicelayer.featuretype 'nameInService'
  * - servicelayer.featuretype.searchtemplate 'attributeLocalname'
+ * 
  */
 Template.layer.onRendered(function(){
-  
-  
   console.log("onRendered");
   console.log(this);
   var formData = this.data; // layer data belonging to this form
