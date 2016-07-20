@@ -66,8 +66,9 @@ Template.map.events({
       "data" : {
         "layerid" : layerId
       },
-    // "children": [{"type":"servicelayer", "text": "<img
-    // src='/images/afdelingen.png'>", "a_attr":{class: "no_checkbox"}}],
+      "state" : {
+        checked : true
+      }
     });
 
     if (sel) {
@@ -84,7 +85,7 @@ Template.map.events({
     sel = ref.create_node(sel, {
       "type" : "group",
       "state" : {
-        checked : false
+        checked : true
       }
     });
     if (sel) {
@@ -186,7 +187,7 @@ Template.map.rendered = function() {
   });
 }
 
-$('.maptree').jstree
+$('.maptree').jstree;
 
 fillLayerSelect = function() {
   var layers = Layers.find({}, {
