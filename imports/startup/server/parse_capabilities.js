@@ -142,11 +142,38 @@ Meteor.methods({
   },
   
   /**
+   * DescribeFeatureType
+   * Retrieve fields and namespace from a featuretype
+   */
+  describeFeatureType: function(serviceId, ftName){
+    var ft = {options:[]}; 
+    console.log('describeFeatureType serviceId: ', serviceId );
+    console.log('FeatureType name:', ftName);
+    var serv = Services.find({_id: serviceId}).fetch();
+    console.log('service found: ',serv);
+    var host = serv[0].endpoint;
+    var version = serv[0].version;
+    var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+//  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    console.log('------- WFS DescribeFeatureType -------');
+    console.log(parseResponse.schema);
+    ft.targetNamespace = parseResponse.schema.$.targetNamespace;
+    _.each(parseResponse.schema.element[0].complexType[0].complexContent[0].extension[0].sequence[0].element,function(ftField){     
+      console.log('FeatureType field: ' + ftField.$.name);
+      ft.options.push({name:ftField.$.name, title:ftField.$.name});
+    });
+    console.log('--------------------------');
+
+    return ft;
+  },
+  
+  /**
    * Get service from collection
    */
-  getService: function(thisid){
-    console.log('getService id:', thisid);
-    var serv = Services.find({_id: thisid}).fetch();
+  getService: function(serviceId){
+    console.log('getService id:', serviceId);
+    var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
     return serv;
   },

@@ -10,6 +10,9 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
   attribute_localname : {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
+    autoform: {
+      options:  []    
+    }
   },
   attibute_namespace: {
     type: String,
@@ -39,18 +42,6 @@ SimpleSchema.featureType = new SimpleSchema ({
     },
 	},
 	
-  selectButton: {
-    type: String,
-    label: ' ',
-    autoform: {
-      afFieldInput: {
-        type: "button",
-        defaultValue: function(){ return i18n('collections.layers.serviceLayer.featureType.selectButton.label'); },
-        class: 'btn btn-warning'
-      }
-    }
-  },
-  
 	nameInService: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
@@ -89,17 +80,6 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     }
   },
   
-  selectButton: {
-    type: String,
-    label: ' ',
-    autoform: {
-      afFieldInput: {
-        type: "button",
-        defaultValue: function(){ return i18n('collections.layers.serviceLayer.selectButton.label'); },
-        class: 'btn btn-warning'
-      }
-    }
-  },
   nameInService: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },

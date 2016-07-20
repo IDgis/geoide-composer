@@ -130,9 +130,6 @@ i18n.map('nl', {
 				service : {
 					label : 'Service',
 				},
-				selectButton: {
-				  label: 'Voeg servicelagen toe:',
-				},
 				nameInService : {
 					label : 'Service laagnaam',
 				},
@@ -152,9 +149,6 @@ i18n.map('nl', {
 					service : {
 						label : 'Service',
 					},
-	        selectButton: {
-	          label: 'Voeg featuretypen toe:',
-	        },
 					nameInService : {
 						label : 'FeatureType naam'
 					},
