@@ -105,7 +105,7 @@ Template.layer.events({
     var serviceId = srvSelect[0].value;
 
     // find searchtemplate localname selectboxes 
-    var dstSelects = $('select[name$=attribute_localname] ');
+    var attrSelects = $('select[name$=attribute_localname] ');
     
     // find searchtemplate namespace fields 
     var nsInputs = $('input[name$=attibute_namespace] ');
@@ -126,18 +126,18 @@ Template.layer.events({
             $(ns).val(lResponse.targetNamespace);
           });
           // fill all searchtemplate.localname options
-          $.each(dstSelects, function(count, dstSelect){
+          $.each(attrSelects, function(count, attrSelect){
             // empty select first (remove existing options)
-            var len = dstSelect.length;
+            var len = attrSelect.length;
             for (var i = 0; i < len ; i++) {
-              dstSelect.remove(0);
+              attrSelect.remove(0);
             }
             // then fill options with the fields found
             $.each(lResponse.options, function(count, obj) {   
               var option = document.createElement("option");
               option.text = obj.title;
               option.value = obj.name;
-              dstSelect.add(option); 
+              attrSelect.add(option); 
             });
           });
         }
@@ -323,13 +323,64 @@ Template.layer.onRendered(function(){
                         // set selectIndex if appropriate
                         if (selected == obj.name){
                           dstSelect.selectedIndex = count;
-                          console.log('option select: ' + selected + ', index: ' + count);
+                          console.log('layer/ft select: ' + selected + ', index: ' + count);
                         } else {
-                          console.log('option name  : ' + obj.name + ', index: ' + count);
+                          console.log('layer/ft name  : ' + obj.name + ', index: ' + count);
                         }
                       });
-                      // now continue with searchTemplates 
-                      
+                      /* 
+                       * now continue filling in searchTemplates
+                       * localname and namespace
+                       */ 
+                      if (name.indexOf('.featureType.') > 0){
+                        
+                        // find searchtemplate localname selectboxes 
+                        var attrSelects = $('select[name$=attribute_localname] ');
+                        
+                        // find searchtemplate namespace fields 
+                        var nsInputs = $('input[name$=attibute_namespace] ');
+                        // TODO get names above from name of servicelayer
+                        
+                        // retrieve fields and namespace from a featuretype
+                        // and put them in localname selectbox options resp namespace field
+                        Meteor.call('describeFeatureType',
+                          serviceId,
+                          selected, // =ftName
+                          function(lError, lResponse) {
+                            if (lError) {
+                              console.log('describeFeatureType Error ', lError);
+                            } else {
+                              // featuretype attrs found !!
+                              console.log('describeFeatureType result ', lResponse);
+                              // fill all searchtemplate.namespace fields 
+                              $.each(nsInputs, function(count, ns){
+                                $(ns).val(lResponse.targetNamespace);
+                              });
+                              // fill all searchtemplate.localname options
+                              $.each(attrSelects, function(count, attrSelect){
+                                selectLocalName = formData.service_layers[index].featureType[0].searchTemplates[count].attribute_localname;
+                                
+                                // empty select first (remove existing options)
+                                var len = attrSelect.length;
+                                for (var i = 0; i < len ; i++) {
+                                  attrSelect.remove(0);
+                                }
+                                // then fill options with the fields found
+                                $.each(lResponse.options, function(count, obj) {   
+                                  var option = document.createElement("option");
+                                  option.text = obj.title;
+                                  option.value = obj.name;
+                                  attrSelect.add(option); 
+                                  // set selectIndex if appropriate
+                                  if (selectLocalName == obj.name){
+                                    attrSelect.selectedIndex = count;
+                                    console.log('ft attr select: ' + selected + ', index: ' + count);
+                                  }
+                                });
+                              });
+                            }
+                        });
+                      }                      
                     }
                 });
               }
