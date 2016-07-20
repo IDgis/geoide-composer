@@ -67,12 +67,18 @@ i18n.map('nl', {
       },
     },
     autoform: {
-      header:'Kaart configuratie',
+      header: 'Kaart configuratie',
+      layerselect: 'Kies een laag',
+      createlayer: 'Nieuwe laag +',
+      creategroup: 'Nieuwe groep +',
+      renamenode: 'Hernoem groep',
+      removenode: 'Verwijder laag/groep X',
     },
     tree: {
       search : {
         placeholder : 'Zoek'
       },
+      label: 'Kaart'
     },
   },
   
@@ -191,7 +197,6 @@ i18n.map('nl', {
 					label: "max Y"
 				},
 			},
-			
 		},
 	},
 
