@@ -44,8 +44,7 @@ Template.map.events({
   },
 
   'submit #mapForm' : function(event) {
-    console.log("submit map " + this._id);
-    // Router.go('map');
+    console.log("submit mapForm ");
   },
 
   'click .jstree' : function() {
@@ -62,8 +61,8 @@ Template.map.events({
         // text: this.text,
         children : $.jstree.reference('.tree').get_json('#')[0].children
       }
-    }, function(error) {
-      console.log("Error save-tree: " + error.message)
+    }, function(error, nr) {
+      console.log("save tree error: " + error + ", #" + nr);
     });
 
   },
@@ -242,6 +241,54 @@ styleChildren = function(children) {
  * when the autoform is succesfully submitted, then go to the map list
  */
 AutoForm.addHooks('mapForm', {
+  beginSubmit: function() {
+    // save tree first
+//    console.log('beginSubmit --- save tree ---');
+//    console.log(this.currentDoc.children);
+//    console.log("save tree " + this.docId);
+//    this.currentDoc.children = $.jstree.reference('.tree').get_json('#')[0].children;
+//    console.log(this.currentDoc.children);
+//    console.log('-----------------');
+    
+  },
+  after: {
+    // Replace `formType` with the form `type` attribute to which this hook applies
+    update: function(error, result) {
+      console.log('after update --- save tree ---');
+      console.log($.jstree.reference('.tree').get_json('#')[0].children)
+      console.log("save tree update " + this.docId);
+      console.log(this.updateDoc);
+
+      Maps.update({
+        _id : this.docId
+      }, {
+        $set : {
+          text: this.updateDoc.text,
+          children : $.jstree.reference('.tree').get_json('#')[0].children
+        }
+      }, function(error, nr) {
+        console.log("update tree error: " + error + ", #" + nr);
+      });
+    },
+    insert: function(error, result) {
+      console.log('after insert --- save tree ---');
+      console.log("save tree insert " + this.docId);
+      console.log(this.insertDoc);
+
+      Maps.update({
+        _id : this.docId
+      }, {
+        $set : {
+          text: this.insertDoc.text,
+          children : $.jstree.reference('.tree').get_json('#')[0].children
+        }
+      }, function(error, nr) {
+        console.log("insert tree error: " + error + ", #" + nr);
+      });
+      console.log(result);
+    }
+  },
+
   onSuccess : function(formType, result) {
     console.log("submit map autoform, goto list");
     Router.go('maps.list');
