@@ -226,7 +226,7 @@ Template.layer.events({
 
 /**
  * This will be called after the form has been rendered.
- * Using the form data to fill in all the select options. 
+ * The form data (in case of update) is used to fill in all the select options. 
  * 
  */
 Template.layer.onRendered(function(){
@@ -310,7 +310,8 @@ Template.layer.onRendered(function(){
                       var indexPoint = subName.indexOf('.');
                       var index = subName.substr(0,indexPoint);
                       console.log('name ' + name + ' index ' + index);
-                      var selected = ''; // will not exist in real data
+                      var selected = ''; 
+                      // decide which nameInService selectbox will be filled
                       if (name.indexOf('.featureType.') > 0){
                         selected = formData.service_layers[index].featureType[0].nameInService;
                       } else {
@@ -331,6 +332,8 @@ Template.layer.onRendered(function(){
                           console.log('option name  : ' + obj.name + ', index: ' + count);
                         }
                       });
+                      // now continue with searchTemplates 
+                      
                     }
                 });
               }
