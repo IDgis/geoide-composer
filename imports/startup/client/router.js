@@ -4,16 +4,16 @@ import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
-import '../ui/main.js';
+import '../../ui/main.js';
 
-import '../ui/services/services.js';
-import '../ui/services/service.js';
+import '../../ui/services/services.js';
+import '../../ui/services/service.js';
 
-import '../ui/layers/layers.js';
-import '../ui/layers/layer.js';
+import '../../ui/layers/layers.js';
+import '../../ui/layers/layer.js';
 
-import '../ui/maps/map.js';
-import '../ui/maps/maps.js';
+import '../../ui/maps/map.js';
+import '../../ui/maps/maps.js';
 
 
 Router.configure({
