@@ -13,9 +13,6 @@ Template.services.helpers({
   services: function(){
         return Services.find({});
     },
-  isSelectedService: function () {
-		return Session.equals("selectedServiceId", this._id);
-	},
 });
 
 

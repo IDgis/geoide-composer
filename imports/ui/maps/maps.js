@@ -10,9 +10,6 @@ Template.maps.helpers({
 	maps: function(){
 	    return Maps.find({});
 	},
-    isSelectedMap: function () {
-		return Session.equals("selectedMapId", this._id);
-	},
 });
 
 Template.maps.events ({
