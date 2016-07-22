@@ -11,11 +11,8 @@ Template.layers.helpers({
 	 * List of layers
 	 */
   layers: function(){
-        return Layers.find({},{sort:["name", "asc"]});
+        return Layers.find({});
     },
-  isSelectedLayer: function () {
-		return Session.equals("selectedLayerId", this._id);
-	},
 });
 
 
