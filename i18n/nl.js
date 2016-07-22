@@ -31,7 +31,9 @@ i18n.map('nl', {
       header: 'Services',
       table: {
         name: 'Naam',
+        label: 'Label',
         type: 'Type',
+        version: 'Versie',
       },
       button: {
         create: 'Maak een nieuwe service'
@@ -48,7 +50,9 @@ i18n.map('nl', {
       header: 'Lagen',
       table: {
         name: 'Naam',
+        label: 'Label',
         type: 'Type',
+        visible: 'Zichtbaar'
       },
       button: {
         create: 'Maak een nieuwe laag'
@@ -62,6 +66,11 @@ i18n.map('nl', {
   maps: {
     list: {
       header: 'Kaarten',
+      table: {
+        name: 'Naam',
+        label: 'Label',
+        layers: 'Hoofdlagen',
+      },
       button: {
         create: 'Maak een nieuwe kaart'
       },
@@ -206,6 +215,7 @@ i18n.map('nl', {
     save: 'Opslaan',
     cancel:'Annuleren'
   },
-
+  yes: 'Ja',
+  no: 'Nee',
   
 });
