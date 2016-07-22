@@ -7,15 +7,15 @@ Meteor.startup(function() {
  * Server publications
  */
   Meteor.publish('services', function(){
-    return Services.find({},{sort:["name", "asc"]});
+    return Services.find({},{sort:[["name", "asc"]]});
   });
 
   Meteor.publish('layers', function(){
-    return Layers.find({},{sort:["name", "asc"]});
+    return Layers.find({},{sort:[["name", "asc"]]});
   });
    
   Meteor.publish('maps', function(){
-    return Maps.find({},{sort:["text", "asc"]});
+    return Maps.find({},{sort:[["text", "asc"]]});
   });
 
 });

@@ -8,7 +8,7 @@ import './maps.html';
 
 Template.maps.helpers({
 	maps: function(){
-	    return Maps.find({},{sort:["text", "asc"]});
+	    return Maps.find({});
 	},
     isSelectedMap: function () {
 		return Session.equals("selectedMapId", this._id);
