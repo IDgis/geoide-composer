@@ -13,7 +13,7 @@ Template.services.helpers({
   services: function(){
         return Services.find({},{sort:["name", "asc"]});
     },
-    isSelectedService: function () {
+  isSelectedService: function () {
 		return Session.equals("selectedServiceId", this._id);
 	},
 });
