@@ -23,7 +23,9 @@ i18n.map('nl', {
       xmlapi: 'xmlapi - test',
       getcaplayersapi: 'getcaplayersapi - test',
     },
-    messages : 'meldingen'
+    messages : 'meldingen',
+    loggedin : 'Ingelogd als: ',
+    notloggedin : 'Niet ingelogd',
   },
   
   services:{

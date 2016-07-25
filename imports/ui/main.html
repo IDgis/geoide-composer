@@ -51,7 +51,13 @@
 					<div class="col-lg-9 col-lg-offset-1" >{{i18n 'version'}}: {{gitRev 'tag'}}</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-9 col-lg-offset-1">Logged in as {{currentUser.username}}</div>
+					<div class="col-lg-9 col-lg-offset-1"> 
+						{{#if currentUser}} 
+							{{i18n 'main.loggedin'}} <em>{{currentUser.username}}</em> 
+						{{else}} 
+							{{i18n 'main.notloggedin'}} 
+						{{/if}}
+					</div>
 				</div>
 			</div>
 			
