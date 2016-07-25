@@ -15,6 +15,9 @@ import '../../ui/layers/layer.js';
 import '../../ui/maps/map.js';
 import '../../ui/maps/maps.js';
 
+import '../../ui/users/user.js';
+import '../../ui/users/users.js';
+
 
 Router.configure({
     layoutTemplate: 'main'
@@ -86,6 +89,26 @@ Router.route('/layer/:_id', function () {
     this.render('layer', {data: layer});
 }, {
     name: 'layer.edit'
+});
+
+//user routes
+Router.route('/users', function () {
+  this.render('users');
+}, {
+  name: 'users.list'
+});
+
+Router.route('/user/insert', function () {
+    this.render('user');
+}, {
+    name: 'user.insert'
+});
+
+Router.route('/user/:_id', function () {
+    var user = Meteor.users.findOne({_id: this.params._id});
+    this.render('user', {data: user});
+}, {
+    name: 'user.edit'
 });
 
 // temporary routes
