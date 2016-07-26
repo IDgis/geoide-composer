@@ -13,7 +13,6 @@
 
 //import '../router.js';
 import './startup.js';
-import './users.js';
 import './jsonapi.js';
 import './json_gv_api.js';
 import './parse_capabilities.js';

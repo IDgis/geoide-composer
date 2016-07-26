@@ -14,7 +14,9 @@
 		</div>
 
 		<div class="row">
-			{{> loginButtons}}
+			<div class="col-lg-6">
+				{{> loginButtons}}
+			</div>
 		</div>
 		
 		<div class="row">
@@ -25,7 +27,6 @@
 							<li role="presentation"><a href="/services">{{i18n 'main.menu.services'}}</a></li>
 							<li role="presentation"><a href="/layers">{{i18n 'main.menu.layers'}}</a></li>
 							<li role="presentation"><a href="/maps">{{i18n 'main.menu.maps'}}</a></li>
-							<li role="presentation"><a href="/users">{{i18n 'main.menu.users'}}</a></li>
 							<li role="presentation"><a href="{{absoluteUrl}}jsonapi-services">{{i18n 'main.menu.jsonapi.services'}}</a></li>
 							<li role="presentation"><a href="{{absoluteUrl}}jsonapi-layers">{{i18n 'main.menu.jsonapi.layers'}}</a></li>
 							<li role="presentation"><a href="{{absoluteUrl}}jsonapi-maps">{{i18n 'main.menu.jsonapi.maps'}}</a></li>

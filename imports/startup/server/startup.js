@@ -20,29 +20,22 @@ Meteor.startup(function() {
     return Maps.find({},{sort:[["text", "asc"]]});
   });
 
-  Meteor.publish("userData", function () {
-    if (this.userId) {
-      return Meteor.users.find({_id: this.userId});
-    } else {
-      this.ready();
-    }
-  });
-  
-  Meteor.publish("allUsers", function () {
-    return Meteor.users.find({});
-  });
-  
 });
+
+Meteor.methods({
+  getAdminUser : function (){
+    return Meteor.users.findOne({username: 'idgis-admin'});
+  }
+}); 
 
 /**
  * Make sure user idgis_admin with administrator role exists 
  */
-var user = Meteor.users.findOne({username: 'idgis_admin'});
-console.log("idgis_admin user: ",user);
-if (!user){
-  user = Accounts.createUser({username:'idgis_admin', password:'koffie'});
+var adminUser = Meteor.users.findOne({username: 'idgis-admin'});
+console.log("idgis-admin user: ",adminUser);
+if (!adminUser){
+  adminUser = Accounts.createUser({username:'idgis-admin', password:'koffie'});
   
-  console.log("new idgis_admin user: ",user);
-  Meteor.users.update(user, {$set: {role: 'idgis-admin'}});
+  console.log("new idgis-admin user: ",adminUser);
+  Meteor.users.update(adminUser);
 }
-

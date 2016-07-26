@@ -30,5 +30,5 @@ underscore
 meteor-platform
 meteor-base
 tracker
-accounts-ui
 accounts-password
+accounts-ui
