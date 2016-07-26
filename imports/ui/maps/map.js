@@ -104,9 +104,38 @@ Template.map.events({
 
   'click #removenode' : function() {
     var ref = $.jstree.reference('.maptree'), sel = ref.get_selected();
+    console.log('removenode ' + ref);
     if (!sel.length || ref.get_type(sel) === "map") {
       return false;
     }
+    if (ref.get_type(sel) === "layer") {
+      var lyrName = ref.get_text(sel);
+      console.log('removenode lyrName: ' + lyrName);
+      var lyr =  Layers.findOne({name: lyrName});
+      console.log('removenode lyr: ' + lyr);
+      if (lyr){
+        console.log('removenode lyr.type: ' + lyr.type);
+        var adminLoggedIn = false; 
+        if (Meteor.user()){
+          // a user is logged in
+          var name = Meteor.user().username;
+          adminLoggedIn = _.isEqual(name, 'idgis-admin');
+          console.log('adminLoggedIn ' + adminLoggedIn);
+          if (!adminLoggedIn && (lyr.type==='cosurvey-sql')){
+            // not remove cosurvey-sql if user is no admin 
+            console.log('not remove cosurvey-sql if user is no admin ');
+            return false;
+          }
+        } else {
+          // no user logged in, no remove allowed
+          console.log('no user logged in, no remove allowed');
+          return false;
+        }
+      } else {
+        // layer not found, remove is ok
+        console.log('layer not found, remove is ok');
+      }
+    } 
     ref.delete_node(sel);
   },
 
