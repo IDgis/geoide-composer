@@ -9,9 +9,19 @@ import './layers.html';
 Template.layers.helpers({
 	/**
 	 * List of layers
+	 * Only retrieve all layers when idgis-admin user is logged in 
 	 */
   layers: function(){
+      var adminLoggedIn = false; 
+      if (Meteor.user()){
+        var name = Meteor.user().username;
+        adminLoggedIn = _.isEqual(name, 'idgis-admin');
+      }
+      if (adminLoggedIn){
         return Layers.find({});
+      } else {
+        return Layers.find({type: 'default'});
+      }
     },
 });
 

@@ -6,6 +6,7 @@ i18n.map('nl', {
       services: 'Services',
       layers: 'Lagen',
       maps: 'Kaarten',
+      users: 'Gebruikers',
       i18n: 'i18n - test',
       jsonapi: {
         services: 'jsonapi - services',
@@ -23,7 +24,9 @@ i18n.map('nl', {
       xmlapi: 'xmlapi - test',
       getcaplayersapi: 'getcaplayersapi - test',
     },
-    messages : 'meldingen'
+    messages : 'meldingen',
+    loggedin : 'Ingelogd als: ',
+    notloggedin : 'Niet ingelogd',
   },
   
   services:{
@@ -90,6 +93,24 @@ i18n.map('nl', {
       label: 'Kaart'
     },
   },
+
+  users:{
+    list: {
+      header: 'Gebruikers',
+      table: {
+        name: 'Naam',
+        role: 'Rol',
+      },
+      button: {
+        create: 'Maak een nieuwe gebruiker'
+      },
+    },
+    autoform: {
+      header:'Gebruiker configuratie',
+    },
+    
+  },
+  
   
 //Collections
 	collections : {
@@ -184,30 +205,40 @@ i18n.map('nl', {
 				},
 			},
 		},
-		maps: {
+    maps: {
       name : {
         label : 'Naam',
       },
       label : {
-				label: "Label",
-			},
-			initialExtent: {
-				label: "Initiële kaartuitsnede",
-				minX: {
-					label: "min X",
-				},
-				minY: {
-					label: "min Y",
-				},
-				maxX: {
-					label: "max X",
-				},
-				maxY: {
-					label: "max Y"
-				},
-			},
-		},
-	},
+        label: "Label",
+      },
+      initialExtent: {
+        label: "Initiële kaartuitsnede",
+        minX: {
+          label: "min X",
+        },
+        minY: {
+          label: "min Y",
+        },
+        maxX: {
+          label: "max X",
+        },
+        maxY: {
+          label: "max Y"
+        },
+      },
+    },
+    users: {
+      name : {
+        label : 'Naam',
+      },
+      role : {
+        label: "Rol",
+      },
+    },
+  },
+
+
 
   // Generiek
   version: 'versie',

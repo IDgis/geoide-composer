@@ -1,3 +1,5 @@
+import { Accounts } from 'meteor/accounts-base';
+
 import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
@@ -20,3 +22,15 @@ Meteor.startup(function() {
 
 });
 
+/**
+ * Make sure user idgis-admin with administrator role exists,
+ * make one if needed 
+ */
+var adminUser = Meteor.users.findOne({username: 'idgis-admin'});
+console.log("idgis-admin user: ",adminUser);
+if (!adminUser){
+  adminUser = Accounts.createUser({username:'idgis-admin', password:'koffie'});
+  
+  console.log("new idgis-admin user: ",adminUser);
+  Meteor.users.update(adminUser);
+}

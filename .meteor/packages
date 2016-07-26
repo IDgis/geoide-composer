@@ -13,7 +13,6 @@ aldeed:autoform-bs-datepicker
 rajit:bootstrap3-datepicker
 aldeed:tabular
 reywood:publish-composite
-dburles:collection-helpers
 aldeed:delete-button
 jss:jstree
 jss:jstree-proton-theme
@@ -31,3 +30,5 @@ underscore
 meteor-platform
 meteor-base
 tracker
+accounts-password
+accounts-ui

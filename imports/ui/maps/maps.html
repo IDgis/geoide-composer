@@ -1,33 +1,39 @@
 <template name="maps">
-<div class="page-header"><h2>{{i18n 'maps.list.header'}}</h2></div>
-	<table class="table table-condensed table-hover">
-        <thead>
-          <tr style="font-weight: bold;">
-            <td>{{i18n 'maps.list.table.name'}}</td>
-            <td>{{i18n 'maps.list.table.label'}}</td>
-            <td style="width: 70px"></td>
-          </tr>
-        </thead>
-	  <tbody>
+<div class="page-header">
+	<h2>{{i18n 'maps.list.header'}}</h2>
+</div>
+<table class="table table-condensed table-hover">
+	<thead>
+		<tr style="font-weight: bold;">
+			<td>{{i18n 'maps.list.table.name'}}</td>
+			<td>{{i18n 'maps.list.table.label'}}</td>
+			<td style="width: 70px"></td>
+		</tr>
+	</thead>
+	<tbody>
 		{{#each maps}}
-		  <tr class="map-row">
-		    <td>{{text}}</td>
-            <td>{{label}}</td>
-		    <td style="{white-space: nowrap;width: 70px}">
-		         <button class="btn btn-default edit-map" >
-					<a class="glyphicon glyphicon-edit" ></a>
-	 			</button>
-	          	<a class="btn btn-warning delete-map">
+		<tr class="map-row">
+			<td>{{text}}</td>
+			<td>{{label}}</td>
+			<td style="white-space: nowrap; width: 70px">
+			{{#if currentUser}}
+				<button class="btn btn-default edit-service">
+					<a class="glyphicon glyphicon-edit"></a>
+				</button> 
+				<a class="btn btn-warning delete-service"> 
 					<span class="glyphicon glyphicon-remove"></span>
-	 			</a>  
+				</a>
+			{{/if}}
 			</td>
-		  </tr>
-	  	{{/each}}
-	  </tbody>
-	</table>	
- 	<div type="button" class="btn btn-success col-sm-12 insert-map">
-		<a class="glyphicon glyphicon-plus create-btn">
-			<span class="create-btn-label">{{i18n 'maps.list.button.create'}}</span>
-		</a>
-	</div>
-</template>      
+		</tr>
+		{{/each}}
+	</tbody>
+</table>
+{{#if currentUser}}
+<div type="button" class="btn btn-success col-sm-12 insert-map">
+	<a class="glyphicon glyphicon-plus create-btn"> <span
+		class="create-btn-label">{{i18n 'maps.list.button.create'}}</span>
+	</a>
+</div>
+{{/if}}
+</template>

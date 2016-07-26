@@ -151,7 +151,16 @@ export const Layers = new Mongo.Collection("layers");
 Layers.attachSchema(LayerSchema);
 
 Layers.allow({
-	  insert: function () { return true; },
-	  update: function () { return true; },
-	  remove: function () { return true; }
+  insert: function(userId, doc) {
+    // only allow posting if you are logged in
+    return !! userId; 
+  },
+  update: function(userId, doc) {
+    // only allow posting if you are logged in
+    return !! userId; 
+  },
+  remove: function(userId, doc) {
+    // only allow posting if you are logged in
+    return !! userId; 
+  }
 });
