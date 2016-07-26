@@ -22,14 +22,9 @@ Meteor.startup(function() {
 
 });
 
-Meteor.methods({
-  getAdminUser : function (){
-    return Meteor.users.findOne({username: 'idgis-admin'});
-  }
-}); 
-
 /**
- * Make sure user idgis_admin with administrator role exists 
+ * Make sure user idgis-admin with administrator role exists,
+ * make one if needed 
  */
 var adminUser = Meteor.users.findOne({username: 'idgis-admin'});
 console.log("idgis-admin user: ",adminUser);
