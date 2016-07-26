@@ -1,3 +1,5 @@
+import { EJSON } from 'meteor/ejson';
+
 import { Router } from 'meteor/iron:router';
 import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
@@ -10,7 +12,7 @@ Router.map(function () {
     action: function () {
       var json = Services.find().fetch(); // what ever data you want to return
       this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(json));
+      this.response.end(EJSON.stringify(json, {indent: true}));
     }
   });
   this.route('jsonapi-layers', {
@@ -19,7 +21,7 @@ Router.map(function () {
     action: function () {
       var json = Layers.find().fetch(); // what ever data you want to return
       this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(json));
+      this.response.end(EJSON.stringify(json, {indent: true}));
     }
   });
   this.route('jsonapi-maps', {
@@ -28,7 +30,7 @@ Router.map(function () {
     action: function () {
       var json = Maps.find().fetch(); // what ever data you want to return
       this.response.setHeader('Content-Type', 'application/json');
-      this.response.end(JSON.stringify(json));
+      this.response.end(EJSON.stringify(json, {indent: true}));
     }
   });
 });

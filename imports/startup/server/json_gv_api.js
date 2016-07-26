@@ -62,7 +62,7 @@ Router.map(function () {
         );
       });
       // TODO remove this before release
-      console.log("gvServices", EJSON.stringify(gvServices));
+//      console.log("gvServices", EJSON.stringify(gvServices));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServices, {indent: true}));
@@ -152,7 +152,7 @@ Router.map(function () {
       });
 
       // TODO remove this before release
-      console.log("gvLayers", EJSON.stringify(gvLayers));
+//      console.log("gvLayers", EJSON.stringify(gvLayers));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvLayers, {indent: true}));
@@ -200,7 +200,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvServiceLayers", EJSON.stringify(gvServiceLayers));
+//      console.log("gvServiceLayers", EJSON.stringify(gvServiceLayers));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServiceLayers, {indent: true}));
@@ -243,7 +243,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvFeatureTypes", EJSON.stringify(gvFeatureTypes));
+//      console.log("gvFeatureTypes", EJSON.stringify(gvFeatureTypes));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvFeatureTypes, {indent: true}));
@@ -283,7 +283,7 @@ Router.map(function () {
         });
       });
       // TODO remove this before release
-      console.log("gvSearchTemplates", EJSON.stringify(gvSearchTemplates));
+//      console.log("gvSearchTemplates", EJSON.stringify(gvSearchTemplates));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvSearchTemplates, {indent: true}));
@@ -338,14 +338,16 @@ Router.map(function () {
                     } else {
                       // layer
                       const aLayer = Layers.findOne({_id: child3.data.layerid});
-                      gvMapLayers3.push(
-                          {
-                            layer: aLayer.name,//child3.data.layerid,
-                            state: {
-                              visible : child3.state.checked,
-                            },
-                          }
-                      );
+                      if (aLayer){
+                        gvMapLayers3.push(
+                            {
+                              layer: aLayer.name,//child3.data.layerid,
+                              state: {
+                                visible : child3.state.checked,
+                              },
+                            }
+                        );
+                      }
                     }
                   }
                   // group
@@ -361,14 +363,16 @@ Router.map(function () {
                 } else {
                   // layer
                   const aLayer = Layers.findOne({_id: child2.data.layerid});
-                  gvMapLayers2.push(
-                      {
-                        layer: aLayer.name,//child2.data.layerid,
-                        state: {
-                          visible : child2.state.checked,
-                        },
-                      }
-                  );
+                  if (aLayer){
+                    gvMapLayers2.push(
+                        {
+                          layer: aLayer.name,//child2.data.layerid,
+                          state: {
+                            visible : child2.state.checked,
+                          },
+                        }
+                    );
+                  }
                 }
               }
               // group
@@ -384,15 +388,16 @@ Router.map(function () {
             } else {
               // layer
               const aLayer = Layers.findOne({_id: child1.data.layerid});
-              gvMapLayers1.push(
-                  {
-                    layer: aLayer.name,//child1.data.layerid,
-                    state: {
-                      visible : child1.state.checked,
-                    },
-                  }
-              );
-              
+              if (aLayer){
+                gvMapLayers1.push(
+                    {
+                      layer: aLayer.name,//child1.data.layerid,
+                      state: {
+                        visible : child1.state.checked,
+                      },
+                    }
+                );
+              }              
             }
           }
         }
@@ -406,7 +411,7 @@ Router.map(function () {
         );
       }
       // TODO remove this before release
-      console.log("gvMaps", EJSON.stringify(gvMaps));
+//      console.log("gvMaps", EJSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvMaps, {indent: true}));
@@ -447,14 +452,16 @@ Router.map(function () {
                   } else {
                     // layer
                     const aLayer = Layers.findOne({_id: child3.data.layerid});
-                    gvMapLayers3.push(
-                        {
-                          layer: aLayer.name,//child3.data.layerid,
-                          state: {
-                            visible : child3.state.checked,
-                          },
-                        }
-                    );
+                    if (aLayer){
+                      gvMapLayers3.push(
+                          {
+                            layer: aLayer.name,//child3.data.layerid,
+                            state: {
+                              visible : child3.state.checked,
+                            },
+                          }
+                      );
+                    }
                   }
                 });
                 // group
@@ -470,14 +477,16 @@ Router.map(function () {
               } else {
                 // layer
                 const aLayer = Layers.findOne({_id: child2.data.layerid});
-                gvMapLayers2.push(
-                    {
-                      layer: aLayer.name,//child2.data.layerid,
-                      state: {
-                        visible : child2.state.checked,
-                      },
-                    }
-                );
+                if (aLayer){
+                  gvMapLayers2.push(
+                      {
+                        layer: aLayer.name,//child2.data.layerid,
+                        state: {
+                          visible : child2.state.checked,
+                        },
+                      }
+                  );
+                }
               }
             });
             // group
@@ -493,15 +502,16 @@ Router.map(function () {
           } else {
             // layer
             const aLayer = Layers.findOne({_id: child1.data.layerid});
-            gvMapLayers1.push(
-                {
-                  layer: aLayer.name,//child1.data.layerid,
-                  state: {
-                    visible : child1.state.checked,
-                  },
-                }
-            );
-            
+            if (aLayer){
+              gvMapLayers1.push(
+                  {
+                    layer: aLayer.name,//child1.data.layerid,
+                    state: {
+                      visible : child1.state.checked,
+                    },
+                  }
+              );
+            }            
           }
         });
         gvMaps.maps.push(
@@ -516,7 +526,7 @@ Router.map(function () {
         );
       });
       // TODO remove this before release
-      console.log("gvMaps", EJSON.stringify(gvMaps));
+//      console.log("gvMaps", EJSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvMaps, {indent: true}));
