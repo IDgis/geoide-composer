@@ -105,14 +105,21 @@ SimpleSchema.layerProperties = new SimpleSchema ({
   },
   initial_query: {
     type: String,
-    optional: function() {
-      if (this.type==='cosurvey-sql') {
-        return false;
-      } else {
-        return true;
-      } 
-     },
      label: function(){ return i18n('collections.layers.properties.initialQuery.label'); },
+     optional: true,
+     autoform: {
+       /*
+        * 'disabled' works reactive i.e. after the form is rendered
+        * whereas optional, omit, hidden do not 
+        */
+       disabled: function() {
+         if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+           return true;
+         } else {
+           return false;
+         }
+       },
+     },
   },  
   applayer: {
     type: Boolean,
@@ -135,6 +142,7 @@ export const LayerSchema = new SimpleSchema({
     type: String,
     label: function(){ return i18n('collections.layers.type.label'); },
     allowedValues: ['default','cosurvey-sql'],
+    defaultValue: 'default',
   }, 
   service_layers: {
     type: [SimpleSchema.serviceLayer],
