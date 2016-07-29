@@ -59,6 +59,16 @@ Template.layer.helpers({
 	           {label: "cosurvey-sql", value: "cosurvey-sql"}];
 	  },
 	
+	  adminLoggedIn: function(){
+      var admin = false; 
+      if (Meteor.user()){
+        // a user is logged in
+        var name = Meteor.user().username;
+        admin = _.isEqual(name, 'idgis-admin');
+        return admin;
+      }
+      return false;
+	  },
 });
 
 fillLayerSelect = function() {
