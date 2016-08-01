@@ -1,19 +1,9 @@
 <template name="layer">
- <h1>{{ i18n 'layers.autoform.header' }}</h1>
- {{#autoForm collection=layers schema=layerSchema id="layerform" doc=layerDoc type=formType}}
-        <fieldset>
-            {{> afQuickField name="name" template="bootstrap3-horizontal" label-class="col-sm-2" input-col-class="col-sm-9"}}
-            {{> afQuickField name="label" template="bootstrap3-horizontal" label-class="col-sm-2" input-col-class="col-sm-9"}}
-            {{#if adminLoggedIn }} 
-        		{{> afQuickField name="type" type='select-radio-inline' options=layerTypes template="bootstrap3-horizontal" label-class="col-sm-2" input-col-class="col-sm-9"}}
-        	{{else}}
-        		{{> afQuickField name="type" disabled="true" type='select-radio-inline' options=layerTypes template="bootstrap3-horizontal" label-class="col-sm-2" input-col-class="col-sm-9"}}
-        	{{/if}}
-        	{{> afQuickField name="properties" template="bootstrap3-horizontal" label-class="col-sm-2" input-col-class="col-sm-9"}}
-        	{{> afQuickField name="service_layers" template="bootstrap3-horizontal" label-class="col-sm-2" input-col-class="col-sm-9"}}
-        </fieldset>  
-        <button type="submit" class="btn btn-primary">{{ i18n 'button.save' }}</button>     
-        <a id="returnLayer" class="btn btn-primary">{{ i18n 'button.cancel' }}</a>
- {{/autoForm}}
+<h1>{{ i18n 'layers.autoform.header' }}</h1>
   
+ {{#quickForm collection=layers schema=layerSchema id="layerform" doc=layerDoc type=formType 
+ 	buttonContent=buttonSubmitLabel 
+ 	template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11" class="form-inline"}}
+ {{/quickForm}}
+ 
 </template>

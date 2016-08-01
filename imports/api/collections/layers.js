@@ -103,6 +103,11 @@ SimpleSchema.layerProperties = new SimpleSchema ({
     defaultValue: false,
     label: function(){ return i18n('collections.layers.properties.initialVisible.label'); },
   },
+  applayer: {
+    type: Boolean,
+    defaultValue: false,
+    label: function(){ return i18n('collections.layers.properties.applayer.label'); },
+  },
   initial_query: {
     type: String,
      label: function(){ return i18n('collections.layers.properties.initialQuery.label'); },
@@ -121,11 +126,6 @@ SimpleSchema.layerProperties = new SimpleSchema ({
        },
      },
   },  
-  applayer: {
-    type: Boolean,
-    defaultValue: false,
-    label: function(){ return i18n('collections.layers.properties.applayer.label'); },
-  }
 })
 
 export const LayerSchema = new SimpleSchema({
@@ -143,15 +143,21 @@ export const LayerSchema = new SimpleSchema({
     label: function(){ return i18n('collections.layers.type.label'); },
     allowedValues: ['default','cosurvey-sql'],
     defaultValue: 'default',
-  }, 
-  service_layers: {
-    type: [SimpleSchema.serviceLayer],
-    label: function(){ return i18n('collections.layers.serviceLayers.label'); }, 
+    autoform: {
+      "type": 'select-radio-inline',
+    },
   }, 
   properties:  {
     type: SimpleSchema.layerProperties,
     label: function(){ return i18n('collections.layers.properties.label'); },
-  }
+    minCount: 1,
+    maxCount: 2,
+
+  },
+  service_layers: {
+    type: [SimpleSchema.serviceLayer],
+    label: function(){ return i18n('collections.layers.serviceLayers.label'); }, 
+  }, 
   
 });
 
