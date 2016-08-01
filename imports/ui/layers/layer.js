@@ -69,6 +69,9 @@ Template.layer.helpers({
       }
       return false;
 	  },
+	  buttonSubmitLabel: function(){
+	    return i18n ('button.save');
+	  }
 });
 
 fillLayerSelect = function() {
