@@ -1,5 +1,7 @@
 <template name="service">
- <h1>{{ i18n 'services.autoform.header' }}</h1>
+<div class="page-header">
+ 	<h2>{{ i18n 'services.autoform.header' }}</h2>
+ </div>
 {{#autoForm collection=services schema=serviceSchema id="serviceform" doc=serviceDoc type=formType}}
       <fieldset>
 		{{> afQuickField name="name" template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}

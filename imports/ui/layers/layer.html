@@ -1,5 +1,8 @@
 <template name="layer">
- <h1>{{ i18n 'layers.autoform.header' }}</h1>
+ <div class="page-header">
+ 	<h2>{{ i18n 'layers.autoform.header' }}</h2>
+ </div>
+ 
  {{#autoForm collection=layers schema=layerSchema id="layerform" doc=layerDoc type=formType
   label-class="col-lg-0" input-col-class="col-lg-12" class="form-inline"
  	}}

@@ -12,7 +12,12 @@
 
 /* override some bootstrap widths */
 .initquery { 
-    width: 800px !important;
+    min-width: 640px !important;
+    max-width: 1280px !important;
+    min-height: 32px !important;
+    max-height: 80px !important;
+/*     width: 600px !important; */
+/*     height: 40px !important; */
 }
 .namelabel {
     width: 250px !important;

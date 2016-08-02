@@ -139,7 +139,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
            return false;
          }
        },
-       "type": 'text',
+       "type": 'textarea',
        "class": 'initquery',
      },
   },  
