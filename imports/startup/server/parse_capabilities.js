@@ -103,7 +103,11 @@ Meteor.methods({
     var tmsLayer = parseResponse.TileMap.TileSets[0].TileSet[0];
     var href = tmsLayer.$.href;
     var first = href.indexOf('1.0.0/') + 6;
-    var last = href.lastIndexOf('/');
+    var last = href.indexOf('@');
+    if (!last){
+      last = href.lastIndexOf('/');
+    }
+    // the layername is between the tms version and the last '/'or the first '@'
     var layername = href.slice(first, last);
     var servoptions = [];
     servoptions.push({name:layername, title:layername});
