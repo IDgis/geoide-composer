@@ -9,3 +9,14 @@
 {
     display:none
 }
+
+/* override some bootstrap widths */
+.initquery { 
+    width: 800px !important;
+}
+.namelabel {
+    width: 250px !important;
+}
+.namespace {
+    width: 350px !important;
+}
