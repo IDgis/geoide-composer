@@ -19,6 +19,9 @@
 /*     width: 600px !important; */
 /*     height: 40px !important; */
 }
+.legendgraphic {
+    width: 250px !important;
+}
 .namelabel {
     width: 250px !important;
 }

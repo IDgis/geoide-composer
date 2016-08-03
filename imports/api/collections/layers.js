@@ -110,6 +110,15 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     minCount: 0,
     maxCount: 1,
   },
+
+  legendGraphic: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.legendGraphic.label'); },
+    optional: false,
+    autoform: {
+      "class": 'legendgraphic',
+    },
+  }, 
 });
 
 SimpleSchema.layerProperties = new SimpleSchema ({

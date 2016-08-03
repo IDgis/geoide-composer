@@ -172,9 +172,12 @@ i18n.map('nl', {
 				wfsService : {
 					label : 'WFS service',
 				},
-				featureTypes : {
-					label : 'WFS Featuretypes'
-				},
+				legendGraphic : {
+          label : 'Legend Graphic'
+        },
+        featureTypes : {
+          label : 'WFS Featuretypes'
+        },
 				featureType : {
 		      name : {
 		        label : 'Naam',
