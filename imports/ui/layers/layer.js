@@ -3,9 +3,9 @@ import { Template } from 'meteor/templating';
 import { Router } from 'meteor/iron:router';
 import { Session } from 'meteor/session';
 
+import '../legendGraphic/legendGraph.js';
 import { Services } from '/imports/api/collections/services.js';
 import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
-
 import './layer.html';
 
 Template.layer.helpers({
