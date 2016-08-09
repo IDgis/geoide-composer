@@ -53,7 +53,7 @@ SimpleSchema.featureType = new SimpleSchema ({
     },
 	},
 	
-	nameInService: {
+	nameInWfsService: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {

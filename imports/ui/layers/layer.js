@@ -96,13 +96,59 @@ Template.layer.events({
     console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
+  
+  
+  'change select[name$=".nameInService"]' : function(e){
+    console.log("change on wms layer select ");
+    console.log(e);
+    // get name of  select box
+    var srcName = e.target.name;
+    console.log("Source: " + srcName);
+    // get wms layer name 
+    var srcSelect = $('select[name="' + srcName + '"] ');
+    var lyrName = srcSelect[0].value;
+
+    // find service id from service selectbox
+    var srvName = srcName.replace("nameInService", "service");
+    var srvSelect = $('select[name="' + srvName + '"] ');
+    var serviceId = srvSelect[0].value;
+
+    // find lg field 
+    var lgName = srcName.replace("nameInService", "legendGraphic");
+    var lg = $('input[name="' + lgName + '"] ');
+    
+    // find lg image field 
+    var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
+    var lgImg = $('img[name="' + lgImgName + '"] ');
+    
+    // retrieve fields and namespace from a featuretype
+    // and put them in localname selectbox options resp namespace field
+    Meteor.call('getLegendGraphicUrl',
+      serviceId,
+      lyrName,
+      function(lError, lResponse) {
+        if (lError) {
+          console.log(' Error ', lError);
+        } else {
+          // url found !!
+          console.log(' result ', lResponse);
+          console.log(' lg ', lg);
+          console.log(' lgImg ', lgImg);
+          lg[0].value = lResponse;
+          lgImg[0].src = lResponse;
+        }
+    });
+    
+    
+  },  
+  
   /**
    * Fill a selectbox with featuretype attributes 
    * 1. listen to change on selectbox nameInService,
    * 2. get the attributes from the describeFeatureType of the selected wfs service
    * 3. and put the attribute list in selectbox 'attribute localname'
    */
-  'change select[name$="featureType.0.nameInService"]' : function(e){
+  'change select[name$="featureType.0.nameInWfsService"]' : function(e){
     console.log("change on featureType select ");
     console.log(e);
     // get name of ft select box
@@ -113,7 +159,7 @@ Template.layer.events({
     var ftName = srcSelect[0].value;
 
     // find service id from service selectbox
-    var srvName = srcName.replace("nameInService", "service");
+    var srvName = srcName.replace("nameInWfsService", "service");
     var srvSelect = $('select[name="' + srvName + '"] ');
     var serviceId = srvSelect[0].value;
 
@@ -170,11 +216,6 @@ Template.layer.events({
     console.log("changed select box " + srcName);
     var srcSelect = $('select[name="' + srcName + '"] ');
     console.log(srcSelect);
-    // get the name of the nameInService selectbox 
-    var dstName = srcName.replace(".service", ".nameInService");
-    console.log("nameInService select box: " + dstName);
-    var dstSelect = $('select[name="' + dstName + '"] ');
-    console.log(dstSelect);
     // get the current selected service to use in a GetCapabilities call
     var serviceId = srcSelect[0].value;
     console.log("service id " + serviceId);
@@ -192,15 +233,22 @@ Template.layer.events({
           } else {
             console.log('getService endpoint ', sResponse[0].endpoint);
             var methodName = '';
+            var dstName  = '';
             switch(sResponse[0].type) {
               case 'WMS':
-                  methodName = 'getWmsLayers';
-                  break;
+                methodName = 'getWmsLayers';
+                // get the name of the nameInService selectbox 
+                dstName = srcName.replace(".service", ".nameInService");
+                break;
               case 'TMS':
                 methodName = 'getTmsLayers';
+                // get the name of the nameInService selectbox 
+                dstName = srcName.replace(".service", ".nameInService");
                 break;
               case 'WFS':
                 methodName = 'getWfsFeatureTypes';
+                // get the name of the nameInWfsService selectbox 
+                dstName = srcName.replace(".service", ".nameInWfsService");
                 break;
               default:
                 methodName = '';
@@ -208,6 +256,10 @@ Template.layer.events({
             if (methodName == ''){
               // error
             } else {
+              console.log("nameInService select box: " + dstName);
+              var dstSelect = $('select[name="' + dstName + '"] ');
+              console.log(dstSelect);
+
               Meteor.call(methodName,
                 sResponse[0].endpoint,
                 sResponse[0].version,
@@ -236,7 +288,7 @@ Template.layer.events({
  * The form data (in case of update) is used to fill in all the select options. 
  * Select boxes are:
  * - servicelayer 'nameInService'
- * - servicelayer.featuretype 'nameInService'
+ * - servicelayer.featuretype 'nameInWfsService'
  * - servicelayer.featuretype.searchtemplate 'attributeLocalname'
  * 
  */
@@ -259,13 +311,6 @@ Template.layer.onRendered(function(){
       console.log("service id " + serviceId);
       console.log('selectedIndex ' + obj.selectedIndex);
   
-      // find nameInService selectbox below it (layerName, featuretype)
-      var dstName = selectName.replace(".service", ".nameInService");
-      console.log("Destination: " + dstName);
-      var dstSelects = $('select[name="' + dstName + '"] ');
-      console.log(dstSelects);
-      var dstSelect = dstSelects[0];
-      console.log(dstSelect);
   
     console.log("--------------");
     
@@ -282,15 +327,22 @@ Template.layer.onRendered(function(){
               console.log('getService result ', sResponse);
               console.log('getService endpoint ', sResponse[0].endpoint);
               var methodName = '';
+              var dstName = '';
               switch(sResponse[0].type) {
                 case 'WMS':
                     methodName = 'getWmsLayers';
+                    // find nameInService selectbox below it (layerName)
+                    dstName = selectName.replace(".service", ".nameInService");
                     break;
                 case 'TMS':
                   methodName = 'getTmsLayers';
+                  // find nameInService selectbox below it (layerName)
+                  dstName = selectName.replace(".service", ".nameInService");
                   break;
                 case 'WFS':
                   methodName = 'getWfsFeatureTypes';
+                  // find nameInService selectbox below it (featuretype)
+                  dstName = selectName.replace(".service", ".nameInWfsService");
                   break;
                 default:
                   methodName = '';
@@ -298,6 +350,13 @@ Template.layer.onRendered(function(){
               if (methodName == ''){
                 // error
               } else {
+                
+                console.log("Destination: " + dstName);
+                var dstSelects = $('select[name="' + dstName + '"] ');
+                console.log(dstSelects);
+                var dstSelect = dstSelects[0];
+                console.log(dstSelect);
+
                 Meteor.call(methodName,
                   sResponse[0].endpoint,
                   sResponse[0].version,
@@ -322,7 +381,7 @@ Template.layer.onRendered(function(){
                       var selected = ''; 
                       // decide which nameInService selectbox will be filled
                       if (name.indexOf('.featureType.') > 0){
-                        selected = formData.service_layers[index].featureType[0].nameInService;
+                        selected = formData.service_layers[index].featureType[0].nameInWfsService;
                       } else {
                         selected = formData.service_layers[index].nameInService;
                       }

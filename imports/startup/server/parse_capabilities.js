@@ -173,6 +173,36 @@ Meteor.methods({
   },
   
   /**
+   * GetLegendGraphic from a WMS
+   */
+  getLegendGraphicUrl: function(serviceId, layer){
+    console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
+    var serv = Services.find({_id: serviceId}).fetch();
+    console.log('service found: ',serv);
+    var host = serv[0].endpoint;
+    var version = serv[0].version;
+    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    console.log('------- Capability -------');
+    console.log(parseResponse.WMS_Capabilities.Capability);
+    console.log('--------------------------');
+    var url = "http://148.251.183.26/crs-deegree-webservices/services?request=GetLegendGraphic&service=WMS&layer=puntelementen&format=image/png";
+
+    // TODO code below depends on version
+    // version 1.3.0
+    // main layer
+    var capRequest= parseResponse.WMS_Capabilities.Capability[0].Request;
+    console.log('******* WMS requests: *******');
+    _.each(capRequest,function(mainRequest){
+        console.log(mainRequest);
+        console.log('**************************');
+    });
+    console.log('WMS getLegendGraphic url: ',url);
+    return url;
+  },
+  
+  /**
    * Get service from collection
    */
   getService: function(serviceId){

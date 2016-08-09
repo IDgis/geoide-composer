@@ -15,7 +15,7 @@ import { Maps } from '/imports/api/collections/maps.js';
  *     The name of such a toplevel object is forced as unique in its schema
  *  2. id of an object at a lower level is assembled by concatenating the names of its parents:
  *     for 'layer.serviceLayer.featureType' the id becomes:
- *     featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType.nameInService 
+ *     featureType: layer.name + '.' + serviceLayer.nameInService + '.' + serviceLayer.featureType.nameInWfsService 
  *     
  *  The following dependencies are in place:
  *    services.json:        none
@@ -184,7 +184,7 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService,
+                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
                 }
             );
           } else {
@@ -232,9 +232,9 @@ Router.map(function () {
             if (aService){
               gvFeatureTypes.featureTypes.push(
                   {
-                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService, 
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
                     label: ft.label,
-                    name: ft.nameInService,
+                    name: ft.nameInWfsService,
                     service: aService.name, //ft.service,
                   }
               );
@@ -271,9 +271,9 @@ Router.map(function () {
             _.each(ft.searchTemplates, function(searchTemplate){
               gvSearchTemplates.searchTemplates.push(
                   {
-                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService + '.' + searchTemplate.label, 
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + searchTemplate.label, 
                     label: searchTemplate.label,
-                    featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInService,
+                    featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
                     attribute: {localName: searchTemplate.attribute_localname, namespace: searchTemplate.attibute_namespace},
                     serviceLayer: layer.name + '.' + serviceLayer.nameInService,
                   }
