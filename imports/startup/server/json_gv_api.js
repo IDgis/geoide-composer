@@ -98,14 +98,16 @@ Router.map(function () {
         var layerServiceLayers = [];
         _.each(layer.service_layers, function(serviceLayer){
           layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
-          // add searchfields to properties
-          if (serviceLayer.featureType){
-            layerProps.searchFields = [];
-            _.each(serviceLayer.featureType, function(ft){
-              _.each(ft.searchTemplates, function(st){
-                layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
-              });            
-            });
+          if (layer.type !== 'default'){
+            // add searchfields to properties
+            if (serviceLayer.featureType){
+              layerProps.searchFields = [];
+              _.each(serviceLayer.featureType, function(ft){
+                _.each(ft.searchTemplates, function(st){
+                  layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
+                });            
+              });
+            }
           }
         });
         gvLayers.layers.push(
