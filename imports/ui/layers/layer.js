@@ -212,6 +212,7 @@ Template.layer.events({
     console.log("changed select box " + srcName);
     var srcSelect = $('select[name="' + srcName + '"] ');
     console.log(srcSelect);
+    
     // get the current selected service to use in a GetCapabilities call
     var serviceId = srcSelect[0].value;
     console.log("service id " + serviceId);
@@ -228,6 +229,26 @@ Template.layer.events({
             // TODO do nothing or clear nameInService selectboxes 
           } else {
             console.log('getService endpoint ', sResponse[0].endpoint);
+            switch(sResponse[0].type) {
+              case 'WMS':
+              case 'TMS':
+                /*
+                 * Clear the getLegendGraphic field and image
+                 */
+                // find lg field 
+                var lgName = srcName.replace(".service", ".legendGraphic");
+                var lg = $('input[name="' + lgName + '"] ');
+                
+                // find lg image field 
+                var lgImgName = srcName.replace(".service", ".legendGraphic.img");
+                var lgImg = $('img[name="' + lgImgName + '"] ');
+                
+                lg[0].value = '';
+                lgImg[0].src = '';
+                break;
+              default:
+            }
+            
             var methodName = '';
             var dstName  = '';
             switch(sResponse[0].type) {
