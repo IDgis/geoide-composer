@@ -173,6 +173,75 @@ Meteor.methods({
   },
   
   /**
+   * GetLegendGraphic from a WMS
+   */
+  getLegendGraphicUrl: function(serviceId, layer){
+    console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
+    var serv = Services.find({_id: serviceId}).fetch();
+    console.log('service found: ',serv);
+    var host = serv[0].endpoint;
+    var url = host;
+    var version = serv[0].version;
+    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    console.log('------- Capability -------');
+    console.log(parseResponse.WMS_Capabilities.Capability);
+    console.log('--------------------------');
+
+    // TODO code below depends on version
+    // version 1.3.0
+    // main layer
+    var capRequest= parseResponse.WMS_Capabilities.Capability[0].Request;
+    console.log('******* WMS requests: *******');
+    var selectedFormat;
+    _.each(capRequest,function(mainRequest){
+        console.log(mainRequest);
+        var lg = mainRequest['sld:GetLegendGraphic'];
+        console.log(lg);
+        var pngFormat, jpgFormat, gifFormat;
+        var formats = lg[0].Format; 
+        _.each(formats,function(format){
+          console.log(format);
+          if (format === 'image/png'){
+            pngFormat = format;            
+          } 
+          if (format === 'image/jpg' | format === 'image/jpeg'){
+            jpgFormat = format;
+          }
+          if (format === 'image/gif'){
+            gifFormat = format;
+          }
+        })
+        // select a preferred format (png, then jpg, then gif)
+        if (pngFormat){
+          selectedFormat = pngFormat;
+        } else if (jpgFormat){
+          selectedFormat = jpgFormat;
+        } else if (gifFormat){
+          selectedFormat = gifFormat;
+        } else {
+          // no preferable formats found: selectedFormat = undefined
+        }
+        /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
+         * because in the capabilities it can be listed as 'http://localhost:8081/...'
+         */ 
+        if (url.lastIndexOf('?') < 0){
+          url = url + '?';
+        }
+        if (selectedFormat){
+          url = url + 'request=GetLegendGraphic&service=WMS&layer=' + layer 
+            + '&format=' + selectedFormat;          
+        } else {
+          url = null;
+        }
+        console.log('**************************');
+    });
+    console.log('WMS getLegendGraphic url: ',url);
+    return url;
+  },
+  
+  /**
    * Get service from collection
    */
   getService: function(serviceId){

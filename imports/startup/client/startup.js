@@ -15,5 +15,9 @@ Meteor.startup(function() {
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY',
   });
+  
+  AutoForm.debug(true);//enable debugging during development
+  SimpleSchema.debug = true;
+
 });
 

@@ -53,7 +53,7 @@ SimpleSchema.featureType = new SimpleSchema ({
     },
 	},
 	
-	nameInService: {
+	nameInWfsService: {
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
@@ -114,9 +114,10 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   legendGraphic: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.legendGraphic.label'); },
-    optional: false,
     autoform: {
-      "class": 'legendgraphic',
+      afFieldInput: {
+        type: "legendGraphicType"
+      },
     },
   }, 
 });

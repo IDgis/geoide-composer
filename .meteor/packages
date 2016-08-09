@@ -32,3 +32,5 @@ meteor-base
 tracker
 accounts-password
 accounts-ui
+tomi:upload-jquery
+tomi:upload-server
