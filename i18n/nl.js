@@ -111,6 +111,71 @@ i18n.map('nl', {
     
   },
   
+  //Tooltips
+  tooltips:{
+    main: {      
+      login: "Log in",
+      menu: {
+        services: "Maak en beheer services",
+        layers: "Maak en beheer lagen",
+        kaart: "Maak en beheer kaarten"
+      },
+      
+    },
+    layers:{
+      list:{
+        button: {
+          create: "Maak een nieuwe laag aan",
+          edit: "Wijzig een laag",
+          remove: "Verwijder een laag",
+        }
+      },
+    },
+    services: {
+      list:{
+        button: {
+          create: "Maak een nieuwe service aan",
+          edit: "Wijzig een service",
+          remove: "Verwijder een service",
+        }
+      },
+    },
+    maps: {
+      list:{
+        button: {
+          create: "Maak een nieuwe kaart aan",
+          edit: "Wijzig een kaart",
+          remove: "Verwijder een kaart",
+        }
+      },
+      autoform: {
+        fields: {
+          name: "Geef een (unieke) naam aan de kaart",
+          label: "Geef een omschrijving  (wordt getoond in de viewer)",
+          initial_extent: {
+            label: "Bounding box van de kaart",
+            minx: "minimum waarde van x",
+            miny: "minimum waarde van y",
+            maxx: "maximum waarde van x",
+            maxy: "maximum waarde van y",
+          },
+        },
+        createlayer: 'Nieuwe laag +',
+        creategroup: 'Nieuwe groep +',
+        renamenode: 'Hernoem groep',
+        removenode: 'Verwijder laag/groep X',
+      },
+      jstree: {
+        main: "Verander volgorde door slepen en neerzetten",
+        select: "Selecteer een laag",
+        search: "Zoek op (groeps)laag naam",
+        button: {
+          save: 'Opslaan',
+          cancel:'Annuleren'
+        },
+      },
+    },
+  },
   
 //Collections
 	collections : {

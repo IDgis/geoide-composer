@@ -17,34 +17,34 @@
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-6" style="text-align:left;">
 			<label>{{ i18n 'maps.autoform.layerselect'}}&nbsp;&nbsp;</label>
-		    <select id="layerselect"></select>
+		    <select id="layerselect" title="{{i18n 'tooltips.maps.jstree.select'}}"></select>
 			<label>&nbsp;&nbsp;&nbsp;&nbsp;{{ i18n 'maps.tree.search.placeholder'}}&nbsp;&nbsp;</label>
-			<input id="search-tree" type="text" placeholder="{{ i18n 'maps.tree.search.placeholder' }}" value="">
+			<input id="search-tree" type="text" placeholder="{{ i18n 'maps.tree.search.placeholder' }}" value="" title="{{i18n 'tooltips.maps.jstree.search'}}">
 		</div>
 	</div>	
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-6" style="text-align:left;">
-			<button id="createlayer"  type="button"  class="btn btn-success btn-sm">{{ i18n 'maps.autoform.createlayer'}}</button>
+			<button id="createlayer"  type="button"  class="btn btn-success btn-sm" title="{{i18n 'tooltips.maps.autoform.createlayer'}}">{{ i18n 'maps.autoform.createlayer'}}</button>
 			<label>&nbsp;&nbsp;</label>
-			<button id="creategroup"  type="button" class="btn btn-sm">{{ i18n 'maps.autoform.creategroup'}}</button>
+			<button id="creategroup"  type="button" class="btn btn-sm" title="{{i18n 'tooltips.maps.autoform.creategroup'}}">{{ i18n 'maps.autoform.creategroup'}}</button>
 			<label>&nbsp;&nbsp;</label>
-			<button id="renamenode"  type="button" class="btn btn-warning btn-sm">{{ i18n 'maps.autoform.renamenode'}}</button>
+			<button id="renamenode"  type="button" class="btn btn-warning btn-sm" title="{{i18n 'tooltips.maps.autoform.renamenode'}}">{{ i18n 'maps.autoform.renamenode'}}</button>
 			<label>&nbsp;&nbsp;</label>
-			<button id="removenode"  type="button" class="btn btn-danger btn-sm" >{{ i18n 'maps.autoform.removenode'}}</button>
+			<button id="removenode"  type="button" class="btn btn-danger btn-sm"  title="{{i18n 'tooltips.maps.autoform.removenode'}}">{{ i18n 'maps.autoform.removenode'}}</button>
 		</div>
 	</div>	
 
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-6" style="text-align:left;">
 			<label>{{ i18n 'maps.tree.label'}}</label>
-		  	<div class="maptree tree"></div>
+		  	<div class="maptree tree" title="{{i18n 'tooltips.maps.jstree.main'}}"></div>
 		</div>	
 	</div>	
  
 	<div class="row">
 		<div class="col-md-6 col-sm-6 col-xs-6" style="text-align:left;">
-			<button id="save" type="submit" class="btn btn-primary">{{ i18n 'button.save' }}</button> 
-			<a id="return" class="btn btn-primary">{{ i18n 'button.cancel' }}</a>
+			<button id="save" type="submit" class="btn btn-primary" title="{{i18n 'tooltips.maps.jstree.button.save'}}">{{ i18n 'button.save' }}</button> 
+			<a id="return" class="btn btn-primary" title="{{i18n 'tooltips.maps.jstree.button.cancel'}}">{{ i18n 'button.cancel' }}</a>
 		</div>	
 	</div>	
 {{/autoForm}}

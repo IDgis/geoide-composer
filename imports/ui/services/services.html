@@ -22,10 +22,10 @@
 			<td>{{version}}</td>
 			<td style='white-space: nowrap'>
 			{{#if currentUser}}
-				<button class="btn btn-default edit-service">
+				<button class="btn btn-default edit-service" title="{{i18n 'tooltips.services.list.button.edit'}}">
 					<a class="glyphicon glyphicon-edit"></a>
 				</button> 
-				<a class="btn btn-warning delete-service"> 
+				<a class="btn btn-warning delete-service" title="{{i18n 'tooltips.services.list.button.remove'}}"> 
 					<span class="glyphicon glyphicon-remove"></span>
 				</a>
 			{{/if}}
@@ -36,7 +36,7 @@
 </table>
 
 {{#if currentUser}}
-<div type="button" class="btn btn-success col-sm-12 insert-service">
+<div type="button" class="btn btn-success col-sm-12 insert-service" title="{{i18n 'tooltips.services.list.button.create'}}">
 	<a class="glyphicon glyphicon-plus create-btn"> <span
 		class="create-btn-label">{{i18n 'services.list.button.create'}}</span>
 	</a>
