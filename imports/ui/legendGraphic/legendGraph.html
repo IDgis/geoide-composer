@@ -1,15 +1,16 @@
 <template name="legendGraphTemplate">
 
 <div class="row">
-	<div class="col-lg-9" >
-		{{> upload_bootstrap callbacks=legendGraphicCallback}}
+	<div class="col-lg-3 ">
+		<img class="img-responsive" alt="legendGraphic" src="{{this.value}}"
+			name='{{this.atts.name}}.img' />
 	</div>
 	<div class="col-lg-1">
 		<input type="hidden" value="{{this.value}}" {{this.atts}} >
 	</div>
-	<div class="col-lg-2 ">
-		<img class="img-responsive" alt="legendGraphic" src="{{this.value}}"
-			name='{{this.atts.name}}.img' />
+	
+	<div class="col-lg-6" >
+		{{> upload_bootstrap callbacks=legendGraphicCallback}}
 	</div>
 </div>
 
