@@ -121,8 +121,8 @@ Template.layer.events({
     var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
     var lgImg = $('img[name="' + lgImgName + '"] ');
     
-    // retrieve fields and namespace from a featuretype
-    // and put them in localname selectbox options resp namespace field
+    // retrieve url for GetLegendGraphic
+    // and put it in hidden field and image
     Meteor.call('getLegendGraphicUrl',
       serviceId,
       lyrName,
@@ -132,14 +132,10 @@ Template.layer.events({
         } else {
           // url found !!
           console.log(' result ', lResponse);
-          console.log(' lg ', lg);
-          console.log(' lgImg ', lgImg);
           lg[0].value = lResponse;
           lgImg[0].src = lResponse;
         }
     });
-    
-    
   },  
   
   /**
