@@ -259,45 +259,6 @@ Router.map(function () {
     }
   });
 
-  /**
-   * SearchTemplates
-   */
-  this.route('json-gv-api-searchtemplates', {
-    path: '/json-gv-api-searchtemplates',
-    where: 'server',
-    action: function () {
-      var cursor = Layers.find(); 
-      gvSearchTemplates = {searchTemplates:[]};
-      cursor.forEach(function(layer){
-        _.each(layer.service_layers, function(serviceLayer){
-          if (serviceLayer.featureType){
-            var ft;
-            if  (_.isArray(serviceLayer.featureType)){
-              ft = serviceLayer.featureType[0];
-            } else {
-              ft = serviceLayer.featureType;
-            }
-            _.each(ft.searchTemplates, function(searchTemplate){
-              gvSearchTemplates.searchTemplates.push(
-                  {
-                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + searchTemplate.label, 
-                    label: searchTemplate.label,
-                    featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
-                    attribute: {localName: searchTemplate.attribute_localname, namespace: searchTemplate.attibute_namespace},
-                    serviceLayer: layer.name + '.' + serviceLayer.nameInService,
-                  }
-              );
-            });
-          }
-        });
-      });
-      // TODO remove this before release
-//      console.log("gvSearchTemplates", EJSON.stringify(gvSearchTemplates));
-      this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(EJSON.stringify(gvSearchTemplates, {indent: true}));
-    }
-  });
 
   /**
    * Maps
