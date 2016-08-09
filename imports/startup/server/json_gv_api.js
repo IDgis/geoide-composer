@@ -98,6 +98,17 @@ Router.map(function () {
         var layerServiceLayers = [];
         _.each(layer.service_layers, function(serviceLayer){
           layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
+          if (layer.type !== 'default'){
+            // add searchfields to properties
+            if (serviceLayer.featureType){
+              layerProps.searchFields = [];
+              _.each(serviceLayer.featureType, function(ft){
+                _.each(ft.searchTemplates, function(st){
+                  layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
+                });            
+              });
+            }
+          }
         });
         gvLayers.layers.push(
             {
@@ -250,45 +261,6 @@ Router.map(function () {
     }
   });
 
-  /**
-   * SearchTemplates
-   */
-  this.route('json-gv-api-searchtemplates', {
-    path: '/json-gv-api-searchtemplates',
-    where: 'server',
-    action: function () {
-      var cursor = Layers.find(); 
-      gvSearchTemplates = {searchTemplates:[]};
-      cursor.forEach(function(layer){
-        _.each(layer.service_layers, function(serviceLayer){
-          if (serviceLayer.featureType){
-            var ft;
-            if  (_.isArray(serviceLayer.featureType)){
-              ft = serviceLayer.featureType[0];
-            } else {
-              ft = serviceLayer.featureType;
-            }
-            _.each(ft.searchTemplates, function(searchTemplate){
-              gvSearchTemplates.searchTemplates.push(
-                  {
-                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + searchTemplate.label, 
-                    label: searchTemplate.label,
-                    featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
-                    attribute: {localName: searchTemplate.attribute_localname, namespace: searchTemplate.attibute_namespace},
-                    serviceLayer: layer.name + '.' + serviceLayer.nameInService,
-                  }
-              );
-            });
-          }
-        });
-      });
-      // TODO remove this before release
-//      console.log("gvSearchTemplates", EJSON.stringify(gvSearchTemplates));
-      this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(EJSON.stringify(gvSearchTemplates, {indent: true}));
-    }
-  });
 
   /**
    * Maps
@@ -417,121 +389,5 @@ Router.map(function () {
       this.response.end(EJSON.stringify(gvMaps, {indent: true}));
     }
   });
-
-  /*
-   * the same order of groups and layers as shown in Map tree
-   */
-  this.route('json-gv-api-maps-nosort', {
-    path: '/json-gv-api-maps-nosort',
-    where: 'server',
-    action: function () {
-      gvMaps = {maps:[]};
-      // get maps
-      var cursor = Maps.find(); 
-      cursor.forEach(function(map){
-        var gvMapLayers1 = [];
-        _.each(map.children, function(child1){
-          if (child1.type == "group"){
-            var gvMapLayers2 = [];
-            _.each(child1.children, function(child2){
-              if (child2.type == "group"){
-                var gvMapLayers3 = [];
-                _.each(child2.children, function(child3){
-                  if (child3.type == "group"){
-                    var gvMapLayers4 = [];
-                    // group
-                    gvMapLayers3.push(
-                        {
-                          layer: child3.text,
-                          state: {
-                            visible : child3.state.checked,
-                          },
-                          maplayers: gvMapLayers4,
-                        }
-                    );
-                  } else {
-                    // layer
-                    const aLayer = Layers.findOne({_id: child3.data.layerid});
-                    if (aLayer){
-                      gvMapLayers3.push(
-                          {
-                            layer: aLayer.name,//child3.data.layerid,
-                            state: {
-                              visible : child3.state.checked,
-                            },
-                          }
-                      );
-                    }
-                  }
-                });
-                // group
-                gvMapLayers2.push(
-                    {
-                      layer: child2.text,
-                      state: {
-                        visible : child2.state.checked,
-                      },
-                      maplayers: gvMapLayers3,
-                    }
-                );
-              } else {
-                // layer
-                const aLayer = Layers.findOne({_id: child2.data.layerid});
-                if (aLayer){
-                  gvMapLayers2.push(
-                      {
-                        layer: aLayer.name,//child2.data.layerid,
-                        state: {
-                          visible : child2.state.checked,
-                        },
-                      }
-                  );
-                }
-              }
-            });
-            // group
-            gvMapLayers1.push(
-                {
-                  layer: child1.text,
-                  state: {
-                    visible : child1.state.checked,
-                  },
-                  maplayers: gvMapLayers2,
-                }
-            );
-          } else {
-            // layer
-            const aLayer = Layers.findOne({_id: child1.data.layerid});
-            if (aLayer){
-              gvMapLayers1.push(
-                  {
-                    layer: aLayer.name,//child1.data.layerid,
-                    state: {
-                      visible : child1.state.checked,
-                    },
-                  }
-              );
-            }            
-          }
-        });
-        gvMaps.maps.push(
-            {
-//              id: map._id, 
-              id: map.text, 
-              label: map.label,
-              "initial-extent": map["initial_extent"],
-              maplayers: gvMapLayers1,
-  //              searchtemplates: ,
-            }
-        );
-      });
-      // TODO remove this before release
-//      console.log("gvMaps", EJSON.stringify(gvMaps));
-      this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
-      this.response.end(EJSON.stringify(gvMaps, {indent: true}));
-    }
-  });
-
-  
+ 
 });

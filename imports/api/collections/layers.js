@@ -9,6 +9,17 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     optional: false,
     autoform: {
       "class": 'namelabel',
+      /*
+       * 'disabled' works reactive i.e. after the form is rendered
+       * whereas optional, omit, hidden do not 
+       */
+      disabled: function() {
+        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
   },
   attribute_localname : {
@@ -16,6 +27,17 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
       options:  [], 
+      /*
+       * 'disabled' works reactive i.e. after the form is rendered
+       * whereas optional, omit, hidden do not 
+       */
+      disabled: function() {
+        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
   },
   attibute_namespace: {
@@ -23,6 +45,17 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
       "class": 'namespace',
+      /*
+       * 'disabled' works reactive i.e. after the form is rendered
+       * whereas optional, omit, hidden do not 
+       */
+      disabled: function() {
+        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          return true;
+        } else {
+          return false;
+        }
+      },
     },
   }		
 });
@@ -65,7 +98,16 @@ SimpleSchema.featureType = new SimpleSchema ({
     	label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
       optional: true,
       minCount: 0,
-      maxCount: 5,
+      maxCount: 3,
+      autoform: {
+        maxCount: function() {
+          if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+            return 0;
+          } else {
+            return 3;
+          }
+        },
+      }
 	},   
 });
 
@@ -132,6 +174,19 @@ SimpleSchema.layerProperties = new SimpleSchema ({
     type: Boolean,
     defaultValue: false,
     label: function(){ return i18n('collections.layers.properties.applayer.label'); },
+    autoform: {
+      /*
+       * 'disabled' works reactive i.e. after the form is rendered
+       * whereas optional, omit, hidden do not 
+       */
+      disabled: function() {
+        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          return true;
+        } else {
+          return false;
+        }
+      },
+    },
   },
   initial_query: {
     type: String,
