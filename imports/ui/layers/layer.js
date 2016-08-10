@@ -489,9 +489,18 @@ AutoForm.addHooks('layerform',{
     Router.go('layers.list');
   },
   onError: function(formType, error){
-    console.log("layer autoform error = " + error);
+    console.log("layer autoform error = ", error);
   },
   onRendered: function(formType, error){
-    console.log("layer autoform rendered= " + formType);
-  }
+    console.log("layer autoform rendered= ", formType);
+  },
+  
+  formToDoc: function(doc){
+    console.log("layer autoform formToDoc= ", doc);
+    return doc;
+  },
+  formToModifier: function(modifier){
+    console.log("layer autoform formToModifier= ", modifier);
+    return modifier;
+  },
 });

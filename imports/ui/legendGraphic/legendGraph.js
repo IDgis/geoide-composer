@@ -9,6 +9,26 @@ Template.legendGraphTemplate.helpers({
           console.log("legendGraphicCallback index", index);
           console.log("legendGraphicCallback fileInfo", fileInfo);
 
+          /*
+           * 1. getImage from upload url
+           */
+          var imgResponse = Meteor.call('getImage', url, {});
+          console.log('legendGraphicCallback imgResponse', imgResponse);
+
+          /*
+           * 2. put it in Mongo GLG collection
+           * Get image_id
+           */
+          
+          /*
+           * 3. change fileinfo url 
+           * from: 
+           * url/upload_path/image_Name (e.g. http/localhost:3000/upload/MyImage.png)
+           * to:
+           * Metero.absoluteUrl()/GetLegendGraphic_Route/image_id
+           * (e.g. http://123.456.0.0/GetLegendGraphic/Xdsf5jHghj676h8J3XgtyY) 
+           */
+          
           var legendGraphic = $("input[name$='legendGraphic']");
 //          console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphic);
           legendGraphic[0].value = fileInfo.url;
