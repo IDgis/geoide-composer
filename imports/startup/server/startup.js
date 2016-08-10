@@ -27,7 +27,11 @@ UploadServer.init({
   uploadDir: process.env.PWD + '/public/.uploads/',
   checkCreateDirectories: true, //create the directories for you
   overwrite: true,
-//  uploadUrl: '/getLegendGraphic/',
+  finished(fileInfo, formFields) {
+    console.log('fileInfo', fileInfo);
+    console.log('formFields', formFields);
+  },
+  //  uploadUrl: '/getLegendGraphic/',
 });
 
 /**

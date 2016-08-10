@@ -7,6 +7,31 @@ import { Services } from '/imports/api/collections/services.js';
 
 Meteor.methods({
   /**
+   * Get result from a server as image. 
+   * host: url of host
+   *   example:
+   *   'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' 
+   * params : array of key/value pairs
+   *   example:  
+   *   {request: 'GetCapabilities', service:'WMS'} 
+   */ 
+  getImage : function (host){
+    console.log('getImage() host: ', host);
+    try {
+      var res = HTTP.get(host, {headers:{
+          'User-Agent': 'Meteor/1.3',
+//          'Accept-Language': 'en-US,en;q=0.7,nl;q=0.3',
+//          'Accept-Encoding': 'gzip, deflate',
+          'Accept': 'image/gif,image/jpeg,image/png;q=0.9,*/*;q=0.8'
+        }
+      });
+      return res;
+    } catch (e) {
+      // Got a network error, time-out or HTTP error in the 400 or 500 range.
+      return e; // return the error as a valid result, to be analyzed at client side
+    }
+  },
+  /**
    * Get result from a server as xml. 
    * host: url of host
    *   example:
@@ -238,6 +263,8 @@ Meteor.methods({
         console.log('**************************');
     });
     console.log('WMS getLegendGraphic url: ',url);
+    var imgResponse = Meteor.call('getImage', url, {});
+    console.log('imgResponse', imgResponse);
     return url;
   },
   
