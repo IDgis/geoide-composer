@@ -6,20 +6,32 @@ export const ServiceSchema = new SimpleSchema({
     type: String,
     label: function(){ return i18n('collections.services.name.label'); },
     unique : true,
+    autoform: {
+      "title": function(){ return i18n ('tooltips.services.autoform.fields.name'); },
+    },
   },
   label: {
     type: String,
     label: function(){ return i18n('collections.services.label.label'); },
+    autoform: {
+      "title": function(){ return i18n ('tooltips.services.autoform.fields.label'); },
+    },
   },
 	endpoint: {
 		type: String,
-		label: function(){ return i18n('collections.services.endpoint.label'); }
+		label: function(){ return i18n('collections.services.endpoint.label'); },
+    autoform: {
+      "title": function(){ return i18n ('tooltips.services.autoform.fields.endpoint'); },
+    },
 	},
 	type: {
 		type: String,
 		label: function(){ return i18n('collections.services.type.label'); },
 		allowedValues: ['WMS', 'WFS', 'TMS'],
 //		defaultValue: 'WMS',
+    autoform: {
+      "title": function(){ return i18n ('tooltips.services.autoform.fields.type'); },
+    },
 	},
 	version: {
 	    type: String,
@@ -34,8 +46,11 @@ export const ServiceSchema = new SimpleSchema({
   			if (this.type==='TMS') {
   				return ["1.0.0"];
   			}
-	    }
-	}
+	    },
+	    autoform: {
+	      "title": function(){ return i18n ('tooltips.services.autoform.fields.version'); },
+	    },
+	},
 });
 
 export const Services = new Mongo.Collection("services");
