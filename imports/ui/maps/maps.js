@@ -8,7 +8,7 @@ import './maps.html';
 
 Template.maps.helpers({
 	maps: function(){
-	    return Maps.find({});
+	    return Maps.find({},{sort:[["name", "asc"]]});
 	},
 });
 

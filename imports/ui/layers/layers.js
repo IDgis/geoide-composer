@@ -18,9 +18,9 @@ Template.layers.helpers({
         adminLoggedIn = _.isEqual(name, 'idgis-admin');
       }
       if (adminLoggedIn){
-        return Layers.find({});
+        return Layers.find({},{sort:[["name", "asc"]]});
       } else {
-        return Layers.find({type: 'default'});
+        return Layers.find({type: 'default'},{sort:[["name", "asc"]]});
       }
     },
 });
