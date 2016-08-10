@@ -152,6 +152,7 @@ i18n.map('nl', {
         fields: {
           name: "Geef een (unieke) naam aan de kaart",
           label: "Geef een omschrijving  (wordt getoond in de viewer)",
+          initial_visible : "Maak een laag of groep initieel (on)zichtbaar ",
           initial_extent: {
             label: "Bounding box van de kaart",
             minx: "minimum waarde van x",

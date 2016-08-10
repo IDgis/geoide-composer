@@ -8,7 +8,10 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 	checked: {
 		type: Boolean,
 		optional: true
-	}
+	},
+  autoform: {
+    "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
+  },
 });
 
 SimpleSchema.mapLayerData = new SimpleSchema ({
