@@ -20,6 +20,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
           return false;
         }
       },
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.searchTemplate.label'); },
     },
   },
   attribute_localname : {
@@ -38,6 +39,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
           return false;
         }
       },
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.searchTemplate.attributeLocalname'); },
     },
   },
   attibute_namespace: {
@@ -56,8 +58,9 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
           return false;
         }
       },
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.searchTemplate.attibuteNamespace'); },
     },
-  }		
+  },		
 });
 
 SimpleSchema.featureType = new SimpleSchema ({
@@ -67,6 +70,7 @@ SimpleSchema.featureType = new SimpleSchema ({
     optional: false,
     autoform: {
       "class": 'namelabel',
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.featureType.label'); },
     },
   }, 
 	//service_id WFS
@@ -83,6 +87,7 @@ SimpleSchema.featureType = new SimpleSchema ({
           });
           return servoptions;
         },
+        "title": function(){ return i18n ('tooltips.maps.autoform.fields.featureType.service'); },
     },
 	},
 	
@@ -91,6 +96,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options:  [],
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.featureType.nameInWfsService'); },
     },
 	},
 	searchTemplates: {
@@ -107,7 +113,8 @@ SimpleSchema.featureType = new SimpleSchema ({
             return 3;
           }
         },
-      }
+        "title": function(){ return i18n ('tooltips.maps.autoform.fields.featureType.searchTemplates'); },
+      },
 	},   
 });
 
@@ -118,6 +125,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     optional: false,
     autoform: {
       "class": 'namelabel',
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.label'); },
     },
   }, 
   //services_id WMS/TMS
@@ -134,7 +142,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
           });
           return servoptions;
         },
-    }
+        "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.service'); },
+    },
   },
   
   nameInService: {
@@ -142,6 +151,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
       options:  [],    
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.nameInService'); },
     },
   }, 
   
@@ -151,6 +161,9 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     optional: true,
     minCount: 0,
     maxCount: 1,
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.featureType'); },
+    },
   },
 
   legendGraphic: {
@@ -160,6 +173,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       afFieldInput: {
         type: "legendGraphicType"
       },
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.legendGraphic'); },
     },
   }, 
 });
@@ -169,6 +183,9 @@ SimpleSchema.layerProperties = new SimpleSchema ({
     type: Boolean,
     defaultValue: false,
     label: function(){ return i18n('collections.layers.properties.initialVisible.label'); },
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.properties.initialVisible'); },
+    },
   },
   applayer: {
     type: Boolean,
@@ -186,6 +203,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
           return false;
         }
       },
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.properties.appLayer'); },
     },
   },
   initial_query: {
@@ -206,6 +224,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
        },
        "type": 'textarea',
        "class": 'initquery',
+       "title": function(){ return i18n ('tooltips.maps.autoform.fields.properties.initialQuery'); },
      },
   },  
 })
@@ -217,6 +236,7 @@ export const LayerSchema = new SimpleSchema({
     unique: true,
     autoform: {
       "class": 'namelabel',
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
     },
   }, 
   label: {
@@ -224,6 +244,7 @@ export const LayerSchema = new SimpleSchema({
     label: function(){ return i18n('collections.layers.label.label'); },
     autoform: {
       "class": 'namelabel',
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.label'); },
     },
   }, 
   type: {
@@ -233,11 +254,15 @@ export const LayerSchema = new SimpleSchema({
     defaultValue: 'default',
     autoform: {
       "type": 'select-radio-inline',
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.type'); },
     },
   }, 
   properties:  {
     type: SimpleSchema.layerProperties,
     label: function(){ return i18n('collections.layers.properties.label'); },
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.properties.main'); },
+    },
   },
   service_layers: {
     type: [SimpleSchema.serviceLayer],
@@ -245,6 +270,9 @@ export const LayerSchema = new SimpleSchema({
     optional: true,
     minCount: 0,
     maxCount: 5,
+    autoform: {
+      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); },
+    },
   }, 
   
 });

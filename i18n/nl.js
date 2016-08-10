@@ -111,6 +111,122 @@ i18n.map('nl', {
     
   },
   
+  //Tooltips
+  tooltips:{
+    main: {      
+      login: "Log in",
+      menu: {
+        services: "Maak en beheer services",
+        layers: "Maak en beheer lagen",
+        kaart: "Maak en beheer kaarten"
+      },
+      
+    },
+    layers:{
+      list:{
+        button: {
+          create: "Maak een nieuwe laag aan",
+          edit: "Wijzig een laag",
+          remove: "Verwijder een laag",
+        }
+      },
+      autoform: {
+        fields: {
+          name: "Geef een (unieke) naam aan de service",
+          label: "Geef een omschrijving van de service (wordt getoond in de viewer)",
+          type: "Het type van deze laag",
+          properties: {
+            main: "Eigenschappen van de laag",
+            initialVisible: "Is de laag initieel (on)zichtbaar",
+            appLayer: "Is de laag een CRS2 laag",
+            initialQuery: "De sql query voor deze laag indien van type 'cosurvey-sql'",
+          },
+          serviceLayers: {
+            main: "Service lagen",
+            label: "Geef een omschrijving",
+            service: "Kies de WMS of TMS service",
+            nameInService: "Kies de service laag",
+            featureType: "Het featuretype bij deze laag",
+            legendGraphic: "De legenda bij deze laag, kan worden vervangen door een eigen legenda afbeelding",
+          },
+          featureType: {
+            label: "Geef een omschrijving",
+            service: "Kies de WFS service",
+            nameInWfsService: "Kies het service feature type",
+            searchTemplates: "Zoekingangen voor velden van het feature type",
+            
+          },
+          searchTemplate: {
+            label: "Geef een omschrijving",
+            attributeLocalname: "Veld van het feature type",
+            attributeNamespace: "Namespace van het feature type (wordt automatisch gevuld)",
+          }
+        },
+        button: {
+          save: 'Opslaan',
+          cancel:'Annuleren',
+        },
+      },
+    },
+    services: {
+      list:{
+        button: {
+          create: "Maak een nieuwe service aan",
+          edit: "Wijzig een service",
+          remove: "Verwijder een service",
+        }
+      },
+      autoform: {
+        fields: {
+          name: "Geef een (unieke) naam aan de service",
+          label: "Geef een omschrijving van de service (wordt getoond in de viewer)",
+          endpoint: "Geef de basis url van de service, afgesloten met een '?'",
+          type: "Kies het service type",
+          version: "Kies de versie van de service",
+        },
+        button: {
+          save: 'Opslaan',
+          cancel:'Annuleren',
+        },
+      },
+    },
+    maps: {
+      list:{
+        button: {
+          create: "Maak een nieuwe kaart aan",
+          edit: "Wijzig een kaart",
+          remove: "Verwijder een kaart",
+        }
+      },
+      autoform: {
+        fields: {
+          name: "Geef een (unieke) naam aan de kaart",
+          label: "Geef een omschrijving  (wordt getoond in de viewer)",
+          initial_visible : "Maak een laag of groep initieel (on)zichtbaar ",
+          initial_extent: {
+            label: "Bounding box van de kaart",
+            minx: "minimum waarde van x",
+            miny: "minimum waarde van y",
+            maxx: "maximum waarde van x",
+            maxy: "maximum waarde van y",
+          },
+        },
+        createlayer: 'Nieuwe laag +',
+        creategroup: 'Nieuwe groep +',
+        renamenode: 'Hernoem groep',
+        removenode: 'Verwijder laag/groep X',
+      },
+      jstree: {
+        main: "Verander volgorde door slepen en neerzetten",
+        select: "Selecteer een laag",
+        search: "Zoek op (groeps)laag naam",
+        button: {
+          save: 'Opslaan',
+          cancel:'Annuleren'
+        },
+      },
+    },
+  },
   
 //Collections
 	collections : {

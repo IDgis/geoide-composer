@@ -7,8 +7,11 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 	//mapLayer initial visible
 	checked: {
 		type: Boolean,
-		optional: true
-	}
+		optional: true,
+		autoform: {
+		  "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
+		},
+	},
 });
 
 SimpleSchema.mapLayerData = new SimpleSchema ({
@@ -27,6 +30,9 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	max: 300000,
     	defaultValue: 0,
     	label:  function(){ return i18n('collections.maps.initial_extent.minX.label'); },
+    	autoform: {
+    	  "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.minx'); },
+    	},
     },
     "miny": {
     	type: Number,
@@ -34,6 +40,9 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	max: 620000,
     	defaultValue: 300000,
     	label: function(){ return i18n('collections.maps.initial_extent.minY.label'); },
+      autoform: {
+        "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.miny'); },
+      },
      },
      "maxx": {
     	type: Number,
@@ -41,13 +50,19 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	max: 300000,
     	defaultValue: 300000,
     	label: function(){ return i18n('collections.maps.initial_extent.maxX.label'); },
+      autoform: {
+        "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxx'); },
+      },
     },
     "maxy":  {
-      	type: Number,
-       	min: 300000,
-       	max: 620000,
-       	defaultValue: 620000,
-       	label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
+    	type: Number,
+     	min: 300000,
+     	max: 620000,
+     	defaultValue: 620000,
+     	label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
+      autoform: {
+        "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxy'); }, 
+      },
     }
 });
 
@@ -58,10 +73,16 @@ export const MapSchema= new SimpleSchema({
 		type: String,
 		label: function(){ return i18n('collections.maps.name.label'); },
 		unique: true,
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
+    },
 	}, 
   label: {
     type: String,
     label: function(){ return i18n('collections.maps.label.label'); },
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.label'); },
+    },
   }, 
 	//type in tree (not relevant for viewerconfig)
 	type: {
@@ -71,7 +92,10 @@ export const MapSchema= new SimpleSchema({
 	initial_extent: {
 		type: SimpleSchema.initialExtent,
 		label: function(){ return i18n('collections.maps.initialExtent.label'); },
-		optional: true
+		optional: true,
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.label'); },
+    },
 	},
 	children: {
 		type: [Object],
