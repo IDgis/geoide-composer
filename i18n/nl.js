@@ -181,7 +181,7 @@ i18n.map('nl', {
           name: "Geef een (unieke) naam aan de service",
           label: "Geef een omschrijving van de service (wordt getoond in de viewer)",
           endpoint: "Geef de basis url van de service, afgesloten met een '?'",
-          type: "Kies het service type,
+          type: "Kies het service type",
           version: "Kies de versie van de service",
         },
         button: {

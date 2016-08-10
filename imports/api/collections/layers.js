@@ -58,8 +58,8 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
           return false;
         }
       },
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.searchTemplate.attibuteNamespace'); },
     },
-    "title": function(){ return i18n ('tooltips.maps.autoform.fields.searchTemplate.attibuteNamespace'); },
   },		
 });
 

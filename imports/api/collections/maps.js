@@ -7,11 +7,11 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 	//mapLayer initial visible
 	checked: {
 		type: Boolean,
-		optional: true
+		optional: true,
+		autoform: {
+		  "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
+		},
 	},
-  autoform: {
-    "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
-  },
 });
 
 SimpleSchema.mapLayerData = new SimpleSchema ({
