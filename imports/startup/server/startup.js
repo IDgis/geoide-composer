@@ -30,6 +30,9 @@ UploadServer.init({
   finished(fileInfo, formFields) {
     console.log('fileInfo', fileInfo);
     console.log('formFields', formFields);
+    var imgResponse = Meteor.call('getImage', fileInfo.url, {});
+    console.log('imgResponse', imgResponse);
+
   },
   //  uploadUrl: '/getLegendGraphic/',
 });
