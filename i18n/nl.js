@@ -130,6 +130,43 @@ i18n.map('nl', {
           remove: "Verwijder een laag",
         }
       },
+      autoform: {
+        fields: {
+          name: "Geef een (unieke) naam aan de service",
+          label: "Geef een omschrijving van de service (wordt getoond in de viewer)",
+          type: "Het type van deze laag",
+          properties: {
+            main: "Eigenschappen van de laag",
+            initialVisible: "Is de laag initieel (on)zichtbaar",
+            appLayer: "Is de laag een CRS2 laag",
+            initialQuery: "De sql query voor deze laag indien van type 'cosurvey-sql'",
+          },
+          serviceLayers: {
+            main: "Service lagen",
+            label: "Geef een omschrijving",
+            service: "Kies de WMS of TMS service",
+            nameInService: "Kies de service laag",
+            featureType: "Het featuretype bij deze laag",
+            legendGraphic: "De legenda bij deze laag, kan worden vervangen door een eigen legenda afbeelding",
+          },
+          featureType: {
+            label: "Geef een omschrijving",
+            service: "Kies de WFS service",
+            nameInWfsService: "Kies het service feature type",
+            searchTemplates: "Zoekingangen voor velden van het feature type",
+            
+          },
+          searchTemplate: {
+            label: "Geef een omschrijving",
+            attributeLocalname: "Veld van het feature type",
+            attributeNamespace: "Namespace van het feature type (wordt automatisch gevuld)",
+          }
+        },
+        button: {
+          save: 'Opslaan',
+          cancel:'Annuleren',
+        },
+      },
     },
     services: {
       list:{
