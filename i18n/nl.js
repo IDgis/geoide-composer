@@ -27,6 +27,32 @@ i18n.map('nl', {
     messages : 'meldingen',
     loggedin : 'Ingelogd als: ',
     notloggedin : 'Niet ingelogd',
+    home:{
+      header: "Home",
+      content: {
+        heading: "Geoide Admin",
+        sub: "De Geoide viewer verzamelt gegevens uit verschillende bronnen om ze in een kaartbeeld weer te geven. Voor het samenstellen van zo'n kaartbeeld in de viewer is Geoide-Admin ontwikkeld.", 
+        list:{
+          heading: "Stappen", 
+          item1: {
+            head: "1. Inloggen",
+            text: "Als u nog niet bent ingelogd, kunt u de services, lagen en kaarten wel bekijken, maar niet configureren. Log daarom eerst in met uw gebruikersnaam en wachtwoord.",
+          },
+          item2: {
+            head: "2. Services",
+            text: "Na het inloggen moet als eerste één of meer services worden geconfigureerd. Door een service te configureren heeft Geoide een bron om gegevens vandaan te halen. De bron kan een WMS, WFS of TMS zijn.",
+          },
+          item3: {
+            head: "3. Lagen",
+            text: "Op basis van een WMS of TMS service configureert u lagen voor de vieer, door servicelagen uit de service te kiezen en daar een FeatureType uit een WFS aan te koppelen.",
+          },
+          item4: {
+            head: "4. Kaarten",
+            text: "Tenslotte configureert u een kaart door lagen te kiezen en de ordenen.",
+          },
+        },
+      },
+    },
   },
   
   services:{
