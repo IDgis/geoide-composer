@@ -15,13 +15,14 @@ import '../../ui/layers/layer.js';
 import '../../ui/maps/map.js';
 import '../../ui/maps/maps.js';
 
+import '../../ui/home/home.html';
 
 Router.configure({
     layoutTemplate: 'main'
 });
 
 Router.route('/', function () {
-  this.render('services');
+  this.render('home');
 }, {
   name: 'main'
 });
