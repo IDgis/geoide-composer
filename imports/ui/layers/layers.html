@@ -1,7 +1,29 @@
 <template name="layers">
-<div class="page-header">
-	<h2>{{i18n 'layers.list.header'}}</h2>
-</div>
+
+<table class="table table-condensed">
+	<thead>
+		<tr style="font-weight: bold;">
+			<td><h2>{{i18n 'layers.list.header'}}</h2></td>
+			<td style="width: 35px">
+				{{#if currentUser}}
+				<div type="button" class="btn btn-success insert-layer"
+					title="{{i18n 'tooltips.layers.list.button.create'}}">
+					<a class="glyphicon glyphicon-plus create-btn"> <span
+						class="create-btn-label"></span>
+					</a>
+				</div>
+				{{/if}}
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style='white-space: nowrap'></td>
+			<td style='white-space: nowrap'></td>
+		</tr>
+	</tbody>
+</table>
+
 <table class="table table-condensed table-hover">
 	<thead>
 		<tr style="font-weight: bold;">
@@ -34,13 +56,6 @@
 		{{/each}}
 	</tbody>
 </table>
-{{#if currentUser}}
-<div type="button" class="btn btn-success col-sm-12 insert-layer" title="{{i18n 'tooltips.layers.list.button.create'}}">
-	<a class="glyphicon glyphicon-plus create-btn"> <span
-		class="create-btn-label">{{i18n 'layers.list.button.create'}}</span>
-	</a>
-</div>
-{{/if}} 
 
 </template>
 
