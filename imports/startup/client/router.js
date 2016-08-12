@@ -22,7 +22,7 @@ Router.configure({
 });
 
 Router.route('/', function () {
-  this.render('home');
+  this.render(i18n ('main.home.template'));
 }, {
   name: 'main'
 });

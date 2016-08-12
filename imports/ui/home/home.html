@@ -1,36 +1,33 @@
-<template name="home">
-
-<div class="page-header">
-	<h2>{{i18n 'main.home.content.heading'}}</h2>
-</div>
-
-<div class="row">
-	<div class="col-lg-6">
-		<h4>{{i18n 'main.home.content.sub'}}</h4>
+<template name="home-nl">
+	<div class="page-header">
+		<h2>Geoide Admin</h2>
 	</div>
-</div>
-
-<div class="row">
-
-	<div class="col-lg-6">
-		<h4>{{i18n 'main.home.content.list.heading'}}</h4>
+	<div class="row">
+		<div class="col-lg-6">
+			<h4>De Geoide viewer verzamelt gegevens uit verschillende bronnen om ze in een kaartbeeld weer te geven. Voor het samenstellen van zo'n kaartbeeld in de viewer is Geoide-Admin ontwikkeld.</h4>
+		</div>
 	</div>
-</div>
-
-<div class="row">
-	<div class="col-lg-6">
-		<dl class="dl-horizontal">
-			<dt>{{i18n 'main.home.content.list.item1.head'}}</dt>
-			<dd>{{i18n 'main.home.content.list.item1.text'}}</dd>
-			<dt>{{i18n 'main.home.content.list.item2.head'}}</dt>
-			<dd>{{i18n 'main.home.content.list.item2.text'}}</dd>
-			<dt>{{i18n 'main.home.content.list.item3.head'}}</dt>
-			<dd>{{i18n 'main.home.content.list.item3.text'}}</dd>
-			<dt>{{i18n 'main.home.content.list.item4.head'}}</dt>
-			<dd>{{i18n 'main.home.content.list.item4.text'}}</dd>
-		</dl>
+	<div class="row">
+	
+		<div class="col-lg-6">
+			<h4>Stappen</h4>
+		</div>
 	</div>
-
-</div>
-
+	<div class="row">
+		<div class="col-lg-6">
+			<dl class="dl-horizontal">
+				<dt>Inloggen</dt>
+				<dd>Als u nog niet bent ingelogd, kunt u de services, lagen en kaarten wel bekijken, maar niet configureren. Log daarom eerst in met uw gebruikersnaam en wachtwoord.</dd>
+				<dt>Services</dt>
+				<dd>Na het inloggen moet als eerste een of meer services worden geconfigureerd. Door een service te configureren heeft Geoide een bron om gegevens vandaan te halen. De bron kan een WMS, WFS of TMS zijn.</dd>
+				<dt>Lagen</dt>
+				<dd>Op basis van een WMS of TMS service configureert u lagen voor de vieer, door servicelagen uit de service te kiezen en daar een FeatureType uit een WFS aan te koppelen.</dd>
+				<dt>Kaarten</dt>
+				<dd>Tenslotte configureert u een kaart door lagen te kiezen en de ordenen.</dd>
+			</dl>
+		</div>
+	</div>
 </template>
+
+<!-- Templates for other languages: -->
+<!-- put template name in i18n language .js file -->
