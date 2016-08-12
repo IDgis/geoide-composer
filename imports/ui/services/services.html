@@ -1,8 +1,29 @@
 <template name="services">
 
-<div class="page-header">
-	<h2>{{i18n 'services.list.header'}}</h2>
-</div>
+<table class="table table-condensed">
+	<thead>
+		<tr style="font-weight: bold;">
+			<td><h2>{{i18n 'services.list.header'}}</h2></td>
+			<td style="width: 35px">
+				{{#if currentUser}}
+				<div type="button" class="btn btn-success insert-service"
+					title="{{i18n 'tooltips.services.list.button.create'}}">
+					<a class="glyphicon glyphicon-plus create-btn"> <span
+						class="create-btn-label"></span>
+					</a>
+				</div>
+				{{/if}}
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td style='white-space: nowrap'></td>
+			<td style='white-space: nowrap'></td>
+		</tr>
+	</tbody>
+</table>
+
 <table class="table table-condensed">
 	<thead>
 		<tr style="font-weight: bold;">
@@ -35,13 +56,4 @@
 	</tbody>
 </table>
 
-{{#if currentUser}}
-<div type="button" class="btn btn-success col-sm-12 insert-service" title="{{i18n 'tooltips.services.list.button.create'}}">
-	<a class="glyphicon glyphicon-plus create-btn"> <span
-		class="create-btn-label">{{i18n 'services.list.button.create'}}</span>
-	</a>
-</div>
-{{/if}} 
-
 </template>
-
