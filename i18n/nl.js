@@ -93,6 +93,9 @@ i18n.map('nl', {
     autoform: {
       header:'Laag configuratie',
     },
+    help:{
+      template: "help-layers-nl",
+    },
   },
   
   maps: {

@@ -6,7 +6,9 @@ import { Session } from 'meteor/session';
 import '../legendGraphic/legendGraph.js';
 import { Services } from '/imports/api/collections/services.js';
 import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
+
 import './layer.html';
+import './help.html';
 
 Template.layer.helpers({
   /**
@@ -97,6 +99,11 @@ Template.layer.events({
     Router.go('layers.list');
   },
   
+  "click #help": function () {
+    var helpTemplate = i18n ('layers.help.template');
+    console.log("clicked help", helpTemplate );
+    Modal.show(helpTemplate);
+  },
   
   'change select[name$=".nameInService"]' : function(e){
     console.log("change on wms layer select ");
