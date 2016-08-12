@@ -95,7 +95,7 @@ Template.map.events({
 
   'click #renamenode' : function() {
     var ref = $.jstree.reference('.maptree'), sel = ref.get_selected();
-    if (!sel.length || ref.get_type(sel) === "layer" || ref.get_type(sel) === "map") {
+    if (!sel.length || ref.get_type(sel) === "map") {
       return false;
     }
     sel = sel[0];
@@ -221,12 +221,12 @@ $('.maptree').jstree;
 fillLayerSelect = function() {
   var layers = Layers.find({}, {
     fields : {
-      name : 1,
+      label : 1,
       _id : 1
     }
   }).fetch();
   layers.forEach(function(entry) {
-    var layerOption = "<option value=" + entry._id + ">" + entry.name
+    var layerOption = "<option value=" + entry._id + ">" + entry.label
         + "</option>"
     $('#layerselect').append(layerOption);
   });
