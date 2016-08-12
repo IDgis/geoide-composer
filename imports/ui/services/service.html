@@ -1,7 +1,18 @@
 <template name="service">
-<div class="page-header">
- 	<h2>{{ i18n 'services.autoform.header' }}</h2>
- </div>
+<div class="row">
+	<div class="col-lg-11">
+		<div class="page-header">
+		 	<h2>{{ i18n 'services.autoform.header' }}</h2>
+		 </div>
+	 </div>
+	<div class="col-lg-1">
+		<div>&nbsp;</div>
+	   <a id="help" class="btn btn-info  help-service" title="{{i18n 'button.help'}}">
+	   		<span class="glyphicon glyphicon-question-sign"></span>
+	   </a>
+	</div>
+</div>
+ 
 {{#autoForm collection=services schema=serviceSchema id="serviceform" doc=serviceDoc type=formType}}
       <fieldset>
 		{{> afQuickField name="name" template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
