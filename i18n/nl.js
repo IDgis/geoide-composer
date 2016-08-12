@@ -72,8 +72,7 @@ i18n.map('nl', {
       header:'Service configuratie',
     },
     help:{
-      header: "Services",
-      content: "U kunt een service configureren door de service eerst een unieke naam te geven. Bij ‘label’ vult u de naam in die aan gebruikers getoond wordt. Deze hoeft niet uniek te zijn. De URL moet verwijzen naar een WMS, WFS of TMS (engels), bijvoorbeeld http://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wms. Bij ‘type’ geeft u aan naar welk type service de URL verwijst. Bij de voorbeeld-URL is dat WMS. Daarna kiest de versie waarmee Geoide de service kan bevragen. De service moet compatibel zijn met deze versie. Tenslotte klikt u op ‘Opslaan’.",
+      template: "help-services-nl",
     },
   },
   

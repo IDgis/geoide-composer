@@ -63,9 +63,11 @@ Template.service.events({
 		Router.go('services.list');
 	},
   'click #help': function () {
-    console.log("clicked help" );
-    Modal.show('servicesHelp');
+    var helpTemplate = i18n ('services.help.template');
+    console.log("clicked help", helpTemplate );
+    Modal.show(helpTemplate);
   },
+  
 });
  
 /**
