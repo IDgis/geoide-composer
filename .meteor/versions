@@ -66,6 +66,7 @@ less@2.6.5
 livedata@1.0.18
 localstorage@1.0.11
 logging@1.1.14
+matdutour:popup-confirm@0.1.26
 mdg:validation-error@0.2.0
 meteor@1.2.16
 meteor-base@1.0.4

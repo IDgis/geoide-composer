@@ -355,6 +355,18 @@ i18n.map('nl', {
         label: "Rol",
       },
     },
+    confirmation: {
+      "delete" :{
+        title: "Verwijderen",
+        cancel: "Annuleren",
+        ok: "OK",
+        message: {
+          services: "Wilt u deze service verwijderen?",
+          layers: "Wilt u deze laag verwijderen?",
+          maps: "Wilt u deze kaart verwijderen?",
+        },
+      },
+    },
   },
 
 
