@@ -109,7 +109,7 @@ i18n.map('nl', {
       layerselect: 'Kies een laag',
       createlayer: 'Nieuwe laag +',
       creategroup: 'Nieuwe groep +',
-      renamenode: 'Hernoem groep',
+      renamenode: 'Hernoem laag/groep',
       removenode: 'Verwijder laag/groep X',
     },
     tree: {
