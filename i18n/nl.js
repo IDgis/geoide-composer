@@ -123,6 +123,9 @@ i18n.map('nl', {
       },
       label: 'Kaart'
     },
+    help:{
+      template: "help-maps-nl",
+    },
   },
 
   users:{

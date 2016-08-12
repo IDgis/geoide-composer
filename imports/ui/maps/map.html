@@ -1,7 +1,18 @@
 <template name="map">
-<div class="page-header">
-	<h2>{{ i18n 'maps.autoform.header' }}</h2>
+<div class="row">
+	<div class="col-lg-11">
+		<div class="page-header">
+		 	<h2>{{ i18n 'maps.autoform.header' }}</h2>
+		 </div>
+	 </div>
+	<div class="col-lg-1">
+		<div>&nbsp;</div>
+	   <a id="help" class="btn btn-info  help-map" title="{{i18n 'button.help'}}">
+	   		<span class="glyphicon glyphicon-question-sign"></span>
+	   </a>
+	</div>
 </div>
+
   {{#autoForm collection=maps schema=mapSchema id="mapForm" doc=mapDoc type=formType class="form-inline"}}
 	<div class="row">
 		<div class="col-md-12 col-sm-12 col-xs-12" style="text-align:left;">

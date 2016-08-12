@@ -6,6 +6,7 @@ import { Maps, MapSchema } from '/imports/api/collections/maps.js';
 import { Layers } from '/imports/api/collections/layers.js';
 
 import'./map.html';
+import'./help.html';
 
 Template.map.helpers({
   /**
@@ -41,6 +42,12 @@ Template.map.events({
   'click #return' : function() {
     console.log("clicked cancel mapform");
     Router.go('maps.list');
+  },
+
+  'click #help': function () {
+    var helpTemplate = i18n ('maps.help.template');
+    console.log("clicked help", helpTemplate );
+    Modal.show(helpTemplate);
   },
 
   'submit #mapForm' : function(event) {
