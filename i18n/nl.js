@@ -71,7 +71,9 @@ i18n.map('nl', {
     autoform: {
       header:'Service configuratie',
     },
-    
+    help:{
+      template: "help-services-nl",
+    },
   },
   
   layers: {
@@ -89,6 +91,9 @@ i18n.map('nl', {
     },
     autoform: {
       header:'Laag configuratie',
+    },
+    help:{
+      template: "help-layers-nl",
     },
   },
   
@@ -117,6 +122,9 @@ i18n.map('nl', {
         placeholder : 'Zoek'
       },
       label: 'Kaart'
+    },
+    help:{
+      template: "help-maps-nl",
     },
   },
 
@@ -401,7 +409,9 @@ i18n.map('nl', {
   version: 'versie',
   button: {
     save: 'Opslaan',
-    cancel:'Annuleren'
+    cancel:'Annuleren',
+    help: "Help",
+    close: "Sluiten",
   },
   yes: 'Ja',
   no: 'Nee',

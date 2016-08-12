@@ -1,0 +1,35 @@
+<template name="help-layers-nl">
+    <div class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h4 class="modal-title">Lagen</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>U kunt een laag configureren door de laag eerst een unieke naam te geven.</p> 
+                    <p>Bij 'label' vult u een tekst in die aan gebruikers getoond wordt.
+                    Deze hoeft niet uniek te zijn.</p> 
+                    <p>Onder 'eigenschappen' vult u in of de kaart bij het starten getoond moet worden (initieel zichtbaar) en of de laag een CRS2-laag is.</p>
+                    <p>Vervolgens kunt u de laag in de viewer samenstellen uit een of meerdere lagen van een service (servicelagen). 
+                    Om een servicelaag toe te voegen kiest u onder 'servicelagen' een service uit de lijst met services (deze toont alleen WMS en TMS) en uit deze service kiest u een servicelaag.</p>
+					<p>Aan de geselecteerde servicelaag uit de WMS of TMS kunt u een FeatureType uit een WFS koppelen. 
+					Dit is nodig om gegevens van kaartobjecten te tonen (feature-info) of als u wilt zoeken op een kenmerk van de kaartobjecten. 
+					Hiertoe kiest u onder 'Feature type' een service uit de lijst met services  (deze toont alleen WFS) en uit deze service kiest u een FeatureType.</p>
+					<p>Aan het FeatureType kunt u zoekingangen koppelen. 
+					Kies onder 'zoekingangen' een zoekveld uit de lijst met zoekvelden. 
+					Door een zoekingang toe te voegen, maakt u het mogelijk om in een veld van een FeatureType te zoeken.</p>
+					<p>Klik tenslotte op 'Opslaan'.</p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ i18n 'button.close' }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Templates for other languages: -->
+<!-- put template name in i18n language .js file -->

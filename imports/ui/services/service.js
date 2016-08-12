@@ -5,6 +5,7 @@ import { Session } from 'meteor/session';
 import { Services,  ServiceSchema } from '/imports/api/collections/services.js';
 
 import './service.html';
+import './help.html';
 
 Template.service.helpers({
   /**
@@ -60,7 +61,13 @@ Template.service.events({
 	'click #return': function () {
     console.log("clicked cancel serviceform" );
 		Router.go('services.list');
-	}
+	},
+  'click #help': function () {
+    var helpTemplate = i18n ('services.help.template');
+    console.log("clicked help", helpTemplate );
+    Modal.show(helpTemplate);
+  },
+  
 });
  
 /**
