@@ -24,8 +24,23 @@ Template.maps.events ({
 	  Router.go('map.insert');
   },
   'click .delete-map': function() {
-	  //zie https://github.com/aldeed/meteor-delete-button
-	 console.log("verwijder kaart " + this._id); 
-	 Maps.remove({_id:this._id})
+    // zie atmosphere package matdutour:popup-confirm
+    console.log("verwijder map " + this._id);
+    var mapId = this._id;
+    new Confirmation({
+      message: function(){ return i18n('collections.confirmation.delete.message.maps'); },
+      title: function(){ return i18n('collections.confirmation.delete.title'); },
+      cancelText: function(){ return i18n('collections.confirmation.delete.cancel'); },
+      okText: function(){ return i18n('collections.confirmation.delete.ok'); },
+      success: false, // whether the button should be green or red
+      focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+    }, function (ok) {
+      console.log("confirmation", ok);
+      // ok is true if the user clicked on "ok", false otherwise
+      if (ok){
+        console.log("id", mapId);
+        Maps.remove({_id:mapId});
+      }
+    });
   },
 });

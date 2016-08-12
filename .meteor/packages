@@ -35,3 +35,4 @@ accounts-ui@1.1.9
 tomi:upload-jquery
 tomi:upload-server
 npm-bcrypt
+matdutour:popup-confirm
