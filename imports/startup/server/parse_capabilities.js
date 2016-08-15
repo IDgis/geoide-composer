@@ -163,15 +163,15 @@ Meteor.methods({
 //    console.log('getWfsFeatureTypes xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
 //    console.log('getWfsFeatureTypes parseResponse:', parseResponse);
-    console.log('------- WFS Capability -------');
-    console.log(parseResponse.WFS_Capabilities);
+    console.log('------- WFS Capability -------', parseResponse);
+    console.log('------- WFS Capability main -------', parseResponse.WFS_Capabilities);
     console.log('--------------------------');
 
     var servoptions = [];
 
-    // TODO code below depends on version
-    // version 2.0.0
-    _.each(parseResponse.WFS_Capabilities.FeatureTypeList[0].FeatureType,function(ft){
+    // version:  1.0.0, 1.1.0, 2.0.0
+    _.each(parseResponse,function(WFS_Capabilities){
+      _.each(WFS_Capabilities.FeatureTypeList[0].FeatureType,function(ft){
         console.log(ft);
         if (ft.Name[0]._){
           servoptions.push({name:ft.Name[0]._, title:ft.Title[0]});
@@ -179,6 +179,7 @@ Meteor.methods({
           servoptions.push({name:ft.Name[0], title:ft.Title[0]});
         }
       });
+    });
 
     console.log('WFS FeatureTypes found: ',servoptions);
     return servoptions;
