@@ -224,19 +224,33 @@ Meteor.methods({
     var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
 //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    var glgTag, capRequest;
+    
     console.log('------- Capability -------');
-    console.log(parseResponse.WMS_Capabilities.Capability);
-    console.log('--------------------------');
+    switch(version) {
+    case '1.3.0':
+      // version 1.3.0
+      console.log(parseResponse.WMS_Capabilities.Capability);
+      // request
+      capRequest = parseResponse.WMS_Capabilities.Capability[0].Request;
+      glgTag = 'sld:GetLegendGraphic';
+      break;
+    case '1.1.0':
+    default:
+      // version 1.1.0
+      console.log(parseResponse.WMT_MS_Capabilities.Capability);
+      // request
+      capRequest = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+      glgTag = 'GetLegendGraphic';
+      break;
+    }
 
-    // TODO code below depends on version
-    // version 1.3.0
     // main layer
-    var capRequest= parseResponse.WMS_Capabilities.Capability[0].Request;
     console.log('******* WMS requests: *******');
     var selectedFormat;
     _.each(capRequest,function(mainRequest){
         console.log(mainRequest);
-        var lg = mainRequest['sld:GetLegendGraphic'];
+        var lg = mainRequest[glgTag];
         console.log(lg);
         var pngFormat, jpgFormat, gifFormat;
         var formats = lg[0].Format; 
