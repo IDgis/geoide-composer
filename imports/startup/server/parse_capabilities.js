@@ -74,21 +74,33 @@ Meteor.methods({
     var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
 //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    console.log('------- Capability -------');
-    console.log(parseResponse.WMS_Capabilities.Capability);
-    console.log('--------------------------');
     var servoptions = [];
 
-    // TODO code below depends on version
-    // version 1.3.0
-    // main layer
-    var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
+    console.log('------- Capability -------');
+    switch(version) {
+    case '1.3.0':
+      // version 1.3.0
+      console.log(parseResponse.WMS_Capabilities.Capability);
+      // main layer
+      var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
+      break;
+    case '1.1.0':
+    default:
+      // version 1.1.0
+      console.log(parseResponse.WMT_MS_Capabilities.Capability);
+      // main layer
+      var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
+      break;
+    }
+  
     console.log('******* main Layers *******');
     _.each(capLayer,function(mainLayer){
       console.log(mainLayer);
       if (mainLayer.$){
         if (mainLayer.$.queryable){
-          servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
+          if (mainLayer.$.queryable == '1'){
+            servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
+          }
         }
       }
       console.log('**************************');
@@ -99,7 +111,9 @@ Meteor.methods({
           console.log(subLayer);
           if (subLayer.$){
             if (subLayer.$.queryable){
-              servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
+              if (subLayer.$.queryable == '1'){
+                servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
+              }
             }
           }
           console.log('..........................');
