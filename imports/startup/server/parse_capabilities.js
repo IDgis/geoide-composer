@@ -283,8 +283,13 @@ Meteor.methods({
           url = url + '?';
         }
         if (selectedFormat){
-          url = url + 'request=GetLegendGraphic&service=WMS&layer=' + layer 
-            + '&format=' + selectedFormat;          
+          url = url + 'request=GetLegendGraphic&service=WMS'
+            + '&layer=' + layer 
+            + '&format=' + selectedFormat
+            // tbv Mapserver:
+            // (wordt genegeerd door deegree en geoserver)
+            + '&version=' + version
+            + '&sld_version=1.1.0';          
         } else {
           url = null;
         }
