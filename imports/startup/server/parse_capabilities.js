@@ -85,9 +85,9 @@ Meteor.methods({
       // main layer
       var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
       break;
-    case '1.1.0':
+    case '1.1.1':
     default:
-      // version 1.1.0
+      // version 1.1.1
       console.log(parseResponse.WMT_MS_Capabilities.Capability);
       // main layer
       var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
@@ -171,14 +171,32 @@ Meteor.methods({
     var servoptions = [];
 
     // version:  1.0.0, 1.1.0, 2.0.0
+    // using this 'each' construction instead of 'parseResponse.WFS_Capabilities' makes it prefix unaware
     _.each(parseResponse,function(WFS_Capabilities){
-      _.each(WFS_Capabilities.FeatureTypeList[0].FeatureType,function(ft){
-        console.log(ft);
-        if (ft.Name[0]._){
-          servoptions.push({name:ft.Name[0]._, title:ft.Title[0]});
-        } else {
-          servoptions.push({name:ft.Name[0], title:ft.Title[0]});
-        }
+      // But the following tag FeatureTypeList can have the same or no prefix
+      // find some common tag namespace prefixes
+      var namePrefix = '';
+      if (WFS_Capabilities['xsd:FeatureTypeList']){
+        namePrefix = 'xsd:';
+      } else if (WFS_Capabilities['xs:FeatureTypeList']){
+        namePrefix = 'xs:';
+      } else if (WFS_Capabilities['wfs:FeatureTypeList']){
+        namePrefix = 'wfs:';
+      } else {
+        namePrefix = '';
+      }
+      
+      _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
+        _.each(ftList,function(ft){
+//          console.log(ft);
+          if (ft[namePrefix+'Name']){
+            if (ft[namePrefix+'Name'][0]._){
+              servoptions.push({name:ft[namePrefix+'Name'][0]._, title:ft[namePrefix+'Title'][0]});
+            } else {
+              servoptions.push({name:ft[namePrefix+'Name'][0], title:ft[namePrefix+'Title'][0]});
+            }
+          }
+        });
       });
     });
 
@@ -201,9 +219,16 @@ Meteor.methods({
     var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
 //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+    // find some common tag namespace prefixes
     var namePrefix = '';
     if (parseResponse['xsd:schema']){
       namePrefix = 'xsd:';
+    } else if (parseResponse['xs:schema']){
+      namePrefix = 'xs:';
+    } else if (parseResponse['wfs:schema']){
+      namePrefix = 'wfs:';
+    } else {
+      namePrefix = '';
     }
     console.log('------- WFS DescribeFeatureType -------', namePrefix);
     _.each(parseResponse,function(schema){
@@ -285,9 +310,9 @@ Meteor.methods({
       capRequest = parseResponse.WMS_Capabilities.Capability[0].Request;
       glgTag = 'sld:GetLegendGraphic';
       break;
-    case '1.1.0':
+    case '1.1.1':
     default:
-      // version 1.1.0
+      // version 1.1.1
       console.log(parseResponse.WMT_MS_Capabilities.Capability);
       // request
       capRequest = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
