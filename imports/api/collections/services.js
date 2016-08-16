@@ -37,18 +37,54 @@ export const ServiceSchema = new SimpleSchema({
 	    type: String,
 	    label: function(){ return i18n('collections.services.version.label'); },
 	    allowedValues: function() {
-  			if (this.type==='WMS') {
+  			if (this.type === 'WMS') {
   				return ["1.1.1","1.3.0"];
   			}
-  			if (this.type==='WFS') {
+  			if (this.type === 'WFS') {
   				return ["1.0.0","1.1.0","2.0.0"];
   			} 
-  			if (this.type==='TMS') {
+  			if (this.type === 'TMS') {
   				return ["1.0.0"];
   			}
 	    },
+	    // this does not seem to work
+      "defaultValue": function() {
+        if (this.type === 'WMS') {
+          return "1.1.1";
+        }
+        if (this.type === 'WFS') {
+          return "1.1.0";
+        } 
+        if (this.type === 'TMS') {
+          return "1.0.0";
+        }
+      },
 	    autoform: {
 	      "title": function(){ return i18n ('tooltips.services.autoform.fields.version'); },
+	      // this is added, because the default value does not work 
+	      // after a value has already been selected
+        "value": function() {
+          var currentVersion = AutoForm.getFieldValue('version', 'serviceform');
+          var currentType = AutoForm.getFieldValue('type', 'serviceform');
+          if (currentType === 'WMS') {
+            return (currentVersion)?((currentVersion === "1.3.0")?currentVersion:"1.1.1"):"1.1.1";
+          } else if (currentType === 'WFS') {
+            return (currentVersion)?((currentVersion === "1.0.0" | currentVersion === "2.0.0")?currentVersion:"1.1.0"):"1.1.0";
+          } else if (currentType === 'TMS') {
+            return "1.0.0";
+          }
+        },
+        // this seems to work
+        "defaultValue": function() {
+          var currentType = AutoForm.getFieldValue('type', 'serviceform');
+          if (currentType === 'WMS') {
+            return "1.1.1";
+          } else if (currentType === 'WFS') {
+            return "1.1.0";
+          } else if (currentType === 'TMS') {
+            return "1.0.0";
+          }
+        },
 	    },
 	},
 });
