@@ -60,11 +60,12 @@ Meteor.methods({
   /**
    * Parse xml and return a javascript object representing the xml content. 
    * Using package peerlibrary:xml2js (xml2js is available on server side only)
-   * We use 'explicitArray:true' so that parsing code can behave the same whether
+   * 'explicitArray:true' : parsing code can behave the same whether
    * an object contains one or more subobjects of some kind. 
+   * 'stripPrefix: true' : strip prefixes (except xmlns)
    */
   parseXml : function(xml){
-    return xml2js.parseStringSync(xml, {explicitArray:true});
+    return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
   },
   /**
    * Get layers from a WMS
@@ -200,12 +201,60 @@ Meteor.methods({
     var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
 //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    console.log('------- WFS DescribeFeatureType -------');
-    console.log(parseResponse.schema);
-    ft.targetNamespace = parseResponse.schema.$.targetNamespace;
-    _.each(parseResponse.schema.element[0].complexType[0].complexContent[0].extension[0].sequence[0].element,function(ftField){     
-      console.log('FeatureType field: ' + ftField.$.name);
-      ft.options.push({name:ftField.$.name, title:ftField.$.name});
+    var namePrefix = '';
+    if (parseResponse['xsd:schema']){
+      namePrefix = 'xsd:';
+    }
+    console.log('------- WFS DescribeFeatureType -------', namePrefix);
+    _.each(parseResponse,function(schema){
+      console.log('schema', schema);
+      ft.targetNamespace = schema.$.targetNamespace;
+      _.each(schema,function(nextTag){
+        console.log('nextTag', nextTag);
+        var complexType = null;
+        if (nextTag[0]){
+          // look for nextTag == element or complexType
+          if (nextTag[0][namePrefix+'complexType']){
+//            element.complexType.complexContent.extension.sequence.element 
+              complexType = nextTag[0][namePrefix+'complexType'];
+          } else if (nextTag[0][namePrefix+'complexContent']){
+//            complexType.complexContent.extension.sequence.element 
+                  complexType = nextTag;
+          }
+        }
+        if (complexType){
+          console.log('complexType', complexType); 
+          if (complexType[0]){
+            if (complexType[0][namePrefix+'complexContent']){
+              _.each(complexType[0],function(complexContent){     
+                console.log('complexContent', complexContent);
+                if (complexContent[0]){
+                  if (complexContent[0][namePrefix+'extension']){
+                    _.each(complexContent[0],function(extension){     
+                      console.log('extension', extension);
+                      if (extension[0]){
+                        if (extension[0][namePrefix+'sequence']){
+                          _.each(extension[0],function(sequence){     
+                            console.log('sequence', sequence);
+                            if (sequence[0]){
+                              if (sequence[0][namePrefix+'element']){
+                                _.each(sequence[0][namePrefix+'element'],function(ftField){     
+                                  console.log('FeatureType field: ' + ftField.$.name);
+                                  ft.options.push({name:ftField.$.name, title:ftField.$.name});
+                                });
+                              }
+                            }
+                          });
+                        }
+                      }
+                    });
+                  }
+                }
+              });
+            }
+          }
+        }
+      });
     });
     console.log('--------------------------');
 
