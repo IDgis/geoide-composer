@@ -47,6 +47,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
       "class": 'namespace',
+      "readonly": true,
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
