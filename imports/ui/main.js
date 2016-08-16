@@ -9,5 +9,9 @@ Template.main.helpers({
    */
   absoluteUrl: function(){
     return Meteor.absoluteUrl();
+  },
+  
+  version: function(){
+    return ReactiveMethod.call('getVersion');
   }
 });

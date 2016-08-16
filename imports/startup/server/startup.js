@@ -22,6 +22,26 @@ Meteor.startup(function() {
 
 });
 
+
+
+Meteor.methods({
+  getVersion : function(){
+    if (Meteor.settings){
+      return Meteor.settings.version;
+    } else {
+      return '-';
+    }
+  },
+  getViewerReloadConfigUrl : function(){
+    if (Meteor.settings){
+      return Meteor.settings.viewer.reloadConfigUrl;
+    } else {
+      return '';
+    }
+  },
+
+});
+
 UploadServer.init({
   tmpDir: process.env.PWD + '/public/.uploads/tmp',
   uploadDir: process.env.PWD + '/public/.uploads/',
