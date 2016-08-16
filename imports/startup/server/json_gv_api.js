@@ -195,6 +195,7 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
+                  legendGraphicUrl: serviceLayer.legendGraphic,
                   featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
                 }
             );
@@ -205,6 +206,7 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
+                  legendGraphicUrl: serviceLayer.legendGraphic,
                 }
             );
           }
