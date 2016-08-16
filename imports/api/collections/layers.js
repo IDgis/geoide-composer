@@ -155,17 +155,6 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     },
   }, 
   
-  featureType: {
-    type: [SimpleSchema.featureType],
-    label: function(){ return i18n('collections.layers.servicelayer.featureTypes.label'); },
-    optional: true,
-    minCount: 0,
-    maxCount: 1,
-    autoform: {
-      "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.featureType'); },
-    },
-  },
-
   legendGraphic: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.legendGraphic.label'); },
@@ -176,6 +165,17 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.legendGraphic'); },
     },
   }, 
+  
+  featureType: {
+    type: [SimpleSchema.featureType],
+    label: function(){ return i18n('collections.layers.servicelayer.featureTypes.label'); },
+    optional: true,
+    minCount: 0,
+    maxCount: 1,
+    autoform: {
+      "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.featureType'); },
+    },
+  },
 });
 
 SimpleSchema.layerProperties = new SimpleSchema ({
