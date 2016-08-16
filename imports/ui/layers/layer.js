@@ -493,6 +493,12 @@ Template.layer.onRendered(function(){
 AutoForm.addHooks('layerform',{
   onSuccess: function(formType, result) {
     console.log("submit layer autoform, goto list");
+    Meteor.call('triggerViewerReload',
+        function(lError, lResponse) {
+          if (lError) {
+            console.log('triggerViewerReload Error ', lError);
+          }
+    });
     Router.go('layers.list');
   },
   onError: function(formType, error){

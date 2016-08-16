@@ -25,6 +25,9 @@ Meteor.startup(function() {
 
 
 Meteor.methods({
+  /**
+   * settings: version   
+   */
   getVersion : function(){
     if (Meteor.settings){
       return Meteor.settings.version;
@@ -32,11 +35,37 @@ Meteor.methods({
       return '-';
     }
   },
+
+  /**
+   * settings: url initiating geoide-viewer configuration reload   
+   */
   getViewerReloadConfigUrl : function(){
     if (Meteor.settings){
       return Meteor.settings.viewer.reloadConfigUrl;
     } else {
-      return '';
+      return null;
+    }
+  },
+
+  /**
+   * initiate geoide-viewer configuration reload by calling http get on url
+   */
+  triggerViewerReload : function (){
+    var url = Meteor.call('getViewerReloadConfigUrl');
+    console.log('triggerViewerReload() url: ', url);
+    if (url){
+      try {
+        var res = HTTP.get(url, {headers:{
+            'User-Agent': 'Meteor/1.3',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+          }
+        });
+        return res;
+      } catch (e) {
+        // Got a network error, time-out or HTTP error in the 400 or 500 range.
+        console.log('triggerViewerReload() error', e);
+        return e; // return the error as a valid result, to be analyzed at client side
+      }
     }
   },
 

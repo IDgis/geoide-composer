@@ -294,6 +294,12 @@ AutoForm.addHooks('mapForm', {
 
   onSuccess : function(formType, result) {
     console.log("submit map autoform, goto list");
+    Meteor.call('triggerViewerReload',
+        function(lError, lResponse) {
+          if (lError) {
+            console.log('triggerViewerReload Error ', lError);
+          }
+    });
     Router.go('maps.list');
   },
   onError : function(formType, error) {
