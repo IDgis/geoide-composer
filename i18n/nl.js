@@ -3,6 +3,7 @@ i18n.map('nl', {
   main : {
     title : 'Geoide Admin',
     menu  : {
+      home: 'Home',
       services: 'Services',
       layers: 'Lagen',
       maps: 'Kaarten',
