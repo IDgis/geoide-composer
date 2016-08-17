@@ -21,7 +21,17 @@ Template.legendGraphTemplate.helpers({
   },
 });
 
-
+Template.legendGraphTemplate.events ({
+  'click .delete-graphic': function () { 
+    console.log("delete-graphic"); 
+    
+    var legendGraphic = $("input[name$='legendGraphic']");
+    legendGraphic[0].value = "";
+    var legendGraphicImage = $("img[name$='legendGraphic.img']");
+    legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
+  },
+});
+  
   AutoForm.addInputType("legendGraphicType", {
     template: "legendGraphTemplate",
     valueOut: function () {
