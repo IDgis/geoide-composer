@@ -6,6 +6,7 @@ export const ServiceSchema = new SimpleSchema({
     type: String,
     label: function(){ return i18n('collections.services.name.label'); },
     unique : true,
+    regEx: /^([a-zA-Z0-9_\-]+)$/,
     autoform: {
       "title": function(){ return i18n ('tooltips.services.autoform.fields.name'); },
     },
@@ -20,6 +21,7 @@ export const ServiceSchema = new SimpleSchema({
 	endpoint: {
 		type: String,
 		label: function(){ return i18n('collections.services.endpoint.label'); },
+		regEx: SimpleSchema.RegEx.Url,
     autoform: {
       "title": function(){ return i18n ('tooltips.services.autoform.fields.endpoint'); },
     },

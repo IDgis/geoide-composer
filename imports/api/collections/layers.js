@@ -235,6 +235,7 @@ export const LayerSchema = new SimpleSchema({
     type: String,
     label: function(){ return i18n('collections.layers.name.label'); },
     unique: true,
+    regEx: /^([a-zA-Z0-9_\-]+)$/,
     autoform: {
       "class": 'namelabel',
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
