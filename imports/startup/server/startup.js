@@ -80,7 +80,6 @@ UploadServer.init({
     console.log('fileInfo', fileInfo);
     console.log('formFields', formFields);
   },
-  uploadUrl: '/GetLegendGraphic/',
 });
 
 /**

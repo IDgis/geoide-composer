@@ -319,6 +319,16 @@ Template.layer.events({
 Template.layer.onRendered(function(){
   console.log("onRendered");
   console.log(this);
+  /*
+   * if image is empty, fill it with initial png
+   * (initially the src of the image is the url of 'edit-layer' route)
+   */
+  var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
+  if (legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>0){
+    legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
+  }
+  console.log('legendGraphicImage[0].src', legendGraphicImage[0].src);
+  
   var formData = this.data; // layer data belonging to this form
   
   if (formData){

@@ -238,6 +238,11 @@ i18n.map('nl', {
         },
       },
     },
+    legendgraphic: {
+      button: {
+        remove: "Verwijder een legenda plaatje",
+      },
+    },
   },
   
 //Collections
@@ -390,6 +395,7 @@ i18n.map('nl', {
     cancel:'Annuleren',
     help: "Help",
     close: "Sluiten",
+    remove: "Verwijder",
   },
   yes: 'Ja',
   no: 'Nee',
