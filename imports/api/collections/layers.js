@@ -159,6 +159,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   legendGraphic: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.legendGraphic.label'); },
+    optional: true,
     autoform: {
       afFieldInput: {
         type: "legendGraphicType"
