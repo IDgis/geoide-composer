@@ -72,14 +72,15 @@ Meteor.methods({
 });
 
 UploadServer.init({
-  tmpDir: process.env.PWD + '/public/uploads/tmp',
-  uploadDir: process.env.PWD + '/public/uploads/',
+  tmpDir: '/tmp/uploads/tmp',
+  uploadDir: '/tmp/uploads/',
   checkCreateDirectories: true, //create the directories for you
   overwrite: true,
   finished(fileInfo, formFields) {
     console.log('fileInfo', fileInfo);
     console.log('formFields', formFields);
   },
+//  uploadUrl: '/GetLegendGraphic/',
 });
 
 /**
