@@ -73,6 +73,7 @@ export const MapSchema= new SimpleSchema({
 		type: String,
 		label: function(){ return i18n('collections.maps.name.label'); },
 		unique: true,
+    regEx: /^([a-zA-Z0-9_\-]+)$/,		
     autoform: {
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
     },
