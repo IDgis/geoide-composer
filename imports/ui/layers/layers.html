@@ -40,14 +40,19 @@
 			<td>{{name}}</td>
 			<td>{{label}}</td>
 			<td>{{type}}</td>
-			<td>{{#if properties.initial_visible}} {{i18n 'yes'}} {{else}}
-				{{i18n 'no'}} {{/if}}</td>
+			<td>{{#if properties.initial_visible}} {{i18n 'yes'}} 
+				{{else}}
+				{{i18n 'no'}} {{/if}} 
+			</td>
 			<td style='white-space: nowrap'>
 			{{#if currentUser}}
 				<button class="btn btn-default edit-layer" title="{{i18n 'tooltips.layers.list.button.edit'}}">
 					<a class="glyphicon glyphicon-edit"></a>
 				</button> 
-				<a class="btn btn-warning delete-layer" title="{{i18n 'tooltips.layers.list.button.remove'}}"> 
+				<a class="btn btn-warning delete-layer" 
+					title="{{i18n 'tooltips.layers.list.button.remove'}}" 
+					{{setDisabled _id}} role="button"
+				> 
 					<span class="glyphicon glyphicon-remove"></span>
 				</a>
 			{{/if}}

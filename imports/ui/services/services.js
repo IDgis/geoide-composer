@@ -13,6 +13,9 @@ Template.services.helpers({
   services: function(){
         return Services.find({},{sort:[["name", "asc"]]});
     },
+    setDisabled: function(id){
+      return ReactiveMethod.call('isServiceInLayer', id)?'disabled':'';
+    },
 });
 
 

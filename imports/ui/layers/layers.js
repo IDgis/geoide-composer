@@ -23,6 +23,9 @@ Template.layers.helpers({
         return Layers.find({type: 'default'},{sort:[["name", "asc"]]});
       }
     },
+    setDisabled: function(id){
+      return (ReactiveMethod.call('isLayerInMap', id)?'disabled':'');
+    },
 });
 
 
