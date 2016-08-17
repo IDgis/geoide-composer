@@ -3,6 +3,7 @@ import { HTTP } from 'meteor/http';
 import { xml2js } from 'meteor/peerlibrary:xml2js';
 
 import { Services } from '/imports/api/collections/services.js';
+import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
 
@@ -68,16 +69,18 @@ Meteor.methods({
   parseXml : function(xml){
     return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
   },
-  
+
+  /**
+   * Find if the layer with layerId is use in a map
+   */
   isLayerInMap: function(layerId){
-    console.log('\nisLayerInMap', layerId);
     var cursor = Maps.find();
     var result = false;
     cursor.forEach(function(map){
-      console.log('map', map.text);
+//      console.log('map', map.text);
       _.each(map.children,function(child){
         if (child.data){
-          console.log('  child.data.layerid', child.data.layerid);
+//          console.log('  child.data.layerid', child.data.layerid);
           if (child.data.layerid){
             if (child.data.layerid == layerId){
               result = true;
@@ -86,7 +89,7 @@ Meteor.methods({
         }
         _.each(child.children,function(child1){
           if (child1.data){
-            console.log('    child1.data.layerid', child1.data.layerid);
+//            console.log('    child1.data.layerid', child1.data.layerid);
             if (child1.data.layerid){
               if (child1.data.layerid == layerId){
                 result = true;
@@ -95,7 +98,7 @@ Meteor.methods({
           }
           _.each(child1.children,function(child2){
             if (child2.data){
-              console.log('      child2.data.layerid', child2.data.layerid);
+//              console.log('      child2.data.layerid', child2.data.layerid);
               if (child2.data.layerid){
                 if (child2.data.layerid == layerId){
                   result = true;
@@ -104,7 +107,7 @@ Meteor.methods({
             }
             _.each(child2.children,function(child3){
               if (child3.data){
-                console.log('        child3.data.layerid', child3.data.layerid);
+//                console.log('        child3.data.layerid', child3.data.layerid);
                 if (child3.data.layerid){
                   if (child3.data.layerid == layerId){
                     result = true;
@@ -116,7 +119,34 @@ Meteor.methods({
         });
       });
     });
-    console.log('isLayerInMap', result);
+    console.log('isLayerInMap ' + layerId + ": " + result);
+    return result;
+  },
+
+  /**
+   * Find if the service with serviceId is use in a layer
+   */
+  isServiceInLayer: function(serviceId){
+    var cursor = Layers.find();
+    var result = false;
+    cursor.forEach(function(layer){
+//      console.log('layer', layer.name);
+      _.each(layer.service_layers,function(serviceLayer){
+//        console.log('  serviceLayer.service', serviceLayer.service);
+        if (serviceLayer.service == serviceId){
+          result = true;
+        }
+        if (serviceLayer.featureType){
+          if (serviceLayer.featureType[0]){
+//            console.log('    serviceLayer.featureType.service', serviceLayer.featureType[0].service);
+            if (serviceLayer.featureType[0].service == serviceId){
+              result = true;
+            }
+          }
+        }
+      });
+    });
+    console.log('isServiceInLayer ' + serviceId + ": " + result);
     return result;
   },
   /**
