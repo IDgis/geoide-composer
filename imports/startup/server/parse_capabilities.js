@@ -3,6 +3,7 @@ import { HTTP } from 'meteor/http';
 import { xml2js } from 'meteor/peerlibrary:xml2js';
 
 import { Services } from '/imports/api/collections/services.js';
+import { Maps } from '/imports/api/collections/maps.js';
 
 
 Meteor.methods({
@@ -66,6 +67,57 @@ Meteor.methods({
    */
   parseXml : function(xml){
     return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
+  },
+  
+  isLayerInMap: function(layerId){
+    console.log('\nisLayerInMap', layerId);
+    var cursor = Maps.find();
+    var result = false;
+    cursor.forEach(function(map){
+      console.log('map', map.text);
+      _.each(map.children,function(child){
+        if (child.data){
+          console.log('  child.data.layerid', child.data.layerid);
+          if (child.data.layerid){
+            if (child.data.layerid == layerId){
+              result = true;
+            }
+          }
+        }
+        _.each(child.children,function(child1){
+          if (child1.data){
+            console.log('    child1.data.layerid', child1.data.layerid);
+            if (child1.data.layerid){
+              if (child1.data.layerid == layerId){
+                result = true;
+              }
+            }
+          }
+          _.each(child1.children,function(child2){
+            if (child2.data){
+              console.log('      child2.data.layerid', child2.data.layerid);
+              if (child2.data.layerid){
+                if (child2.data.layerid == layerId){
+                  result = true;
+                }
+              }
+            }
+            _.each(child2.children,function(child3){
+              if (child3.data){
+                console.log('        child3.data.layerid', child3.data.layerid);
+                if (child3.data.layerid){
+                  if (child3.data.layerid == layerId){
+                    result = true;
+                  }
+                }
+              }
+            });
+          });
+        });
+      });
+    });
+    console.log('isLayerInMap', result);
+    return result;
   },
   /**
    * Get layers from a WMS
