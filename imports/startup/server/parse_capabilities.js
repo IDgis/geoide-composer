@@ -203,8 +203,9 @@ Meteor.methods({
         });
       }
     });
-    console.log('WMS Layers found: ',servoptions);
-    return servoptions;
+    var sortedServoptions = _.sortBy(servoptions, 'title');
+    console.log('WMS Layers found: ',sortedServoptions);
+    return sortedServoptions;
   },
   
   /**
@@ -281,9 +282,9 @@ Meteor.methods({
         });
       });
     });
-
-    console.log('WFS FeatureTypes found: ',servoptions);
-    return servoptions;
+    var sortedServoptions = _.sortBy(servoptions, 'title');
+    console.log('WFS FeatureTypes found: ',sortedServoptions);
+    return sortedServoptions;
   },
   
   /**
@@ -364,7 +365,7 @@ Meteor.methods({
       });
     });
     console.log('--------------------------');
-
+    ft.options = _.sortBy(ft.options, 'title');
     return ft;
   },
   
