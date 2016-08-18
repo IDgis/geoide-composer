@@ -297,7 +297,7 @@ Meteor.methods({
     console.log('FeatureType name:', ftName);
     var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
-    if (serv){
+    if (serv[0]){
       var host = serv[0].endpoint;
       var version = serv[0].version;
       var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
@@ -378,7 +378,7 @@ Meteor.methods({
     console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
     var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
-    if (serv){
+    if (serv[0]){
       var host = serv[0].endpoint;
       var url = host;
       var version = serv[0].version;

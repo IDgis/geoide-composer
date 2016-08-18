@@ -331,8 +331,11 @@ Template.layer.onRendered(function(){
    * (initially the src of the image is the url of 'edit-layer' route)
    */
   var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
-  if (legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>0){
-    legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
+  if (legendGraphicImage[0].src){
+    if (_.isEmpty(legendGraphicImage[0].src) | 
+        legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>0){
+      legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
+    }
   }
   console.log('legendGraphicImage[0].src', legendGraphicImage[0].src);
   
