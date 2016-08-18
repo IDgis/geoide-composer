@@ -105,8 +105,13 @@ SimpleSchema.featureType = new SimpleSchema ({
     	label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
       optional: true,
       minCount: 0,
-      maxCount: 3,
+//      maxCount: 3,
       autoform: {
+        type: function() {
+          if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+            return "hidden";
+          }
+        },
         maxCount: function() {
           if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
             return 0;
