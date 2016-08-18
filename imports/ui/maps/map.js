@@ -227,6 +227,7 @@ $('.maptree').jstree;
 
 fillLayerSelect = function() {
   var layers = Layers.find({}, {
+    sort:[["label", "asc"]],
     fields : {
       label : 1,
       _id : 1
