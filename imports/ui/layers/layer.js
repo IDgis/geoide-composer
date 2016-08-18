@@ -194,6 +194,11 @@ Template.layer.events({
             for (var i = 0; i < len ; i++) {
               attrSelect.remove(0);
             }
+            // First element in list
+            var option = document.createElement("option");
+            option.text = function(){ return i18n('collections.firstOption'); };
+            option.value = '';
+            attrSelect.add(option); 
             // then fill options with the fields found
             $.each(lResponse.options, function(count, obj) {   
               var option = document.createElement("option");
@@ -295,6 +300,8 @@ Template.layer.events({
                     console.log(methodName + ' result ', lResponse);
                     // put it in options of nameInService
                     dstSelect.empty();
+                    // first element is a '(Select item:)'
+                    dstSelect.append($('<option>', { value : '' }).text(function(){ return i18n('collections.firstOption'); }));
                     $.each(lResponse, function(count, obj) {   
                       dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
                     });
