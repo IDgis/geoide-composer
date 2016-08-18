@@ -196,7 +196,7 @@ Template.layer.events({
             }
             // First element in list
             var option = document.createElement("option");
-            option.text = function(){ return i18n('collections.firstOption'); };
+            option.text = i18n('collections.firstOption');
             option.value = '';
             attrSelect.add(option); 
             // then fill options with the fields found
