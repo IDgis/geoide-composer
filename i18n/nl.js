@@ -1,7 +1,7 @@
 i18n.map('nl', {
   // GUI
   main : {
-    title : 'Geoide Admin',
+    title : 'Geoide Composer',
     menu  : {
       home: 'Home',
       services: 'Services',
