@@ -247,6 +247,7 @@ i18n.map('nl', {
   
 //Collections
 	collections : {
+	  firstOption: '(Selecteer)',
     services : {
       name : {
         label : 'Naam',

@@ -27,7 +27,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
-      options:  [], 
+      options:  [],
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
@@ -88,6 +88,7 @@ SimpleSchema.featureType = new SimpleSchema ({
           });
           return servoptions;
         },
+        firstOption: function(){ return i18n('collections.firstOption'); },
         "title": function(){ return i18n ('tooltips.maps.autoform.fields.featureType.service'); },
     },
 	},
@@ -97,6 +98,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options:  [],
+      firstOption: function(){ return i18n('collections.firstOption'); },
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.featureType.nameInWfsService'); },
     },
 	},
@@ -148,6 +150,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
           });
           return servoptions;
         },
+        firstOption: function(){ return i18n('collections.firstOption'); },
         "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.service'); },
     },
   },
@@ -157,6 +160,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
       options:  [],    
+      firstOption: function(){ return i18n('collections.firstOption'); },
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.nameInService'); },
     },
   }, 
