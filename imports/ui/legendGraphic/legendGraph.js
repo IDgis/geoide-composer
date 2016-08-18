@@ -32,6 +32,14 @@ Template.legendGraphTemplate.events ({
   },
 });
   
+/**
+ * This is a special autoform type for legendgrahic
+ * Defined in the Layer schema:
+ *    afFieldInput: {
+ *       type: "legendGraphicType"
+ *     },
+ * This field uses its own html template
+ */
   AutoForm.addInputType("legendGraphicType", {
     template: "legendGraphTemplate",
     valueOut: function () {

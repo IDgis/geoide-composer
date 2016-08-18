@@ -22,8 +22,6 @@ Meteor.startup(function() {
 
 });
 
-
-
 Meteor.methods({
   /**
    * settings: version   
@@ -82,6 +80,9 @@ Meteor.methods({
 
 });
 
+/**
+ * Set up for upload package (used for legendGraphics)
+ */
 UploadServer.init({
   tmpDir: Meteor.call('getLegendGraphicUploadFolder') + 'tmp',
   uploadDir: Meteor.call('getLegendGraphicUploadFolder'),

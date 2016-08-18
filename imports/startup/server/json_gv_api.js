@@ -8,7 +8,9 @@ import { Maps } from '/imports/api/collections/maps.js';
 /**
  *  REST api for delivering json for Geoide-Viewer
  *  NOTE:
- *  Identifiers cannot be represented by Mongo _id's, but must be human readable.
+ *  Identifiers cannot be represented by Mongo _id's, but must be human readable,
+ *  because they are also edited in CRS2.
+ *  
  *  They are made (as) unique (as possible) in the following way:
  *  1. id of an object at the highest level is equal to its name:
  *     'id: service.name' instead of 'id: service._id'
@@ -61,8 +63,6 @@ Router.map(function () {
             }
         );
       });
-      // TODO remove this before release
-//      console.log("gvServices", EJSON.stringify(gvServices));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServices, {indent: true}));
@@ -162,8 +162,6 @@ Router.map(function () {
         });
       });
 
-      // TODO remove this before release
-//      console.log("gvLayers", EJSON.stringify(gvLayers));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvLayers, {indent: true}));
@@ -212,8 +210,6 @@ Router.map(function () {
           }
         });
       });
-      // TODO remove this before release
-//      console.log("gvServiceLayers", EJSON.stringify(gvServiceLayers));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServiceLayers, {indent: true}));
@@ -255,8 +251,6 @@ Router.map(function () {
           }
         });
       });
-      // TODO remove this before release
-//      console.log("gvFeatureTypes", EJSON.stringify(gvFeatureTypes));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvFeatureTypes, {indent: true}));
@@ -384,8 +378,6 @@ Router.map(function () {
             }
         );
       }
-      // TODO remove this before release
-//      console.log("gvMaps", EJSON.stringify(gvMaps));
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvMaps, {indent: true}));

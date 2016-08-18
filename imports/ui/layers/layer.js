@@ -104,7 +104,10 @@ Template.layer.events({
     console.log("clicked help", helpTemplate );
     Modal.show(helpTemplate);
   },
-  
+  /**
+   * Act on a change of the wms layer select list:
+   * fill legendgraphic 
+   */
   'change select[name$=".nameInService"]' : function(e){
     console.log("change on wms layer select ");
     console.log(e);
@@ -316,6 +319,7 @@ Template.layer.events({
 
 /**
  * This will be called after the form has been rendered.
+ * Update the legendgraphic.
  * The form data (in case of update) is used to fill in all the select options. 
  * Select boxes are:
  * - servicelayer 'nameInService'

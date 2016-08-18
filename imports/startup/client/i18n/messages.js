@@ -1,6 +1,7 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 // TODO make this i18n
+// i.e. get the text strings from the i18n/nl.js file
 SimpleSchema.messages({
   required: "[label] is verplicht",
   minString: "[label] moet tenminste [min] karakters bevatten",

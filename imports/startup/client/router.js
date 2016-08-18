@@ -21,6 +21,12 @@ Router.configure({
     layoutTemplate: 'main'
 });
 
+/**
+ * Main entry: home page
+ * Note: 
+ *   The name of the home page template name, is stored in the i18n file.
+ *   The home page html contains all templates for all supported languages.
+ */
 Router.route('/', function () {
   this.render(i18n ('main.home.template'));
 }, {
@@ -29,7 +35,6 @@ Router.route('/', function () {
 
 //service routes
 Router.route('/services', function () {
-  console.log("REL Meteor.absoluteUrl(): " + Meteor.absoluteUrl());
   this.render('services');
 }, {
   name: 'services.list'
