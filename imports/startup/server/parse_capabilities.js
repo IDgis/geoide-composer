@@ -297,75 +297,77 @@ Meteor.methods({
     console.log('FeatureType name:', ftName);
     var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
-    var host = serv[0].endpoint;
-    var version = serv[0].version;
-    var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-//  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
-    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    // find some common tag namespace prefixes
-    var namePrefix = '';
-    if (parseResponse['xsd:schema']){
-      namePrefix = 'xsd:';
-    } else if (parseResponse['xs:schema']){
-      namePrefix = 'xs:';
-    } else if (parseResponse['wfs:schema']){
-      namePrefix = 'wfs:';
-    } else {
-      namePrefix = '';
-    }
-    console.log('------- WFS DescribeFeatureType -------', namePrefix);
-    _.each(parseResponse,function(schema){
-      console.log('schema', schema);
-      ft.targetNamespace = schema.$.targetNamespace;
-      _.each(schema,function(nextTag){
-        console.log('nextTag', nextTag);
-        var complexType = null;
-        if (nextTag[0]){
-          // look for nextTag == element or complexType
-          if (nextTag[0][namePrefix+'complexType']){
-//            element.complexType.complexContent.extension.sequence.element 
-              complexType = nextTag[0][namePrefix+'complexType'];
-          } else if (nextTag[0][namePrefix+'complexContent']){
-//            complexType.complexContent.extension.sequence.element 
-                  complexType = nextTag;
-          }
-        }
-        if (complexType){
-          console.log('complexType', complexType); 
-          if (complexType[0]){
-            if (complexType[0][namePrefix+'complexContent']){
-              _.each(complexType[0],function(complexContent){     
-                console.log('complexContent', complexContent);
-                if (complexContent[0]){
-                  if (complexContent[0][namePrefix+'extension']){
-                    _.each(complexContent[0],function(extension){     
-                      console.log('extension', extension);
-                      if (extension[0]){
-                        if (extension[0][namePrefix+'sequence']){
-                          _.each(extension[0],function(sequence){     
-                            console.log('sequence', sequence);
-                            if (sequence[0]){
-                              if (sequence[0][namePrefix+'element']){
-                                _.each(sequence[0][namePrefix+'element'],function(ftField){     
-                                  console.log('FeatureType field: ' + ftField.$.name);
-                                  ft.options.push({name:ftField.$.name, title:ftField.$.name});
-                                });
-                              }
-                            }
-                          });
-                        }
-                      }
-                    });
-                  }
-                }
-              });
+    if (serv){
+      var host = serv[0].endpoint;
+      var version = serv[0].version;
+      var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+  //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
+      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      // find some common tag namespace prefixes
+      var namePrefix = '';
+      if (parseResponse['xsd:schema']){
+        namePrefix = 'xsd:';
+      } else if (parseResponse['xs:schema']){
+        namePrefix = 'xs:';
+      } else if (parseResponse['wfs:schema']){
+        namePrefix = 'wfs:';
+      } else {
+        namePrefix = '';
+      }
+      console.log('------- WFS DescribeFeatureType -------', namePrefix);
+      _.each(parseResponse,function(schema){
+        console.log('schema', schema);
+        ft.targetNamespace = schema.$.targetNamespace;
+        _.each(schema,function(nextTag){
+          console.log('nextTag', nextTag);
+          var complexType = null;
+          if (nextTag[0]){
+            // look for nextTag == element or complexType
+            if (nextTag[0][namePrefix+'complexType']){
+  //            element.complexType.complexContent.extension.sequence.element 
+                complexType = nextTag[0][namePrefix+'complexType'];
+            } else if (nextTag[0][namePrefix+'complexContent']){
+  //            complexType.complexContent.extension.sequence.element 
+                    complexType = nextTag;
             }
           }
-        }
+          if (complexType){
+            console.log('complexType', complexType); 
+            if (complexType[0]){
+              if (complexType[0][namePrefix+'complexContent']){
+                _.each(complexType[0],function(complexContent){     
+                  console.log('complexContent', complexContent);
+                  if (complexContent[0]){
+                    if (complexContent[0][namePrefix+'extension']){
+                      _.each(complexContent[0],function(extension){     
+                        console.log('extension', extension);
+                        if (extension[0]){
+                          if (extension[0][namePrefix+'sequence']){
+                            _.each(extension[0],function(sequence){     
+                              console.log('sequence', sequence);
+                              if (sequence[0]){
+                                if (sequence[0][namePrefix+'element']){
+                                  _.each(sequence[0][namePrefix+'element'],function(ftField){     
+                                    console.log('FeatureType field: ' + ftField.$.name);
+                                    ft.options.push({name:ftField.$.name, title:ftField.$.name});
+                                  });
+                                }
+                              }
+                            });
+                          }
+                        }
+                      });
+                    }
+                  }
+                });
+              }
+            }
+          }
+        });
       });
-    });
-    console.log('--------------------------');
-    ft.options = _.sortBy(ft.options, 'title');
+      console.log('--------------------------');
+      ft.options = _.sortBy(ft.options, 'title');
+    }
     return ft;
   },
   
@@ -376,87 +378,91 @@ Meteor.methods({
     console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
     var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
-    var host = serv[0].endpoint;
-    var url = host;
-    var version = serv[0].version;
-    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
-    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    var glgTag, capRequest;
-    
-    console.log('------- Capability -------');
-    switch(version) {
-    case '1.3.0':
-      // version 1.3.0
-      console.log(parseResponse.WMS_Capabilities.Capability);
-      // request
-      capRequest = parseResponse.WMS_Capabilities.Capability[0].Request;
-      glgTag = 'sld:GetLegendGraphic';
-      break;
-    case '1.1.1':
-    default:
-      // version 1.1.1
-      console.log(parseResponse.WMT_MS_Capabilities.Capability);
-      // request
-      capRequest = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
-      glgTag = 'GetLegendGraphic';
-      break;
+    if (serv){
+      var host = serv[0].endpoint;
+      var url = host;
+      var version = serv[0].version;
+      var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+  //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
+      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      var glgTag, capRequest;
+      
+      console.log('------- Capability -------');
+      switch(version) {
+      case '1.3.0':
+        // version 1.3.0
+        console.log(parseResponse.WMS_Capabilities.Capability);
+        // request
+        capRequest = parseResponse.WMS_Capabilities.Capability[0].Request;
+        glgTag = 'sld:GetLegendGraphic';
+        break;
+      case '1.1.1':
+      default:
+        // version 1.1.1
+        console.log(parseResponse.WMT_MS_Capabilities.Capability);
+        // request
+        capRequest = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+        glgTag = 'GetLegendGraphic';
+        break;
+      }
+  
+      // main layer
+      console.log('******* WMS requests: *******');
+      var selectedFormat;
+      _.each(capRequest,function(mainRequest){
+          console.log(mainRequest);
+          var lg = mainRequest[glgTag];
+          console.log(lg);
+          var pngFormat, jpgFormat, gifFormat;
+          var formats = lg[0].Format; 
+          _.each(formats,function(format){
+            console.log(format);
+            if (format === 'image/png'){
+              pngFormat = format;            
+            } 
+            if (format === 'image/jpg' | format === 'image/jpeg'){
+              jpgFormat = format;
+            }
+            if (format === 'image/gif'){
+              gifFormat = format;
+            }
+          })
+          // select a preferred format (png, then jpg, then gif)
+          if (pngFormat){
+            selectedFormat = pngFormat;
+          } else if (jpgFormat){
+            selectedFormat = jpgFormat;
+          } else if (gifFormat){
+            selectedFormat = gifFormat;
+          } else {
+            // no preferable formats found: selectedFormat = undefined
+          }
+          /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
+           * because in the capabilities it can be listed as 'http://localhost:8081/...'
+           */ 
+          if (url.lastIndexOf('?') < 0){
+            url = url + '?';
+          }
+          if (selectedFormat){
+            url = url + 'request=GetLegendGraphic&service=WMS'
+              + '&layer=' + layer 
+              + '&format=' + selectedFormat
+              // tbv Mapserver:
+              // (wordt genegeerd door deegree en geoserver)
+              + '&version=' + version
+              + '&sld_version=1.1.0';          
+          } else {
+            url = null;
+          }
+          console.log('**************************');
+      });
+      console.log('WMS getLegendGraphic url: ',url);
+      var imgResponse = Meteor.call('getImage', url, {});
+      console.log('imgResponse', imgResponse);
+      return url;
+    } else {
+      return '';
     }
-
-    // main layer
-    console.log('******* WMS requests: *******');
-    var selectedFormat;
-    _.each(capRequest,function(mainRequest){
-        console.log(mainRequest);
-        var lg = mainRequest[glgTag];
-        console.log(lg);
-        var pngFormat, jpgFormat, gifFormat;
-        var formats = lg[0].Format; 
-        _.each(formats,function(format){
-          console.log(format);
-          if (format === 'image/png'){
-            pngFormat = format;            
-          } 
-          if (format === 'image/jpg' | format === 'image/jpeg'){
-            jpgFormat = format;
-          }
-          if (format === 'image/gif'){
-            gifFormat = format;
-          }
-        })
-        // select a preferred format (png, then jpg, then gif)
-        if (pngFormat){
-          selectedFormat = pngFormat;
-        } else if (jpgFormat){
-          selectedFormat = jpgFormat;
-        } else if (gifFormat){
-          selectedFormat = gifFormat;
-        } else {
-          // no preferable formats found: selectedFormat = undefined
-        }
-        /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
-         * because in the capabilities it can be listed as 'http://localhost:8081/...'
-         */ 
-        if (url.lastIndexOf('?') < 0){
-          url = url + '?';
-        }
-        if (selectedFormat){
-          url = url + 'request=GetLegendGraphic&service=WMS'
-            + '&layer=' + layer 
-            + '&format=' + selectedFormat
-            // tbv Mapserver:
-            // (wordt genegeerd door deegree en geoserver)
-            + '&version=' + version
-            + '&sld_version=1.1.0';          
-        } else {
-          url = null;
-        }
-        console.log('**************************');
-    });
-    console.log('WMS getLegendGraphic url: ',url);
-    var imgResponse = Meteor.call('getImage', url, {});
-    console.log('imgResponse', imgResponse);
-    return url;
   },
   
   /**
