@@ -15,7 +15,7 @@ import '../../ui/layers/layer.js';
 import '../../ui/maps/map.js';
 import '../../ui/maps/maps.js';
 
-import '../../ui/home/home.html';
+import '../../ui/i18n/home/home.html';
 
 Router.configure({
     layoutTemplate: 'main'

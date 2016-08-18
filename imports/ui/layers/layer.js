@@ -8,7 +8,7 @@ import { Services } from '/imports/api/collections/services.js';
 import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
 
 import './layer.html';
-import './help.html';
+import '../i18n/layers/help.html';
 
 Template.layer.helpers({
   /**

@@ -5,7 +5,7 @@ import { Session } from 'meteor/session';
 import { Services,  ServiceSchema } from '/imports/api/collections/services.js';
 
 import './service.html';
-import './help.html';
+import '../i18n/services/help.html';
 
 Template.service.helpers({
   /**
