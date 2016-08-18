@@ -6,7 +6,7 @@ import { Maps, MapSchema } from '/imports/api/collections/maps.js';
 import { Layers } from '/imports/api/collections/layers.js';
 
 import'./map.html';
-import'./help.html';
+import'../i18n/maps/help.html';
 
 Template.map.helpers({
   /**

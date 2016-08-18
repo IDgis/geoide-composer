@@ -5,12 +5,15 @@ import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
+/**
+ * Helper routines to show the collections as json
+ */
 Router.map(function () {
   this.route('jsonapi-services', {
     path: '/jsonapi-services',
     where: 'server',
     action: function () {
-      var json = Services.find().fetch(); // what ever data you want to return
+      var json = Services.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
@@ -19,7 +22,7 @@ Router.map(function () {
     path: '/jsonapi-layers',
     where: 'server',
     action: function () {
-      var json = Layers.find().fetch(); // what ever data you want to return
+      var json = Layers.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
@@ -28,7 +31,7 @@ Router.map(function () {
     path: '/jsonapi-maps',
     where: 'server',
     action: function () {
-      var json = Maps.find().fetch(); // what ever data you want to return
+      var json = Maps.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }

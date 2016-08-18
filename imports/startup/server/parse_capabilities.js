@@ -6,6 +6,11 @@ import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
+/**
+ * All kinds of handy routines, mainly wms/wfs parsing.
+ * Could be split in several utility files.  
+ * 
+ */
 
 Meteor.methods({
   /**
@@ -65,6 +70,13 @@ Meteor.methods({
    * 'explicitArray:true' : parsing code can behave the same whether
    * an object contains one or more subobjects of some kind. 
    * 'stripPrefix: true' : strip prefixes (except xmlns)
+   * 
+   * Note:
+   *  There is one option (xmlns=true) that saves the tagname 
+   *  without prefix in the js object. 
+   *  This means code restructuring.
+   *  But the result will a lot cleaner and robust.  
+   * 
    */
   parseXml : function(xml){
     return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
