@@ -48,6 +48,17 @@ Meteor.methods({
   },
 
   /**
+   * settings: folder where uploaded legendGraphics are stored   
+   */
+  getLegendGraphicUploadFolder : function(){
+    if (Meteor.settings){
+      return Meteor.settings.legendGraphic.uploadFolder;
+    } else {
+      return "/tmp/.uploads/";
+    }
+  },
+
+  /**
    * initiate geoide-viewer configuration reload by calling http get on url
    */
   triggerViewerReload : function (){
@@ -72,15 +83,15 @@ Meteor.methods({
 });
 
 UploadServer.init({
-  tmpDir: '/tmp/uploads/tmp',
-  uploadDir: '/tmp/uploads/',
+  tmpDir: Meteor.call('getLegendGraphicUploadFolder') + 'tmp',
+  uploadDir: Meteor.call('getLegendGraphicUploadFolder'),
   checkCreateDirectories: true, //create the directories for you
   overwrite: true,
   finished(fileInfo, formFields) {
     console.log('fileInfo', fileInfo);
     console.log('formFields', formFields);
   },
-//  uploadUrl: '/GetLegendGraphic/',
+//  uploadUrl: '/GetLegendGraphic/', // ## must be 'upload' ##
 });
 
 /**
