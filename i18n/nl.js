@@ -128,9 +128,10 @@ i18n.map('nl', {
     main: {      
       login: "Log in",
       menu: {
+    	home: "Keer terug naar de start pagina", 
         services: "Maak en beheer services",
         layers: "Maak en beheer lagen",
-        kaart: "Maak en beheer kaarten"
+        maps: "Maak en beheer kaarten"
       },
       
     },
