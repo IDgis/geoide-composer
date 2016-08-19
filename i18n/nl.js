@@ -156,7 +156,7 @@ i18n.map('nl', {
           },
           serviceLayers: {
             main: "Service lagen",
-            label: "Geef een omschrijving",
+            label: "Geef een omschrijving (optioneel)",
             service: "Kies de WMS of TMS service",
             nameInService: "Kies de service laag",
             featureType: "Het featuretype bij deze laag",
