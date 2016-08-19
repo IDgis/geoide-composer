@@ -130,7 +130,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   label: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.label.label'); },
-    optional: false,
+    optional: true,
     autoform: {
       "class": 'namelabel',
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.serviceLayers.label'); },
