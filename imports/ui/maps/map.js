@@ -64,7 +64,7 @@ Template.map.events({
     if (!sel) {
       return false;
     }
-
+    
     var layerLabel = $('#layerselect option:selected').text();
     var layerId = $('#layerselect option:selected').val();
     sel = ref.create_node(sel, {
@@ -175,11 +175,6 @@ Template.map.rendered = function() {
       }
     };
   }
-  if (map.children) {
-    styleChildren(map.children);
-  }
-
-  console.log(map);
 
   $('.maptree').jstree({
     core : {
@@ -218,12 +213,12 @@ Template.map.rendered = function() {
 
   })
 
-  .on("loaded.jstree", function() {
+  
+  .on("loaded.jstree", function() {   
     $('.maptree').jstree('open_all');
   });
 }
 
-$('.maptree').jstree;
 
 fillLayerSelect = function() {
   var layers = Layers.find({}, {
@@ -240,70 +235,40 @@ fillLayerSelect = function() {
   });
 };
 
-styleChildren = function(children) {
-  children.forEach(function(child) {
-    if (child.type === "servicelayer") {
-      child.a_attr = {
-        class : "no_checkbox"
-      };
-    }
-    ;
-    if (child.children) {
-      styleChildren(child.children);
-    }
-    ;
-  });
-};
+
 
 /**
  * when the autoform is succesfully submitted, then go to the map list
  */
 AutoForm.addHooks('mapForm', {
-  /*
-   * after update or insert, update the map with the tree component
-   * and set the tree.text to the name of the map
-   */
-  after: {
-    update: function(error, result) {
-      console.log('after update --- save tree ---');
-      Maps.update({
-        _id : this.docId
-      }, {
-        $set : {
-          text: this.updateDoc.text,
-          children : $.jstree.reference('.tree').get_json('#')[0].children
-        }
-      }, function(error, nr) {
-        console.log("update tree error: " + error + ", #" + nr);
-      });
-    },
-    insert: function(error, result) {
-      console.log('after insert --- save tree ---');
-      Maps.update({
-        _id : this.docId
-      }, {
-        $set : {
-          text: this.insertDoc.text,
-          children : $.jstree.reference('.tree').get_json('#')[0].children
-        }
-      }, function(error, nr) {
-        console.log("insert tree error: " + error + ", #" + nr);
-      });
-      console.log(result);
-    }
-  },
 
-  onSuccess : function(formType, result) {
-    console.log("submit map autoform, goto list");
-    Meteor.call('triggerViewerReload',
-        function(lError, lResponse) {
-          if (lError) {
-            console.log('triggerViewerReload Error ', lError);
-          }
-    });
-    Router.go('maps.list');
-  },
-  onError : function(formType, error) {
-    console.log("map autoform error = " + error);
-  }
+	before: {
+		//Voeg de children uit de jstree toe aan het doc object, voordat deze wordt 
+		//weggeschreven naar de database
+		update: function(doc) {
+			doc.$set.children = $.jstree.reference('.tree').get_json('#')[0].children;
+			return doc;
+		},	
+		
+		insert: function(doc) {
+			doc.children = $.jstree.reference('.tree').get_json('#')[0].children;
+			return doc; 
+		}	
+	},
+	
+	onSuccess : function(formType, result) {
+	  //Stuur een refresh request naar de viewer en ga naar de list 
+	  console.log("submit map autoform, goto list");
+	    Meteor.call('triggerViewerReload',
+	        function(lError, lResponse) {
+	          if (lError) {
+	            console.log('triggerViewerReload Error ', lError);
+	          }
+	    });
+	    Router.go('maps.list');
+	},
+	
+	onError : function(formType, error) {
+		console.log("map autoform error = " + error);
+	}
 });
