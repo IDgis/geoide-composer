@@ -102,7 +102,7 @@ Template.map.events({
 
   'click #renamenode' : function() {
     var ref = $.jstree.reference('.maptree'), sel = ref.get_selected();
-    if (!sel.length || ref.get_type(sel) === "map") {
+    if (!sel.length || ref.get_type(sel) === "map" || ref.get_type(sel) === "layer") {
       return false;
     }
     sel = sel[0];

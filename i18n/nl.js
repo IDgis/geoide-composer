@@ -92,7 +92,7 @@
       layerselect: 'Kies een laag',
       createlayer: 'Nieuwe laag +',
       creategroup: 'Nieuwe groep +',
-      renamenode: 'Hernoem laag/groep',
+      renamenode: 'Hernoem groep',
       removenode: 'Verwijder laag/groep X',
     },
     tree: {
