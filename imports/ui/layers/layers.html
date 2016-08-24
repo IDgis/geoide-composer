@@ -30,7 +30,6 @@
 			<td>{{i18n 'layers.list.table.name'}}</td>
 			<td>{{i18n 'layers.list.table.label'}}</td>
 			<td>{{i18n 'layers.list.table.type'}}</td>
-			<td>{{i18n 'layers.list.table.visible'}}</td>
 			<td style="width: 70px"></td>
 		</tr>
 	</thead>
@@ -40,10 +39,6 @@
 			<td>{{name}}</td>
 			<td>{{label}}</td>
 			<td>{{type}}</td>
-			<td>{{#if properties.initial_visible}} {{i18n 'yes'}} 
-				{{else}}
-				{{i18n 'no'}} {{/if}} 
-			</td>
 			<td style='white-space: nowrap'>
 			{{#if currentUser}}
 				<button class="btn btn-default edit-layer" title="{{i18n 'tooltips.layers.list.button.edit'}}">

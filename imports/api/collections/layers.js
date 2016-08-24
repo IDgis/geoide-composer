@@ -190,14 +190,6 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
 });
 
 SimpleSchema.layerProperties = new SimpleSchema ({
-  initial_visible: {
-    type: Boolean,
-    defaultValue: false,
-    label: function(){ return i18n('collections.layers.properties.initialVisible.label'); },
-    autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialVisible'); },
-    },
-  },
   applayer: {
     type: Boolean,
     defaultValue: false,
