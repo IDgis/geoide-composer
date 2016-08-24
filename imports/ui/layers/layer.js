@@ -131,6 +131,8 @@ Template.layer.events({
     var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
     var lgImg = $('img[name="' + lgImgName + '"] ');
     
+    console.log(serviceId);
+    console.log(lyrName);
     // retrieve url for GetLegendGraphic
     // and put it in hidden field and image
     Meteor.call('getLegendGraphicUrl',

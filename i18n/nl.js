@@ -150,7 +150,6 @@
           type: "Het type van deze laag, bij type=sql moet de initiële query worden ingevuld.",
           properties: {
             main: "Eigenschappen van de laag",
-            appLayer: "Is de laag een CRS2 laag",
             initialQuery: "De sql query voor deze laag indien van type 'sql'",
           },
           serviceLayers: {
@@ -281,9 +280,6 @@
 			properties : {
 				initialQuery : {
 					label : 'Initiële query',
-				},
-				applayer : {
-					label : 'CRS2 laag',
 				},
 			},
 			serviceLayer : {

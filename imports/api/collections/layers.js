@@ -190,25 +190,6 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
 });
 
 SimpleSchema.layerProperties = new SimpleSchema ({
-  applayer: {
-    type: Boolean,
-    defaultValue: false,
-    label: function(){ return i18n('collections.layers.properties.applayer.label'); },
-    autoform: {
-      /*
-       * 'disabled' works reactive i.e. after the form is rendered
-       * whereas optional, omit, hidden do not 
-       */
-      disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
-          return true;
-        } else {
-          return false;
-        }
-      },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.appLayer'); },
-    },
-  },
   initial_query: {
     type: String,
      label: function(){ return i18n('collections.layers.properties.initialQuery.label'); },
