@@ -190,7 +190,7 @@ Router.map(function () {
             gvServiceLayers.serviceLayers.push(
                 {
                   id: layer.name + '.' + serviceLayer.nameInService, 
-                  label: serviceLayer.label,
+                  label: (serviceLayer.label ? serviceLayer.label : ""),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
                   legendGraphicUrl: serviceLayer.legendGraphic,
@@ -242,7 +242,7 @@ Router.map(function () {
               gvFeatureTypes.featureTypes.push(
                   {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
-                    label: ft.label,
+                    label: (ft.label.label ? ft.label.label : ""),
                     name: ft.nameInWfsService,
                     service: aService.name, //ft.service,
                   }
