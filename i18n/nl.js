@@ -1,4 +1,4 @@
-i18n.map('nl', {
+﻿i18n.map('nl', {
   // GUI
   main : {
     title : 'Geoide Composer',
@@ -32,7 +32,7 @@ i18n.map('nl', {
       template: "home-nl",
     },
   },
-  
+
   services:{
     list: {
       header: 'Services',
@@ -53,7 +53,7 @@ i18n.map('nl', {
       template: "help-services-nl",
     },
   },
-  
+
   layers: {
     list: {
       header: 'Lagen',
@@ -74,7 +74,7 @@ i18n.map('nl', {
       template: "help-layers-nl",
     },
   },
-  
+
   maps: {
     list: {
       header: 'Kaarten',
@@ -120,20 +120,20 @@ i18n.map('nl', {
     autoform: {
       header:'Gebruiker configuratie',
     },
-    
+
   },
-  
+
   //Tooltips
   tooltips:{
-    main: {      
+    main: {
       login: "Log in",
       menu: {
-    	home: "Keer terug naar de start pagina", 
+    	home: "Keer terug naar de start pagina",
         services: "Maak en beheer services",
         layers: "Maak en beheer lagen",
         maps: "Maak en beheer kaarten"
       },
-      
+
     },
     layers:{
       list:{
@@ -145,34 +145,33 @@ i18n.map('nl', {
       },
       autoform: {
         fields: {
-          name: "Geef een (unieke) naam aan de service",
-          label: "Geef een omschrijving van de service (wordt getoond in de viewer)",
-          type: "Het type van deze laag",
+          name: "Geef een (unieke) naam aan de laag",
+          label: "Geef de titel van de laag waarmee deze getoond moet worden in de viewer",
+          type: "Het type van deze laag, bij type=sql moet de initiële query worden ingevuld.",
           properties: {
             main: "Eigenschappen van de laag",
-            initialVisible: "Is de laag initieel (on)zichtbaar",
             appLayer: "Is de laag een CRS2 laag",
-            initialQuery: "De sql query voor deze laag indien van type 'cosurvey-sql'",
+            initialQuery: "De sql query voor deze laag indien van type 'sql'",
           },
           serviceLayers: {
-            main: "Service lagen",
-            label: "Geef een omschrijving (optioneel)",
+            main: "Servicelagen",
+            label: "Geef de titel waarmee de service-laag getoond moet worden in de viewer (optioneel)",
             service: "Kies de WMS of TMS service",
-            nameInService: "Kies de service laag",
+            nameInService: "Kies laag van de WMS / TMS",
             featureType: "Het featuretype bij deze laag",
             legendGraphic: "De legenda bij deze laag, kan worden vervangen door een eigen legenda afbeelding",
           },
           featureType: {
-            label: "Geef een omschrijving",
+            label: "Geef de titel van het featuretype",
             service: "Kies de WFS service",
-            nameInWfsService: "Kies het service feature type",
-            searchTemplates: "Zoekingangen voor velden van het feature type",
-            
+            nameInWfsService: "Kies het featuretype van de WFS",
+            searchTemplates: "Zoekingangen voor velden van het featuretype",
+
           },
           searchTemplate: {
-            label: "Geef een omschrijving",
-            attributeLocalname: "Veld van het feature type",
-            attributeNamespace: "Namespace van het feature type (wordt automatisch gevuld)",
+            label: "Geef de titel van de zoekingang waarmee deze getond moet worden in de viewer",
+            attributeLocalname: "Veld van het featuretype",
+            attributeNamespace: "Namespace van het featuretype (wordt automatisch gevuld)",
           }
         },
         button: {
@@ -192,10 +191,10 @@ i18n.map('nl', {
       autoform: {
         fields: {
           name: "Geef een (unieke) naam aan de service",
-          label: "Geef een omschrijving van de service (wordt getoond in de viewer)",
+          label: "Geef de titel van de service waarmee deze getoond moet worden in de viewer",
           endpoint: "Geef de basis url van de service, afgesloten met een '?'",
           type: "Kies het service type",
-          version: "Kies de versie van de service",
+          version: "Kies de versie van de service, controleer eventueel of de gekozen versie door de service wordt ondersteund.",
         },
         button: {
           save: 'Opslaan',
@@ -214,10 +213,10 @@ i18n.map('nl', {
       autoform: {
         fields: {
           name: "Geef een (unieke) naam aan de kaart",
-          label: "Geef een omschrijving  (wordt getoond in de viewer)",
+          label: "Geef de titel waarmee de kaart in de viewer getoond moet worden.",
           initial_visible : "Maak een laag of groep initieel (on)zichtbaar ",
           initial_extent: {
-            label: "Bounding box van de kaart",
+            label: "Omgrenzende rechthoek / extent van de kaart in RD coördinaten",
             minx: "minimum waarde van x",
             miny: "minimum waarde van y",
             maxx: "maximum waarde van x",
@@ -245,7 +244,7 @@ i18n.map('nl', {
       },
     },
   },
-  
+
 //Collections
 	collections : {
 	  firstOption: '(Selecteer)',
@@ -280,10 +279,6 @@ i18n.map('nl', {
 				label : 'Servicelagen',
 			},
 			properties : {
-				label : 'Eigenschappen',
-				initialVisible : {
-					label : 'Initiëel zichtbaar',
-				},
 				initialQuery : {
 					label : 'Initiële query',
 				},
@@ -401,5 +396,5 @@ i18n.map('nl', {
   },
   yes: 'Ja',
   no: 'Nee',
-  
+
 });
