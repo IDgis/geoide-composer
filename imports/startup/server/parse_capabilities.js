@@ -383,8 +383,11 @@ Meteor.methods({
     return ft;
   },
   
+  
+ 
+  
   /**
-   * GetLegendGraphic from a WMS
+   * GetLegendGraphic from a WMS LAYER
    */
   getLegendGraphicUrl: function(serviceId, layer){
     console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
@@ -395,87 +398,49 @@ Meteor.methods({
       var url = host;
       var version = serv[0].version;
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-  //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
       var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      var glgTag, capRequest;
       
       console.log('------- Capability -------');
-      switch(version) {
-      case '1.3.0':
-        // version 1.3.0
-        console.log(parseResponse.WMS_Capabilities.Capability);
-        // request
-        capRequest = parseResponse.WMS_Capabilities.Capability[0].Request;
-        glgTag = 'sld:GetLegendGraphic';
-        break;
-      case '1.1.1':
-      default:
-        // version 1.1.1
-        console.log(parseResponse.WMT_MS_Capabilities.Capability);
-        // request
-        capRequest = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
-        glgTag = 'GetLegendGraphic';
-        break;
+      var capKey = Object.keys(parseResponse);
+      var wmsCapObject = parseResponse[capKey];
+      if(!wmsCapObject.Capability) {
+    	  return '';
       }
-  
-      // main layer
-      console.log('******* WMS requests: *******');
-      var selectedFormat;
-      _.each(capRequest,function(mainRequest){
-          console.log(mainRequest);
-          var lg = mainRequest[glgTag];
-          console.log(lg);
-          var pngFormat, jpgFormat, gifFormat;
-          var formats = lg[0].Format; 
-          _.each(formats,function(format){
-            console.log(format);
-            if (format === 'image/png'){
-              pngFormat = format;            
-            } 
-            if (format === 'image/jpg' | format === 'image/jpeg'){
-              jpgFormat = format;
-            }
-            if (format === 'image/gif'){
-              gifFormat = format;
-            }
-          })
-          // select a preferred format (png, then jpg, then gif)
-          if (pngFormat){
-            selectedFormat = pngFormat;
-          } else if (jpgFormat){
-            selectedFormat = jpgFormat;
-          } else if (gifFormat){
-            selectedFormat = gifFormat;
-          } else {
-            // no preferable formats found: selectedFormat = undefined
-          }
-          /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
-           * because in the capabilities it can be listed as 'http://localhost:8081/...'
-           */ 
-          if (url.lastIndexOf('?') < 0){
-            url = url + '?';
-          }
-          if (selectedFormat){
-            url = url + 'request=GetLegendGraphic&service=WMS'
-              + '&layer=' + layer 
-              + '&format=' + selectedFormat
-              // tbv Mapserver:
-              // (wordt genegeerd door deegree en geoserver)
-              + '&version=' + version
-              + '&sld_version=1.1.0';          
-          } else {
-            url = null;
-          }
-          console.log('**************************');
-      });
-      console.log('WMS getLegendGraphic url: ',url);
-      var imgResponse = Meteor.call('getImage', url, {});
-      console.log('imgResponse', imgResponse);
-      return url;
-    } else {
+      var capObject = wmsCapObject.Capability[0];      
+      var layersObject = capObject.Layer;
+      var capLayer = Meteor.call('getLayerByName',layersObject, layer, 1);
+      if(capLayer) {
+	      if(capLayer.Style) {
+	    	  if(!capLayer.Style) {
+	    		  return '';
+	    	  }
+	    	  if(capLayer.Style[0].LegendURL) {
+	    		  if(!capLayer.Style[0].LegendURL[0].OnlineResource[0]) { 
+	    			  return '';
+	    		  }
+	    		  return capLayer.Style[0].LegendURL[0].OnlineResource[0].$['xlink:href'];
+	    	  }
+	      }
+      }
       return '';
     }
   },
+  
+  getLayerByName: function(layers,name, n){
+	for(var i = 0; i < layers.length; i++){
+		if (layers[i].Layer) {
+			return Meteor.call('getLayerByName', layers[i].Layer, name, n);
+		}	
+		else if(layers[i].Name) {
+			if (layers[i].Name[0] === name ) {
+				return layers[i];
+				break;
+			}	
+		} 
+	};
+	return null;
+  },
+  
   
   /**
    * Get service from collection
