@@ -176,6 +176,7 @@
         button: {
           save: 'Opslaan',
           cancel:'Annuleren',
+          control:'Controleren',
         },
       },
     },
@@ -198,6 +199,7 @@
         button: {
           save: 'Opslaan',
           cancel:'Annuleren',
+          control: 'Opvragen capabilities',
         },
       },
     },
@@ -389,6 +391,7 @@
     help: "Help",
     close: "Sluiten",
     remove: "Verwijder",
+    control: "Controleren",
   },
   yes: 'Ja',
   no: 'Nee',
