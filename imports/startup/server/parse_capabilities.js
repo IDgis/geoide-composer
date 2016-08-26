@@ -408,7 +408,7 @@ Meteor.methods({
       }
       var capObject = wmsCapObject.Capability[0];      
       var layersObject = capObject.Layer;
-      var capLayer = Meteor.call('getLayerByName',layersObject, layer, 1);
+      var capLayer = Meteor.call('getLayerByName',layersObject, layer);
       if(capLayer) {
 	      if(capLayer.Style) {
 	    	  if(!capLayer.Style) {
@@ -426,15 +426,14 @@ Meteor.methods({
     }
   },
   
-  getLayerByName: function(layers,name, n){
+  getLayerByName: function(layers, name){
 	for(var i = 0; i < layers.length; i++){
 		if (layers[i].Layer) {
-			return Meteor.call('getLayerByName', layers[i].Layer, name, n);
+			return Meteor.call('getLayerByName', layers[i].Layer, name);
 		}	
 		else if(layers[i].Name) {
 			if (layers[i].Name[0] === name ) {
 				return layers[i];
-				break;
 			}	
 		} 
 	};
