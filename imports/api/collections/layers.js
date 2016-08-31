@@ -245,6 +245,7 @@ export const LayerSchema = new SimpleSchema({
   properties:  {
     type: SimpleSchema.layerProperties,
     label: function(){ return i18n('collections.layers.properties.label'); },
+    optional: true,
     autoform: {
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); },
     },
