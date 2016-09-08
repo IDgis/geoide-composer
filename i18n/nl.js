@@ -90,15 +90,12 @@
     autoform: {
       header: 'Kaart configuratie',
       layerselect: 'Kies een laag',
-      createlayer: 'Nieuwe laag +',
+      createlayer: 'Laag toeveoegen +',
       creategroup: 'Nieuwe groep +',
       renamenode: 'Hernoem groep',
       removenode: 'Verwijder laag/groep X',
     },
     tree: {
-      search : {
-        placeholder : 'Zoek'
-      },
       label: 'Kaart'
     },
     help:{
@@ -231,8 +228,8 @@
       },
       jstree: {
         main: "Verander volgorde door slepen en neerzetten",
+        check: "Verander de initiële zichtbaarheid van een laag in de viewer",
         select: "Selecteer een laag",
-        search: "Zoek op (groeps)laag naam",
         button: {
           save: 'Opslaan',
           cancel:'Annuleren'
