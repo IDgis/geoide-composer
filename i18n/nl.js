@@ -38,7 +38,6 @@
       header: 'Services',
       table: {
         name: 'Naam',
-        label: 'Label',
         type: 'Type',
         version: 'Versie',
       },
@@ -151,7 +150,6 @@
           },
           serviceLayers: {
             main: "Servicelagen",
-            label: "Geef de titel waarmee de service-laag getoond moet worden in de viewer (optioneel)",
             service: "Kies de WMS of TMS service",
             nameInService: "Kies laag van de WMS / TMS",
             featureType: "Het featuretype bij deze laag",
@@ -188,7 +186,6 @@
       autoform: {
         fields: {
           name: "Geef een (unieke) naam aan de service",
-          label: "Geef de titel van de service waarmee deze getoond moet worden in de viewer",
           endpoint: "Geef de basis url van de service, afgesloten met een '?'",
           type: "Kies het service type",
           version: "Kies de versie van de service, controleer eventueel of de gekozen versie door de service wordt ondersteund.",
@@ -249,9 +246,6 @@
     services : {
       name : {
         label : 'Naam',
-      },
-      label : {
-        label : 'Label',
       },
       endpoint : {
         label : 'Url',

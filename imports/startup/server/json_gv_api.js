@@ -54,7 +54,6 @@ Router.map(function () {
             {
 //              id: service._id, 
               id: service.name, 
-              label: service.label,
               identification: {
                 serviceType: service.type,
                 serviceEndpoint: service.endpoint,
