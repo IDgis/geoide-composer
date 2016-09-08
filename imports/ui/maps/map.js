@@ -86,7 +86,8 @@ Template.map.events({
 	},
 
 	'click #createlayer' : function() {
-		var ref = $.jstree.reference('.maptree'), sel = ref
+
+		var ref = $.jstree.reference('#maptree'), sel = ref
 				.get_top_selected();
 
 		if (!sel) {
@@ -95,22 +96,23 @@ Template.map.events({
 
 		var layerLabel = $('#layerselect option:selected').text();
 		var layerId = $('#layerselect option:selected').val();
-		sel = ref.create_node(sel, {
+		ref.create_node(sel, {
 			"type" : "layer",
 			"text" : layerLabel,
 			"data" : {
 				"layerid" : layerId
 			},
 			"state" : {
-				checked : true
+				"checked" : true
 			}
 		});
-
+		
+		$('#maptree').jstree('open_node',sel);
 		fillLayerSelect();
 	},
 
 	'click #creategroup' : function() {
-		var ref = $.jstree.reference('.maptree'), sel = ref
+		var ref = $.jstree.reference('#maptree'), sel = ref
 				.get_top_selected();
 
 		if (!sel) {
@@ -119,16 +121,17 @@ Template.map.events({
 		sel = ref.create_node(sel, {
 			"type" : "group",
 			"state" : {
-				checked : true
+				"checked" : true
 			}
 		});
 		if (sel) {
 			ref.edit(sel);
 		}
+		
 	},
 
-	'click #renamenode' : function() {
-		var ref = $.jstree.reference('.maptree'), sel = ref
+	'click #renamenode' : function() {	
+		var ref = $.jstree.reference('#maptree'), sel = ref
 				.get_selected();
 		if (!sel.length || ref.get_type(sel) === "map"
 				|| ref.get_type(sel) === "layer") {
@@ -139,7 +142,7 @@ Template.map.events({
 	},
 
 	'click #removenode' : function() {
-		var ref = $.jstree.reference('.maptree'), sel = ref
+		var ref = $.jstree.reference('#maptree'), sel = ref
 				.get_selected();
 		console.log('removenode ' + ref);
 		if (!sel.length || ref.get_type(sel) === "map") {
@@ -177,19 +180,17 @@ Template.map.events({
 			}
 		}
 		ref.delete_node(sel);
-
 		fillLayerSelect();
 
 	},
 
 	'keyup #search-tree' : function() {
 		var v = $('#search-tree').val();
-		$.jstree.reference('.maptree').search(v);
+		$.jstree.reference('#maptree').search(v);
 	}
 });
 
 Template.map.rendered = function() {
-
 	var mapId = Session.get("selectedMapId");
 	var map;
 	if (mapId) {
@@ -197,8 +198,11 @@ Template.map.rendered = function() {
 			_id : mapId
 		}).fetch()[0];
 		map.a_attr = {
-			class : "no_checkbox"
+			class : "no_checkbox",
 		};
+		map.state = {
+			"selected": true,
+		}
 	} else {
 		map = {
 			text : 'Nieuwe kaart',
@@ -206,13 +210,16 @@ Template.map.rendered = function() {
 			'children' : [],
 			'a_attr' : {
 				class : "no_checkbox"
+			},
+			state: {
+				"selected": true, 
 			}
 		};
 	}
-
-	$('.maptree').jstree({
-		core : {
-			data : [ map ],
+	
+	$('#maptree').jstree({
+		'core' : {
+			'data' : [ map ],
 			check_callback : true,
 		},
 		types : {
@@ -239,24 +246,28 @@ Template.map.rendered = function() {
 			}
 		},
 		checkbox : {
-			three_state : false,
-			tie_selection : false,
-			whole_node : false
+			three_state: false,
+			tie_selection: false,
+			whole_node : false,
 		},
-		plugins : [ "dnd", "search", "state", "types", "checkbox" ]
+		plugins : [ "checkbox","dnd","types"]
 
 	})
-
-	.on("loaded.jstree", function() {
-		$('.maptree').jstree('open_all');
-
+	
+	.on("loaded.jstree", function(e, data) {
+		$('#maptree').jstree('open_all');
+		$('.jstree-checkbox').attr('title', i18n('tooltips.maps.jstree.check'));
 		fillLayerSelect();
-
-	});
+	})
+	
+	.on("move_node.jstree", function(e, data) {
+		var parent = data.new_instance;
+		$('#maptree').jstree('open_node',data.parent);
+	})
+	
 }
 
 fillLayerSelect = function() {
-	console.log("filleLayerSelect");
 	var layers = Layers.find({}, {
 		sort : [ [ "label", "asc" ] ],
 		fields : {
@@ -298,10 +309,12 @@ layerInTree = function(children, layerId) {
  */
 AutoForm.addHooks('mapForm',{
 	before : {
+		
 		// Voeg de children uit de jstree toe aan het doc
 		// object, voordat deze wordt
 		// weggeschreven naar de database
 		update : function(doc) {
+			console.log($.jstree.reference('.tree').get_json('#')[0]);
 			doc.$set.children = $.jstree.reference('.tree')
 					.get_json('#')[0].children;
 			return doc;
