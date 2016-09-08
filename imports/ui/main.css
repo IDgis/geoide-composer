@@ -19,6 +19,12 @@
 /*     width: 600px !important; */
 /*     height: 40px !important; */
 }
+
+.initquery[disabled]{
+	display:none !important;
+}
+
+
 .legendgraphic {
     width: 250px !important;
 }
@@ -28,3 +34,5 @@
 .namespace {
     width: 350px !important;
 }
+
+
