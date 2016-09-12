@@ -22,7 +22,7 @@ SimpleSchema.messages({
   expectedObject: "[label] moet een object zijn",
   expectedConstructor: "[label] moet van type [type] zijn",
   regEx: [
-    {msg: "[label] geen geldige reguliere expressie"},
+    {exp: /^([a-zA-Z0-9_\-]+)$/, msg: "[label] mag alleen cijfers, letters, '_' of '-' bevatten (geen spaties)"},
     {exp: SimpleSchema.RegEx.Email, msg: "[label] moet een valide e-mail adres zijn"},
     {exp: SimpleSchema.RegEx.WeakEmail, msg: "[label] moet een valide e-mail adres zijn"},
     {exp: SimpleSchema.RegEx.Domain, msg: "[label] moet een valide domein zijn"},
