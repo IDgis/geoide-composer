@@ -339,6 +339,10 @@ AutoForm.addHooks('mapForm',{
         Router.go('maps.list');
 			} else {
 			  console.log('triggerViewerReload Response ', lResponse);
+        // check op bepaalde inhoud van response of refresh gelukt is
+        if (lResponse.statusCode != '200' ){
+          alert(i18n('alert.viewerRefresh'));
+        }
 			  Router.go('maps.list');
 			}
 		});

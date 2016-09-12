@@ -152,12 +152,15 @@ AutoForm.addHooks('serviceform', {
 		console.log("submit service autoform, goto list");
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
-        console.log('triggerViewerReload Error ',
-            lError);
+        console.log('triggerViewerReload Error ', lError);
         alert(i18n('alert.viewerRefresh'));
         Router.go('services.list');
       } else {
         console.log('triggerViewerReload Response ', lResponse);
+        // check op bepaalde inhoud van response of refresh gelukt is
+        if (lResponse.statusCode != '200' ){
+          alert(i18n('alert.viewerRefresh') + ' ('+lResponse.statusCode+')');
+        }
         Router.go('services.list');
       }
 		});
