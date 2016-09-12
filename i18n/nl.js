@@ -385,6 +385,9 @@
     remove: "Verwijder",
     control: "Controleren",
   },
+  alert: {
+    viewerRefresh: 'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
+  },
   yes: 'Ja',
   no: 'Nee',
 

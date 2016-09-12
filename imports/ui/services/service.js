@@ -151,11 +151,16 @@ AutoForm.addHooks('serviceform', {
 	onSuccess : function(formType, result) {
 		console.log("submit service autoform, goto list");
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
-			if (lError) {
-				console.log('triggerViewerReload Error ', lError);
-			}
+      if (lError) {
+        console.log('triggerViewerReload Error ',
+            lError);
+        alert(i18n('alert.viewerRefresh'));
+        Router.go('services.list');
+      } else {
+        console.log('triggerViewerReload Response ', lResponse);
+        Router.go('services.list');
+      }
 		});
-		Router.go('services.list');
 	},
 	onError : function(formType, error) {
 		console.log("service autoform error = " + error);
