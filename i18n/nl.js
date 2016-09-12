@@ -89,7 +89,7 @@
     autoform: {
       header: 'Kaart configuratie',
       layerselect: 'Kies een laag',
-      createlayer: 'Laag toeveoegen +',
+      createlayer: 'Laag toevoegen +',
       creategroup: 'Nieuwe groep +',
       renamenode: 'Hernoem groep',
       removenode: 'Verwijder laag/groep X',
@@ -143,7 +143,7 @@
         fields: {
           name: "Geef een (unieke) naam aan de laag",
           label: "Geef de titel van de laag waarmee deze getoond moet worden in de viewer",
-          type: "Het type van deze laag, bij type=sql moet de initiële query worden ingevuld.",
+          type: "Het type van deze laag, bij type=sql kan de initiële query worden ingevuld.",
           properties: {
             main: "Eigenschappen van de laag",
             initialQuery: "De sql query voor deze laag indien van type 'sql'",
@@ -218,13 +218,13 @@
             maxy: "maximum waarde van y",
           },
         },
-        createlayer: 'Nieuwe laag +',
-        creategroup: 'Nieuwe groep +',
-        renamenode: 'Hernoem groep',
-        removenode: 'Verwijder laag/groep X',
+        createlayer: 'Voeg de gekozen laag toe aan de kaart',
+        creategroup: 'Voeg een nieuwe groep toe aan de kaart',
+        renamenode: 'Hernoem een groep',
+        removenode: 'Verwijder laag of groep uit de kaart',
       },
       jstree: {
-        main: "Verander volgorde door slepen en neerzetten",
+        main: "Verander de volgorde van groepen en lagen door slepen en neerzetten",
         check: "Verander de initiële zichtbaarheid van een laag in de viewer",
         select: "Selecteer een laag",
         button: {
@@ -271,6 +271,7 @@
 				label : 'Servicelagen',
 			},
 			properties : {
+			  label: 'Eigenschappen',
 				initialQuery : {
 					label : 'Initiële query',
 				},
@@ -292,10 +293,10 @@
 					label : 'WFS service',
 				},
 				legendGraphic : {
-          label : 'Legend Graphic'
+          label : 'Legenda plaatje'
         },
         featureTypes : {
-          label : 'WFS Featuretypes'
+          label : 'Feature types'
         },
 				featureType : {
 		      name : {

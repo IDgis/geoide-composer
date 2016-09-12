@@ -10,14 +10,17 @@
                 <div class="modal-body">
                     <p>U kunt een laag configureren door de laag eerst een unieke naam te geven.</p> 
                     <p>Bij 'label' vult u een tekst in die aan gebruikers getoond wordt.
-                    Deze hoeft niet uniek te zijn.</p> 
-                    <p>Onder 'eigenschappen' vult u in of de kaart bij het starten getoond moet worden (initieel zichtbaar) en of de laag een CRS2-laag is.</p>
+                    Deze hoeft niet uniek te zijn.</p>
+                    <p>Bij type geeft u aan of een laag van het type sql is. 
+                    In dat geval kunnen er zoekingangen bij een featuretype worden geconfigureerd 
+                    en kan onder eigenschappen een query worden opgegeven.</p> 
+                    <p>Onder 'eigenschappen' vult u een optionele query in (alleen als de laag van het type sql is).</p>
                     <p>Vervolgens kunt u de laag in de viewer samenstellen uit een of meerdere lagen van een service (servicelagen). 
                     Om een servicelaag toe te voegen kiest u onder 'servicelagen' een service uit de lijst met services (deze toont alleen WMS en TMS) en uit deze service kiest u een servicelaag.</p>
 					<p>Aan de geselecteerde servicelaag uit de WMS of TMS kunt u een FeatureType uit een WFS koppelen. 
 					Dit is nodig om gegevens van kaartobjecten te tonen (feature-info) of als u wilt zoeken op een kenmerk van de kaartobjecten. 
 					Hiertoe kiest u onder 'Feature type' een service uit de lijst met services  (deze toont alleen WFS) en uit deze service kiest u een FeatureType.</p>
-					<p>Aan het FeatureType kunt u zoekingangen koppelen. 
+					<p>Aan het FeatureType kunt u zoekingangen koppelen (alleen als de laag van het type sql is). 
 					Kies onder 'zoekingangen' een zoekveld uit de lijst met zoekvelden. 
 					Door een zoekingang toe te voegen, maakt u het mogelijk om in een veld van een FeatureType te zoeken.</p>
 					<p>Klik tenslotte op 'Opslaan'.</p>

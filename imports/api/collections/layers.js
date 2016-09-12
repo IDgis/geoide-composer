@@ -179,7 +179,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   
   featureType: {
     type: [SimpleSchema.featureType],
-    label: function(){ return i18n('collections.layers.servicelayer.featureTypes.label'); },
+    label: function(){ return i18n('collections.layers.serviceLayer.featureTypes.label'); },
     optional: true,
     minCount: 0,
     maxCount: 1,
