@@ -23,6 +23,7 @@ SimpleSchema.messages({
   expectedConstructor: "[label] moet van type [type] zijn",
   regEx: [
     {exp: /^([a-zA-Z0-9_\-]+)$/, msg: "[label] mag alleen cijfers, letters, '_' of '-' bevatten (geen spaties)"},
+    {exp: /^((http:|https:)\/\/[a-zA-Z0-9\.-]{2,}(:[0-9]{2,5})?(\/)(([a-zA-Z0-9_\-]+)(\/|\.)?){1,}([a-zA-Z0-9_\-]+)\?)$/, msg: "[label] is geen valide service url (voorbeeld: http://host:8080/services-global/wms?)"},
     {exp: SimpleSchema.RegEx.Email, msg: "[label] moet een valide e-mail adres zijn"},
     {exp: SimpleSchema.RegEx.WeakEmail, msg: "[label] moet een valide e-mail adres zijn"},
     {exp: SimpleSchema.RegEx.Domain, msg: "[label] moet een valide domein zijn"},
