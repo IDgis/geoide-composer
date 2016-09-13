@@ -1,33 +1,10 @@
-import
-{
-	Template
-}
-from
-'meteor/templating';
-import
-{
-	Router
-}
-from
-'meteor/iron:router';
-import
-{
-	Session
-}
-from
-'meteor/session';
+import {Template} from 'meteor/templating';
+import {Router} from 'meteor/iron:router';
+import {Session} from 'meteor/session';
+import {Services, ServiceSchema} from '/imports/api/collections/services.js';
 
-import
-{
-	Services, ServiceSchema
-}
-from
-'/imports/api/collections/services.js';
-
-import
-'./service.html';
-import
-'../i18n/services/help.html';
+import './service.html';
+import '../i18n/services/help.html';
 
 Template.service.helpers({
 	/**
