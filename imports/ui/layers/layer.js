@@ -374,8 +374,7 @@ Template.layer.onRendered(function(){
               console.log('getService Error ', sError);
             } else {
               // service found
-              console.log('getService result ', sResponse);
-              console.log('getService endpoint ', sResponse[0].endpoint);
+              console.log('getService result ', sResponse[0]);
               var methodName = '';
               var dstName = '';
               switch(sResponse[0].type) {
