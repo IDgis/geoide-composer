@@ -8,7 +8,7 @@ import { Maps } from '/imports/api/collections/maps.js';
 
 /**
  * All kinds of handy routines, mainly wms/wfs parsing.
- * Could be split in several utility files.  
+ * TODO: Could be split in several utility files.  
  * 
  */
 
@@ -75,7 +75,7 @@ Meteor.methods({
    *  There is one option (xmlns=true) that saves the tagname 
    *  without prefix in the js object. 
    *  This means code restructuring.
-   *  But the result will a lot cleaner and robust.  
+   *  But the result will be cleaner and robust.  
    * 
    */
   parseXml : function(xml){

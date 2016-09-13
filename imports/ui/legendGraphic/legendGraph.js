@@ -3,6 +3,9 @@ import './legendGraph.html';
 
 
 Template.legendGraphTemplate.helpers({
+  /**
+   * Called whenever a legendgraphic image is uploaded
+   */
   legendGraphicCallback: function() {
     return {
         finished: function(index, fileInfo, context) {
@@ -33,7 +36,7 @@ Template.legendGraphTemplate.events ({
 });
   
 /**
- * This is a special autoform type for legendgrahic
+ * This is a special autoform type for legendgraphic
  * Defined in the Layer schema:
  *    afFieldInput: {
  *       type: "legendGraphicType"

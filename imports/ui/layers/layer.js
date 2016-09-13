@@ -512,10 +512,12 @@ Template.layer.onRendered(function(){
 });
 /**/
  
-/**
- * when the autoform is succesfully submitted, then go to the layer list
- */
 AutoForm.addHooks('layerform',{
+  /**
+   * When the autoform is succesfully submitted, go to the layer list.
+   * Before doing this, trigger the Geoide viewer that the configuration has changed.
+   * When the viewer reload fails, alert the user.
+   */
   onSuccess: function(formType, result) {
     console.log("submit layer autoform, goto list");
     Meteor.call('triggerViewerReload',

@@ -304,9 +304,6 @@ layerInTree = function(children, layerId) {
 	return false;
 }
 
-/**
- * when the autoform is succesfully submitted, then go to the map list
- */
 AutoForm.addHooks('mapForm',{
 	before : {
 		
@@ -327,6 +324,11 @@ AutoForm.addHooks('mapForm',{
 		}
 	},
 
+	/**
+	 * When the autoform is succesfully submitted, go to the map list.
+	 * Before doing this, trigger the Geoide viewer that the configuration has changed.
+	 * When the viewer reload fails, alert the user.
+	 */
 	onSuccess : function(formType, result) {
 		// Stuur een refresh request naar de viewer en ga naar
 		// de list

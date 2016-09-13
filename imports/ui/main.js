@@ -11,6 +11,9 @@ Template.main.helpers({
     return Meteor.absoluteUrl();
   },
   
+  /**
+   * get version using package simple:reactive-method
+   */
   version: function(){
     return ReactiveMethod.call('getVersion');
   }

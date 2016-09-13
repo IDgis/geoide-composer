@@ -75,7 +75,7 @@ Meteor.methods({
 });
 
 /**
- * Set up for upload package (used for legendGraphics)
+ * Set up for upload package tomi:upload-server (used for legendGraphics)
  */
 UploadServer.init({
   tmpDir: Meteor.call('getLegendGraphicUploadFolder') + 'tmp',
