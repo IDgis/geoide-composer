@@ -334,11 +334,18 @@ AutoForm.addHooks('mapForm',{
 		Meteor.call('triggerViewerReload', function(lError,
 				lResponse) {
 			if (lError) {
-				console.log('triggerViewerReload Error ',
-						lError);
+				console.log('triggerViewerReload Error ', lError);
+				alert(i18n('alert.viewerRefresh'));
+        Router.go('maps.list');
+			} else {
+			  console.log('triggerViewerReload Response ', lResponse);
+        // check op bepaalde inhoud van response of refresh gelukt is
+        if (lResponse.statusCode != '200' ){
+          alert(i18n('alert.viewerRefresh'));
+        }
+			  Router.go('maps.list');
 			}
 		});
-		Router.go('maps.list');
 	},
 
 	onError : function(formType, error) {

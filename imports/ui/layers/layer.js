@@ -521,11 +521,19 @@ AutoForm.addHooks('layerform',{
     console.log("submit layer autoform, goto list");
     Meteor.call('triggerViewerReload',
         function(lError, lResponse) {
-          if (lError) {
-            console.log('triggerViewerReload Error ', lError);
-          }
+      if (lError) {
+        console.log('triggerViewerReload Error ', lError);
+        alert(i18n('alert.viewerRefresh'));
+        Router.go('layers.list');
+      } else {
+        console.log('triggerViewerReload Response ', lResponse);
+        // check op bepaalde inhoud van response of refresh gelukt is
+        if (lResponse.statusCode != '200' ){
+          alert(i18n('alert.viewerRefresh'));
+        }
+        Router.go('layers.list');
+      }
     });
-    Router.go('layers.list');
   },
   onError: function(formType, error){
     console.log("layer autoform error = " + error);
