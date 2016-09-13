@@ -226,9 +226,9 @@ Template.layer.events({
     console.log(e);
     // get the name of service selectbox
     var srcName = e.target.name;
-    console.log("changed select box " + srcName);
+//    console.log("changed select box " + srcName);
     var srcSelect = $('select[name="' + srcName + '"] ');
-    console.log(srcSelect);
+//    console.log(srcSelect);
     
     // get the current selected service to use in a GetCapabilities call
     var serviceId = srcSelect[0].value;
@@ -290,9 +290,9 @@ Template.layer.events({
             if (methodName == ''){
               // error
             } else {
-              console.log("nameInService select box: " + dstName);
+//              console.log("nameInService select box: " + dstName);
               var dstSelect = $('select[name="' + dstName + '"] ');
-              console.log(dstSelect);
+//              console.log(dstSelect);
 
               Meteor.call(methodName,
                 sResponse[0].endpoint,
@@ -302,7 +302,7 @@ Template.layer.events({
                     console.log(methodName + ' Error ', lError);
                   } else {
                     // service layers/featuretypes found !!
-                    console.log(methodName + ' result ', lResponse);
+//                    console.log(methodName + ' result ', lResponse);
                     // put it in options of nameInService
                     dstSelect.empty();
                     // first element is a '(Select item:)'
@@ -352,14 +352,14 @@ Template.layer.onRendered(function(){
     console.log(serviceSelects);
     
     $.each(serviceSelects, function(count, obj) {
-      console.log('serviceSelect:');
-      console.log(obj);
+//      console.log('serviceSelect:');
+//      console.log(obj);
       // get name of service select and service id
       var selectName = obj.name;
-      console.log('selectName ' + selectName);
+//      console.log('selectName ' + selectName);
       var serviceId = obj.value;
-      console.log("service id " + serviceId);
-      console.log('selectedIndex ' + obj.selectedIndex);
+//      console.log("service id " + serviceId);
+//      console.log('selectedIndex ' + obj.selectedIndex);
   
   
     console.log("--------------");
@@ -400,11 +400,11 @@ Template.layer.onRendered(function(){
                 // error
               } else {
                 
-                console.log("Destination: " + dstName);
+//                console.log("Destination: " + dstName);
                 var dstSelects = $('select[name="' + dstName + '"] ');
-                console.log(dstSelects);
+//                console.log(dstSelects);
                 var dstSelect = dstSelects[0];
-                console.log(dstSelect);
+//                console.log(dstSelect);
 
                 Meteor.call(methodName,
                   sResponse[0].endpoint,
@@ -426,7 +426,7 @@ Template.layer.onRendered(function(){
                       var subName = name.substr('service_layers.'.length,name.length);
                       var indexPoint = subName.indexOf('.');
                       var index = subName.substr(0,indexPoint);
-                      console.log('name ' + name + ' index ' + index);
+//                      console.log('name ' + name + ' index ' + index);
                       var selected = ''; 
                       // decide which nameInService selectbox will be filled
                       if (name.indexOf('.featureType.') > 0){
@@ -434,7 +434,7 @@ Template.layer.onRendered(function(){
                       } else {
                         selected = formData.service_layers[index].nameInService;
                       }
-                      console.log('selected: ' + selected);
+//                      console.log('selected: ' + selected);
                       // then fill options with the fields found
                       $.each(lResponse, function(count, obj) {   
                         var option = document.createElement("option");
@@ -444,9 +444,9 @@ Template.layer.onRendered(function(){
                         // set selectIndex if appropriate
                         if (selected == obj.name){
                           dstSelect.selectedIndex = count;
-                          console.log('layer/ft select: ' + selected + ', index: ' + count);
+//                          console.log('layer/ft select: ' + selected + ', index: ' + count);
                         } else {
-                          console.log('layer/ft name  : ' + obj.name + ', index: ' + count);
+//                          console.log('layer/ft name  : ' + obj.name + ', index: ' + count);
                         }
                       });
                       /* 
@@ -472,7 +472,7 @@ Template.layer.onRendered(function(){
                               console.log('describeFeatureType Error ', lError);
                             } else {
                               // featuretype attrs found !!
-                              console.log('describeFeatureType result ', lResponse);
+//                              console.log('describeFeatureType result ', lResponse);
                               // fill all searchtemplate.namespace fields 
                               $.each(nsInputs, function(count, ns){
                                 $(ns).val(lResponse.targetNamespace);
@@ -495,7 +495,7 @@ Template.layer.onRendered(function(){
                                   // set selectIndex if appropriate
                                   if (selectLocalName == obj.name){
                                     attrSelect.selectedIndex = count;
-                                    console.log('ft attr select: ' + selected + ', index: ' + count);
+//                                    console.log('ft attr select: ' + selected + ', index: ' + count);
                                   }
                                 });
                               });
