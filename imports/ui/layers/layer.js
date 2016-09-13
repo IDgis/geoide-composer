@@ -261,7 +261,7 @@ Template.layer.events({
                 var lgImg = $('img[name="' + lgImgName + '"] ');
                 
                 lg[0].value = '';
-                lgImg[0].src = '';
+                lgImg[0].src = '/images/empty-legendgraphic.png';
                 break;
               default:
             }
