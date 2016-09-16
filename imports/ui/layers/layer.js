@@ -104,51 +104,6 @@ Template.layer.events({
     console.log("clicked help", helpTemplate );
     Modal.show(helpTemplate);
   },
-  /**
-   * Act on a change of the wms layer select list:
-   * fill legendgraphic 
-   */
-  'change select[name$=".nameInService"]' : function(e){
-    console.log("change on wms layer select ");
-    console.log(e);
-    // get name of  select box
-    var srcName = e.target.name;
-    console.log("Source: " + srcName);
-    // get wms layer name 
-    var srcSelect = $('select[name="' + srcName + '"] ');
-    var lyrName = srcSelect[0].value;
-
-    // find service id from service selectbox
-    var srvName = srcName.replace("nameInService", "service");
-    var srvSelect = $('select[name="' + srvName + '"] ');
-    var serviceId = srvSelect[0].value;
-
-    // find lg field 
-    var lgName = srcName.replace("nameInService", "legendGraphic");
-    var lg = $('input[name="' + lgName + '"] ');
-    
-    // find lg image field 
-    var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
-    var lgImg = $('img[name="' + lgImgName + '"] ');
-    
-    console.log(serviceId);
-    console.log(lyrName);
-    // retrieve url for GetLegendGraphic
-    // and put it in hidden field and image
-    Meteor.call('getLegendGraphicUrl',
-      serviceId,
-      lyrName,
-      function(lError, lResponse) {
-        if (lError) {
-          console.log(' Error ', lError);
-        } else {
-          // url found !!
-          console.log(' result ', lResponse);
-          lg[0].value = lResponse;
-          lgImg[0].src = lResponse;
-        }
-    });
-  },  
   
   /**
    * Fill a selectbox with featuretype attributes 
@@ -216,107 +171,6 @@ Template.layer.events({
     });
      
   },
-  /**
-   * Fill selectbox 'nameInService' with layer or featuretype names of a service
-   * 1. listen to change on selectbox 'service' in servicelayer/featuretype,
-   * 2. get the service layers/featuretypes from the GetCapabilities of the selected service
-   * 3. and put the layer/featuretype list in selectbox 'nameInService'
-   */
-    'change select[name$=".service"]' : function(e){
-    console.log(e);
-    // get the name of service selectbox
-    var srcName = e.target.name;
-//    console.log("changed select box " + srcName);
-    var srcSelect = $('select[name="' + srcName + '"] ');
-//    console.log(srcSelect);
-    
-    // get the current selected service to use in a GetCapabilities call
-    var serviceId = srcSelect[0].value;
-    console.log("service id " + serviceId);
-    Meteor.call('getService', 
-      serviceId,
-      function(sError, sResponse) {
-        if (sError) {
-          console.log('getService Error ', sError);
-        } else {
-          // service found
-          console.log('getService result ', sResponse);
-          if (_.isEmpty(sResponse)){
-            console.log('no service found');
-            // TODO do nothing or clear nameInService selectboxes 
-          } else {
-            console.log('getService endpoint ', sResponse[0].endpoint);
-            switch(sResponse[0].type) {
-              case 'WMS':
-              case 'TMS':
-                /*
-                 * Clear the getLegendGraphic field and image
-                 */
-                // find lg field 
-                var lgName = srcName.replace(".service", ".legendGraphic");
-                var lg = $('input[name="' + lgName + '"] ');
-                
-                // find lg image field 
-                var lgImgName = srcName.replace(".service", ".legendGraphic.img");
-                var lgImg = $('img[name="' + lgImgName + '"] ');
-                
-                lg[0].value = '';
-                lgImg[0].src = '/images/empty-legendgraphic.png';
-                break;
-              default:
-            }
-            
-            var methodName = '';
-            var dstName  = '';
-            switch(sResponse[0].type) {
-              case 'WMS':
-                methodName = 'getWmsLayers';
-                // get the name of the nameInService selectbox 
-                dstName = srcName.replace(".service", ".nameInService");
-                break;
-              case 'TMS':
-                methodName = 'getTmsLayers';
-                // get the name of the nameInService selectbox 
-                dstName = srcName.replace(".service", ".nameInService");
-                break;
-              case 'WFS':
-                methodName = 'getWfsFeatureTypes';
-                // get the name of the nameInWfsService selectbox 
-                dstName = srcName.replace(".service", ".nameInWfsService");
-                break;
-              default:
-                methodName = '';
-            }
-            if (methodName == ''){
-              // error
-            } else {
-//              console.log("nameInService select box: " + dstName);
-              var dstSelect = $('select[name="' + dstName + '"] ');
-//              console.log(dstSelect);
-
-              Meteor.call(methodName,
-                sResponse[0].endpoint,
-                sResponse[0].version,
-                function(lError, lResponse) {
-                  if (lError) {
-                    console.log(methodName + ' Error ', lError);
-                  } else {
-                    // service layers/featuretypes found !!
-//                    console.log(methodName + ' result ', lResponse);
-                    // put it in options of nameInService
-                    dstSelect.empty();
-                    // first element is a '(Select item:)'
-                    dstSelect.append($('<option>', { value : '' }).text(function(){ return i18n('collections.firstOption'); }));
-                    $.each(lResponse, function(count, obj) {   
-                      dstSelect.append($('<option>', { value : obj.name }).text(obj.title)); 
-                    });
-                  }
-              });
-            }
-          }
-        }
-     });
-  },
 });
 
 /**
@@ -344,6 +198,7 @@ Template.layer.onRendered(function(){
     }
   }
   console.log('legendGraphicImage[0].src', legendGraphicImage[0].src);
+  return;
   
   var formData = this.data; // layer data belonging to this form
   

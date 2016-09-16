@@ -97,7 +97,31 @@ SimpleSchema.featureType = new SimpleSchema ({
 		type: String,
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
-      options:  [],
+      options: function(){
+        console.log("nameInWfsService name", this.name);
+        var service = AutoForm.getFieldValue(this.name.replace(".nameInWfsService", ".service"));
+        console.log("nameInWfsService service", service);
+        var servoptions = [];
+
+        if (service){
+          var serv = Services.findOne({_id:service});
+          console.log("Found service in DB", serv);
+          /*
+           * Retrieve the featuretypes from the service
+           * and put them in the options
+           */
+          var featuretypeoptions = ReactiveMethod.call(
+              'getWfsFeatureTypes',
+              serv.endpoint,
+              serv.version
+          );
+          _.each(featuretypeoptions, function(ft){
+            servoptions.push({label:ft.title, value:ft.name});            
+          });
+        }
+        console.log("return options",servoptions);
+        return servoptions;
+      },    
       firstOption: function(){ return i18n('collections.firstOption'); },
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); },
     },
@@ -159,7 +183,42 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
-      options:  [],    
+      options: function(){
+        var service = AutoForm.getFieldValue(this.name.replace(".nameInService", ".service"));
+        console.log("nameInService service", service);
+
+        /*
+         * Fill the nameInService options list
+         */
+        var servoptions = [];
+        if (service){
+          var serv = Services.findOne({_id:service});
+          console.log("Found service in DB", serv);
+          /*
+           * Retrieve the layers from the service
+           * and put them in the options
+           */
+          var methodName = '';
+          switch(serv.type) {
+            case 'WMS':
+                methodName = 'getWmsLayers';
+                break;
+            case 'TMS':
+              methodName = 'getTmsLayers';
+              break;
+          }
+          var layeroptions = ReactiveMethod.call(
+              methodName,
+              serv.endpoint,
+              serv.version
+          );
+          _.each(layeroptions, function(layer){
+            servoptions.push({label:layer.title, value:layer.name});            
+          });
+        }
+        console.log("return options",servoptions);
+        return servoptions;
+      },    
       firstOption: function(){ return i18n('collections.firstOption'); },
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); },
     },
@@ -173,6 +232,27 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       afFieldInput: {
         type: "legendGraphicType"
       },
+      "value": function(){
+        var lg = '';
+        var lyrName =  AutoForm.getFieldValue(this.name.replace(".legendGraphic", ".nameInService"));
+//        console.log("legendGraphic lyrName", lyrName);
+        if (lyrName){
+          var service = AutoForm.getFieldValue(this.name.replace(".legendGraphic", ".service"));
+//        console.log("legendGraphic service", service);
+          if (service){
+            var lgUrl = ReactiveMethod.call('getLegendGraphicUrl',
+                service,
+                lyrName,
+            );
+            if (lgUrl){
+              lg = lgUrl;
+            }
+          }
+        }
+        console.log("legendGraphic", lg);
+        return lg;
+      },
+
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); },
     },
   }, 
