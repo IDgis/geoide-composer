@@ -67,18 +67,19 @@ Template.map.events({
 		}
 
 		var layerLabel = $('#layerselect option:selected').text();
-		var layerId = $('#layerselect option:selected').val();
-		ref.create_node(sel, {
-			"type" : "layer",
-			"text" : layerLabel,
-			"data" : {
-				"layerid" : layerId
-			},
-			"state" : {
-				"checked" : true
-			}
-		});
-		
+		if (layerLabel){
+  		var layerId = $('#layerselect option:selected').val();
+  		ref.create_node(sel, {
+  			"type" : "layer",
+  			"text" : layerLabel,
+  			"data" : {
+  				"layerid" : layerId
+  			},
+  			"state" : {
+  				"checked" : true
+  			}
+  		});
+		}
 		$('#maptree').jstree('open_node',sel);
 		fillLayerSelect();
 	},
