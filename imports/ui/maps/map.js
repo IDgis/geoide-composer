@@ -67,18 +67,19 @@ Template.map.events({
 		}
 
 		var layerLabel = $('#layerselect option:selected').text();
-		var layerId = $('#layerselect option:selected').val();
-		ref.create_node(sel, {
-			"type" : "layer",
-			"text" : layerLabel,
-			"data" : {
-				"layerid" : layerId
-			},
-			"state" : {
-				"checked" : true
-			}
-		});
-		
+		if (layerLabel){
+  		var layerId = $('#layerselect option:selected').val();
+  		ref.create_node(sel, {
+  			"type" : "layer",
+  			"text" : layerLabel,
+  			"data" : {
+  				"layerid" : layerId
+  			},
+  			"state" : {
+  				"checked" : true
+  			}
+  		});
+		}
 		$('#maptree').jstree('open_node',sel);
 		fillLayerSelect();
 	},
@@ -114,46 +115,60 @@ Template.map.events({
 	},
 
 	'click #removenode' : function() {
-		var ref = $.jstree.reference('#maptree'), sel = ref
-				.get_selected();
-		console.log('removenode ' + ref);
-		if (!sel.length || ref.get_type(sel) === "map") {
-			return false;
-		}
-		if (ref.get_type(sel) === "layer") {
-			var lyrName = ref.get_text(sel);
-			console.log('removenode lyrName: ' + lyrName);
-			var lyr = Layers.findOne({
-				name : lyrName
-			});
-			console.log('removenode lyr: ' + lyr);
-			if (lyr) {
-				console.log('removenode lyr.type: ' + lyr.type);
-				var adminLoggedIn = false;
-				if (Meteor.user()) {
-					// a user is logged in
-					var name = Meteor.user().username;
-					adminLoggedIn = _.isEqual(name, 'idgis-admin');
-					console.log('adminLoggedIn ' + adminLoggedIn);
-					if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
-						// not remove cosurvey-sql if user is no admin
-						console
-								.log('not remove cosurvey-sql if user is no admin ');
-						return false;
-					}
-				} else {
-					// no user logged in, no remove allowed
-					console.log('no user logged in, no remove allowed');
-					return false;
-				}
-			} else {
-				// layer not found, remove is ok
-				console.log('layer not found, remove is ok');
-			}
-		}
-		ref.delete_node(sel);
+		var ref = $.jstree.reference('#maptree');
+		console.log('removenode', ref);
+		var selObjects = ref.get_selected(true);
+		console.log('selected list', selObjects);
+		_.each(selObjects, function(sel){
+		  console.log('selected ', sel);
+		  if (ref.get_type(sel) === "map") {
+		    return false;
+		  }
+		  if (ref.get_type(sel) === "layer") {
+  			var lyr = Layers.findOne({
+  				_id : sel.data.layerid
+  			});
+  			console.log('removenode layer: ', lyr);
+  			if (lyr) {
+  				console.log('removenode layer.type:', lyr.type);
+  				var adminLoggedIn = false;
+  				if (Meteor.user()) {
+  					// a user is logged in
+  					var name = Meteor.user().username;
+  					adminLoggedIn = _.isEqual(name, 'idgis-admin');
+  					console.log('adminLoggedIn', adminLoggedIn);
+  					if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
+  						console.log('not remove cosurvey-sql if user is no admin ');
+  						return false;
+  					}
+  				} else {
+  					console.log('no user logged in, no remove allowed');
+  					return false;
+  				}
+  			} else {
+  				// layer not found, remove is ok
+  				console.log('layer not found, remove is ok');
+  			}
+  			ref.delete_node(sel);
+  		}
+      if (ref.get_type(sel) === "group") {
+        new Confirmation({
+          message: function(){ return i18n('collections.confirmation.delete.message.groups') + ': ' + sel.text; },
+          title: function(){ return i18n('collections.confirmation.delete.title'); },
+          cancelText: function(){ return i18n('collections.confirmation.delete.cancel'); },
+          okText: function(){ return i18n('collections.confirmation.delete.ok'); },
+          success: false, // whether the button should be green or red
+          focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+        }, function (ok) {
+          // ok is true if the user clicked on "ok", false otherwise
+          if (ok){
+            ref.delete_node(sel);
+          }
+        });
+      }
+		});
+		
 		fillLayerSelect();
-
 	},
 
 	'keyup #search-tree' : function() {

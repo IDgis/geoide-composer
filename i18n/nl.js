@@ -366,6 +366,7 @@
         ok: "OK",
         message: {
           services: "Wilt u deze service verwijderen?",
+          groups: "Wilt u deze groep verwijderen?",
           layers: "Wilt u deze laag verwijderen?",
           maps: "Wilt u deze kaart verwijderen?",
         },
