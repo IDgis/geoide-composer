@@ -57,8 +57,9 @@ Router.map(function () {
               identification: {
                 serviceType: service.type,
                 serviceEndpoint: service.endpoint,
-                serviceVersion: service.version
-              }
+                serviceVersion: service.version,
+              },
+              printFormat: service.printFormat,
             }
         );
       });
