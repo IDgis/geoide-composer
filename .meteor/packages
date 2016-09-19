@@ -18,7 +18,6 @@ jss:jstree
 jss:jstree-proton-theme
 dguedry:autoform-jstree
 anti:i18n
-johdirr:meteor-git-rev
 http@1.2.9
 peerlibrary:xml2js
 aldeed:simple-schema
