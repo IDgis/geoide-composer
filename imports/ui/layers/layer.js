@@ -106,6 +106,58 @@ Template.layer.events({
   },
   
   /**
+   * Act on a change of the wms layer select list:
+   * fill legendgraphic 
+   */
+  'click select[name$=".nameInService"]' : function(e){
+    console.log("change on wms layer select ");
+    console.log(e);
+    // get name of  select box
+    var srcName = e.target.name;
+//    console.log("Source: " + srcName);
+    // get wms layer name 
+    var srcSelect = $('select[name="' + srcName + '"] ');
+    var lyrName = srcSelect[0].value;
+
+    // find service id from service selectbox
+    var srvName = srcName.replace("nameInService", "service");
+    var srvSelect = $('select[name="' + srvName + '"] ');
+    var serviceId = srvSelect[0].value;
+
+    // find lg field 
+    var lgName = srcName.replace("nameInService", "legendGraphic");
+    var lg = $('input[name="' + lgName + '"] ');
+    
+    // find lg image field 
+    var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
+    var lgImg = $('img[name="' + lgImgName + '"] ');
+    
+    console.log(serviceId);
+    console.log(lyrName);
+    // retrieve url for GetLegendGraphic
+    // and put it in hidden field and image
+    Meteor.call('getLegendGraphicUrl',
+      serviceId,
+      lyrName,
+      function(lError, lResponse) {
+        if (lError) {
+          console.log('getLegendGraphicUrl Error ', lError);
+        } else {
+          // url found !!
+          console.log('getLegendGraphicUrl result ', lResponse);
+          if (lResponse){
+            lg[0].value = lResponse;
+            if (_.isEmpty(lResponse)){
+              lgImg[0].src = '/images/empty-legendgraphic.png';
+            } else {
+              lgImg[0].src = lResponse;
+            }
+          }
+        }
+    });
+  },  
+  
+  /**
    * Fill a selectbox with featuretype attributes 
    * 1. listen to change on selectbox nameInService,
    * 2. get the attributes from the describeFeatureType of the selected wfs service
@@ -174,13 +226,8 @@ Template.layer.events({
 });
 
 /**
- * This will be called after the form has been rendered.
  * Update the legendgraphic.
- * The form data (in case of update) is used to fill in all the select options. 
- * Select boxes are:
- * - servicelayer 'nameInService'
- * - servicelayer.featuretype 'nameInWfsService'
- * - servicelayer.featuretype.searchtemplate 'attributeLocalname'
+ * This will be called after the form has been rendered.
  * 
  */
 Template.layer.onRendered(function(){
@@ -198,172 +245,7 @@ Template.layer.onRendered(function(){
     }
   }
   console.log('legendGraphicImage[0].src', legendGraphicImage[0].src);
-  return;
-  
-  var formData = this.data; // layer data belonging to this form
-  
-  if (formData){
-    var serviceSelects = this.$('select[name$=".service"]');
-    console.log(serviceSelects);
-    
-    $.each(serviceSelects, function(count, obj) {
-//      console.log('serviceSelect:');
-//      console.log(obj);
-      // get name of service select and service id
-      var selectName = obj.name;
-//      console.log('selectName ' + selectName);
-      var serviceId = obj.value;
-//      console.log("service id " + serviceId);
-//      console.log('selectedIndex ' + obj.selectedIndex);
-  
-  
-    console.log("--------------");
-    
-    /*
-     * Retrieve the layers or featuretypes from the service
-     * and put them in the appropriate nameInService options
-     */
-    Meteor.call('getService', serviceId
-        , function(sError, sResponse) {
-            if (sError) {
-              console.log('getService Error ', sError);
-            } else {
-              // service found
-              console.log('getService result ', sResponse[0]);
-              var methodName = '';
-              var dstName = '';
-              switch(sResponse[0].type) {
-                case 'WMS':
-                    methodName = 'getWmsLayers';
-                    // find nameInService selectbox below it (layerName)
-                    dstName = selectName.replace(".service", ".nameInService");
-                    break;
-                case 'TMS':
-                  methodName = 'getTmsLayers';
-                  // find nameInService selectbox below it (layerName)
-                  dstName = selectName.replace(".service", ".nameInService");
-                  break;
-                case 'WFS':
-                  methodName = 'getWfsFeatureTypes';
-                  // find nameInService selectbox below it (featuretype)
-                  dstName = selectName.replace(".service", ".nameInWfsService");
-                  break;
-                default:
-                  methodName = '';
-              }
-              if (methodName == ''){
-                // error
-              } else {
-                
-//                console.log("Destination: " + dstName);
-                var dstSelects = $('select[name="' + dstName + '"] ');
-//                console.log(dstSelects);
-                var dstSelect = dstSelects[0];
-//                console.log(dstSelect);
 
-                Meteor.call(methodName,
-                  sResponse[0].endpoint,
-                  sResponse[0].version,
-                  function(lError, lResponse) {
-                    if (lError) {
-                      console.log(methodName + ' Error ', lError);
-                    } else {
-                      // service layers found !!
-                      console.log(methodName + ' result ', lResponse);
-                      // put it in options /  of nameInService
-                      // empty select first (remove existing options)
-                      var len = dstSelect.length;
-                      for (var i = 0; i < len ; i++) {
-                        dstSelect.remove(0);
-                      }
-                      // find the selected element
-                      var name = dstSelect.name;
-                      var subName = name.substr('service_layers.'.length,name.length);
-                      var indexPoint = subName.indexOf('.');
-                      var index = subName.substr(0,indexPoint);
-//                      console.log('name ' + name + ' index ' + index);
-                      var selected = ''; 
-                      // decide which nameInService selectbox will be filled
-                      if (name.indexOf('.featureType.') > 0){
-                        selected = formData.service_layers[index].featureType[0].nameInWfsService;
-                      } else {
-                        selected = formData.service_layers[index].nameInService;
-                      }
-//                      console.log('selected: ' + selected);
-                      // then fill options with the fields found
-                      $.each(lResponse, function(count, obj) {   
-                        var option = document.createElement("option");
-                        option.text = obj.title;
-                        option.value = obj.name;
-                        dstSelect.add(option); 
-                        // set selectIndex if appropriate
-                        if (selected == obj.name){
-                          dstSelect.selectedIndex = count;
-//                          console.log('layer/ft select: ' + selected + ', index: ' + count);
-                        } else {
-//                          console.log('layer/ft name  : ' + obj.name + ', index: ' + count);
-                        }
-                      });
-                      /* 
-                       * now continue filling in searchTemplates
-                       * localname and namespace
-                       */ 
-                      if (name.indexOf('.featureType.') > 0){
-                        
-                        // find searchtemplate localname selectboxes 
-                        var attrSelects = $('select[name$=attribute_localname] ');
-                        
-                        // find searchtemplate namespace fields 
-                        var nsInputs = $('input[name$=attibute_namespace] ');
-                        // TODO get names above from name of servicelayer
-                        
-                        // retrieve fields and namespace from a featuretype
-                        // and put them in localname selectbox options resp namespace field
-                        Meteor.call('describeFeatureType',
-                          serviceId,
-                          selected, // =ftName
-                          function(lError, lResponse) {
-                            if (lError) {
-                              console.log('describeFeatureType Error ', lError);
-                            } else {
-                              // featuretype attrs found !!
-//                              console.log('describeFeatureType result ', lResponse);
-                              // fill all searchtemplate.namespace fields 
-                              $.each(nsInputs, function(count, ns){
-                                $(ns).val(lResponse.targetNamespace);
-                              });
-                              // fill all searchtemplate.localname options
-                              $.each(attrSelects, function(count, attrSelect){
-                                selectLocalName = formData.service_layers[index].featureType[0].searchTemplates[count].attribute_localname;
-                                
-                                // empty select first (remove existing options)
-                                var len = attrSelect.length;
-                                for (var i = 0; i < len ; i++) {
-                                  attrSelect.remove(0);
-                                }
-                                // then fill options with the fields found
-                                $.each(lResponse.options, function(count, obj) {   
-                                  var option = document.createElement("option");
-                                  option.text = obj.title;
-                                  option.value = obj.name;
-                                  attrSelect.add(option); 
-                                  // set selectIndex if appropriate
-                                  if (selectLocalName == obj.name){
-                                    attrSelect.selectedIndex = count;
-//                                    console.log('ft attr select: ' + selected + ', index: ' + count);
-                                  }
-                                });
-                              });
-                            }
-                        });
-                      }                      
-                    }
-                });
-              }
-            }
-         });
-    });
-  }
 });
 /**/
  

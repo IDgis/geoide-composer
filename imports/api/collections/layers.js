@@ -232,27 +232,6 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       afFieldInput: {
         type: "legendGraphicType"
       },
-      "value": function(){
-        var lg = '';
-        var lyrName =  AutoForm.getFieldValue(this.name.replace(".legendGraphic", ".nameInService"));
-//        console.log("legendGraphic lyrName", lyrName);
-        if (lyrName){
-          var service = AutoForm.getFieldValue(this.name.replace(".legendGraphic", ".service"));
-//        console.log("legendGraphic service", service);
-          if (service){
-            var lgUrl = ReactiveMethod.call('getLegendGraphicUrl',
-                service,
-                lyrName,
-            );
-            if (lgUrl){
-              lg = lgUrl;
-            }
-          }
-        }
-        console.log("legendGraphic", lg);
-        return lg;
-      },
-
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); },
     },
   }, 
