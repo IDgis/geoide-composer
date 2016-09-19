@@ -161,6 +161,7 @@ Meteor.methods({
 //    console.log('isServiceInLayer ' + serviceId + ": " + result);
     return result;
   },
+  
   /**
    * Get layers from a WMS
    */
@@ -383,9 +384,6 @@ Meteor.methods({
     return ft;
   },
   
-  
- 
-  
   /**
    * GetLegendGraphic from a WMS LAYER
    */
@@ -425,6 +423,49 @@ Meteor.methods({
       return '';
     }
   },
+  
+  
+  /**
+   * getPrintFormat from a WMS 
+   */
+  getPrintFormat: function(host, version){
+    console.log('getPrintFormat service: ',host, version);
+    var servoptions = [];
+    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+//    console.log("xmlResponse ",xmlResponse);
+    if (xmlResponse.content){
+      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      
+      var req = undefined;
+      switch(version) {
+      case '1.3.0':
+        if (parseResponse.WMS_Capabilities.Capability[0]){
+          req = parseResponse.WMS_Capabilities.Capability[0].Request;
+        }
+        break;
+      case '1.1.1':
+      default:
+        if (parseResponse.WMT_MS_Capabilities.Capability[0]){
+          req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+        }
+        break;
+      }
+      console.log("req ",req);
+      if (req){
+        if (req[0].GetMap){
+//            console.log("req[0].GetMap ",req[0].GetMap);
+          _.each(req[0].GetMap[0].Format,function(format){
+            console.log(format);
+            servoptions.push({label:format, value:format});
+          });
+        }
+      }
+    }
+    var sortedServoptions = _.sortBy(servoptions, 'label');
+    console.log('WMS getmap format found: ',sortedServoptions);
+    return sortedServoptions;
+  },
+  
   
   getLayerByName: function(layers, name){
 	for(var i = 0; i < layers.length; i++){

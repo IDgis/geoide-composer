@@ -86,6 +86,37 @@ export const ServiceSchema = new SimpleSchema({
         },
 	    },
 	},
+  printFormat: {
+    type: String,
+    label: function(){ return i18n('collections.services.printFormat.label'); },
+    optional: false,
+    autoform: {
+      options: function(){
+        var host = AutoForm.getFieldValue(this.name.replace("printFormat", "endpoint"));
+        var version = AutoForm.getFieldValue(this.name.replace("printFormat", "version"));
+//        console.log("printFormat service ", host, version);
+        /*
+         * Fill the printFormat options list
+         */
+        var printFormatOptions = [];
+//        printFormatOptions.push({label:"image/png", value:"image/png"});
+        
+        if (host){
+          printFormatOptions = ReactiveMethod.call(
+              'getPrintFormat',
+              host,
+              version
+          );
+        }
+//        console.log("return options",printFormatOptions);
+        return printFormatOptions;
+      },    
+      firstOption: function(){ return i18n('collections.firstOption'); },
+      "title": function(){ return i18n ('tooltips.services.autoform.fields.printFormat'); },
+      "defaultValue": function() {return "image/svg"; },
+    },
+  },
+	
 });
 
 export const Services = new Mongo.Collection("services");

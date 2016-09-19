@@ -189,6 +189,7 @@
           endpoint: "Geef de basis url van de service, afgesloten met een '?'",
           type: "Kies het service type",
           version: "Kies de versie van de service, controleer eventueel of de gekozen versie door de service wordt ondersteund.",
+          printFormat: "Kies een print formaat uit de lijst, svg geeft de beste kwaliteit",
         },
         button: {
           save: 'Opslaan',
@@ -255,6 +256,9 @@
       },
       version : {
         label : 'Versie',
+      },
+      printFormat : {
+        label : 'Print formaat',
       },
     },
     layers : {
