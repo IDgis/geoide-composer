@@ -56,7 +56,7 @@ Router.map(function () {
               id: service.name, 
               identification: {
                 serviceType: service.type,
-                serviceEndpoint: service.endpoint,
+                serviceEndpoint: Meteor.call("removeQmarkFromUrl", service.endpoint),
                 serviceVersion: service.version,
               },
               printFormat: service.printFormat,
