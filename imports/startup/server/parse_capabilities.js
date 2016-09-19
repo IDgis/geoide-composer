@@ -48,6 +48,7 @@ Meteor.methods({
    *   {request: 'GetCapabilities', service:'WMS'} 
    */ 
   getXml : function (host, params){
+    host = Meteor.call("addQmarkToUrl", host);
     console.log('getXml() host: ', host + ', params: ' + params);
     try {
       var res = HTTP.get(host, {'params' : params, 
@@ -450,19 +451,19 @@ Meteor.methods({
         }
         break;
       }
-      console.log("req ",req);
+//      console.log("req ",req);
       if (req){
         if (req[0].GetMap){
 //            console.log("req[0].GetMap ",req[0].GetMap);
           _.each(req[0].GetMap[0].Format,function(format){
-            console.log(format);
+//            console.log(format);
             servoptions.push({label:format, value:format});
           });
         }
       }
     }
     var sortedServoptions = _.sortBy(servoptions, 'label');
-    console.log('WMS getmap format found: ',sortedServoptions);
+//    console.log('WMS getmap format found: ',sortedServoptions);
     return sortedServoptions;
   },
   
@@ -491,5 +492,28 @@ Meteor.methods({
     console.log('service found: ',serv);
     return serv;
   },
+  
+  /**
+   * remove '?' from service endpoint
+   */
+  removeQmarkFromUrl: function(url){
+    var q = url.indexOf("?");
+    if (q != -1) {
+      url = url.substr(0,q);
+    }
+    return url;
+  },
+  
+  /**
+   * add '?' to service endpoint
+   */
+  addQmarkToUrl: function(url){
+    if (url.indexOf("?") == -1) {
+      url += "?";
+    }
+    return url;
+  },
+  
+
 });
 
