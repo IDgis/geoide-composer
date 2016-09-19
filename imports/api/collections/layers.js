@@ -98,9 +98,12 @@ SimpleSchema.featureType = new SimpleSchema ({
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options: function(){
-        console.log("nameInWfsService name", this.name);
+//        console.log("nameInWfsService name", this.name);
         var service = AutoForm.getFieldValue(this.name.replace(".nameInWfsService", ".service"));
         console.log("nameInWfsService service", service);
+        /*
+         * Fill the nameInWfsService options list
+         */
         var servoptions = [];
 
         if (service){
