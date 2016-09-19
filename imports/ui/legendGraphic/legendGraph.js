@@ -22,6 +22,17 @@ Template.legendGraphTemplate.helpers({
         },
     }
   },
+  imgSrc: function(src){
+//    console.log("imgSrc src",src);
+    var result = '/images/empty-legendgraphic.png';
+    if (src){
+      if (!_.isEmpty(src)){
+        result = src;
+      }
+    }
+//    console.log("imgSrc result",result);
+    return result;
+  },
 });
 
 Template.legendGraphTemplate.events ({
