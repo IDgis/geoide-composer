@@ -451,19 +451,19 @@ Meteor.methods({
         }
         break;
       }
-      console.log("req ",req);
+//      console.log("req ",req);
       if (req){
         if (req[0].GetMap){
 //            console.log("req[0].GetMap ",req[0].GetMap);
           _.each(req[0].GetMap[0].Format,function(format){
-            console.log(format);
+//            console.log(format);
             servoptions.push({label:format, value:format});
           });
         }
       }
     }
     var sortedServoptions = _.sortBy(servoptions, 'label');
-    console.log('WMS getmap format found: ',sortedServoptions);
+//    console.log('WMS getmap format found: ',sortedServoptions);
     return sortedServoptions;
   },
   
