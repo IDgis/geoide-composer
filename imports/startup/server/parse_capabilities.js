@@ -12,6 +12,13 @@ import { Maps } from '/imports/api/collections/maps.js';
  * 
  */
 
+/*
+ * Global variables used for caching WMS/WFS request results
+ * 
+ */
+
+PRINTFORMAT = new Map();
+
 Meteor.methods({
   /**
    * Get result from a server as image. 
@@ -430,40 +437,49 @@ Meteor.methods({
    * getPrintFormat from a WMS 
    */
   getPrintFormat: function(host, version){
-    console.log('getPrintFormat service: ',host, version);
-    var servoptions = [];
-    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-//    console.log("xmlResponse ",xmlResponse);
-    if (xmlResponse.content){
-      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      
-      var req = undefined;
-      switch(version) {
-      case '1.3.0':
-        if (parseResponse.WMS_Capabilities.Capability[0]){
-          req = parseResponse.WMS_Capabilities.Capability[0].Request;
+    var sortedServoptions = [];
+    var PRINTFORMATKEY = host + "-" + version;
+    console.log('getPrintFormat key: ', PRINTFORMATKEY);
+    var resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
+    if (resultPrintFormat){
+      sortedServoptions = resultPrintFormat;
+    } else {
+      console.log('getPrintFormat service: ',host, version);
+      var servoptions = [];
+      var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+  //    console.log("xmlResponse ",xmlResponse);
+      if (xmlResponse.content){
+        var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        
+        var req = undefined;
+        switch(version) {
+        case '1.3.0':
+          if (parseResponse.WMS_Capabilities.Capability[0]){
+            req = parseResponse.WMS_Capabilities.Capability[0].Request;
+          }
+          break;
+        case '1.1.1':
+        default:
+          if (parseResponse.WMT_MS_Capabilities.Capability[0]){
+            req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+          }
+          break;
         }
-        break;
-      case '1.1.1':
-      default:
-        if (parseResponse.WMT_MS_Capabilities.Capability[0]){
-          req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+  //      console.log("req ",req);
+        if (req){
+          if (req[0].GetMap){
+  //            console.log("req[0].GetMap ",req[0].GetMap);
+            _.each(req[0].GetMap[0].Format,function(format){
+  //            console.log(format);
+              servoptions.push({label:format, value:format});
+            });
+          }
         }
-        break;
       }
-//      console.log("req ",req);
-      if (req){
-        if (req[0].GetMap){
-//            console.log("req[0].GetMap ",req[0].GetMap);
-          _.each(req[0].GetMap[0].Format,function(format){
-//            console.log(format);
-            servoptions.push({label:format, value:format});
-          });
-        }
-      }
+      sortedServoptions = _.sortBy(servoptions, 'label');
+      PRINTFORMAT.set(PRINTFORMATKEY, sortedServoptions);
     }
-    var sortedServoptions = _.sortBy(servoptions, 'label');
-//    console.log('WMS getmap format found: ',sortedServoptions);
+    console.log('WMS getmap format found: ',sortedServoptions);
     return sortedServoptions;
   },
   
