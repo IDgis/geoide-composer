@@ -16,13 +16,22 @@ import { Maps } from '/imports/api/collections/maps.js';
  * Global variables used for caching WMS/WFS request results
  * 
  */
-
 PRINTFORMAT = new Map();
 WMSLAYERS = new Map();
 TMSLAYERS = new Map();
 FEATURETYPES = new Map();
 DESCRIBEFEATURETYPES = new Map();
 
+// clear all caches every DELAY milliseconds
+const DELAY = 10 * 60 * 1000; // 10 minutes
+Meteor.setInterval(function(){
+  PRINTFORMAT = new Map();
+  WMSLAYERS = new Map();
+  TMSLAYERS = new Map();
+  FEATURETYPES = new Map();
+  DESCRIBEFEATURETYPES = new Map();  
+  console.log("Cleared WMS/WFS request caches");
+}, DELAY);
 
 Meteor.methods({
   /**
