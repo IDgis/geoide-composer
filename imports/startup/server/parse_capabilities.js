@@ -18,6 +18,11 @@ import { Maps } from '/imports/api/collections/maps.js';
  */
 
 PRINTFORMAT = new Map();
+WMSLAYERS = new Map();
+TMSLAYERS = new Map();
+FEATURETYPES = new Map();
+DESCRIBEFEATURETYPES = new Map();
+
 
 Meteor.methods({
   /**
@@ -174,8 +179,14 @@ Meteor.methods({
    * Get layers from a WMS
    */
   getWmsLayers: function(host, version){
-    console.log('getWmsLayers host: ' + host + ', version: ' + version);
-    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+    var sortedServoptions = [];
+    var WMSLAYERSKEY = host + "-" + version;
+    console.log('getWmsLayers key: ', WMSLAYERSKEY);
+    var resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
+    if (resultWmsLayers){
+      sortedServoptions = resultWmsLayers;
+    } else {
+      var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
 //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
     var parseResponse = Meteor.call('parseXml', xmlResponse.content);
     var servoptions = [];
@@ -224,9 +235,12 @@ Meteor.methods({
         });
       }
     });
-    var sortedServoptions = _.sortBy(servoptions, 'title');
+      sortedServoptions = _.sortBy(servoptions, 'title');
+      WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
+    }
     console.log('WMS Layers found: ',sortedServoptions);
     return sortedServoptions;
+  
   },
   
   /**
