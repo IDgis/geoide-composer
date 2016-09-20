@@ -247,7 +247,7 @@ Meteor.methods({
       sortedServoptions = _.sortBy(servoptions, 'title');
       WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
     }
-    console.log('WMS Layers found: ',sortedServoptions);
+//    console.log('WMS Layers found: ',sortedServoptions);
     return sortedServoptions;
   
   },
@@ -285,7 +285,7 @@ Meteor.methods({
       servoptions.push({name:layername, title:layername});
       TMSLAYERS.set(TMSLAYERSKEY, servoptions);
     }
-    console.log('TMS Layers found: ',servoptions);
+//    console.log('TMS Layers found: ',servoptions);
     return servoptions;
   },
   
@@ -342,7 +342,7 @@ Meteor.methods({
       sortedServoptions = _.sortBy(servoptions, 'title');
       FEATURETYPES.set(FEATURETYPESKEY, sortedServoptions);
     }
-    console.log('WFS FeatureTypes found: ',sortedServoptions);
+//    console.log('WFS FeatureTypes found: ',sortedServoptions);
     return sortedServoptions;
   },
   
@@ -434,7 +434,7 @@ Meteor.methods({
         }
       }
     }
-    console.log('describeFeatureType found: ', ft.options);
+//    console.log('describeFeatureType found: ', ft.options);
     return ft;
   },
   
@@ -526,7 +526,7 @@ Meteor.methods({
       sortedServoptions = _.sortBy(servoptions, 'label');
       PRINTFORMAT.set(PRINTFORMATKEY, sortedServoptions);
     }
-    console.log('WMS getmap format found: ',sortedServoptions);
+//    console.log('WMS getmap format found: ',sortedServoptions);
     return sortedServoptions;
   },
   
