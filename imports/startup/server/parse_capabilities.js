@@ -188,53 +188,53 @@ Meteor.methods({
     } else {
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
 //    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
-    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-    var servoptions = [];
-
-//    console.log('------- Capability -------');
-    switch(version) {
-    case '1.3.0':
-      // version 1.3.0
-//      console.log('------- WMS Capability main -------', parseResponse.WMS_Capabilities.Capability);
-      // main layer
-      var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
-      break;
-    case '1.1.1':
-    default:
-      // version 1.1.1
-//      console.log('------- WMS Capability main -------', parseResponse.WMT_MS_Capabilities.Capability);
-      // main layer
-      var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
-      break;
-    }
+      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      var servoptions = [];
   
-//    console.log('******* main Layers *******');
-    _.each(capLayer,function(mainLayer){
-//      console.log(mainLayer);
-      if (mainLayer.$){
-        if (mainLayer.$.queryable){
-          if (mainLayer.$.queryable == '1'){
-            servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
-          }
-        }
+  //    console.log('------- Capability -------');
+      switch(version) {
+      case '1.3.0':
+        // version 1.3.0
+  //      console.log('------- WMS Capability main -------', parseResponse.WMS_Capabilities.Capability);
+        // main layer
+        var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
+        break;
+      case '1.1.1':
+      default:
+        // version 1.1.1
+  //      console.log('------- WMS Capability main -------', parseResponse.WMT_MS_Capabilities.Capability);
+        // main layer
+        var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
+        break;
       }
-//      console.log('**************************');
-      // sub layer(s)
-      if (mainLayer.Layer){
-//        console.log('...... sub Layers .........');
-        _.each(mainLayer.Layer,function(subLayer){
-//          console.log(subLayer);
-          if (subLayer.$){
-            if (subLayer.$.queryable){
-              if (subLayer.$.queryable == '1'){
-                servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
-              }
+    
+  //    console.log('******* main Layers *******');
+      _.each(capLayer,function(mainLayer){
+  //      console.log(mainLayer);
+        if (mainLayer.$){
+          if (mainLayer.$.queryable){
+            if (mainLayer.$.queryable == '1'){
+              servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
             }
           }
-//          console.log('..........................');
-        });
-      }
-    });
+        }
+  //      console.log('**************************');
+        // sub layer(s)
+        if (mainLayer.Layer){
+  //        console.log('...... sub Layers .........');
+          _.each(mainLayer.Layer,function(subLayer){
+  //          console.log(subLayer);
+            if (subLayer.$){
+              if (subLayer.$.queryable){
+                if (subLayer.$.queryable == '1'){
+                  servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
+                }
+              }
+            }
+  //          console.log('..........................');
+          });
+        }
+      });
       sortedServoptions = _.sortBy(servoptions, 'title');
       WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
     }
@@ -247,28 +247,35 @@ Meteor.methods({
    * Get layers from a TMS
    */
   getTmsLayers: function(host, version){
-    console.log('getTmsLayers host: ' + host + ', version: ' + version);
-    var xmlResponse = Meteor.call('getXml', host, {});
-//    console.log('getTmsLayers xmlResponse:', xmlResponse.content);
-    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-//    console.log('getTmsLayers parseResponse:', parseResponse);
-//    console.log('getTmsLayers TileSets:', parseResponse.TileMap.TileSets[0]);
- 
-    // version 1.0.0
-    /**
-     * get the first tileset and extract the layername from the href url
-     */
-    var tmsLayer = parseResponse.TileMap.TileSets[0].TileSet[0];
-    var href = tmsLayer.$.href;
-    var first = href.indexOf('1.0.0/') + 6;
-    var last = href.indexOf('@');
-    if (!last){
-      last = href.lastIndexOf('/');
-    }
-    // the layername is between the tms version and the last '/'or the first '@'
-    var layername = href.slice(first, last);
     var servoptions = [];
-    servoptions.push({name:layername, title:layername});
+    var TMSLAYERSKEY = host + "-" + version;
+    console.log('getTmsLayers key: ', TMSLAYERSKEY);
+    var resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
+    if (resultTmsLayers){
+      servoptions = resultTmsLayers;
+    } else {
+      var xmlResponse = Meteor.call('getXml', host, {});
+  //    console.log('getTmsLayers xmlResponse:', xmlResponse.content);
+      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+  //    console.log('getTmsLayers parseResponse:', parseResponse);
+  //    console.log('getTmsLayers TileSets:', parseResponse.TileMap.TileSets[0]);
+   
+      // version 1.0.0
+      /**
+       * get the first tileset and extract the layername from the href url
+       */
+      var tmsLayer = parseResponse.TileMap.TileSets[0].TileSet[0];
+      var href = tmsLayer.$.href;
+      var first = href.indexOf('1.0.0/') + 6;
+      var last = href.indexOf('@');
+      if (!last){
+        last = href.lastIndexOf('/');
+      }
+      // the layername is between the tms version and the last '/'or the first '@'
+      var layername = href.slice(first, last);
+      servoptions.push({name:layername, title:layername});
+      TMSLAYERS.set(TMSLAYERSKEY, servoptions);
+    }
     console.log('TMS Layers found: ',servoptions);
     return servoptions;
   },
