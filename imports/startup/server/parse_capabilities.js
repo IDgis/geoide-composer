@@ -284,47 +284,55 @@ Meteor.methods({
    * Get feature types from a WFS
    */
   getWfsFeatureTypes: function(host, version){
-    console.log('getWfsFeatureTypes host: ' + host + ', version: ' + version);
-    var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
-//    console.log('getWfsFeatureTypes xmlResponse:', xmlResponse.content);
-    var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-//    console.log('getWfsFeatureTypes parseResponse:', parseResponse);
-//    console.log('------- WFS Capability -------', parseResponse);
-//    console.log('------- WFS Capability main -------', parseResponse.WFS_Capabilities);
-//    console.log('--------------------------');
-
-    var servoptions = [];
-
-    // version:  1.0.0, 1.1.0, 2.0.0
-    // using this 'each' construction instead of 'parseResponse.WFS_Capabilities' makes it prefix unaware
-    _.each(parseResponse,function(WFS_Capabilities){
-      // But the following tag FeatureTypeList can have the same or no prefix
-      // find some common tag namespace prefixes
-      var namePrefix = '';
-      if (WFS_Capabilities['xsd:FeatureTypeList']){
-        namePrefix = 'xsd:';
-      } else if (WFS_Capabilities['xs:FeatureTypeList']){
-        namePrefix = 'xs:';
-      } else if (WFS_Capabilities['wfs:FeatureTypeList']){
-        namePrefix = 'wfs:';
-      } else {
-        namePrefix = '';
-      }
-      
-      _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
-        _.each(ftList,function(ft){
-//          console.log(ft);
-          if (ft[namePrefix+'Name']){
-            if (ft[namePrefix+'Name'][0]._){
-              servoptions.push({name:ft[namePrefix+'Name'][0]._, title:ft[namePrefix+'Title'][0]});
-            } else {
-              servoptions.push({name:ft[namePrefix+'Name'][0], title:ft[namePrefix+'Title'][0]});
+    var sortedServoptions = [];
+    var FEATURETYPESKEY = host + "-" + version;
+    console.log('getFeatureTypes key: ', FEATURETYPESKEY);
+    var resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
+    if (resultFeatureTypes){
+      sortedServoptions = resultFeatureTypes;
+    } else {
+      var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
+  //    console.log('getWfsFeatureTypes xmlResponse:', xmlResponse.content);
+      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+  //    console.log('getWfsFeatureTypes parseResponse:', parseResponse);
+  //    console.log('------- WFS Capability -------', parseResponse);
+  //    console.log('------- WFS Capability main -------', parseResponse.WFS_Capabilities);
+  //    console.log('--------------------------');
+  
+      var servoptions = [];
+  
+      // version:  1.0.0, 1.1.0, 2.0.0
+      // using this 'each' construction instead of 'parseResponse.WFS_Capabilities' makes it prefix unaware
+      _.each(parseResponse,function(WFS_Capabilities){
+        // But the following tag FeatureTypeList can have the same or no prefix
+        // find some common tag namespace prefixes
+        var namePrefix = '';
+        if (WFS_Capabilities['xsd:FeatureTypeList']){
+          namePrefix = 'xsd:';
+        } else if (WFS_Capabilities['xs:FeatureTypeList']){
+          namePrefix = 'xs:';
+        } else if (WFS_Capabilities['wfs:FeatureTypeList']){
+          namePrefix = 'wfs:';
+        } else {
+          namePrefix = '';
+        }
+        
+        _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
+          _.each(ftList,function(ft){
+  //          console.log(ft);
+            if (ft[namePrefix+'Name']){
+              if (ft[namePrefix+'Name'][0]._){
+                servoptions.push({name:ft[namePrefix+'Name'][0]._, title:ft[namePrefix+'Title'][0]});
+              } else {
+                servoptions.push({name:ft[namePrefix+'Name'][0], title:ft[namePrefix+'Title'][0]});
+              }
             }
-          }
+          });
         });
       });
-    });
-    var sortedServoptions = _.sortBy(servoptions, 'title');
+      sortedServoptions = _.sortBy(servoptions, 'title');
+      FEATURETYPES.set(FEATURETYPESKEY, sortedServoptions);
+    }
     console.log('WFS FeatureTypes found: ',sortedServoptions);
     return sortedServoptions;
   },
