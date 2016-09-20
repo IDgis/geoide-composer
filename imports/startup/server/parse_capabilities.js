@@ -496,10 +496,11 @@ Meteor.methods({
           }
           break;
         case '1.1.1':
-        default:
           if (parseResponse.WMT_MS_Capabilities.Capability[0]){
             req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
           }
+          break;
+        default:
           break;
         }
   //      console.log("req ",req);
