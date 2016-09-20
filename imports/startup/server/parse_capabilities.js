@@ -23,13 +23,13 @@ FEATURETYPES = new Map();
 DESCRIBEFEATURETYPES = new Map();
 
 // clear all caches every DELAY milliseconds
-const DELAY = 10 * 60 * 1000; // 10 minutes
+const DELAY = 60 * 60 * 1000; // 60 minutes
 Meteor.setInterval(function(){
-  PRINTFORMAT = new Map();
-  WMSLAYERS = new Map();
-  TMSLAYERS = new Map();
-  FEATURETYPES = new Map();
-  DESCRIBEFEATURETYPES = new Map();  
+  PRINTFORMAT.clear();
+  WMSLAYERS.clear();
+  TMSLAYERS.clear();
+  FEATURETYPES.clear();
+  DESCRIBEFEATURETYPES.clear();  
   console.log("Cleared WMS/WFS request caches");
 }, DELAY);
 
