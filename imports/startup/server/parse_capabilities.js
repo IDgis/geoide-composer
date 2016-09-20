@@ -349,80 +349,80 @@ Meteor.methods({
     if (resultFeatureTypes){
       ft = resultFeatureTypes;
     } else {
-      
       var serv = Services.find({_id: serviceId}).fetch();
       console.log('service found: ',serv);
       if (serv[0]){
         var host = serv[0].endpoint;
         var version = serv[0].version;
-        var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-    //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
-        var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        // find some common tag namespace prefixes
-        var namePrefix = '';
-        if (parseResponse['xsd:schema']){
-          namePrefix = 'xsd:';
-        } else if (parseResponse['xs:schema']){
-          namePrefix = 'xs:';
-        } else if (parseResponse['wfs:schema']){
-          namePrefix = 'wfs:';
-        } else {
-          namePrefix = '';
-        }
-  //      console.log('------- WFS DescribeFeatureType -------', namePrefix);
-        _.each(parseResponse,function(schema){
-  //        console.log('schema', schema);
-          ft.targetNamespace = schema.$.targetNamespace;
-          _.each(schema,function(nextTag){
-  //          console.log('nextTag', nextTag);
-            var complexType = null;
-            if (nextTag[0]){
-              // look for nextTag == element or complexType
-              if (nextTag[0][namePrefix+'complexType']){
-    //            element.complexType.complexContent.extension.sequence.element 
-                  complexType = nextTag[0][namePrefix+'complexType'];
-              } else if (nextTag[0][namePrefix+'complexContent']){
-    //            complexType.complexContent.extension.sequence.element 
-                      complexType = nextTag;
-              }
-            }
-            if (complexType){
-  //            console.log('complexType', complexType); 
-              if (complexType[0]){
-                if (complexType[0][namePrefix+'complexContent']){
-                  _.each(complexType[0],function(complexContent){     
-  //                  console.log('complexContent', complexContent);
-                    if (complexContent[0]){
-                      if (complexContent[0][namePrefix+'extension']){
-                        _.each(complexContent[0],function(extension){     
-  //                        console.log('extension', extension);
-                          if (extension[0]){
-                            if (extension[0][namePrefix+'sequence']){
-                              _.each(extension[0],function(sequence){     
-  //                              console.log('sequence', sequence);
-                                if (sequence[0]){
-                                  if (sequence[0][namePrefix+'element']){
-                                    _.each(sequence[0][namePrefix+'element'],function(ftField){     
-  //                                    console.log('FeatureType field: ' + ftField.$.name);
-                                      ft.options.push({name:ftField.$.name, title:ftField.$.name});
-                                    });
-                                  }
-                                }
-                              });
-                            }
-                          }
-                        });
-                      }
-                    }
-                  });
+        if (ftName){
+          var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+      //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
+          var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+          // find some common tag namespace prefixes
+          var namePrefix = '';
+          if (parseResponse['xsd:schema']){
+            namePrefix = 'xsd:';
+          } else if (parseResponse['xs:schema']){
+            namePrefix = 'xs:';
+          } else if (parseResponse['wfs:schema']){
+            namePrefix = 'wfs:';
+          } else {
+            namePrefix = '';
+          }
+    //      console.log('------- WFS DescribeFeatureType -------', namePrefix);
+          _.each(parseResponse,function(schema){
+    //        console.log('schema', schema);
+            ft.targetNamespace = schema.$.targetNamespace;
+            _.each(schema,function(nextTag){
+    //          console.log('nextTag', nextTag);
+              var complexType = null;
+              if (nextTag[0]){
+                // look for nextTag == element or complexType
+                if (nextTag[0][namePrefix+'complexType']){
+      //            element.complexType.complexContent.extension.sequence.element 
+                    complexType = nextTag[0][namePrefix+'complexType'];
+                } else if (nextTag[0][namePrefix+'complexContent']){
+      //            complexType.complexContent.extension.sequence.element 
+                        complexType = nextTag;
                 }
               }
-            }
+              if (complexType){
+    //            console.log('complexType', complexType); 
+                if (complexType[0]){
+                  if (complexType[0][namePrefix+'complexContent']){
+                    _.each(complexType[0],function(complexContent){     
+    //                  console.log('complexContent', complexContent);
+                      if (complexContent[0]){
+                        if (complexContent[0][namePrefix+'extension']){
+                          _.each(complexContent[0],function(extension){     
+    //                        console.log('extension', extension);
+                            if (extension[0]){
+                              if (extension[0][namePrefix+'sequence']){
+                                _.each(extension[0],function(sequence){     
+    //                              console.log('sequence', sequence);
+                                  if (sequence[0]){
+                                    if (sequence[0][namePrefix+'element']){
+                                      _.each(sequence[0][namePrefix+'element'],function(ftField){     
+    //                                    console.log('FeatureType field: ' + ftField.$.name);
+                                        ft.options.push({name:ftField.$.name, title:ftField.$.name});
+                                      });
+                                    }
+                                  }
+                                });
+                              }
+                            }
+                          });
+                        }
+                      }
+                    });
+                  }
+                }
+              }
+            });
           });
-        });
-  //      console.log('--------------------------');
-        ft.options = _.sortBy(ft.options, 'title');
-        DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
+          ft.options = _.sortBy(ft.options, 'title');
+          DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
+        }
       }
     }
     console.log('describeFeatureType found: ', ft.options);
