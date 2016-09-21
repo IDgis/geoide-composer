@@ -27,7 +27,39 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
-      options:  [],
+      options: function(){
+        console.log("attribute_localname name", this.name);
+        var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
+        var service = AutoForm.getFieldValue(serviceField);
+        console.log("attribute_localname service", serviceField, service);
+        var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
+        var ftName = AutoForm.getFieldValue(ftField);
+        console.log("attribute_localname ftName", ftField, ftName);
+        /*
+         * Fill the attribute_localname options list
+         */
+        var servoptions = [];
+  
+        if (service && ftName){
+          /*
+           * Retrieve the featuretype fields from the service
+           * and put them in the options
+           */
+          var featuretypeFields = ReactiveMethod.call(
+              'describeFeatureType',
+              service,
+              ftName
+          );
+          if (featuretypeFields){
+            _.each(featuretypeFields.options, function(f){
+              servoptions.push({label:f.title, value:f.name});            
+            });
+          }
+        }
+        console.log("return options",servoptions);
+        return servoptions;
+      },    
+      firstOption: function(){ return i18n('collections.firstOption'); },
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
