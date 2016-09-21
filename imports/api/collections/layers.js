@@ -28,13 +28,13 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
       options: function(){
-        console.log("attribute_localname name", this.name);
+//        console.log("attribute_localname name", this.name);
         var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
         var service = AutoForm.getFieldValue(serviceField);
-        console.log("attribute_localname service", serviceField, service);
+//        console.log("attribute_localname service", serviceField, service);
         var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
         var ftName = AutoForm.getFieldValue(ftField);
-        console.log("attribute_localname ftName", ftField, ftName);
+//        console.log("attribute_localname ftName", ftField, ftName);
         /*
          * Fill the attribute_localname options list
          */
@@ -56,7 +56,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
             });
           }
         }
-        console.log("return options",servoptions);
+//        console.log("return options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
@@ -78,6 +78,36 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
+      value: function(){
+//        console.log("attibute_namespace name", this.name);
+        var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
+        var service = AutoForm.getFieldValue(serviceField);
+//        console.log("attibute_namespace service", serviceField, service);
+        var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
+        var ftName = AutoForm.getFieldValue(ftField);
+//        console.log("attibute_namespace ftName", ftField, ftName);
+        /*
+         * Fill the attribute_localname options list
+         */
+        var namespace = "";
+  
+        if (service && ftName){
+          /*
+           * Retrieve the featuretype fields from the service
+           * and put them in the options
+           */
+          var featuretypeFields = ReactiveMethod.call(
+              'describeFeatureType',
+              service,
+              ftName
+          );
+          if (featuretypeFields){
+            namespace = featuretypeFields.targetNamespace;
+          }
+        }
+//        console.log("return namespace",namespace);
+        return namespace;
+      },    
       "class": 'namespace',
       "readonly": true,
       /*
@@ -132,7 +162,7 @@ SimpleSchema.featureType = new SimpleSchema ({
       options: function(){
 //        console.log("nameInWfsService name", this.name);
         var service = AutoForm.getFieldValue(this.name.replace(".nameInWfsService", ".service"));
-        console.log("nameInWfsService service", service);
+//        console.log("nameInWfsService service", service);
         /*
          * Fill the nameInWfsService options list
          */
@@ -140,7 +170,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 
         if (service){
           var serv = Services.findOne({_id:service});
-          console.log("Found service in DB", serv);
+//          console.log("Found service in DB", serv);
           /*
            * Retrieve the featuretypes from the service
            * and put them in the options
@@ -154,7 +184,7 @@ SimpleSchema.featureType = new SimpleSchema ({
             servoptions.push({label:ft.title, value:ft.name});            
           });
         }
-        console.log("return options",servoptions);
+//        console.log("return options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
@@ -220,7 +250,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     autoform: {
       options: function(){
         var service = AutoForm.getFieldValue(this.name.replace(".nameInService", ".service"));
-        console.log("nameInService service", service);
+//        console.log("nameInService service", service);
 
         /*
          * Fill the nameInService options list
@@ -228,7 +258,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
         var servoptions = [];
         if (service){
           var serv = Services.findOne({_id:service});
-          console.log("Found service in DB", serv);
+//          console.log("Found service in DB", serv);
           /*
            * Retrieve the layers from the service
            * and put them in the options
@@ -251,7 +281,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
             servoptions.push({label:layer.title, value:layer.name});            
           });
         }
-        console.log("return options",servoptions);
+//        console.log("return options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
