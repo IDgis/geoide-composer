@@ -55,6 +55,16 @@ Template.map.events({
 
 	'click .jstree' : function() {
 		console.log("click .jstree", this);
+		// only enable 'rename group' button if group is selected
+    var ref = $.jstree.reference('#maptree'), sel = ref
+    .get_selected();
+    if (!sel.length || ref.get_type(sel) === "group") {
+      console.log("enable renamenode");
+      $('#renamenode').prop('disabled', false);
+    } else {
+      console.log("disable renamenode");
+      $('#renamenode').prop('disabled', true);
+    }
 	},
 
 	'click #createlayer' : function() {
@@ -112,6 +122,9 @@ Template.map.events({
 		}
 		sel = sel[0];
 		ref.edit(sel);
+    // after rename disable 'rename group' button 
+    console.log("disable renamenode after edit");
+		$('#renamenode').prop('disabled', true);
 	},
 
 	'click #removenode' : function() {
@@ -163,6 +176,9 @@ Template.map.events({
           // ok is true if the user clicked on "ok", false otherwise
           if (ok){
             ref.delete_node(sel);
+            // after remove disable 'rename group' button 
+            console.log("disable renamenode after remove");
+            $('#renamenode').prop('disabled', true);
           }
         });
       }
@@ -247,7 +263,8 @@ Template.map.rendered = function() {
 		var parent = data.new_instance;
 		$('#maptree').jstree('open_node',data.parent);
 	})
-	
+	// disable renamenode button by default
+	$('#renamenode').prop('disabled', true);
 }
 
 fillLayerSelect = function() {
