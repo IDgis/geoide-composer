@@ -264,14 +264,23 @@ fillLayerSelect = function() {
 	     .remove()
 	     .end()
     ;
+	
+	var layerOption = undefined;
 	layers.forEach(function(entry) {
 		if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
 				entry._id)) {
-			var layerOption = "<option value=" + entry._id + ">" + entry.label
+			layerOption = "<option value=" + entry._id + ">" + entry.label
 					+ "</option>"
 			$('#layerselect').append(layerOption);
 		}
 	});
+	
+	// if the select box is empty, then disable button
+	if (layerOption){
+	  $('#createlayer').prop('disabled', false);
+	} else{
+    $('#createlayer').prop('disabled', true);
+	}
 }
 
 layerInTree = function(children, layerId) {
