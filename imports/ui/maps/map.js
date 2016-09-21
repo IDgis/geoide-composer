@@ -55,22 +55,26 @@ Template.map.events({
 
 	'click .jstree' : function() {
 		console.log("click .jstree", this);
-		// only enable 'rename group' button if group is selected
+		// check which buttons to disable/enable, 
+		// depending on what is selected in the tree
     var ref = $.jstree.reference('#maptree');
     var sel = ref.get_selected();
     if (sel){
       if (ref.get_type(sel) === "group") {
-        console.log("enable renamenode/removenode");
+//        console.log("enable renamenode/removenode/creategroup");
         $('#renamenode').prop('disabled', false);
         $('#removenode').prop('disabled', false);
+        $('#creategroup').prop('disabled', false);
       } else if (ref.get_type(sel) === "layer") {
-        console.log("disable renamenode/enable removenode");
+//        console.log("disable renamenode/creategroup, enable removenode");
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', false);
-      } else {
-        console.log("disable renamenode/removenode");
+        $('#creategroup').prop('disabled', true);
+      } else {// top node 'map' is selected
+//        console.log("disable renamenode/removenode, enable creategroup");
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', true);        
+        $('#creategroup').prop('disabled', false);
       }
     }
 	},
@@ -131,7 +135,7 @@ Template.map.events({
 		sel = sel[0];
 		ref.edit(sel);
     // after rename disable 'rename group' button 
-    console.log("disable renamenode after edit");
+//    console.log("disable renamenode after edit");
 		$('#renamenode').prop('disabled', true);
 	},
 
@@ -171,6 +175,9 @@ Template.map.events({
   				console.log('layer not found, remove is ok');
   			}
   			ref.delete_node(sel);
+        // after remove disable 'remove' button
+//        console.log("disable removenode button after remove");
+        $('#removenode').prop('disabled', true);
   		}
       if (ref.get_type(sel) === "group") {
         new Confirmation({
@@ -184,10 +191,11 @@ Template.map.events({
           // ok is true if the user clicked on "ok", false otherwise
           if (ok){
             ref.delete_node(sel);
-            // after remove disable 'rename/remove' group buttons 
-            console.log("disable renamenode/removenode after remove");
+            // after remove disable 'rename/remove/creategroup' buttons 
+//            console.log("disable renamenode/removenode/creategroup buttons after remove");
             $('#renamenode').prop('disabled', true);
             $('#removenode').prop('disabled', true);
+            $('#creategroup').prop('disabled', true);
           }
         });
       }
