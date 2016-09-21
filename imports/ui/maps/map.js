@@ -56,14 +56,22 @@ Template.map.events({
 	'click .jstree' : function() {
 		console.log("click .jstree", this);
 		// only enable 'rename group' button if group is selected
-    var ref = $.jstree.reference('#maptree'), sel = ref
-    .get_selected();
-    if (!sel.length || ref.get_type(sel) === "group") {
-      console.log("enable renamenode");
-      $('#renamenode').prop('disabled', false);
-    } else {
-      console.log("disable renamenode");
-      $('#renamenode').prop('disabled', true);
+    var ref = $.jstree.reference('#maptree');
+    var sel = ref.get_selected();
+    if (sel){
+      if (ref.get_type(sel) === "group") {
+        console.log("enable renamenode/removenode");
+        $('#renamenode').prop('disabled', false);
+        $('#removenode').prop('disabled', false);
+      } else if (ref.get_type(sel) === "layer") {
+        console.log("disable renamenode/enable removenode");
+        $('#renamenode').prop('disabled', true);
+        $('#removenode').prop('disabled', false);
+      } else {
+        console.log("disable renamenode/removenode");
+        $('#renamenode').prop('disabled', true);
+        $('#removenode').prop('disabled', true);        
+      }
     }
 	},
 
@@ -176,9 +184,10 @@ Template.map.events({
           // ok is true if the user clicked on "ok", false otherwise
           if (ok){
             ref.delete_node(sel);
-            // after remove disable 'rename group' button 
-            console.log("disable renamenode after remove");
+            // after remove disable 'rename/remove' group buttons 
+            console.log("disable renamenode/removenode after remove");
             $('#renamenode').prop('disabled', true);
+            $('#removenode').prop('disabled', true);
           }
         });
       }
@@ -263,8 +272,9 @@ Template.map.rendered = function() {
 		var parent = data.new_instance;
 		$('#maptree').jstree('open_node',data.parent);
 	})
-	// disable renamenode button by default
+	// disable renamenode/removenode buttons by default
 	$('#renamenode').prop('disabled', true);
+	$('#removenode').prop('disabled', true);  
 }
 
 fillLayerSelect = function() {
