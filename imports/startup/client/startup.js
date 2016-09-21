@@ -17,7 +17,7 @@ Meteor.startup(function() {
   });
   
   AutoForm.debug(true);//enable debugging during development
-  SimpleSchema.debug = true;
+//  SimpleSchema.debug = true;
 
 });
 
