@@ -16,7 +16,7 @@ Meteor.startup(function() {
     passwordSignupFields: 'USERNAME_ONLY',
   });
   
-  AutoForm.debug(true);//enable debugging during development
+//  AutoForm.debug(true);//enable debugging during development
 //  SimpleSchema.debug = true;
 
 });
