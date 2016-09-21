@@ -54,7 +54,7 @@ Template.map.events({
 	},
 
 	'click .jstree' : function() {
-		console.log("click .jstree");
+		console.log("click .jstree", this);
 	},
 
 	'click #createlayer' : function() {
@@ -171,10 +171,6 @@ Template.map.events({
 		fillLayerSelect();
 	},
 
-	'keyup #search-tree' : function() {
-		var v = $('#search-tree').val();
-		$.jstree.reference('#maptree').search(v);
-	}
 });
 
 Template.map.rendered = function() {
