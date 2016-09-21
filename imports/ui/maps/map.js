@@ -54,27 +54,37 @@ Template.map.events({
 	},
 
 	'click .jstree' : function() {
-		console.log("click .jstree", this);
+		console.log("click .jstree" , this);
 		// check which buttons to disable/enable, 
 		// depending on what is selected in the tree
     var ref = $.jstree.reference('#maptree');
+    console.log("click selected" , ref.get_selected(true));
     var sel = ref.get_selected();
     if (sel){
+      // check if select list contains anything
+      var numberOfOptions = $('#layerselect option').length;
       if (ref.get_type(sel) === "group") {
 //        console.log("enable renamenode/removenode/creategroup");
         $('#renamenode').prop('disabled', false);
         $('#removenode').prop('disabled', false);
         $('#creategroup').prop('disabled', false);
+        if (numberOfOptions > 0){
+          $('#createlayer').prop('disabled', false);
+        }
       } else if (ref.get_type(sel) === "layer") {
-//        console.log("disable renamenode/creategroup, enable removenode");
+//        console.log("disable renamenode/creategroup/createlayer, enable removenode");
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', false);
         $('#creategroup').prop('disabled', true);
+        $('#createlayer').prop('disabled', true);
       } else {// top node 'map' is selected
 //        console.log("disable renamenode/removenode, enable creategroup");
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', true);        
         $('#creategroup').prop('disabled', false);
+        if (numberOfOptions > 0){
+          $('#createlayer').prop('disabled', false);
+        }
       }
     }
 	},
@@ -135,17 +145,13 @@ Template.map.events({
 		sel = sel[0];
 		ref.edit(sel);
     // after rename disable 'rename group' button 
-//    console.log("disable renamenode after edit");
 		$('#renamenode').prop('disabled', true);
 	},
 
 	'click #removenode' : function() {
 		var ref = $.jstree.reference('#maptree');
-		console.log('removenode', ref);
 		var selObjects = ref.get_selected(true);
-		console.log('selected list', selObjects);
 		_.each(selObjects, function(sel){
-		  console.log('selected ', sel);
 		  if (ref.get_type(sel) === "map") {
 		    return false;
 		  }
@@ -155,7 +161,6 @@ Template.map.events({
   			});
   			console.log('removenode layer: ', lyr);
   			if (lyr) {
-  				console.log('removenode layer.type:', lyr.type);
   				var adminLoggedIn = false;
   				if (Meteor.user()) {
   					// a user is logged in
@@ -175,6 +180,7 @@ Template.map.events({
   				console.log('layer not found, remove is ok');
   			}
   			ref.delete_node(sel);
+        fillLayerSelect();
         // after remove disable 'remove' button
 //        console.log("disable removenode button after remove");
         $('#removenode').prop('disabled', true);
@@ -190,7 +196,8 @@ Template.map.events({
         }, function (ok) {
           // ok is true if the user clicked on "ok", false otherwise
           if (ok){
-            ref.delete_node(sel);
+            ref.delete_node([sel]);
+            fillLayerSelect();
             // after remove disable 'rename/remove/creategroup' buttons 
 //            console.log("disable renamenode/removenode/creategroup buttons after remove");
             $('#renamenode').prop('disabled', true);
@@ -200,8 +207,6 @@ Template.map.events({
         });
       }
 		});
-		
-		fillLayerSelect();
 	},
 
 });
@@ -276,11 +281,12 @@ Template.map.rendered = function() {
 		fillLayerSelect();
 	})
 	
-	.on("move_node.jstree", function(e, data) {
-		var parent = data.new_instance;
-		$('#maptree').jstree('open_node',data.parent);
-	})
-	// disable renamenode/removenode buttons by default
+  .on("move_node.jstree", function(e, data) {
+    var parent = data.new_instance;
+    $('#maptree').jstree('open_node',data.parent);
+  })
+  
+  // disable renamenode/removenode buttons by default
 	$('#renamenode').prop('disabled', true);
 	$('#removenode').prop('disabled', true);  
 }
@@ -359,7 +365,7 @@ AutoForm.addHooks('mapForm',{
 	onSuccess : function(formType, result) {
 		// Stuur een refresh request naar de viewer en ga naar
 		// de list
-		console.log("submit map autoform, goto list");
+		console.log("submit map autoform, trigger viewer, then goto list");
 		Meteor.call('triggerViewerReload', function(lError,
 				lResponse) {
 			if (lError) {
