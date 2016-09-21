@@ -7,6 +7,8 @@ import {Layers} from '/imports/api/collections/layers.js';
 import './map.html';
 import '../i18n/maps/help.html';
 
+const MAX_TREE_DEPTH = 4;
+
 Template.map.helpers({
 	/**
 	 * Mapscollection
@@ -54,31 +56,40 @@ Template.map.events({
 	},
 
 	'click .jstree' : function() {
-		console.log("click .jstree" , this);
+		console.log("click .jstree");
 		// check which buttons to disable/enable, 
 		// depending on what is selected in the tree
     var ref = $.jstree.reference('#maptree');
-    console.log("click selected" , ref.get_selected(true));
     var sel = ref.get_selected();
     if (sel){
       // check if select list contains anything
       var numberOfOptions = $('#layerselect option').length;
       if (ref.get_type(sel) === "group") {
-//        console.log("enable renamenode/removenode/creategroup");
+//      enable renamenode/removenode/creategroup
         $('#renamenode').prop('disabled', false);
         $('#removenode').prop('disabled', false);
         $('#creategroup').prop('disabled', false);
         if (numberOfOptions > 0){
           $('#createlayer').prop('disabled', false);
         }
+        var depth = ref.get_selected(true)[0].parents.length;
+        // max depth does not allow another group or layer to be added
+        if (depth == MAX_TREE_DEPTH){
+          $('#createlayer').prop('disabled', true);
+          $('#creategroup').prop('disabled', true);
+        }
+        // (max depth - 1) does not allow another group to be added
+        if (depth == (MAX_TREE_DEPTH - 1)){
+          $('#creategroup').prop('disabled', true);
+        }
       } else if (ref.get_type(sel) === "layer") {
-//        console.log("disable renamenode/creategroup/createlayer, enable removenode");
+//      disable renamenode/creategroup/createlayer, enable removenode
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', false);
         $('#creategroup').prop('disabled', true);
         $('#createlayer').prop('disabled', true);
       } else {// top node 'map' is selected
-//        console.log("disable renamenode/removenode, enable creategroup");
+//      disable renamenode/removenode, enable creategroup
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', true);        
         $('#creategroup').prop('disabled', false);
@@ -246,7 +257,7 @@ Template.map.rendered = function() {
 		types : {
 			"#" : {
 				"max_children" : 1,
-				"max_depth" : 4,
+				"max_depth" : MAX_TREE_DEPTH,
 				"valid_children" : [ "map" ]
 			},
 			map : {
