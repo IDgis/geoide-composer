@@ -7,6 +7,8 @@ import {Layers} from '/imports/api/collections/layers.js';
 import './map.html';
 import '../i18n/maps/help.html';
 
+const MAX_TREE_DEPTH = 4;
+
 Template.map.helpers({
 	/**
 	 * Mapscollection
@@ -55,6 +57,47 @@ Template.map.events({
 
 	'click .jstree' : function() {
 		console.log("click .jstree");
+		// check which buttons to disable/enable, 
+		// depending on what is selected in the tree
+    var ref = $.jstree.reference('#maptree');
+    var sel = ref.get_selected();
+    if (sel){
+      // check if select list contains anything
+      var numberOfOptions = $('#layerselect option').length;
+      if (ref.get_type(sel) === "group") {
+//      enable renamenode/removenode/creategroup
+        $('#renamenode').prop('disabled', false);
+        $('#removenode').prop('disabled', false);
+        $('#creategroup').prop('disabled', false);
+        if (numberOfOptions > 0){
+          $('#createlayer').prop('disabled', false);
+        }
+        var depth = ref.get_selected(true)[0].parents.length;
+        // max depth does not allow another group or layer to be added
+        if (depth == MAX_TREE_DEPTH){
+          $('#createlayer').prop('disabled', true);
+          $('#creategroup').prop('disabled', true);
+        }
+        // (max depth - 1) does not allow another group to be added
+        if (depth == (MAX_TREE_DEPTH - 1)){
+          $('#creategroup').prop('disabled', true);
+        }
+      } else if (ref.get_type(sel) === "layer") {
+//      disable renamenode/creategroup/createlayer, enable removenode
+        $('#renamenode').prop('disabled', true);
+        $('#removenode').prop('disabled', false);
+        $('#creategroup').prop('disabled', true);
+        $('#createlayer').prop('disabled', true);
+      } else {// top node 'map' is selected
+//      disable renamenode/removenode, enable creategroup
+        $('#renamenode').prop('disabled', true);
+        $('#removenode').prop('disabled', true);        
+        $('#creategroup').prop('disabled', false);
+        if (numberOfOptions > 0){
+          $('#createlayer').prop('disabled', false);
+        }
+      }
+    }
 	},
 
 	'click #createlayer' : function() {
@@ -112,15 +155,14 @@ Template.map.events({
 		}
 		sel = sel[0];
 		ref.edit(sel);
+    // after rename disable 'rename group' button 
+		$('#renamenode').prop('disabled', true);
 	},
 
 	'click #removenode' : function() {
 		var ref = $.jstree.reference('#maptree');
-		console.log('removenode', ref);
 		var selObjects = ref.get_selected(true);
-		console.log('selected list', selObjects);
 		_.each(selObjects, function(sel){
-		  console.log('selected ', sel);
 		  if (ref.get_type(sel) === "map") {
 		    return false;
 		  }
@@ -130,7 +172,6 @@ Template.map.events({
   			});
   			console.log('removenode layer: ', lyr);
   			if (lyr) {
-  				console.log('removenode layer.type:', lyr.type);
   				var adminLoggedIn = false;
   				if (Meteor.user()) {
   					// a user is logged in
@@ -150,6 +191,10 @@ Template.map.events({
   				console.log('layer not found, remove is ok');
   			}
   			ref.delete_node(sel);
+        fillLayerSelect();
+        // after remove disable 'remove' button
+//        console.log("disable removenode button after remove");
+        $('#removenode').prop('disabled', true);
   		}
       if (ref.get_type(sel) === "group") {
         new Confirmation({
@@ -162,19 +207,19 @@ Template.map.events({
         }, function (ok) {
           // ok is true if the user clicked on "ok", false otherwise
           if (ok){
-            ref.delete_node(sel);
+            ref.delete_node([sel]);
+            fillLayerSelect();
+            // after remove disable 'rename/remove/creategroup' buttons 
+//            console.log("disable renamenode/removenode/creategroup buttons after remove");
+            $('#renamenode').prop('disabled', true);
+            $('#removenode').prop('disabled', true);
+            $('#creategroup').prop('disabled', true);
           }
         });
       }
 		});
-		
-		fillLayerSelect();
 	},
 
-	'keyup #search-tree' : function() {
-		var v = $('#search-tree').val();
-		$.jstree.reference('#maptree').search(v);
-	}
 });
 
 Template.map.rendered = function() {
@@ -212,7 +257,7 @@ Template.map.rendered = function() {
 		types : {
 			"#" : {
 				"max_children" : 1,
-				"max_depth" : 4,
+				"max_depth" : MAX_TREE_DEPTH,
 				"valid_children" : [ "map" ]
 			},
 			map : {
@@ -247,11 +292,14 @@ Template.map.rendered = function() {
 		fillLayerSelect();
 	})
 	
-	.on("move_node.jstree", function(e, data) {
-		var parent = data.new_instance;
-		$('#maptree').jstree('open_node',data.parent);
-	})
-	
+  .on("move_node.jstree", function(e, data) {
+    var parent = data.new_instance;
+    $('#maptree').jstree('open_node',data.parent);
+  })
+  
+  // disable renamenode/removenode buttons by default
+	$('#renamenode').prop('disabled', true);
+	$('#removenode').prop('disabled', true);  
 }
 
 fillLayerSelect = function() {
@@ -268,14 +316,23 @@ fillLayerSelect = function() {
 	     .remove()
 	     .end()
     ;
+	
+	var layerOption = undefined;
 	layers.forEach(function(entry) {
 		if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
 				entry._id)) {
-			var layerOption = "<option value=" + entry._id + ">" + entry.label
+			layerOption = "<option value=" + entry._id + ">" + entry.label
 					+ "</option>"
 			$('#layerselect').append(layerOption);
 		}
 	});
+	
+	// if the select box is empty, then disable button
+	if (layerOption){
+	  $('#createlayer').prop('disabled', false);
+	} else{
+    $('#createlayer').prop('disabled', true);
+	}
 }
 
 layerInTree = function(children, layerId) {
@@ -319,7 +376,7 @@ AutoForm.addHooks('mapForm',{
 	onSuccess : function(formType, result) {
 		// Stuur een refresh request naar de viewer en ga naar
 		// de list
-		console.log("submit map autoform, goto list");
+		console.log("submit map autoform, trigger viewer, then goto list");
 		Meteor.call('triggerViewerReload', function(lError,
 				lResponse) {
 			if (lError) {
