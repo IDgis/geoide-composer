@@ -163,7 +163,7 @@ Template.layer.events({
    * 2. get the attributes from the describeFeatureType of the selected wfs service
    * 3. and put the attribute list in selectbox 'attribute localname'
    */
-  'change select[name$="featureType.0.nameInWfsService"]' : function(e){
+  'change select[name$="featureType.0.nameInWfsServiceXXXX"]' : function(e){
     console.log("change on featureType select ");
     console.log(e);
     // get name of ft select box
