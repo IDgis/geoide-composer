@@ -236,7 +236,12 @@ Meteor.methods({
             if (subLayer.$){
               if (subLayer.$.queryable){
                 if (subLayer.$.queryable == '1'){
-                  servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
+//                  console.log("subLayer", subLayer.Name, subLayer.Title);
+                  if (subLayer.Name){
+                    if (subLayer.Title){
+                      servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
+                    }
+                  }
                 }
               }
             }
