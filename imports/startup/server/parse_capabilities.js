@@ -452,15 +452,19 @@ Meteor.methods({
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
       var parseResponse = Meteor.call('parseXml', xmlResponse.content);
       
-//      console.log('------- Capability -------');
+//      console.log('------- Capability -------', parseResponse);
       var capKey = Object.keys(parseResponse);
+//      console.log('------- capKey -------', capKey);
       var wmsCapObject = parseResponse[capKey];
       if(!wmsCapObject.Capability) {
     	  return '';
       }
       var capObject = wmsCapObject.Capability[0];      
+//      console.log('------- capObject -------', capObject);
       var layersObject = capObject.Layer;
+//      console.log('------- layersObject -------', layersObject);
       var capLayer = Meteor.call('getLayerByName',layersObject, layer);
+      console.log('------- capLayer -------', capLayer);
       if(capLayer) {
 	      if(capLayer.Style) {
 	    	  if(!capLayer.Style) {
@@ -532,17 +536,18 @@ Meteor.methods({
   
   
   getLayerByName: function(layers, name){
-	for(var i = 0; i < layers.length; i++){
-		if (layers[i].Layer) {
-			return Meteor.call('getLayerByName', layers[i].Layer, name);
-		}	
-		else if(layers[i].Name) {
-			if (layers[i].Name[0] === name ) {
-				return layers[i];
-			}	
-		} 
-	};
-	return null;
+    let result = null;
+  	for(var i = 0; i < layers.length; i++){
+  		if (layers[i].Layer) {
+  		  result = Meteor.call('getLayerByName', layers[i].Layer, name);
+  		}	
+  		else if(layers[i].Name) {
+  			if (layers[i].Name[0] === name ) {
+  			  result =  layers[i];
+  			}	
+  		} 
+  	};
+  	return result;
   },
   
   
