@@ -24,7 +24,7 @@ DESCRIBEFEATURETYPES = new Map();
 LEGENDGRAPHICURL = new Map();
 
 // clear all caches every DELAY milliseconds
-const DELAY = 60 * 60 * 1000; // 60 minutes
+const DELAY = Meteor.call('getRequestCacheDelay');
 Meteor.setInterval(function(){
   PRINTFORMAT.clear();
   WMSLAYERS.clear();
