@@ -99,7 +99,7 @@ Bij de eerste installatie van Geoide-Composer kan ``C:\Users\USER\geoide-compose
      |-- nssm-2.2.4
   
 ## Configuratie   
- De configuratie van de geoide-composer staat in het bestand ``settings.json``  
+ De configuratie van de geoide-composer staat in het bestand ``C:\Users\USER\geoide-composer\conf\settings.json``  
  Dit bestand heeft de volgende structuur:
  
     {
