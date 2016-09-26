@@ -8,10 +8,10 @@ Geoide Composer is gebouwd met meteorjs (Zie [Meteor](https://www.meteor.com/)).
 #### Voorbereiding
 Voor de volgende onderdelen dienen folders aangemaakt te worden.  
   *geoide-composer*   
-    Bijvoorbeeld C:\Users\USER\geoide-composer\    
-    maak hierin de subfolders meteor\, conf\ en logs\   
+    Bijvoorbeeld ``C:\Users\USER\geoide-composer\``    
+    maak hierin de subfolders ``meteor\``, ``conf\`` en ``logs\``   
   *Windows service manager*      
-    Bijvoorbeeld C:\Programs\   
+    Bijvoorbeeld ``C:\Programs\`` of ``C:\Users\USER\nssm\``     
 
 Zie folderstructuur hieronder  
 
@@ -19,7 +19,7 @@ Zie folderstructuur hieronder
  * Meteor - develop/runtime omgeving  
  [Meteor Installatie](https://www.meteor.com/install), volg de instructies voor Windows.  
  Wordt lokaal geinstalleerd voor de ingelogde gebruiker:  
- C:\Users\USER\AppData\Local\.meteor\meteor.bat   
+ ``C:\Users\USER\AppData\Local\.meteor\meteor.bat``   
  meteor.bat wordt gebruikt om applicatie op te starten. Deze wordt door NSSM (zie hieronder) ingesteld om als Windows service te draaien.   
    
  * NSSM - Windows Service Manager   
@@ -31,10 +31,10 @@ Zie folderstructuur hieronder
  Zie instructies hieronder.   
 
 #### Geoide-Composer als service starten   
-   Start ``C:\Programs\nssm-2.24\win64\nssm.exe install`` en vul onderdelen in zoals in het voorbeeld hieronder.   
+   Start ``C:\Programs\nssm-2.24\win64\nssm.exe install`` in een OpdrachtPrompt en vul onderdelen in zoals in het voorbeeld hieronder.   
    In onderstaande is aangegeven wat in de diverse tabbladen van de nssm GUI moet worden ingevuld:
        
-	*service name* e.g. geoide-composer-TEST   
+	*service name* e.g. geoide-composer   
 	*Application\Path* De locatie van het nssm-install-meteor-service.bat script   
 	  C:\Users\USER\geoide-composer\meteor\scripts   
 	*Application\startup directory* meteor build e.g. C:\Users\USER\geoide-composer\meteor   
@@ -43,7 +43,7 @@ Zie folderstructuur hieronder
 	  (elke meteor service moet een andere poortnummer worden toegwezen op de machine,   
 	  bijvoorbeeld 3010, 3020, 3030 etc)    
 	  Deze nummers mogen niet vlak bij elkaar liggen (dus niet 3000, 3001, 3002, etc)        
-	*Details\display name* e.g. geoide-composer   
+	*Details\display name* e.g. Geoide Composer   
 	*Details\description* naar believen in te vullen    
 	*Details\Startup type* e.g. manual     
 	*Login\Log on* Vul in de gebruiker die meteor heeft geinstalleerd, LocalSystem bijvoorbeeld werkt niet         
@@ -69,7 +69,7 @@ Om een bestaande service aan te passen:
 6. kopieer inhoud van zip (onder ``geoide-composer-ReleaseNr``, dus niet deze foldernaam zelf) naar ``C:\Users\USER\geoide-composer\meteor``
 7. wijzig, indien nodig, in ``C:\Users\USER\geoide-composer\conf\settings.json`` de versie van het programma (met kladblok of Notepad++):  
 zet het github release nummer in regel:	``"version": "0.0.22-SNAPSHOT",``
-8. start de service ``geoide-composer`` en test in browser bijv. http://localhost:3010/
+8. start de service ``geoide-composer`` 
 9. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
 NB 2: applicatie logs zijn te vinden onder ``C:\Users\USER\geoide-composer\logs\``   
 NB 3: configuratie moet in  ``C:\Users\USER\geoide-composer\conf\settings.json`` staan   
