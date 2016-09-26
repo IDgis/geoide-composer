@@ -31,8 +31,7 @@ Zie folderstructuur hieronder
  Zie instructies hieronder.   
 
 #### Geoide-Composer als service starten   
-   *nssm-install-meteor-service.bat*   
-   start C:\Programs\nssm-2.24\win64\nssm.exe install en vul onderdelen in zoals in het voorbeeld hieronder.   
+   Start ``C:\Programs\nssm-2.24\win64\nssm.exe install`` en vul onderdelen in zoals in het voorbeeld hieronder.   
    In onderstaande is aangegeven wat in de diverse tabbladen van de nssm GUI moet worden ingevuld:
        
 	*service name* e.g. geoide-composer-TEST   
@@ -51,6 +50,9 @@ Zie folderstructuur hieronder
 	*IO\Output stdout* choose C:\Users\USER\geoide-composer\logs\out.log    
 	*IO\Error stderr* choose C:\Users\USER\geoide-composer\logs\err.log    
     
+
+Om een bestaande service aan te passen:   
+``C:\Programs\nssm-2.24\win64\nssm.exe edit <service name>``
 
 #### Verificatie   
   Kijk of de service onder de opgegeven naam is geinstalleerd (Windows beheer, services)   
@@ -89,6 +91,7 @@ Bij de eerste installatie van Geoide-Composer kan ``C:\Users\USER\geoide-compose
      |-- conf\
      |     settings.json
      
+
   *Windows service manager*  
   Om een meteor applicatie als Windows service te kunnen installeren   
     
