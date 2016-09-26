@@ -29,7 +29,7 @@ Meteor.setInterval(function(){
   WMSLAYERS.clear();
   TMSLAYERS.clear();
   FEATURETYPES.clear();
-  DESCRIBEFEATURETYPES.clear();  
+  DESCRIBEFEATURETYPES.clear();
   console.log("Cleared WMS/WFS request caches");
 }, DELAY);
 
@@ -448,6 +448,7 @@ Meteor.methods({
    */
   getLegendGraphicUrl: function(serviceId, layer){
     console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
+    let result = '';
     var serv = Services.find({_id: serviceId}).fetch();
     console.log('service found: ',serv);
     if (serv[0]){
@@ -461,30 +462,25 @@ Meteor.methods({
       var capKey = Object.keys(parseResponse);
 //      console.log('------- capKey -------', capKey);
       var wmsCapObject = parseResponse[capKey];
-      if(!wmsCapObject.Capability) {
-    	  return '';
+      if(wmsCapObject.Capability) {
+        var capObject = wmsCapObject.Capability[0];      
+  //      console.log('------- capObject -------', capObject);
+        var layersObject = capObject.Layer;
+  //      console.log('------- layersObject -------', layersObject);
+        var capLayer = Meteor.call('getLayerByName',layersObject, layer);
+        console.log('------- capLayer -------', capLayer);
+        if(capLayer) {
+  	      if(capLayer.Style) {
+  	    	  if(capLayer.Style[0].LegendURL) {
+  	    		  if(capLayer.Style[0].LegendURL[0].OnlineResource[0]) {
+  	    		    result = capLayer.Style[0].LegendURL[0].OnlineResource[0].$['xlink:href'];
+  	    		  }
+  	    	  }
+  	      }
+        }
       }
-      var capObject = wmsCapObject.Capability[0];      
-//      console.log('------- capObject -------', capObject);
-      var layersObject = capObject.Layer;
-//      console.log('------- layersObject -------', layersObject);
-      var capLayer = Meteor.call('getLayerByName',layersObject, layer);
-      console.log('------- capLayer -------', capLayer);
-      if(capLayer) {
-	      if(capLayer.Style) {
-	    	  if(!capLayer.Style) {
-	    		  return '';
-	    	  }
-	    	  if(capLayer.Style[0].LegendURL) {
-	    		  if(!capLayer.Style[0].LegendURL[0].OnlineResource[0]) { 
-	    			  return '';
-	    		  }
-	    		  return capLayer.Style[0].LegendURL[0].OnlineResource[0].$['xlink:href'];
-	    	  }
-	      }
-      }
-      return '';
     }
+    return result;
   },
   
   
