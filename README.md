@@ -25,41 +25,20 @@ Zie folderstructuur hieronder
  * NSSM - Windows Service Manager   
  [Installatie](https://nssm.cc/)   
  Download nssm 2.24 (2014-08-31) zip bestand    
- Zip uitpakken in bijvoorbeeld C:\Programs\   
+ Zip uitpakken in bijvoorbeeld C:\Programs\ of C:\Users\USER\nssm\   
  Voeg een service toe door het volgende commando in een terminal uit te voeren:  
  ``C:\Programs\nssm-2.24\win64\nssm.exe install``   
  Zie instructies hieronder.   
- 
-#### Folder structuur na voorbereiding en installatie
-  *Geoide-Composer*  
-  De geoide-composer applicatie    
-
-    C:\Users\USER\geoide-composer\
-     |-- meteor\ 
-     |     (inhoud van zip file)
-     |         \-- scripts
-     |                 nssm-install-meteor-service.bat
-     |-- logs\  
-     |     out.log
-     |     err.log
-     |-- conf\
-     |     settings.json
-     
-  *Windows service manager*  
-  Om een meteor applicatie als Windows service te kunnen installeren   
-    
-    C:\Programs
-     |-- nssm-2.2.4
-  
 
 #### Geoide-Composer als service starten   
    *nssm-install-meteor-service.bat*   
    start C:\Programs\nssm-2.24\win64\nssm.exe install en vul onderdelen in zoals in het voorbeeld hieronder.   
    In onderstaande is aangegeven wat in de diverse tabbladen van de nssm GUI moet worden ingevuld:
        
+	*service name* e.g. geoide-composer-TEST   
 	*Application\Path* De locatie van het nssm-install-meteor-service.bat script   
+	  C:\Users\USER\geoide-composer\meteor\scripts   
 	*Application\startup directory* meteor build e.g. C:\Users\USER\geoide-composer\meteor   
-	*Application\service name* e.g. geoide-composer-TEST   
 	*Application\Arguments* METEOR_PORT  
 	  bijvoorbeeld 3010 
 	  (elke meteor service moet een andere poortnummer worden toegwezen op de machine,   
@@ -67,8 +46,8 @@ Zie folderstructuur hieronder
 	  Deze nummers mogen niet vlak bij elkaar liggen (dus niet 3000, 3001, 3002, etc)        
 	*Details\display name* e.g. geoide-composer   
 	*Details\description* naar believen in te vullen    
-	*Startup type* e.g. manual     
-	*Login\Log on* Vul in de gebruiker die metero heeft geinstalleerd, LocalSystem bijvoorbeeld werkt niet         
+	*Details\Startup type* e.g. manual     
+	*Login\Log on* Vul in de gebruiker die meteor heeft geinstalleerd, LocalSystem bijvoorbeeld werkt niet         
 	*IO\Output stdout* choose C:\Users\USER\geoide-composer\logs\out.log    
 	*IO\Error stderr* choose C:\Users\USER\geoide-composer\logs\err.log    
     
@@ -91,10 +70,31 @@ zet het github release nummer in regel:	``"version": "0.0.22-SNAPSHOT",``
 8. start de service ``geoide-composer`` en test in browser bijv. http://localhost:3010/
 9. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
 NB 2: applicatie logs zijn te vinden onder ``C:\Users\USER\geoide-composer\logs\``   
-NB 3: configuratie staat in ``C:\Users\USER\geoide-composer\conf\settings.json``
+NB 3: configuratie moet in  ``C:\Users\USER\geoide-composer\conf\settings.json`` staan   
 aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.  
 Bij de eerste installatie van Geoide-Composer kan ``C:\Users\USER\geoide-composer\meteor\settings.json`` als leidraad dienen.   
  
+### Folder structuur na voorbereiding en installatie
+  *Geoide-Composer*  
+  De geoide-composer applicatie    
+
+    C:\Users\USER\geoide-composer\
+     |-- meteor\ 
+     |     (inhoud van zip file)
+     |         \-- scripts
+     |                 nssm-install-meteor-service.bat
+     |-- logs\  
+     |     out.log
+     |     err.log
+     |-- conf\
+     |     settings.json
+     
+  *Windows service manager*  
+  Om een meteor applicatie als Windows service te kunnen installeren   
+    
+    C:\Programs
+     |-- nssm-2.2.4
+  
 ## Configuratie   
  De configuratie van de geoide-composer staat in het bestand ``settings.json``  
  Dit bestand heeft de volgende structuur:
