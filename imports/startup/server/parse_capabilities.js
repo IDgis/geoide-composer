@@ -21,15 +21,17 @@ WMSLAYERS = new Map();
 TMSLAYERS = new Map();
 FEATURETYPES = new Map();
 DESCRIBEFEATURETYPES = new Map();
+LEGENDGRAPHICURL = new Map();
 
 // clear all caches every DELAY milliseconds
-const DELAY = 60 * 60 * 1000; // 60 minutes
+const DELAY = Meteor.call('getRequestCacheDelay');
 Meteor.setInterval(function(){
   PRINTFORMAT.clear();
   WMSLAYERS.clear();
   TMSLAYERS.clear();
   FEATURETYPES.clear();
-  DESCRIBEFEATURETYPES.clear();  
+  DESCRIBEFEATURETYPES.clear();
+  LEGENDGRAPHICURL.clear();
   console.log("Cleared WMS/WFS request caches");
 }, DELAY);
 
@@ -447,44 +449,45 @@ Meteor.methods({
    * GetLegendGraphic from a WMS LAYER
    */
   getLegendGraphicUrl: function(serviceId, layer){
-    console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
-    var serv = Services.find({_id: serviceId}).fetch();
-    console.log('service found: ',serv);
-    if (serv[0]){
-      var host = serv[0].endpoint;
-      var url = host;
-      var version = serv[0].version;
-      var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      
-//      console.log('------- Capability -------', parseResponse);
-      var capKey = Object.keys(parseResponse);
-//      console.log('------- capKey -------', capKey);
-      var wmsCapObject = parseResponse[capKey];
-      if(!wmsCapObject.Capability) {
-    	  return '';
+    var LEGENDGRAPHICURLKEY = serviceId + "-" + layer;
+    console.log('getLegendGraphicUrl key: ', LEGENDGRAPHICURLKEY);
+    let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
+    if (!result){
+      console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
+      var serv = Services.find({_id: serviceId}).fetch();
+      console.log('service found: ',serv);
+      if (serv[0]){
+        var host = serv[0].endpoint;
+        var url = host;
+        var version = serv[0].version;
+        var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+        var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        
+  //      console.log('------- Capability -------', parseResponse);
+        var capKey = Object.keys(parseResponse);
+  //      console.log('------- capKey -------', capKey);
+        var wmsCapObject = parseResponse[capKey];
+        if(wmsCapObject.Capability) {
+          var capObject = wmsCapObject.Capability[0];      
+    //      console.log('------- capObject -------', capObject);
+          var layersObject = capObject.Layer;
+    //      console.log('------- layersObject -------', layersObject);
+          var capLayer = Meteor.call('getLayerByName',layersObject, layer);
+          console.log('------- capLayer -------', capLayer);
+          if(capLayer) {
+    	      if(capLayer.Style) {
+    	    	  if(capLayer.Style[0].LegendURL) {
+    	    		  if(capLayer.Style[0].LegendURL[0].OnlineResource[0]) {
+    	    		    result = capLayer.Style[0].LegendURL[0].OnlineResource[0].$['xlink:href'];
+    	    		  }
+    	    	  }
+    	      }
+          }
+        }
       }
-      var capObject = wmsCapObject.Capability[0];      
-//      console.log('------- capObject -------', capObject);
-      var layersObject = capObject.Layer;
-//      console.log('------- layersObject -------', layersObject);
-      var capLayer = Meteor.call('getLayerByName',layersObject, layer);
-      console.log('------- capLayer -------', capLayer);
-      if(capLayer) {
-	      if(capLayer.Style) {
-	    	  if(!capLayer.Style) {
-	    		  return '';
-	    	  }
-	    	  if(capLayer.Style[0].LegendURL) {
-	    		  if(!capLayer.Style[0].LegendURL[0].OnlineResource[0]) { 
-	    			  return '';
-	    		  }
-	    		  return capLayer.Style[0].LegendURL[0].OnlineResource[0].$['xlink:href'];
-	    	  }
-	      }
-      }
-      return '';
+      LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
+    return result;
   },
   
   

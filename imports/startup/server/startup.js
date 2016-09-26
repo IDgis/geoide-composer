@@ -57,6 +57,20 @@ Meteor.methods({
   },
 
   /**
+   * settings: delay of resetting WMS/WFS caches   
+   */
+  getRequestCacheDelay : function(){
+    if (Meteor.settings){
+      if (Meteor.settings.requestcache){
+        if (Meteor.settings.requestcache.delay){
+          return Meteor.settings.requestcache.delay;
+        }
+      }
+    }
+    return 60 * 60 * 1000; // 60 minutes;
+  },
+
+  /**
    * initiate geoide-viewer configuration reload by calling http get on url
    */
   triggerViewerReload : function (){
