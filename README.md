@@ -3,33 +3,15 @@
 Geoide Composer is gebouwd met meteorjs (Zie [Meteor](https://www.meteor.com/)).
 
 ## Installatie
-
-### Instructie voor deployment van nieuwe versie van Geoide Composer
-
-1. Ga naar de link die is opgegeven voor de laatste Geoide-Composer release
-2. download de release zip
-3. stop de service ``geoide-composer``
-4. ga naar ``C:\Users\USER\geoide-composer\meteor``
-5. delete alles in deze folder
-6. kopieer inhoud van zip (onder ``geoide-composer-ReleaseNr``, dus niet deze foldernaam zelf) naar ``C:\Users\USER\geoide-composer\meteor``
-7. wijzig, indien nodig, in ``C:\Users\USER\geoide-composer\conf\settings.json`` de versie van het programma (met kladblok of Notepad++):  
-zet het github release nummer in regel:	``"version": "0.0.22-SNAPSHOT",``
-8. start de service ``geoide-composer`` en test in browser bijv. http://localhost:3010/
-9. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
-NB 2: applicatie logs zijn te vinden onder ``C:\Users\USER\geoide-composer\logs\``   
-NB 3: configuratie staat in ``C:\Users\USER\geoide-composer\conf\settings.json``
-aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.
- 
-
 ### Instructie voor inrichten Windows machine voor Meteor 
   
 #### Voorbereiding
 Voor de volgende onderdelen dienen folders aangemaakt te worden.  
   *geoide-composer*   
-    Bijvoorbeeld C:\Users\USER\geoide-composer\
-    maak hierin de subfolders meteor\, conf\ en logs\
+    Bijvoorbeeld C:\Users\USER\geoide-composer\    
+    maak hierin de subfolders meteor\, conf\ en logs\   
   *Windows service manager*      
-    Bijvoorbeeld C:\Programs\
+    Bijvoorbeeld C:\Programs\   
 
 Zie folderstructuur hieronder  
 
@@ -46,7 +28,7 @@ Zie folderstructuur hieronder
  Zip uitpakken in bijvoorbeeld C:\Programs\   
  Voeg een service toe door het volgende commando in een terminal uit te voeren:  
  ``C:\Programs\nssm-2.24\win64\nssm.exe install``   
- Bekijk het bestand ``nssm-install-meteor-service.bat`` voor instructies   
+ Zie instructies hieronder.   
  
 #### Folder structuur na voorbereiding en installatie
   *Geoide-Composer*  
@@ -93,8 +75,26 @@ Zie folderstructuur hieronder
 
 #### Verificatie   
   Kijk of de service onder de opgegeven naam is geinstalleerd (Windows beheer, services)   
+  Als Geoide-Composer nog niet is gedeployed, voer dit dan eerst uit (zie hieronder).   
   Start de service en ga met een browser naar http://localhost:METEOR_PORT   
 	
+### Instructie voor deployment van nieuwe versie van Geoide Composer
+
+1. Ga naar de link die is opgegeven voor de laatste Geoide-Composer release
+2. download de release zip
+3. stop de service ``geoide-composer``
+4. ga naar ``C:\Users\USER\geoide-composer\meteor``
+5. delete alles in deze folder
+6. kopieer inhoud van zip (onder ``geoide-composer-ReleaseNr``, dus niet deze foldernaam zelf) naar ``C:\Users\USER\geoide-composer\meteor``
+7. wijzig, indien nodig, in ``C:\Users\USER\geoide-composer\conf\settings.json`` de versie van het programma (met kladblok of Notepad++):  
+zet het github release nummer in regel:	``"version": "0.0.22-SNAPSHOT",``
+8. start de service ``geoide-composer`` en test in browser bijv. http://localhost:3010/
+9. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
+NB 2: applicatie logs zijn te vinden onder ``C:\Users\USER\geoide-composer\logs\``   
+NB 3: configuratie staat in ``C:\Users\USER\geoide-composer\conf\settings.json``
+aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.  
+Bij de eerste installatie van Geoide-Composer kan ``C:\Users\USER\geoide-composer\meteor\settings.json`` als leidraad dienen.   
+ 
 ## Configuratie   
  De configuratie van de geoide-composer staat in het bestand ``settings.json``  
  Dit bestand heeft de volgende structuur:
@@ -117,7 +117,8 @@ De onderdelen:
   * version - dit versie nummer wordt getoond in de GUI van de Geoide-Composer  
   * reloadConfigUrl - dit is een url van de Geoide-Viewer   
     Geoide-Composer roept deze url aan telkens als er iets wordt opgeslagen.    
-  * delay - het interval in milliseconden waarin cahce wordt geleegd.  
+  * delay - het interval in milliseconden waarin cache wordt geleegd.  
    (alle requests naar externe services (WMS, WFS, TMS) worden gecached,     
    regelmatig worden deze caches leeggemaakt om tussentijdse veranderingen in services mee te kunnen nemen)   
+
 
