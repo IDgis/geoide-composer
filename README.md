@@ -167,12 +167,19 @@ blijkt tot problemen te kunnen leiden in de applicatie, in ieder geval bij gebru
 Om de gegevens van Geoide-Composer te backuppen:  
 1. stop de service ``geoide-composer``  
 2. ga naar folder ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``  
-3. kopieer bestanden met extensie \*.0 en \*.ns naar een backup locatie  
+3. kopieer bestanden local.\* en meteor.\* naar een backup locatie  
 4. start de service ``geoide-composer``  
 
 Om de gegevens van Geoide-Composer te herstellen:  
 1. stop de service ``geoide-composer``  
-2. kopieer bestanden met extensie \*.0 en \*.ns van de backup locatie naar de folder:     
+2. kopieer bestanden local.\* en meteor.\* van de backup locatie naar de folder:     
    ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``  
 3. start de service ``geoide-composer``  
 
+NB 1: Let op dat dezelfde gebruiker de backup en restore uitvoert.   
+NB 2: Het is beter om een aparte, centrale Mongo installatie te gebruiken   
+en de databases van alle Geoide Composer instanties hiermee te beheren.  
+In dat geval zijn ook commando's als mongodump en mongorestore beschikbaar.   
+
+
+   
