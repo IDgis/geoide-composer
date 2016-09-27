@@ -123,7 +123,7 @@ Voorbeelden:
 Voor elke instantie van Geoide Composer wordt een eigen service gemaakt met nssm.
 
 ### poorten
-Elke instantie van Geoide Composer krijgt een eigen poort nummer waarmee meteor communiceerd met de browser.   
+Elke instantie van Geoide Composer krijgt een eigen poort nummer waarmee meteor communiceert met de browser.   
 Voor deze poortnummers geldt het volgende:   
 1. de standaard meteor poort is 3000.   
 2. Intern gebruikt meteor ook poortnr+1, dus bijvoorbeeld 3001.   
