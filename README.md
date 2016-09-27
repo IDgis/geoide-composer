@@ -124,10 +124,10 @@ Voor elke instantie van Geoide Composer wordt een eigen service gemaakt met nssm
 
 ### poorten
 Elke instantie van Geoide Composer krijgt een eigen poort nummer waarmee meteor communiceerd met de browser.   
-Voor deze poortnummers geldt het volgende:
+Voor deze poortnummers geldt het volgende:   
 1. de standaard meteor poort is 3000.   
-Intern gebruikt metero ook poortnr+1, dus bijvoorbeeld 3001.   
-Gebruik deze standaard poorten bij voorkeur niet, maar ga uit van de reeks 3010, 3020, 3030 etc.
+2. Intern gebruikt metero ook poortnr+1, dus bijvoorbeeld 3001.   
+Gebruik deze standaard poorten bij voorkeur niet, maar ga uit van de reeks 3010, 3020, 3030 etc.   
 
 
 ### url's
