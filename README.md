@@ -73,8 +73,8 @@ zet het github release nummer in regel:	``"version": "0.0.22-SNAPSHOT",``
 9. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
 NB 2: applicatie logs zijn te vinden onder ``C:\Users\USER\geoide-composer\logs\``   
 NB 3: configuratie moet in  ``C:\Users\USER\geoide-composer\conf\settings.json`` staan   
-aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.  
-Bij de eerste installatie van Geoide-Composer kan ``C:\Users\USER\geoide-composer\meteor\settings.json`` als leidraad dienen.   
+aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.   
+Zie ook paragraaf Configuratie.   
  
 ### Folder structuur na voorbereiding en installatie
   *Geoide-Composer*  
@@ -124,4 +124,16 @@ De onderdelen:
    (alle requests naar externe services (WMS, WFS, TMS) worden gecached,     
    regelmatig worden deze caches leeggemaakt om tussentijdse veranderingen in services mee te kunnen nemen)   
 
+## Backup en restore
+Om de gegevens van Geoide-Composer te backuppen:
+1. stop de service ``geoide-composer``
+2. ga naar folder ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``
+3. kopieer bestanden met extensie \*.0 en \*.ns naar een backup locatie
+4. start de service ``geoide-composer``
+
+Om de gegevens van Geoide-Composer te herstellen:
+1. stop de service ``geoide-composer``
+2. kopieer bestanden met extensie \*.0 en \*.ns van de backup locatie naar de folder:   
+   ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``
+3. start de service ``geoide-composer``
 
