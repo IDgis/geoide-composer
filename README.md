@@ -126,7 +126,7 @@ Voor elke instantie van Geoide Composer wordt een eigen service gemaakt met nssm
 Elke instantie van Geoide Composer krijgt een eigen poort nummer waarmee meteor communiceerd met de browser.   
 Voor deze poortnummers geldt het volgende:   
 1. de standaard meteor poort is 3000.   
-2. Intern gebruikt metero ook poortnr+1, dus bijvoorbeeld 3001.   
+2. Intern gebruikt meteor ook poortnr+1, dus bijvoorbeeld 3001.   
 Gebruik deze standaard poorten bij voorkeur niet, maar ga uit van de reeks 3010, 3020, 3030 etc.   
 
 
@@ -164,15 +164,15 @@ blijkt tot problemen te kunnen leiden in de applicatie, in ieder geval bij gebru
      |-- nssm-2.2.4
   
 ## Backup en restore van Geoide Composer gegevens
-Om de gegevens van Geoide-Composer te backuppen:
-1. stop de service ``geoide-composer``
-2. ga naar folder ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``
-3. kopieer bestanden met extensie \*.0 en \*.ns naar een backup locatie
-4. start de service ``geoide-composer``
+Om de gegevens van Geoide-Composer te backuppen:  
+1. stop de service ``geoide-composer``  
+2. ga naar folder ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``  
+3. kopieer bestanden met extensie \*.0 en \*.ns naar een backup locatie  
+4. start de service ``geoide-composer``  
 
-Om de gegevens van Geoide-Composer te herstellen:
-1. stop de service ``geoide-composer``
-2. kopieer bestanden met extensie \*.0 en \*.ns van de backup locatie naar de folder:   
-   ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``
-3. start de service ``geoide-composer``
+Om de gegevens van Geoide-Composer te herstellen:  
+1. stop de service ``geoide-composer``  
+2. kopieer bestanden met extensie \*.0 en \*.ns van de backup locatie naar de folder:     
+   ``C:\Users\USER\geoide-composer\meteor\.meteor\local\db``  
+3. start de service ``geoide-composer``  
 
