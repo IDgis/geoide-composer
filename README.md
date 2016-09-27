@@ -1,21 +1,19 @@
 # Geoide Composer
 
-Geoide Composer is gebouwd met meteorjs (Zie [Meteor](https://www.meteor.com/)).
+Geoide Composer is gebouwd met meteorjs (Zie [Meteor](https://www.meteor.com/)).   
 
 ## Installatie
-### Instructie voor inrichten Windows machine voor Meteor 
-  
+### Instructie voor inrichten Windows machine voor Geoide Composer 
+De ingelogde gebruiker dient administratie rechten te hebben.   
 #### Voorbereiding
 Voor de volgende onderdelen dienen folders aangemaakt te worden.  
   *geoide-composer*   
-    Bijvoorbeeld ``C:\Programs\geoide-composer\`` of ``C:\Users\USER\geoide-composer\``    
+    Bijvoorbeeld ``C:\meteor\geoide-composer\`` of ``C:\Users\USER\geoide-composer\``    
     maak hierin de subfolders ``meteor\``, ``conf\`` en ``logs\``   
   *Windows service manager*      
-    Bijvoorbeeld ``C:\Programs\`` of ``C:\Users\USER\nssm\``     
+    Bijvoorbeeld ``C:\Programs\nssm\`` of ``C:\Users\USER\nssm\``     
 
-Het is mogelijk om meerdere instanties van Geoide Composer naast elkaar te installeren.
-Zie een mogelijke folderstructuur hieronder.
-   
+Het is mogelijk om meerdere instanties van Geoide Composer naast elkaar te installeren.   
 
 #### Installeren basis programma's   
  * Meteor - develop/runtime omgeving  
@@ -33,11 +31,11 @@ Zie een mogelijke folderstructuur hieronder.
   De belangrijkste commando's   
   ``nssm help``  geeft een lijst met commando's   
   ``nssm install`` start de gui om een nieuwe service aan te maken   
-  ``nssm edit <service-naam>`` start de gui om een nieuwe service aan te maken  
+  ``nssm edit <service-naam>`` start de gui om een service te wijzigen  
 
 #### Geoide-Composer als service starten   
    Start ``C:\Programs\nssm-2.24\win64\nssm.exe install`` in een OpdrachtPrompt en vul onderdelen in zoals in het voorbeeld hieronder.   
-   In onderstaande is aangegeven wat in de diverse tabbladen van de nssm GUI moet worden ingevuld:
+   In onderstaande is aangegeven wat in de diverse tabbladen van de nssm GUI kan worden ingevuld:
        
 	*service name* e.g. geoide-composer   
 	*Application\Path* De locatie van het nssm-install-meteor-service.bat script   
@@ -45,9 +43,6 @@ Zie een mogelijke folderstructuur hieronder.
 	*Application\startup directory* meteor build e.g. C:\Users\USER\geoide-composer\meteor   
 	*Application\Arguments* METEOR_PORT  
 	  bijvoorbeeld 3010 
-	  (elke meteor service moet een andere poortnummer worden toegwezen op de machine,   
-	  bijvoorbeeld 3010, 3020, 3030 etc)    
-	  Deze nummers mogen niet vlak bij elkaar liggen (dus niet 3000, 3001, 3002, etc)        
 	*Details\display name* e.g. Geoide Composer   
 	*Details\description* naar believen in te vullen    
 	*Details\Startup type* e.g. manual     
@@ -80,10 +75,10 @@ zet het github release nummer in regel:	``"version": "0.0.22-SNAPSHOT",``
 NB 2: applicatie logs zijn te vinden onder ``C:\Users\USER\geoide-composer\logs\``   
 NB 3: configuratie moet in  ``C:\Users\USER\geoide-composer\conf\settings.json`` staan   
 aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.   
-Zie ook paragraaf Configuratie.   
+Zie ook paragraaf Configuratie in het geval er nog geen settings.json aanwezig is.   
  
 ## Configuratie   
- De configuratie van de geoide-composer staat in het bestand ``C:\Users\USER\geoide-composer\conf\settings.json``  
+ De configuratie van de geoide-composer staat in het bestand ``C:\Users\USER\geoide-composer\conf\settings.json``     
  Dit bestand heeft de volgende structuur:
  
     {
@@ -116,7 +111,7 @@ Het belangrijkste onderscheid zit in de foldernamen, servicenamen en de toegeken
 Elke instantie van Geoide Composer wordt gekopieerd van uit de release zip naar een eigen folder.   
 Voorbeelden:
 
-    C:\Users\USER\                           C:\Programs\                      
+    C:\Users\USER\                           C:\meteor\                      
      |-- geoide-composer-test\               |-- geoide-composer-test\         
      |                                       |                                 
      |-- geoide-composer-prod\               |-- geoide-composer-prod\         
@@ -132,7 +127,8 @@ Elke instantie van Geoide Composer krijgt een eigen poort nummer waarmee meteor 
 Voor deze poortnummers geldt het volgende:
 1. de standaard meteor poort is 3000.   
 Intern gebruikt metero ook poortnr+1, dus bijvoorbeeld 3001.   
-Gebruik deze poorten bij voorkeur niet, maar ga uit van de reeks 3010, 3020, 3030 etc.
+Gebruik deze standaard poorten bij voorkeur niet, maar ga uit van de reeks 3010, 3020, 3030 etc.
+
 
 ### url's
 Het onderscheid tussen meteor applicaties zit in het poort nummer van de url.  
