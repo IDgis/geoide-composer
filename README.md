@@ -177,9 +177,17 @@ Om de gegevens van Geoide-Composer te herstellen:
 3. start de service ``geoide-composer``  
 
 NB 1: Let op dat dezelfde gebruiker de backup en restore uitvoert.   
-NB 2: Het is beter om een aparte, centrale Mongo installatie te gebruiken   
+NB 2: Het is beter om een aparte, *centrale Mongo installatie* te gebruiken   
 en de databases van alle Geoide Composer instanties hiermee te beheren.  
-In dat geval zijn ook commando's als mongodump en mongorestore beschikbaar.   
+In dat geval zijn ook commando's als mongodump en mongorestore beschikbaar,   
+en is replicatie mogelijk.   
+Gebruik in dat geval in *paragraaf* __Geoide-Composer als service starten__   
+het script ``nssm-install-meteor-service-sharedmongo.bat``   
+en vul de argumenten in nssm als volgt in:   
 
+	*Application\Arguments* METEOR_PORT  MONGO_DB_NAME    
+	  bijvoorbeeld 3010 geoide-composer-1      
+
+Elke Geoide Composer instantie krijgt dan een eigen database naam toebedeeld.   
 
    
