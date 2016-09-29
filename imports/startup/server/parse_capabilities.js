@@ -271,28 +271,17 @@ Meteor.methods({
       servoptions = resultTmsLayers;
     } else {
       var xmlResponse = Meteor.call('getXml', host, {});
-  //    console.log('getTmsLayers xmlResponse:', xmlResponse.content);
       var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-  //    console.log('getTmsLayers parseResponse:', parseResponse);
-  //    console.log('getTmsLayers TileSets:', parseResponse.TileMap.TileSets[0]);
-   
-      // version 1.0.0
+      
+      //version 1.0.0
       /**
-       * get the first tileset and extract the layername from the href url
+       * get the title from the TileMap and use this as layername and title
        */
-      var tmsLayer = parseResponse.TileMap.TileSets[0].TileSet[0];
-      var href = tmsLayer.$.href;
-      var first = href.indexOf('1.0.0/') + 6;
-      var last = href.indexOf('@');
-      if (!last){
-        last = href.lastIndexOf('/');
-      }
-      // the layername is between the tms version and the last '/'or the first '@'
-      var layername = href.slice(first, last);
+      var layername =  parseResponse.TileMap.Title;//href.slice(first, last);
       servoptions.push({name:layername, title:layername});
       TMSLAYERS.set(TMSLAYERSKEY, servoptions);
     }
-//    console.log('TMS Layers found: ',servoptions);
+
     return servoptions;
   },
   
