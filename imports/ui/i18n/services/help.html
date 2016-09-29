@@ -11,6 +11,7 @@
                     <p>U kunt een service configureren door de service eerst een unieke naam te geven.</p> 
                     <p>De URL moet verwijzen naar een WMS, WFS of TMS, 
                     bijvoorbeeld http://geodata.nationaalgeoregister.nl/bestuurlijkegrenzen/wms.</p>
+                    <p>NB: Voor een TMS service is dit de url (href)van een TileMap en niet de url van een TileMapService. Daarom: http://geodata1.nationaalgeoregister.nl/luchtfoto/tms/1.0.0/luchtfoto/EPSG28992 en niet http://geodata1.nationaalgeoregister.nl/luchtfoto/tms/1.0.0</p>
                     <p>Bij 'type' geeft u aan naar welk type service de URL verwijst. 
                     Bij de voorbeeld-URL is dat WMS.</p> 
                     <p>Daarna kiest u de versie waarmee Geoide de service kan bevragen. 
@@ -19,6 +20,8 @@
                     Deze keuze bepaalt de kwaliteit van de prints. 
                     Formaten in volgorde van kwaliteit (beste eerst): svg, png, tiff, jpeg, gif</p>
                     <p>Tenslotte klikt u op 'Opslaan'.</p>
+                    
+                    
                     <p>Tip 1 : Wanneer de muis over een invoer veld wordt bewogen verschijnt er een Tooltip.</p>   
                     <p>Tip 2 : Met de knop 'Controleren' worden de capabilities van de service opgevraagd en in een browser scherm getoond. 
                     Zo kunt u controleren of de service url correct is.</p>
