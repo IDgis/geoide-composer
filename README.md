@@ -42,7 +42,8 @@ Ga naar de link die is opgegeven voor de laatste Geoide Composer release en down
     
 
 #### Voorbereiding
-Voor de volgende onderdelen dienen folders aangemaakt te worden.  
+Voor de volgende onderdelen dienen folders aangemaakt te worden. 
+ 
   *NSSM*   
    1. Maak een folder ``C:\meteor\``   
    2. Open de configuratie zip: ``geoide-admin-deployment-[versieNr].zip``   
@@ -213,17 +214,23 @@ Gebruik deze standaard poorten bij voorkeur niet, maar ga uit van de reeks 3010,
 Het onderscheid tussen meteor applicaties zit in het poort nummer van de url.  
 Dus bijvoorbeeld http://localhost:3010/ en http://localhost:3020/.   
 Externe urls kunnen dan zijn http://www.MijnBedrijf.nl:3010/, http://www.MijnBedrijf.nl:3020/.  
-Het gebruik van http://www.MijnBedrijf.nl/composer-1/ en http://www.MijnBedrijf.nl/composer-2/   
+Het gebruik van http://www.MijnBedrijf.nl/composer-test/ en http://www.MijnBedrijf.nl/composer-prod/   
 blijkt tot problemen te kunnen leiden in de applicatie, in ieder geval bij gebruik van Windows IIS.   
   
 ## Backup en restore van Geoide Composer gegevens
 
+### Installeren initieele dataset Geoide Composer 
+TBD
+
+### Backup
 Om de gegevens van Geoide-Composer te backuppen:  
 1. stop de service ``geoide-composer-test``  
 2. voer het commando ``mongodump`` uit voor de betreffende database   
 3. kopieer bestanden local.\* en meteor.\* naar een backup locatie  
 4. start de service ``geoide-composer-test``  
 
+
+### Restore
 Om de gegevens van Geoide-Composer te herstellen:  
 1. stop de service ``geoide-composer-test``  
 2. voer het commando ``mongorestore`` uit voor de betreffende database  
