@@ -218,22 +218,33 @@ Het gebruik van http://www.MijnBedrijf.nl/composer-test/ en http://www.MijnBedri
 blijkt tot problemen te kunnen leiden in de applicatie, in ieder geval bij gebruik van Windows IIS.   
   
 ## Backup en restore van Geoide Composer gegevens
+1. Open de configuratie zip: ``geoide-admin-deployment-[versieNr].zip``   
+2. Unzip uit folder scripts/ de bestanden ``mongo-backup.bat`` en ``mongo-restore.bat`` naar een folder die in het Windows PATH staat.
+3. Voorbeeld voor gebruik:  
+``mongo-backup.bat C:\backup\geoide-composer geoide-composer1``  
+``mongo-restore.bat C:\backup\geoide-composer\geoide-composer1 geoide-composer1 ``  
 
 ### Installeren initieele dataset Geoide Composer 
-TBD
+1. Voer het restore script uit:    
+``mongo-restore.bat C:\MongoDB\dump\geoide-admin-test_crs2 [database naam]``
 
 ### Backup
 Om de gegevens van Geoide-Composer te backuppen:  
 1. stop de service ``geoide-composer-test``  
-2. voer het commando ``mongodump`` uit voor de betreffende database   
-3. kopieer bestanden local.\* en meteor.\* naar een backup locatie  
+2. voer het script ``mongo-backup`` uit voor de betreffende database   
+   ``mongo-backup.bat [folder voor database backup] [database naam]``  
+   Voorbeeld:   
+   ``mongo-backup.bat C:\backup\geoide-composer geoide-composer-test``  
 4. start de service ``geoide-composer-test``  
 
 
 ### Restore
 Om de gegevens van Geoide-Composer te herstellen:  
 1. stop de service ``geoide-composer-test``  
-2. voer het commando ``mongorestore`` uit voor de betreffende database  
+2. voer het script ``mongo-restore`` uit voor de betreffende database  
+   ``mongo-restore.bat [folder van database backup] [database naam]``  
+   Voorbeeld:   
+   ``mongo-restore.bat C:\backup\geoide-composer\geoide-composer-test geoide-composer-test ``  
 3. start de service ``geoide-composer-test``  
 
 NB: Let op dat dezelfde gebruiker de backup en restore uitvoert.   
