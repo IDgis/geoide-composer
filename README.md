@@ -44,12 +44,12 @@ Ga naar de link die is opgegeven voor de laatste Geoide Composer release en down
 #### Voorbereiding
 Voor de volgende onderdelen dienen folders aangemaakt te worden. 
  
-  *NSSM*   
+   *Geoide Composer (NSSM script)*   
    1. Maak een folder ``C:\meteor\``   
    2. Open de configuratie zip: ``geoide-admin-deployment-[versieNr].zip``   
    Kopieer scripts/nssm-install-meteor-service.bat naar ``C:\meteor\``.    
 
-  *MongoDB*   
+   *MongoDB*   
    1. Maak een folder voor de mongo data en logging: ``C:\MongoDB\``   
    2. Kopieer conf/mongo.config uit ``geoide-admin-deployment-[versieNr].zip`` naar deze folder.   
 
@@ -142,10 +142,8 @@ Om een bestaande service aan te passen:
 4. ga naar ``C:\meteor\geoide-composer-test\meteor``
 5. delete alles in deze folder
 6. kopieer inhoud van zip (onder ``geoide-admin-[versieNr]``, dus niet deze foldernaam zelf) naar ``C:\meteor\geoide-composer-test\meteor``   
-7. wijzig, indien nodig, in ``C:\meteor\geoide-composer-test\conf\settings.json`` de versie van het programma (met kladblok of Notepad++) naar [versieNr].   
-Zet het github release nummer in regel:	``"version": "[versieNr]",``
-8. start de service ``geoide-composer-test`` 
-9. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
+7. start de service ``geoide-composer-test`` 
+8. NB 1: Het opstarten kan lang duren omdat meteor eerst de applicatie moet bouwen  
 NB 2: applicatie logs zijn te vinden onder ``C:\meteor\geoide-composer-test\logs\``   
 NB 3: configuratie moet in  ``C:\meteor\geoide-composer-test\conf\settings.json`` staan   
 Aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van de service nodig.   
@@ -159,7 +157,6 @@ Aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van 
  Dit bestand heeft de volgende structuur:
  
     {
-      "version": "1.0-SNAPSHOT",
       "viewer": {
         "reloadConfigUrl": "http://httpbin.org/get"
       },
@@ -173,7 +170,6 @@ Aanpassingen hierin worden vanzelf door meteor verwerkt, er is geen restart van 
 
 Dit bestand kan gewijzigd worden met een teksteditor zoals Windows kladblok of NotePad++.
 De onderdelen:
-  * version - dit versie nummer wordt getoond in de GUI van de Geoide-Composer  
   * reloadConfigUrl - dit is een url van de Geoide-Viewer   
     Geoide-Composer roept deze url aan telkens als er iets wordt opgeslagen.    
   * delay - het interval in milliseconden waarin cache wordt geleegd.  
@@ -185,7 +181,7 @@ Er kunnen meerdere instaties van Geoide Composer naast elkaar worden geinstallee
 Het belangrijkste onderscheid zit in de foldernamen, databasenamen, servicenamen en de toegekende meteor poorten.   
 
 ### folders
-Elke instantie van Geoide Composer wordt gekopieerd van uit de release zip naar een eigen folder.   
+Elke instantie van Geoide Composer is een kopie van de release zip naar een eigen folder.   
 Voorbeelden:
 
        C:\meteor\                      
@@ -203,7 +199,7 @@ Elke instantie van Geoide Composer krijgt een eigen database toegewezen.
 Dit gebeurt bij het aanmaken van de service met nssm (tabblad Application\Arguments).   
 
 ### poorten
-Elke instantie van Geoide Composer krijgt een eigen poort nummer waarmee meteor communiceert met de browser (nssm tabblad Application\Arguments).   
+Elke instantie van Geoide Composer krijgt een eigen meteor poort nummer (nssm tabblad Application\Arguments).   
 Voor deze poortnummers geldt het volgende:   
 1. de standaard meteor poort is 3000.   
 2. Intern gebruikt meteor ook poortnr+1, dus bijvoorbeeld 3001.   
@@ -221,8 +217,9 @@ blijkt tot problemen te kunnen leiden in de applicatie, in ieder geval bij gebru
 1. Open de configuratie zip: ``geoide-admin-deployment-[versieNr].zip``   
 2. Unzip uit folder scripts/ de bestanden ``mongo-backup.bat`` en ``mongo-restore.bat`` naar een folder die in het Windows PATH staat.
 3. Voorbeeld voor gebruik:  
-``mongo-backup.bat C:\backup\geoide-composer geoide-composer1``  
-``mongo-restore.bat C:\backup\geoide-composer\geoide-composer1 geoide-composer1 ``  
+``mongo-backup.bat C:\backup\geoide-composer geoide-composer-test``  
+``mongo-restore.bat C:\backup\geoide-composer\geoide-composer-test geoide-composer-test ``  
+NB: Let op dat dezelfde gebruiker de backup en restore uitvoert.   
 
 ### Installeren initieele dataset Geoide Composer 
 1. Voer het restore script uit:    
@@ -247,7 +244,8 @@ Om de gegevens van Geoide-Composer te herstellen:
    ``mongo-restore.bat C:\backup\geoide-composer\geoide-composer-test geoide-composer-test ``  
 3. start de service ``geoide-composer-test``  
 
-NB: Let op dat dezelfde gebruiker de backup en restore uitvoert.   
+NB: bij restore wordt de bestaande database overschreven met de gegevens uit de restore folder.  
+
 
 
    
