@@ -66,7 +66,15 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-lg-9 col-lg-offset-1" >{{i18n 'version'}}: {{version}}</div>
+					<div class="col-lg-9 col-lg-offset-1" >
+						{{i18n 'version'}}: 
+						{{#if version}} 
+							{{version}} 
+						{{else}} 
+							<!-- Aanpassen en inchecken voor een release -->
+							1.0-SNAPSHOT  
+						{{/if}}
+					</div>
 				</div>
 			</div>
 			

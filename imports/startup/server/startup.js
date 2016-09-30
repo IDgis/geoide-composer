@@ -30,7 +30,7 @@ Meteor.methods({
     if (Meteor.settings){
       return Meteor.settings.version;
     } else {
-      return '-';
+      return null;
     }
   },
 
