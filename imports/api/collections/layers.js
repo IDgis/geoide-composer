@@ -277,11 +277,16 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
               serv.endpoint,
               serv.version
           );
+//          console.log("nameInService layeroptions",layeroptions);
           _.each(layeroptions, function(layer){
-            servoptions.push({label:layer.title, value:layer.name});            
+            if (layer.name){
+              servoptions.push({label:layer.title, value:layer.name});
+            } else {
+              servoptions.push({label:layer.title, value:layer.name, disabled:true});
+            }
           });
         }
-//        console.log("return options",servoptions);
+//        console.log("nameInService options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
