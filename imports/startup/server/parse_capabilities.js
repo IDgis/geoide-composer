@@ -228,8 +228,11 @@ Meteor.methods({
             if (mainLayer.$.queryable){
               if (mainLayer.$.queryable == '1'){
                 level = 2;
-                servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
-              }
+                if (mainLayer.Name){
+                  servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
+                } else {
+                  servoptions.push({name:'', title:mainLayer.Title[0]});
+                }              }
             }
           }
     //      console.log('**************************');
@@ -243,14 +246,14 @@ Meteor.methods({
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
         sortedServoptions.push({name:WMSLAYERSKEY, title:'[Error: '+xmlResponse.statusCode+']'});
       }
+//      console.log('WMS Layers found: ',sortedServoptions);
     }
-//    console.log('WMS Layers found: ',sortedServoptions);
     return sortedServoptions;
   
   },
   
   getOptionsFromLayers: function(mainLayer, servoptions, level){
-    let prefixChars = '______..';
+    let prefixChars = '______________..';
     if (level < 0) {level = 0;}
     if (level > prefixChars.length) {level = prefixChars.length;}
     let prefix = prefixChars.substr(0, level);
@@ -259,11 +262,13 @@ Meteor.methods({
         if (subLayer.$){
           if (subLayer.$.queryable){
             if (subLayer.$.queryable == '1'){
-              if (subLayer.Name){
-                if (subLayer.Title){
-                  let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0])
-//                  console.log('titleWithPrefix', level, titleWithPrefix);
+              if (subLayer.Title){
+                let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0])
+                if (subLayer.Name){
+//                console.log('titleWithPrefix', level, titleWithPrefix);
                   servoptions.push({name:subLayer.Name[0], title:titleWithPrefix});
+                } else {
+                  servoptions.push({name:'', title:titleWithPrefix});
                 }
               }
             }
@@ -588,7 +593,7 @@ Meteor.methods({
   getPrintFormat: function(host, version){
     var sortedServoptions = [];
     var PRINTFORMATKEY = host + "-" + version;
-    console.log('getPrintFormat key: ', PRINTFORMATKEY);
+//    console.log('getPrintFormat key: ', PRINTFORMATKEY);
     var resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
     if (resultPrintFormat){
       sortedServoptions = resultPrintFormat;
@@ -603,13 +608,17 @@ Meteor.methods({
         var req = undefined;
         switch(version) {
         case '1.3.0':
-          if (parseResponse.WMS_Capabilities.Capability[0]){
-            req = parseResponse.WMS_Capabilities.Capability[0].Request;
+          if (parseResponse.WMS_Capabilities){
+            if (parseResponse.WMS_Capabilities.Capability[0]){
+              req = parseResponse.WMS_Capabilities.Capability[0].Request;
+            }
           }
           break;
         case '1.1.1':
-          if (parseResponse.WMT_MS_Capabilities.Capability[0]){
-            req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+          if (parseResponse.WMT_MS_Capabilities){
+            if (parseResponse.WMT_MS_Capabilities.Capability[0]){
+              req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
+            }
           }
           break;
         default:
