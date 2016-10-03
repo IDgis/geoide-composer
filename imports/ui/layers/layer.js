@@ -142,6 +142,8 @@ Template.layer.events({
       function(lError, lResponse) {
         if (lError) {
           console.log('getLegendGraphicUrl Error ', lError);
+          lg[0].value = '';
+          lgImg[0].src = '/images/empty-legendgraphic.png'; //error-legendgraphic.png ??
         } else {
           // url found !!
           console.log('getLegendGraphicUrl result ', lResponse);
@@ -152,6 +154,9 @@ Template.layer.events({
             } else {
               lgImg[0].src = lResponse;
             }
+          } else {
+            lg[0].value = '';
+            lgImg[0].src = '/images/empty-legendgraphic.png';//undefined-legendgraphic.png ??
           }
         }
     });

@@ -198,67 +198,82 @@ Meteor.methods({
       sortedServoptions = resultWmsLayers;
     } else {
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-//    console.log('getServiceLayers xmlResponse:', xmlResponse.content);
-      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      var servoptions = [];
-  
-  //    console.log('------- Capability -------');
-      switch(version) {
-      case '1.3.0':
-        // version 1.3.0
-  //      console.log('------- WMS Capability main -------', parseResponse.WMS_Capabilities.Capability);
-        // main layer
-        var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
-        break;
-      case '1.1.1':
-      default:
-        // version 1.1.1
-  //      console.log('------- WMS Capability main -------', parseResponse.WMT_MS_Capabilities.Capability);
-        // main layer
-        var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
-        break;
-      }
+//      console.log('getWmsLayers xmlResponse:', xmlResponse.content);
+      if (xmlResponse.content){
+        var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        var servoptions = [];
     
-  //    console.log('******* main Layers *******');
-      _.each(capLayer,function(mainLayer){
-  //      console.log(mainLayer);
-        if (mainLayer.$){
-          if (mainLayer.$.queryable){
-            if (mainLayer.$.queryable == '1'){
-              servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
-            }
-          }
+    //    console.log('------- Capability -------');
+        switch(version) {
+        case '1.3.0':
+          // version 1.3.0
+    //      console.log('------- WMS Capability main -------', parseResponse.WMS_Capabilities.Capability);
+          // main layer
+          var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
+          break;
+        case '1.1.1':
+        default:
+          // version 1.1.1
+    //      console.log('------- WMS Capability main -------', parseResponse.WMT_MS_Capabilities.Capability);
+          // main layer
+          var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
+          break;
         }
-  //      console.log('**************************');
-        // sub layer(s)
-        if (mainLayer.Layer){
-  //        console.log('...... sub Layers .........');
-          _.each(mainLayer.Layer,function(subLayer){
-  //          console.log(subLayer);
-            if (subLayer.$){
-              if (subLayer.$.queryable){
-                if (subLayer.$.queryable == '1'){
-//                  console.log("subLayer", subLayer.Name, subLayer.Title);
-                  if (subLayer.Name){
-                    if (subLayer.Title){
-                      servoptions.push({name:subLayer.Name[0], title:subLayer.Title[0]});
-                    }
-                  }
-                }
+      
+    //    console.log('******* main Layers *******');
+        _.each(capLayer,function(mainLayer){
+    //      console.log(mainLayer);
+          let level = 0;
+          if (mainLayer.$){
+            if (mainLayer.$.queryable){
+              if (mainLayer.$.queryable == '1'){
+                level = 2;
+                servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
               }
             }
-  //          console.log('..........................');
-          });
-        }
-      });
-      sortedServoptions = _.sortBy(servoptions, 'title');
-      WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
+          }
+    //      console.log('**************************');
+          // sub layer(s)
+          servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
+        });
+  //      sortedServoptions = _.sortBy(servoptions, 'title');
+        sortedServoptions = servoptions; // do not sort
+        WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
+      } else {
+        console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
+        sortedServoptions.push({name:WMSLAYERSKEY, title:'[Error: '+xmlResponse.statusCode+']'});
+      }
     }
 //    console.log('WMS Layers found: ',sortedServoptions);
     return sortedServoptions;
   
   },
   
+  getOptionsFromLayers: function(mainLayer, servoptions, level){
+    let prefixChars = '______..';
+    if (level < 0) {level = 0;}
+    if (level > prefixChars.length) {level = prefixChars.length;}
+    let prefix = prefixChars.substr(0, level);
+    if (mainLayer.Layer){
+      _.each(mainLayer.Layer,function(subLayer){
+        if (subLayer.$){
+          if (subLayer.$.queryable){
+            if (subLayer.$.queryable == '1'){
+              if (subLayer.Name){
+                if (subLayer.Title){
+                  let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0])
+//                  console.log('titleWithPrefix', level, titleWithPrefix);
+                  servoptions.push({name:subLayer.Name[0], title:titleWithPrefix});
+                }
+              }
+            }
+          }
+        }
+        servoptions = Meteor.call('getOptionsFromLayers', subLayer, servoptions, (level + 2));
+      });
+    }
+    return servoptions;
+  },
   /**
    * Get layers from a TMS
    */
@@ -355,7 +370,7 @@ Meteor.methods({
       ft = resultFeatureTypes;
     } else {
       var serv = Services.find({_id: serviceId}).fetch();
-      console.log('service found: ',serv);
+//      console.log('service found: ',serv);
       if (serv[0]){
         var host = serv[0].endpoint;
         var version = serv[0].version;
@@ -444,7 +459,7 @@ Meteor.methods({
     if (!result){
       console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
       var serv = Services.find({_id: serviceId}).fetch();
-      console.log('service found: ',serv);
+//      console.log('service found: ',serv);
       if (serv[0]){
         var host = serv[0].endpoint;
         var url = host;
@@ -460,9 +475,9 @@ Meteor.methods({
           var capObject = wmsCapObject.Capability[0];      
     //      console.log('------- capObject -------', capObject);
           var layersObject = capObject.Layer;
-    //      console.log('------- layersObject -------', layersObject);
+//          console.log('------- layersObject -------', layersObject);
           var capLayer = Meteor.call('getLayerByName',layersObject, layer);
-          console.log('------- capLayer -------', capLayer);
+//          console.log('------- capLayer -------', capLayer);
           if(capLayer) {
     	      if(capLayer.Style) {
     	    	  if(capLayer.Style[0].LegendURL) {
@@ -472,10 +487,97 @@ Meteor.methods({
     	    	  }
     	      }
           }
+          console.log('WMS getLegendGraphic capLayer url: ',result);
+          if (!result){
+            // there is no legendgraphic url in the layer itself, use the general one 
+            var capRequest = capObject.Request;
+//            console.log('WMS getLegendGraphic capRequest: ',capRequest);
+            if (capRequest){
+              var getLegendGraphic = capRequest[0].GetLegendGraphic;
+              if (!getLegendGraphic){
+                getLegendGraphic = capRequest[0]["sld:GetLegendGraphic"];
+              }
+//              console.log('WMS getLegendGraphic getLegendGraphic: ',getLegendGraphic);
+              if (getLegendGraphic){
+                var selectedFormat;
+                var pngFormat, jpgFormat, gifFormat;
+                let prefFormat = serv[0].printFormat;
+                var formats = getLegendGraphic[0].Format; 
+//                console.log("formats", formats);
+                _.each(formats,function(format){
+//                  console.log("format", format);
+                  
+                  if (format === prefFormat){
+                    selectedFormat = format;            
+                  } 
+                  if (format === 'image/png'){
+                    pngFormat = format;            
+                  } 
+                  if (format === 'image/jpg' | format === 'image/jpeg'){
+                    jpgFormat = format;
+                  }
+                  if (format === 'image/gif'){
+                    gifFormat = format;
+                  }
+                });
+                // select a preferred format (png, then jpg, then gif)
+                if (!selectedFormat){
+                  if (pngFormat){
+                    selectedFormat = pngFormat;
+                  } else if (jpgFormat){
+                    selectedFormat = jpgFormat;
+                  } else if (gifFormat){
+                    selectedFormat = gifFormat;
+                  } else {
+                    // no preferable formats found: selectedFormat = undefined
+                  }
+                }
+                /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
+                 * because in the capabilities it can be listed as 'http://localhost:8081/...'
+                 */ 
+                if (selectedFormat){
+                  if (url.lastIndexOf('?') < 0){
+                    url = url + '?';
+                  }
+                  url = url + 'request=GetLegendGraphic&service=WMS'
+                    + '&layer=' + layer 
+                    + '&format=' + selectedFormat
+                    // tbv Mapserver:
+                    // (wordt genegeerd door deegree en geoserver)
+                    + '&version=' + version
+                    + '&sld_version=1.1.0';          
+                } else {
+                  url = null;
+                }
+            
+                result = url;
+              }
+            }
+          }
         }
       }
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
+    console.log('WMS getLegendGraphic url: ',result);
+    return result;
+  },
+  
+  
+  getLayerByName: function(layers, name){
+    let result = null;
+    for(var i = 0; i < layers.length; i++){
+//      console.log("layers[i]", i, name, layers[i]);
+      if (layers[i].Layer) {
+        result = Meteor.call('getLayerByName', layers[i].Layer, name);
+      }	
+      else if(layers[i].Name) {
+        if (layers[i].Name[0] === name ) {
+          result =  layers[i];
+        }	
+      }
+      if (result) break;
+    };
+//    console.log("result", name, result);
     return result;
   },
   
@@ -529,22 +631,6 @@ Meteor.methods({
     }
 //    console.log('WMS getmap format found: ',sortedServoptions);
     return sortedServoptions;
-  },
-  
-  
-  getLayerByName: function(layers, name){
-    let result = null;
-  	for(var i = 0; i < layers.length; i++){
-  		if (layers[i].Layer) {
-  		  result = Meteor.call('getLayerByName', layers[i].Layer, name);
-  		}	
-  		else if(layers[i].Name) {
-  			if (layers[i].Name[0] === name ) {
-  			  result =  layers[i];
-  			}	
-  		} 
-  	};
-  	return result;
   },
   
   
