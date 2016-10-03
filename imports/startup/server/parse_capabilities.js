@@ -487,10 +487,78 @@ Meteor.methods({
     	    	  }
     	      }
           }
+          console.log('WMS getLegendGraphic capLayer url: ',result);
+          if (!result){
+            // there is no legendgraphic url in the layer itself, use the general one 
+            var capRequest = capObject.Request;
+//            console.log('WMS getLegendGraphic capRequest: ',capRequest);
+            if (capRequest){
+              var getLegendGraphic = capRequest[0].GetLegendGraphic;
+              if (!getLegendGraphic){
+                getLegendGraphic = capRequest[0]["sld:GetLegendGraphic"];
+              }
+//              console.log('WMS getLegendGraphic getLegendGraphic: ',getLegendGraphic);
+              if (getLegendGraphic){
+                var selectedFormat;
+                var pngFormat, jpgFormat, gifFormat;
+                let prefFormat = serv[0].printFormat;
+                var formats = getLegendGraphic[0].Format; 
+//                console.log("formats", formats);
+                _.each(formats,function(format){
+//                  console.log("format", format);
+                  
+                  if (format === prefFormat){
+                    selectedFormat = format;            
+                  } 
+                  if (format === 'image/png'){
+                    pngFormat = format;            
+                  } 
+                  if (format === 'image/jpg' | format === 'image/jpeg'){
+                    jpgFormat = format;
+                  }
+                  if (format === 'image/gif'){
+                    gifFormat = format;
+                  }
+                });
+                // select a preferred format (png, then jpg, then gif)
+                if (!selectedFormat){
+                  if (pngFormat){
+                    selectedFormat = pngFormat;
+                  } else if (jpgFormat){
+                    selectedFormat = jpgFormat;
+                  } else if (gifFormat){
+                    selectedFormat = gifFormat;
+                  } else {
+                    // no preferable formats found: selectedFormat = undefined
+                  }
+                }
+                /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
+                 * because in the capabilities it can be listed as 'http://localhost:8081/...'
+                 */ 
+                if (selectedFormat){
+                  if (url.lastIndexOf('?') < 0){
+                    url = url + '?';
+                  }
+                  url = url + 'request=GetLegendGraphic&service=WMS'
+                    + '&layer=' + layer 
+                    + '&format=' + selectedFormat
+                    // tbv Mapserver:
+                    // (wordt genegeerd door deegree en geoserver)
+                    + '&version=' + version
+                    + '&sld_version=1.1.0';          
+                } else {
+                  url = null;
+                }
+            
+                result = url;
+              }
+            }
+          }
         }
       }
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
+    console.log('WMS getLegendGraphic url: ',result);
     return result;
   },
   
