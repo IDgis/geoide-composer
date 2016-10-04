@@ -9,15 +9,21 @@ Template.legendGraphTemplate.helpers({
   legendGraphicCallback: function() {
     return {
         finished: function(index, fileInfo, context) {
+          console.log("legendGraphicCallback this", this);
           console.log("legendGraphicCallback index", index);
           console.log("legendGraphicCallback fileInfo", fileInfo);
           console.log("legendGraphicCallback context", context);
+          console.log("legendGraphicCallback className", context.uploadControl.context.className);
 
-          var legendGraphic = $("input[name$='legendGraphic']");
+          let legendGraphicName = context.uploadControl.context.className;
+          legendGraphicName = legendGraphicName.replace(".uploadCtrl", "");
+          var legendGraphic = $("input[name$='"+legendGraphicName+"']");
           console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphic);
           legendGraphic[0].value = fileInfo.url;
 
-          var legendGraphicImage = $("img[name$='legendGraphic.img']");
+          let legendGraphicImgName = context.uploadControl.context.className;
+          legendGraphicImgName = legendGraphicImgName.replace(".uploadCtrl", ".img");
+          var legendGraphicImage = $("img[name$='"+legendGraphicImgName+"']");
           console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
           legendGraphicImage[0].src = fileInfo.url;
         },
@@ -78,4 +84,38 @@ Template.legendGraphTemplate.events ({
   });
 
 
-  
+  Template.customUpload.created = function() {
+    Uploader.init(this);
+  };
+
+  Template.customUpload.rendered = function () {
+    Uploader.render.call(this);
+  };
+
+  Template.customUpload.events({
+    'click .start': function (e) {
+      Uploader.startUpload.call(Template.instance(), e);
+    }
+  });
+
+  Template.customUpload.helpers({
+    'infoLabel': function() {
+      var instance = Template.instance();
+
+      // we may have not yet selected a file
+      var info = instance.info.get()
+      if (!info) {
+        return;
+      }
+
+      var progress = instance.globalInfo.get();
+
+      // we display different result when running or not
+      return progress.running ?
+        info.name + ' - ' + progress.progress + '% - [' + progress.bitrate + ']' :
+        info.name + ' - ' + info.size + 'B';
+    },
+    'progress': function() {
+      return Template.instance().globalInfo.get().progress + '%';
+    }
+  });  
