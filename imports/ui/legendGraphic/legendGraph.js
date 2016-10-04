@@ -11,13 +11,14 @@ Template.legendGraphTemplate.helpers({
         finished: function(index, fileInfo, context) {
           console.log("legendGraphicCallback index", index);
           console.log("legendGraphicCallback fileInfo", fileInfo);
+          console.log("legendGraphicCallback context", context);
 
           var legendGraphic = $("input[name$='legendGraphic']");
-//          console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphic);
+          console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphic);
           legendGraphic[0].value = fileInfo.url;
 
           var legendGraphicImage = $("img[name$='legendGraphic.img']");
-//          console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
+          console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
           legendGraphicImage[0].src = fileInfo.url;
         },
     }
@@ -37,11 +38,11 @@ Template.legendGraphTemplate.helpers({
 
 Template.legendGraphTemplate.events ({
   'click .delete-graphic': function () { 
-    console.log("delete-graphic"); 
+    console.log("delete-graphic", this.name); 
     
-    var legendGraphic = $("input[name$='legendGraphic']");
+    var legendGraphic = $("input[name$='"+this.name+"']");
     legendGraphic[0].value = "";
-    var legendGraphicImage = $("img[name$='legendGraphic.img']");
+    var legendGraphicImage = $("img[name$='"+this.name+'.img'+"']");
     legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
   },
 });
