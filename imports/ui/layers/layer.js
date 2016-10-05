@@ -110,6 +110,7 @@ Template.layer.events({
    * fill legendgraphic 
    */
   'click select[name$=".nameInService"]' : function(e){
+    setCursorProgress();
     console.log("change on wms layer select ");
     console.log(e);
     // get name of  select box
@@ -141,6 +142,7 @@ Template.layer.events({
       serviceId,
       lyrName,
       function(lError, lResponse) {
+        setCursorNormal();
         if (lError) {
           console.log('getLegendGraphicUrl Error ', lError);
           lg[0].value = '';
