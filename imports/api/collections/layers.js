@@ -273,19 +273,12 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
               methodName = 'getTmsLayers';
               break;
           }
-          var layeroptions = ReactiveMethod.call(
+          var servoptions = ReactiveMethod.call(
               methodName,
               serv.endpoint,
               serv.version
           );
-//          console.log("nameInService layeroptions",layeroptions);
-          _.each(layeroptions, function(layer){
-            if (layer.name){
-              servoptions.push({label:layer.title, value:layer.name});
-            } else {
-              servoptions.push({label:layer.title, value:layer.name, disabled:true});
-            }
-          });
+//          console.log("nameInService servoptions",servoptions);
         }
 //        console.log("nameInService options",servoptions);
         return servoptions;
