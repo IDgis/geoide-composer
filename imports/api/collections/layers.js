@@ -180,6 +180,7 @@ SimpleSchema.featureType = new SimpleSchema ({
               serv.endpoint,
               serv.version
           );
+          // filling options takes 10x-15x as long in IE edge as in FF, Chrome!
           _.each(featuretypeoptions, function(ft){
             servoptions.push({label:ft.title, value:ft.name});            
           });
