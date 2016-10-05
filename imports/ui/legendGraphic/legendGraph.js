@@ -9,15 +9,39 @@ Template.legendGraphTemplate.helpers({
   legendGraphicCallback: function() {
     return {
         finished: function(index, fileInfo, context) {
-          console.log("legendGraphicCallback index", index);
-          console.log("legendGraphicCallback fileInfo", fileInfo);
+//          console.log("legendGraphicCallback this", this);
+//          console.log("legendGraphicCallback index", index);
+//          console.log("legendGraphicCallback fileInfo", fileInfo);
+//          console.log("legendGraphicCallback context", context);
+//          console.log("legendGraphicCallback className", context.uploadControl.context.className);
 
-          var legendGraphic = $("input[name$='legendGraphic']");
-//          console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphic);
-          legendGraphic[0].value = fileInfo.url;
+          // Get the classname of the div surrounding the upload control template
+          // these initial values will get all instances of 
+          // legendGraphic input and legendGraphic.img  
+          let legendGraphicInputName = 'legendGraphic'; 
+          let legendGraphicImageName = 'legendGraphic.img';
+          let uploadControlName = '';
+          if (context){
+            if (context.uploadControl){
+              if (context.uploadControl.context){
+                if (context.uploadControl.context){
+                  uploadControlName = context.uploadControl.context.className;
+                }
+              }
+            }
+          }
+          if (!_.isEmpty(uploadControlName)){
+            // this will find the proper indexed input and image from
+            // e.g. uploadControlName='servicelayers.1.legendGraphic.uploadCtrl'
+            legendGraphicInputName = uploadControlName.replace(".uploadCtrl", "");
+            legendGraphicImageName = uploadControlName.replace(".uploadCtrl", ".img");
+          }
+          var legendGraphicInput = $("input[name$='"+legendGraphicInputName+"']");
+          console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphicInput);
+          legendGraphicInput[0].value = fileInfo.url;
 
-          var legendGraphicImage = $("img[name$='legendGraphic.img']");
-//          console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
+          var legendGraphicImage = $("img[name$='"+legendGraphicImageName+"']");
+          console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
           legendGraphicImage[0].src = fileInfo.url;
         },
     }
@@ -37,11 +61,11 @@ Template.legendGraphTemplate.helpers({
 
 Template.legendGraphTemplate.events ({
   'click .delete-graphic': function () { 
-    console.log("delete-graphic"); 
+    console.log("delete-graphic", this.name); 
     
-    var legendGraphic = $("input[name$='legendGraphic']");
+    var legendGraphic = $("input[name$='"+this.name+"']");
     legendGraphic[0].value = "";
-    var legendGraphicImage = $("img[name$='legendGraphic.img']");
+    var legendGraphicImage = $("img[name$='"+this.name+'.img'+"']");
     legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
   },
 });
@@ -77,4 +101,38 @@ Template.legendGraphTemplate.events ({
   });
 
 
-  
+  Template.customUpload.created = function() {
+    Uploader.init(this);
+  };
+
+  Template.customUpload.rendered = function () {
+    Uploader.render.call(this);
+  };
+
+  Template.customUpload.events({
+    'click .start': function (e) {
+      Uploader.startUpload.call(Template.instance(), e);
+    }
+  });
+
+  Template.customUpload.helpers({
+    'infoLabel': function() {
+      var instance = Template.instance();
+
+      // we may have not yet selected a file
+      var info = instance.info.get()
+      if (!info) {
+        return;
+      }
+
+      var progress = instance.globalInfo.get();
+
+      // we display different result when running or not
+      return progress.running ?
+        info.name + ' - ' + progress.progress + '% - [' + progress.bitrate + ']' :
+        info.name + ' - ' + info.size + 'B';
+    },
+    'progress': function() {
+      return Template.instance().globalInfo.get().progress + '%';
+    }
+  });  
