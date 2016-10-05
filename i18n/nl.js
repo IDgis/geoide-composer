@@ -238,6 +238,7 @@
       button: {
         remove: "Verwijder een legenda plaatje",
       },
+      notFound: 'Niet gevonden',
     },
   },
 
@@ -395,5 +396,6 @@
   },
   yes: 'Ja',
   no: 'Nee',
+  notFound: 'Niet gevonden',
 
 });
