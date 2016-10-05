@@ -45,16 +45,11 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
            * Retrieve the featuretype fields from the service
            * and put them in the options
            */
-          var featuretypeFields = ReactiveMethod.call(
+          var servoptions = ReactiveMethod.call(
               'describeFeatureType',
               service,
               ftName
           );
-          if (featuretypeFields){
-            _.each(featuretypeFields.options, function(f){
-              servoptions.push({label:f.title, value:f.name});            
-            });
-          }
         }
 //        console.log("return options",servoptions);
         return servoptions;
@@ -175,15 +170,11 @@ SimpleSchema.featureType = new SimpleSchema ({
            * Retrieve the featuretypes from the service
            * and put them in the options
            */
-          var featuretypeoptions = ReactiveMethod.call(
+          var servoptions = ReactiveMethod.call(
               'getWfsFeatureTypes',
               serv.endpoint,
               serv.version
           );
-          // filling options takes 10x-15x as long in IE edge as in FF, Chrome!
-          _.each(featuretypeoptions, function(ft){
-            servoptions.push({label:ft.title, value:ft.name});            
-          });
         }
 //        console.log("return options",servoptions);
         return servoptions;
