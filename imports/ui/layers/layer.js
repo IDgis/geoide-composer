@@ -113,16 +113,19 @@ Template.layer.events({
     console.log("change on wms layer select ");
     console.log(e);
     // get name of  select box
-    var srcName = e.target.name;
-//    console.log("Source: " + srcName);
-    // get wms layer name 
-    var srcSelect = $('select[name="' + srcName + '"] ');
-    var lyrName = srcSelect[0].value;
+    var srcName = e.target.name; //chrome
+    if (!srcName){
+      srcName = e.target.parentElement.name; // FF, IE
+    }
+    console.log("Source name ", srcName);
+    var lyrName = e.target.value;
+    console.log('lyrName', lyrName);
 
     // find service id from service selectbox
     var srvName = srcName.replace("nameInService", "service");
     var srvSelect = $('select[name="' + srvName + '"] ');
     var serviceId = srvSelect[0].value;
+    console.log('serviceId', serviceId);
 
     // find lg field 
     var lgName = srcName.replace("nameInService", "legendGraphic");
@@ -132,8 +135,6 @@ Template.layer.events({
     var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
     var lgImg = $('img[name="' + lgImgName + '"] ');
     
-    console.log(serviceId);
-    console.log(lyrName);
     // retrieve url for GetLegendGraphic
     // and put it in hidden field and image
     Meteor.call('getLegendGraphicUrl',
