@@ -244,7 +244,11 @@ Meteor.methods({
         WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
       } else {
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
-        sortedServoptions.push({name:WMSLAYERSKEY, title:'[Error: '+xmlResponse.statusCode+']'});
+        let errorMsg = xmlResponse.statusCode;
+        if (!errorMsg){
+          errorMsg = xmlResponse.response.statusCode;
+        }
+        sortedServoptions.push({name:WMSLAYERSKEY, title:'[Error: '+errorMsg+']'});
       }
 //      console.log('WMS Layers found: ',sortedServoptions);
     }
@@ -291,15 +295,24 @@ Meteor.methods({
       servoptions = resultTmsLayers;
     } else {
       var xmlResponse = Meteor.call('getXml', host, {});
-      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      
-      //version 1.0.0
-      /**
-       * get the title from the TileMap and use this as layername and title
-       */
-      var layername =  parseResponse.TileMap.Title;//href.slice(first, last);
-      servoptions.push({name:layername, title:layername});
-      TMSLAYERS.set(TMSLAYERSKEY, servoptions);
+      if (xmlResponse.content){
+        var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        
+        //version 1.0.0
+        /**
+         * get the title from the TileMap and use this as layername and title
+         */
+        var layername =  parseResponse.TileMap.Title;//href.slice(first, last);
+        servoptions.push({name:layername, title:layername});
+        TMSLAYERS.set(TMSLAYERSKEY, servoptions);
+      } else {
+        console.log('getTmsLayers ERROR xmlResponse:', xmlResponse);
+        let errorMsg = xmlResponse.statusCode;
+        if (!errorMsg){
+          errorMsg = xmlResponse.response.statusCode;
+        }
+        servoptions.push({name:TMSLAYERSKEY, title:'[Error: '+errorMsg+']'});
+      }
     }
 
     return servoptions;
