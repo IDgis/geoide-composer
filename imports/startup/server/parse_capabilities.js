@@ -364,9 +364,9 @@ Meteor.methods({
   //          console.log(ft);
             if (ft[namePrefix+'Name']){
               if (ft[namePrefix+'Name'][0]._){
-                servoptions.push({name:ft[namePrefix+'Name'][0]._, title:ft[namePrefix+'Title'][0]});
+                servoptions.push({value:ft[namePrefix+'Name'][0]._, label:ft[namePrefix+'Title'][0]});
               } else {
-                servoptions.push({name:ft[namePrefix+'Name'][0], title:ft[namePrefix+'Title'][0]});
+                servoptions.push({value:ft[namePrefix+'Name'][0], label:ft[namePrefix+'Title'][0]});
               }
             }
           });
@@ -446,7 +446,7 @@ Meteor.methods({
                                     if (sequence[0][namePrefix+'element']){
                                       _.each(sequence[0][namePrefix+'element'],function(ftField){     
     //                                    console.log('FeatureType field: ' + ftField.$.name);
-                                        ft.options.push({name:ftField.$.name, title:ftField.$.name});
+                                        ft.options.push({value:ftField.$.name, label:ftField.$.name});
                                       });
                                     }
                                   }
