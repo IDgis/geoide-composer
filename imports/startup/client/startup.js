@@ -21,3 +21,12 @@ Meteor.startup(function() {
 
 });
 
+setCursorProgress = function() {
+  console.log("set cursor to WAIT");
+  $("body").css("cursor", "wait");
+}
+
+setCursorNormal = function() {
+  console.log("set cursor to NORMAL");
+  $("body").css("cursor", "default");
+}

@@ -229,9 +229,9 @@ Meteor.methods({
               if (mainLayer.$.queryable == '1'){
                 level = 2;
                 if (mainLayer.Name){
-                  servoptions.push({name:mainLayer.Name[0], title:mainLayer.Title[0]});
+                  servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
                 } else {
-                  servoptions.push({name:'', title:mainLayer.Title[0]});
+                  servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
                 }              }
             }
           }
@@ -244,7 +244,11 @@ Meteor.methods({
         WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
       } else {
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
-        sortedServoptions.push({name:WMSLAYERSKEY, title:'[Error: '+xmlResponse.statusCode+']'});
+        let errorMsg = xmlResponse.statusCode;
+        if (!errorMsg){
+          errorMsg = xmlResponse.response.statusCode;
+        }
+        sortedServoptions.push({value:WMSLAYERSKEY, label:'[Error: '+errorMsg+']', disabled:true});
       }
 //      console.log('WMS Layers found: ',sortedServoptions);
     }
@@ -266,9 +270,9 @@ Meteor.methods({
                 let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0])
                 if (subLayer.Name){
 //                console.log('titleWithPrefix', level, titleWithPrefix);
-                  servoptions.push({name:subLayer.Name[0], title:titleWithPrefix});
+                  servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
                 } else {
-                  servoptions.push({name:'', title:titleWithPrefix});
+                  servoptions.push({value:'', label:titleWithPrefix, disabled:true});
                 }
               }
             }
@@ -291,15 +295,28 @@ Meteor.methods({
       servoptions = resultTmsLayers;
     } else {
       var xmlResponse = Meteor.call('getXml', host, {});
-      var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      
-      //version 1.0.0
-      /**
-       * get the title from the TileMap and use this as layername and title
-       */
-      var layername =  parseResponse.TileMap.Title;//href.slice(first, last);
-      servoptions.push({name:layername, title:layername});
-      TMSLAYERS.set(TMSLAYERSKEY, servoptions);
+      if (xmlResponse.content){
+        var parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        
+        //version 1.0.0
+        /**
+         * get the title from the TileMap and use this as layername and title
+         */
+        var layername =  parseResponse.TileMap.Title;//href.slice(first, last);
+        if (layername){
+          servoptions.push({label:layername, value:layername});
+        } else {
+          servoptions.push({label:'not found', value:'not found', disabled:true});
+        }
+        TMSLAYERS.set(TMSLAYERSKEY, servoptions);
+      } else {
+        console.log('getTmsLayers ERROR xmlResponse:', xmlResponse);
+        let errorMsg = xmlResponse.statusCode;
+        if (!errorMsg){
+          errorMsg = xmlResponse.response.statusCode;
+        }
+        servoptions.push({value:TMSLAYERSKEY, label:'[Error: '+errorMsg+']', disabled:true});
+      }
     }
 
     return servoptions;
@@ -347,9 +364,9 @@ Meteor.methods({
   //          console.log(ft);
             if (ft[namePrefix+'Name']){
               if (ft[namePrefix+'Name'][0]._){
-                servoptions.push({name:ft[namePrefix+'Name'][0]._, title:ft[namePrefix+'Title'][0]});
+                servoptions.push({value:ft[namePrefix+'Name'][0]._, label:ft[namePrefix+'Title'][0]});
               } else {
-                servoptions.push({name:ft[namePrefix+'Name'][0], title:ft[namePrefix+'Title'][0]});
+                servoptions.push({value:ft[namePrefix+'Name'][0], label:ft[namePrefix+'Title'][0]});
               }
             }
           });
@@ -429,7 +446,7 @@ Meteor.methods({
                                     if (sequence[0][namePrefix+'element']){
                                       _.each(sequence[0][namePrefix+'element'],function(ftField){     
     //                                    console.log('FeatureType field: ' + ftField.$.name);
-                                        ft.options.push({name:ftField.$.name, title:ftField.$.name});
+                                        ft.options.push({value:ftField.$.name, label:ftField.$.name});
                                       });
                                     }
                                   }
@@ -494,7 +511,9 @@ Meteor.methods({
           }
           console.log('WMS getLegendGraphic capLayer url: ',result);
           if (!result){
-            // there is no legendgraphic url in the layer itself, use the general one 
+            /*
+             *  there is no legendgraphic url in the layer itself, use the general one
+             */ 
             var capRequest = capObject.Request;
 //            console.log('WMS getLegendGraphic capRequest: ',capRequest);
             if (capRequest){
@@ -554,7 +573,6 @@ Meteor.methods({
                 } else {
                   url = null;
                 }
-            
                 result = url;
               }
             }
