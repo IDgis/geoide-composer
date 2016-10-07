@@ -502,11 +502,22 @@ Meteor.methods({
 //          console.log('------- capLayer -------', capLayer);
           if(capLayer) {
     	      if(capLayer.Style) {
-    	    	  if(capLayer.Style[0].LegendURL) {
-    	    		  if(capLayer.Style[0].LegendURL[0].OnlineResource[0]) {
-    	    		    result = capLayer.Style[0].LegendURL[0].OnlineResource[0].$['xlink:href'];
-    	    		  }
-    	    	  }
+    	        // Kies de default style of de laatste in de lijst als er geen default is
+    	        var styleDefaultName = 'default';
+    	        var styleDefaultFound = false;
+              _.each(capLayer.Style,function(style){
+//                console.log('------- capLayer.Style -------', styleDefaultFound,  style);
+                if (!styleDefaultFound){
+        	    	  if(style.LegendURL) {
+        	    		  if(style.LegendURL[0].OnlineResource[0]) {
+        	    		    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
+        	    		  }
+        	    	  }
+        	    	  if (style.Name[0] == styleDefaultName){
+        	    	    styleDefaultFound = true;
+        	    	  }
+                }
+              });
     	      }
           }
           console.log('WMS getLegendGraphic capLayer url: ',result);
