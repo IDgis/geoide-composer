@@ -192,7 +192,7 @@ Meteor.methods({
   getWmsLayers: function(host, version){
     var sortedServoptions = [];
     var WMSLAYERSKEY = host + "-" + version;
-    console.log('getWmsLayers key: ', WMSLAYERSKEY);
+//    console.log('getWmsLayers key: ', WMSLAYERSKEY);
     var resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
     if (resultWmsLayers){
       sortedServoptions = resultWmsLayers;
@@ -289,7 +289,7 @@ Meteor.methods({
   getTmsLayers: function(host, version){
     var servoptions = [];
     var TMSLAYERSKEY = host + "-" + version;
-    console.log('getTmsLayers key: ', TMSLAYERSKEY);
+//    console.log('getTmsLayers key: ', TMSLAYERSKEY);
     var resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
     if (resultTmsLayers){
       servoptions = resultTmsLayers;
@@ -328,7 +328,7 @@ Meteor.methods({
   getWfsFeatureTypes: function(host, version){
     var sortedServoptions = [];
     var FEATURETYPESKEY = host + "-" + version;
-    console.log('getFeatureTypes key: ', FEATURETYPESKEY);
+//    console.log('getFeatureTypes key: ', FEATURETYPESKEY);
     var resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
     if (resultFeatureTypes){
       sortedServoptions = resultFeatureTypes;
@@ -386,7 +386,7 @@ Meteor.methods({
   describeFeatureType: function(serviceId, ftName){
     var ft = {options:[]}; 
     var DESCRIBEFEATURETYPESKEY = serviceId + "-" + ftName;
-    console.log('describeFeatureType key: ', DESCRIBEFEATURETYPESKEY);
+//    console.log('describeFeatureType key: ', DESCRIBEFEATURETYPESKEY);
     var resultFeatureTypes = DESCRIBEFEATURETYPES.get(DESCRIBEFEATURETYPESKEY);
     if (resultFeatureTypes){
       ft = resultFeatureTypes;
@@ -476,7 +476,7 @@ Meteor.methods({
    */
   getLegendGraphicUrl: function(serviceId, layer){
     var LEGENDGRAPHICURLKEY = serviceId + "-" + layer;
-    console.log('getLegendGraphicUrl key: ', LEGENDGRAPHICURLKEY);
+//    console.log('getLegendGraphicUrl key: ', LEGENDGRAPHICURLKEY);
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
       console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
