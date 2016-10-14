@@ -45,13 +45,16 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
            * Retrieve the featuretype fields from the service
            * and put them in the options
            */
-          var servoptions = ReactiveMethod.call(
+          var featuretypeFields = ReactiveMethod.call(
               'describeFeatureType',
               service,
               ftName
           );
         }
 //        console.log("return options",servoptions);
+        if (featuretypeFields){
+          servoptions = featuretypeFields.options;
+        }
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
