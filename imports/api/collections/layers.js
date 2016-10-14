@@ -50,11 +50,11 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
               service,
               ftName
           );
+          if (featuretypeFields){
+            servoptions = featuretypeFields.options;
+          }
         }
 //        console.log("return options",servoptions);
-        if (featuretypeFields){
-          servoptions = featuretypeFields.options;
-        }
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
