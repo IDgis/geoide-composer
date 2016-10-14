@@ -105,7 +105,7 @@ export const ServiceSchema = new SimpleSchema({
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
       "title": function(){ return i18n ('tooltips.services.autoform.fields.printFormat'); },
-      "defaultValue": function() {return "image/svg"; },
+      "defaultValue": function() {return "image/png"; },
     },
   },
 });
