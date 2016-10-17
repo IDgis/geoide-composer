@@ -304,7 +304,7 @@ Meteor.methods({
          */
         var layername =  parseResponse.TileMap.Title;//href.slice(first, last);
         if (layername){
-          servoptions.push({label:layername, value:layername});
+          servoptions.push({label:layername[0], value:layername[0]});
         } else {
           servoptions.push({label:'not found', value:'not found', disabled:true});
         }
