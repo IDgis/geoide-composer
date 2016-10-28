@@ -96,7 +96,8 @@ Router.map(function () {
           }
         }
         var layerServiceLayers = [];
-        _.each(layer.service_layers, function(serviceLayer){
+        for (var index = layer.service_layers.length-1; index >= 0; index--)  {
+          var serviceLayer = layer.service_layers[index];
           layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
           if (layer.type !== 'default'){
             // add searchfields to properties
@@ -109,7 +110,7 @@ Router.map(function () {
               });
             }
           }
-        });
+        };
         gvLayers.layers.push(
             {
 //              id: layer._id, 
