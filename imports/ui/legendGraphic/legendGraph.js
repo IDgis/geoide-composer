@@ -38,7 +38,7 @@ Template.legendGraphTemplate.helpers({
           }
           var legendGraphicInput = $("input[name$='"+legendGraphicInputName+"']");
           console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphicInput);
-          legendGraphicInput[0].value = fileInfo.url;
+          legendGraphicInput[0].value = fileInfo.name;
 
           var legendGraphicImage = $("img[name$='"+legendGraphicImageName+"']");
           console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
@@ -47,14 +47,17 @@ Template.legendGraphTemplate.helpers({
     }
   },
   imgSrc: function(src){
-//    console.log("imgSrc src",src);
     var result = '/images/empty-legendgraphic.png';
     if (src){
       if (!_.isEmpty(src)){
-        result = src;
+        if(src.indexOf("http") !== -1){
+        	result = src;
+        } else {
+    	  result = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/upload/" + src;
+        }
       }
     }
-//    console.log("imgSrc result",result);
+    //console.log("imgSrc result",result);
     return result;
   },
 });

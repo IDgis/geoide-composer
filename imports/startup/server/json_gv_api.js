@@ -176,6 +176,8 @@ Router.map(function () {
     path: '/json-gv-api-servicelayers',
     where: 'server',
     action: function () {
+    	var protocol = 	this.request.headers['x-forwarded-proto'];
+    	var host = this.request.headers.host;
       var cursor = Layers.find(); 
       gvServiceLayers = {serviceLayers:[]};
       cursor.forEach(function(layer){
@@ -188,13 +190,17 @@ Router.map(function () {
             } else {
               ft = serviceLayer.featureType;
             }
+            var graphicUrl = serviceLayer.legendGraphic;
+            if(graphicUrl.indexOf("http") === -1){
+            	graphicUrl = protocol + "://" + host + "/upload/" + graphicUrl;
+            } 
             gvServiceLayers.serviceLayers.push(
                 {
                   id: layer.name + '.' + serviceLayer.nameInService, 
                   label: (serviceLayer.label ? serviceLayer.label : ""),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  legendGraphicUrl: serviceLayer.legendGraphic,
+                  legendGraphicUrl: graphicUrl,
                   featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
                 }
             );
@@ -211,6 +217,7 @@ Router.map(function () {
           }
         });
       });
+      
       this.response.setHeader('Content-Type', 'application/json');
       // TODO make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServiceLayers, {indent: true}));
