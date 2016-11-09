@@ -37,7 +37,6 @@ Router.map(function () {
   var gvLayers = {layers:[]};
   var gvMaps = {maps:[]};
   var gvServiceLayers = {serviceLayers:[]};
-  var gvSearchTemplates = {searchTemplates:[]};
   var gvFeatureTypes = {featureTypes:[]};
 
   /**
@@ -126,14 +125,14 @@ Router.map(function () {
       /*
        * Get grouplayers from maps, 3 levels deep
        */
-      var cursor = Maps.find(); 
+      cursor = Maps.find(); 
       cursor.forEach(function(map){
         _.each(map.children, function(child1){
-          if (child1.type == "group"){
+          if (child1.type === "group"){
             _.each(child1.children, function(child2){
-              if (child2.type == "group"){
+              if (child2.type === "group"){
                 _.each(child2.children, function(child3){
-                  if (child3.type == "group"){
+                  if (child3.type === "group"){
                     gvLayers.layers.push(
                         {
                           id: child3.text , 
@@ -286,20 +285,19 @@ Router.map(function () {
         var map = allMaps[index];
         var mapChildren = map.children;
         if (mapChildren){
-          var testIndex1 = mapChildren.length-1;
           for (var index1 = mapChildren.length-1; index1 >= 0; index1--)  {
             var child1 = mapChildren[index1];
-            if (child1.type == "group"){
+            if (child1.type === "group"){
               var gvMapLayers2 = [];
               var child1Children = _.toArray(child1.children);
               for (index2 = child1Children.length-1; index2 >= 0; index2--)  {
                 var child2 = child1Children[index2];
-                if (child2.type == "group"){
+                if (child2.type === "group"){
                   var gvMapLayers3 = [];
                   var child2Children = _.toArray(child2.children);
                   for (index3 = child2Children.length-1; index3 >= 0; index3--)  {
                     var child3 = child2Children[index3];
-                    if (child3.type == "group"){
+                    if (child3.type === "group"){
                       var gvMapLayers4 = [];
                       // group
                       gvMapLayers3.push(
