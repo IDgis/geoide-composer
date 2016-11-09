@@ -14,7 +14,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+        if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
           return true;
         } else {
           return false;
@@ -63,7 +63,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+        if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
           return true;
         } else {
           return false;
@@ -113,7 +113,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+        if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
           return true;
         } else {
           return false;
@@ -173,7 +173,7 @@ SimpleSchema.featureType = new SimpleSchema ({
            * Retrieve the featuretypes from the service
            * and put them in the options
            */
-          var servoptions = ReactiveMethod.call(
+          servoptions = ReactiveMethod.call(
               'getWfsFeatureTypes',
               serv.endpoint,
               serv.version
@@ -194,12 +194,12 @@ SimpleSchema.featureType = new SimpleSchema ({
 //      maxCount: 3,
       autoform: {
         type: function() {
-          if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
             return "hidden";
           }
         },
         maxCount: function() {
-          if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
             return 0;
           } else {
             return 3;
@@ -267,7 +267,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
               methodName = 'getTmsLayers';
               break;
           }
-          var servoptions = ReactiveMethod.call(
+          servoptions = ReactiveMethod.call(
               methodName,
               serv.endpoint,
               serv.version
@@ -317,7 +317,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
         * whereas optional, omit, hidden do not 
         */
        disabled: function() {
-         if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+         if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
            return true;
          } else {
            return false;
