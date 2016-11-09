@@ -89,7 +89,7 @@ Template.service.events({
 		console.log("clicked control serviceform");
 
 		var url = document.getElementsByName("endpoint")[0].value;
-		if (url.indexOf("?") == -1) {
+		if (url.indexOf("?") === -1) {
 			url += "?"
 		}
 		url += "request=GetCapabilities";
@@ -137,7 +137,7 @@ AutoForm.addHooks('serviceform', {
       } else {
         console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode != '200' ){
+        if (lResponse.statusCode !== '200' ){
           alert(i18n('alert.viewerRefresh') + ' ('+lResponse.statusCode+')');
         }
         Router.go('services.list');

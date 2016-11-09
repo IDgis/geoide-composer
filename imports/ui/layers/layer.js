@@ -67,9 +67,8 @@ Template.layer.helpers({
         // a user is logged in
         var name = Meteor.user().username;
         admin = _.isEqual(name, 'idgis-admin');
-        return admin;
       }
-      return false;
+      return admin;
 	  },
 	  buttonSubmitLabel: function(){
 	    return i18n ('button.save');
@@ -208,7 +207,7 @@ AutoForm.addHooks('layerform',{
       } else {
         console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode != '200' ){
+        if (lResponse.statusCode !== '200' ){
           alert(i18n('alert.viewerRefresh'));
         }
         Router.go('layers.list');

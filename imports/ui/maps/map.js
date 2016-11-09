@@ -74,12 +74,12 @@ Template.map.events({
         }
         var depth = ref.get_selected(true)[0].parents.length;
         // max depth does not allow another group or layer to be added
-        if (depth == MAX_TREE_DEPTH){
+        if (depth === MAX_TREE_DEPTH){
           $('#createlayer').prop('disabled', true);
           $('#creategroup').prop('disabled', true);
         }
         // (max depth - 1) does not allow another group to be added
-        if (depth == (MAX_TREE_DEPTH - 1)){
+        if (depth === (MAX_TREE_DEPTH - 1)){
           $('#creategroup').prop('disabled', true);
         }
       } else if (ref.get_type(sel) === "layer") {
@@ -172,11 +172,10 @@ Template.map.events({
   			});
   			console.log('removenode layer: ', lyr);
   			if (lyr) {
-  				var adminLoggedIn = false;
   				if (Meteor.user()) {
   					// a user is logged in
   					var name = Meteor.user().username;
-  					adminLoggedIn = _.isEqual(name, 'idgis-admin');
+  					var adminLoggedIn = _.isEqual(name, 'idgis-admin');
   					console.log('adminLoggedIn', adminLoggedIn);
   					if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
   						console.log('not remove cosurvey-sql if user is no admin ');
@@ -293,7 +292,6 @@ Template.map.rendered = function() {
 	})
 	
   .on("move_node.jstree", function(e, data) {
-    var parent = data.new_instance;
     $('#maptree').jstree('open_node',data.parent);
   })
   
@@ -386,7 +384,7 @@ AutoForm.addHooks('mapForm',{
 			} else {
 			  console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode != '200' ){
+        if (lResponse.statusCode !== '200' ){
           alert(i18n('alert.viewerRefresh'));
         }
 			  Router.go('maps.list');
