@@ -233,9 +233,7 @@ Router.map(function () {
       var cursor = Layers.find(); 
       gvFeatureTypes = {featureTypes:[]};
       cursor.forEach(function(layer){
-        console.log("gvFeatureTypes layer ", layer);
         _.each(layer.service_layers, function(serviceLayer){
-          console.log("gvFeatureTypes serviceLayer ", serviceLayer);
           if (serviceLayer.featureType){
             var ft;
             if  (_.isArray(serviceLayer.featureType)){
@@ -244,7 +242,6 @@ Router.map(function () {
               ft = serviceLayer.featureType;
             }
             const aService = Services.findOne({_id: ft.service});
-            console.log("gvFeatureTypes aService ", aService);
             if (aService){
               gvFeatureTypes.featureTypes.push(
                   {
