@@ -118,7 +118,7 @@ Meteor.methods({
         if (child.data){
 //          console.log('  child.data.layerid', child.data.layerid);
           if (child.data.layerid){
-            if (child.data.layerid == layerId){
+            if (child.data.layerid === layerId){
               result = true;
             }
           }
@@ -127,7 +127,7 @@ Meteor.methods({
           if (child1.data){
 //            console.log('    child1.data.layerid', child1.data.layerid);
             if (child1.data.layerid){
-              if (child1.data.layerid == layerId){
+              if (child1.data.layerid === layerId){
                 result = true;
               }
             }
@@ -136,7 +136,7 @@ Meteor.methods({
             if (child2.data){
 //              console.log('      child2.data.layerid', child2.data.layerid);
               if (child2.data.layerid){
-                if (child2.data.layerid == layerId){
+                if (child2.data.layerid === layerId){
                   result = true;
                 }
               }
@@ -145,7 +145,7 @@ Meteor.methods({
               if (child3.data){
 //                console.log('        child3.data.layerid', child3.data.layerid);
                 if (child3.data.layerid){
-                  if (child3.data.layerid == layerId){
+                  if (child3.data.layerid === layerId){
                     result = true;
                   }
                 }
@@ -169,13 +169,13 @@ Meteor.methods({
 //      console.log('layer', layer.name);
       _.each(layer.service_layers,function(serviceLayer){
 //        console.log('  serviceLayer.service', serviceLayer.service);
-        if (serviceLayer.service == serviceId){
+        if (serviceLayer.service === serviceId){
           result = true;
         }
         if (serviceLayer.featureType){
           if (serviceLayer.featureType[0]){
 //            console.log('    serviceLayer.featureType.service', serviceLayer.featureType[0].service);
-            if (serviceLayer.featureType[0].service == serviceId){
+            if (serviceLayer.featureType[0].service === serviceId){
               result = true;
             }
           }
@@ -204,19 +204,20 @@ Meteor.methods({
         var servoptions = [];
     
     //    console.log('------- Capability -------');
+        var capLayer;
         switch(version) {
         case '1.3.0':
           // version 1.3.0
     //      console.log('------- WMS Capability main -------', parseResponse.WMS_Capabilities.Capability);
           // main layer
-          var capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
+          capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
           break;
         case '1.1.1':
         default:
           // version 1.1.1
     //      console.log('------- WMS Capability main -------', parseResponse.WMT_MS_Capabilities.Capability);
           // main layer
-          var capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
+          capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
           break;
         }
       
@@ -226,7 +227,7 @@ Meteor.methods({
           let level = 0;
           if (mainLayer.$){
             if (mainLayer.$.queryable){
-              if (mainLayer.$.queryable == '1'){
+              if (mainLayer.$.queryable === '1'){
                 level = 2;
                 if (mainLayer.Name){
                   servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
@@ -265,7 +266,7 @@ Meteor.methods({
       _.each(mainLayer.Layer,function(subLayer){
         if (subLayer.$){
           if (subLayer.$.queryable){
-            if (subLayer.$.queryable == '1'){
+            if (subLayer.$.queryable === '1'){
               if (subLayer.Title){
                 let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0])
                 if (subLayer.Name){
@@ -326,7 +327,7 @@ Meteor.methods({
    * Get feature types from a WFS
    */
   getWfsFeatureTypes: function(host, version){
-    var sortedServoptions = [];
+    var sortedServoptions;
     var FEATURETYPESKEY = host + "-" + version;
 //    console.log('getFeatureTypes key: ', FEATURETYPESKEY);
     var resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
@@ -513,7 +514,7 @@ Meteor.methods({
         	    		    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
         	    		  }
         	    	  }
-        	    	  if (style.Name[0] == styleDefaultName){
+        	    	  if (style.Name[0] === styleDefaultName){
         	    	    styleDefaultFound = true;
         	    	  }
                 }
@@ -620,7 +621,7 @@ Meteor.methods({
    * getPrintFormat from a WMS 
    */
   getPrintFormat: function(host, version){
-    var sortedServoptions = [];
+    var sortedServoptions;
     var PRINTFORMATKEY = host + "-" + version;
 //    console.log('getPrintFormat key: ', PRINTFORMATKEY);
     var resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
@@ -687,7 +688,7 @@ Meteor.methods({
    */
   removeQmarkFromUrl: function(url){
     var q = url.indexOf("?");
-    if (q != -1) {
+    if (q !== -1) {
       url = url.substr(0,q);
     }
     return url;
@@ -697,7 +698,7 @@ Meteor.methods({
    * add '?' to service endpoint
    */
   addQmarkToUrl: function(url){
-    if (url.indexOf("?") == -1) {
+    if (url.indexOf("?") === -1) {
       url += "?";
     }
     return url;
