@@ -39,6 +39,52 @@ Template.map.helpers({
 
 });
 
+var layerInTree = function(children, layerId) {
+  for (var j = 0; j < children.length; j++) {
+    if (children[j].children[0]) {
+      if (layerInTree(children[j].children, layerId)) {
+        return true;
+      };
+    } else if (children[j].data.layerid === layerId) {
+      return true;
+    }
+  };
+  return false;
+};
+
+var fillLayerSelect = function() {
+  var layers = Layers.find({}, {
+    sort : [ [ "label", "asc" ] ],
+    fields : {
+      label : 1,
+      _id : 1
+    }
+  }).fetch();
+    
+  $('#layerselect')
+       .find('option')
+       .remove()
+       .end()
+    ;
+  
+  var layerOption = undefined;
+  layers.forEach(function(entry) {
+    if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
+        entry._id)) {
+      layerOption = "<option value=" + entry._id + ">" + entry.label
+          + "</option>";
+      $('#layerselect').append(layerOption);
+    }
+  });
+  
+  // if the select box is empty, then disable button
+  if (layerOption){
+    $('#createlayer').prop('disabled', false);
+  } else{
+    $('#createlayer').prop('disabled', true);
+  }
+};
+
 Template.map.events({
 	'click #return' : function() {
 		Router.go('maps.list');
@@ -84,7 +130,8 @@ Template.map.events({
         $('#removenode').prop('disabled', false);
         $('#creategroup').prop('disabled', true);
         $('#createlayer').prop('disabled', true);
-      } else {// top node 'map' is selected
+      } else {
+        // top node 'map' is selected
 //      disable renamenode/removenode, enable creategroup
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', true);        
@@ -289,57 +336,11 @@ Template.map.rendered = function() {
 	
   .on("move_node.jstree", function(e, data) {
     $('#maptree').jstree('open_node',data.parent);
-  })
+  });
   
   // disable renamenode/removenode buttons by default
 	$('#renamenode').prop('disabled', true);
 	$('#removenode').prop('disabled', true);  
-};
-
-var fillLayerSelect = function() {
-	var layers = Layers.find({}, {
-		sort : [ [ "label", "asc" ] ],
-		fields : {
-			label : 1,
-			_id : 1
-		}
-	}).fetch();
-	 	
-	$('#layerselect')
-	     .find('option')
-	     .remove()
-	     .end()
-    ;
-	
-	var layerOption = undefined;
-	layers.forEach(function(entry) {
-		if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
-				entry._id)) {
-			layerOption = "<option value=" + entry._id + ">" + entry.label
-					+ "</option>";
-			$('#layerselect').append(layerOption);
-		}
-	});
-	
-	// if the select box is empty, then disable button
-	if (layerOption){
-	  $('#createlayer').prop('disabled', false);
-	} else{
-    $('#createlayer').prop('disabled', true);
-	}
-};
-
-var layerInTree = function(children, layerId) {
-	for (var j = 0; j < children.length; j++) {
-		if (children[j].children[0]) {
-			if (layerInTree(children[j].children, layerId)) {
-				return true;
-			};
-		} else if (children[j].data.layerid === layerId) {
-			return true;
-		}
-	};
-	return false;
 };
 
 AutoForm.addHooks('mapForm',{

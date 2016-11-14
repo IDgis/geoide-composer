@@ -94,7 +94,8 @@ Meteor.methods({
 UploadServer.init({
   tmpDir: Meteor.call('getLegendGraphicUploadFolder') + 'tmp',
   uploadDir: Meteor.call('getLegendGraphicUploadFolder'),
-  checkCreateDirectories: true, //create the directories for you
+  //create the directories:
+  checkCreateDirectories: true,
   overwrite: true,
   finished(fileInfo, formFields) {
   },

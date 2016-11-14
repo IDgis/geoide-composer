@@ -88,7 +88,7 @@ Template.service.events({
 
 		var url = document.getElementsByName("endpoint")[0].value;
 		if (url.indexOf("?") === -1) {
-			url += "?"
+			url += "?";
 		};
 		url += "request=GetCapabilities";
 

@@ -552,13 +552,14 @@ Meteor.methods({
     for(let i = 0; i < layers.length; i++){
       if (layers[i].Layer) {
         result = Meteor.call('getLayerByName', layers[i].Layer, name);
-      }	
-      else if(layers[i].Name) {
+      } else if(layers[i].Name) {
         if (layers[i].Name[0] === name ) {
           result =  layers[i];
         }	
       }
-      if (result) break;
+      if (result){ 
+        break;
+      }
     };
     return result;
   },
