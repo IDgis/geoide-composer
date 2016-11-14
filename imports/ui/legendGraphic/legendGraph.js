@@ -18,9 +18,9 @@ Template.legendGraphTemplate.helpers({
           // Get the classname of the div surrounding the upload control template
           // these initial values will get all instances of 
           // legendGraphic input and legendGraphic.img  
-          let legendGraphicInputName = 'legendGraphic'; 
-          let legendGraphicImageName = 'legendGraphic.img';
-          let uploadControlName = '';
+          var legendGraphicInputName = 'legendGraphic'; 
+          var legendGraphicImageName = 'legendGraphic.img';
+          var uploadControlName = '';
           if (context){
             if (context.uploadControl){
               if (context.uploadControl.context){
