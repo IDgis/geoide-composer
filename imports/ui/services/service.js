@@ -82,11 +82,9 @@ Template.service.helpers({
  */
 Template.service.events({
 	'click #return' : function() {
-		console.log("clicked cancel serviceform");
 		Router.go('services.list');
 	},
 	'click #control' : function(e) {
-		console.log("clicked control serviceform");
 
 		var url = document.getElementsByName("endpoint")[0].value;
 		if (url.indexOf("?") === -1) {
@@ -115,7 +113,6 @@ Template.service.events({
 	},
 	'click #help' : function() {
 		var helpTemplate = i18n('services.help.template');
-		console.log("clicked help", helpTemplate);
 		Modal.show(helpTemplate);
 	},
 
@@ -128,14 +125,12 @@ AutoForm.addHooks('serviceform', {
    * When the viewer reload fails, alert the user.
    */
 	onSuccess : function(formType, result) {
-		console.log("submit service autoform, goto list");
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
         console.log('triggerViewerReload Error ', lError);
         alert(i18n('alert.viewerRefresh'));
         Router.go('services.list');
       } else {
-        console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
           alert(i18n('alert.viewerRefresh') + ' ('+lResponse.statusCode+')');

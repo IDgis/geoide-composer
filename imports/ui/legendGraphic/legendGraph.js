@@ -37,11 +37,9 @@ Template.legendGraphTemplate.helpers({
             legendGraphicImageName = uploadControlName.replace(".uploadCtrl", ".img");
           }
           var legendGraphicInput = $("input[name$='"+legendGraphicInputName+"']");
-          console.log("legendGraphicCallbacks getLegendGraphic Input",legendGraphicInput);
           legendGraphicInput[0].value = fileInfo.name;
 
           var legendGraphicImage = $("img[name$='"+legendGraphicImageName+"']");
-          console.log("legendGraphicCallbacks getLegendGraphic Image",legendGraphicImage);
           legendGraphicImage[0].src = fileInfo.url;
         },
     }
@@ -64,7 +62,6 @@ Template.legendGraphTemplate.helpers({
 
 Template.legendGraphTemplate.events ({
   'click .delete-graphic': function () { 
-    console.log("delete-graphic", this.name); 
     
     var legendGraphic = $("input[name$='"+this.name+"']");
     legendGraphic[0].value = "";

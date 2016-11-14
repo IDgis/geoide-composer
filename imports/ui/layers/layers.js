@@ -32,17 +32,14 @@ Template.layers.helpers({
 Template.layers.events({
   'click .edit-layer': function () { 
 	  Session.set("selectedLayerId", this._id);
-    console.log("edit layer " + this._id); 
 	  Router.go('layer.edit', {_id: this._id});
   },
   'click .insert-layer': function () {
 	  Session.set("selectedLayerId", null);
-    console.log("insert layer "); 
 	  Router.go('layer.insert');
   },
   'click .delete-layer': function() {
     // zie atmosphere package matdutour:popup-confirm
-    console.log("verwijder layer " + this._id);
     var layerId = this._id;
     new Confirmation({
       message: function(){ return i18n('collections.confirmation.delete.message.layers'); },
@@ -52,10 +49,8 @@ Template.layers.events({
       success: false, // whether the button should be green or red
       focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
     }, function (ok) {
-      console.log("confirmation", ok);
       // ok is true if the user clicked on "ok", false otherwise
       if (ok){
-        console.log("id", layerId);
         Layers.remove({_id:layerId});
       }
     });

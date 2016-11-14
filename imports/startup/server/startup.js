@@ -75,7 +75,6 @@ Meteor.methods({
    */
   triggerViewerReload : function (){
     var url = Meteor.call('getViewerReloadConfigUrl');
-    console.log('triggerViewerReload() url: ', url);
     if (url){
         var res = HTTP.get(url, {headers:{
             'User-Agent': 'Meteor/1.3',
@@ -97,8 +96,6 @@ UploadServer.init({
   checkCreateDirectories: true, //create the directories for you
   overwrite: true,
   finished(fileInfo, formFields) {
-    console.log('fileInfo', fileInfo);
-    console.log('formFields', formFields);
   },
 //  uploadUrl: '/GetLegendGraphic/', // ## must be 'upload' ##
 });
@@ -108,10 +105,7 @@ UploadServer.init({
  * make one if needed 
  */
 var adminUser = Meteor.users.findOne({username: 'idgis-admin'});
-console.log("idgis-admin user: ",adminUser);
 if (!adminUser){
   adminUser = Accounts.createUser({username:'idgis-admin', password:'koffie'});
-  
-  console.log("new idgis-admin user: ",adminUser);
   Meteor.users.update(adminUser);
 }

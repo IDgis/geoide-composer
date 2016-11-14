@@ -94,13 +94,11 @@ Template.layer.events({
    *  When the Cancel button is pressed go to the layer list
    */
   'click #returnLayer': function () {
-    console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
   
   "click #help": function () {
     var helpTemplate = i18n ('layers.help.template');
-    console.log("clicked help", helpTemplate );
     Modal.show(helpTemplate);
   },
   
@@ -110,8 +108,6 @@ Template.layer.events({
    */
   'click select[name$=".nameInService"]' : function(e){
     setCursorProgress();
-    console.log("change on wms layer select ");
-    console.log(e);
     // get name of  select box
     var srcName = e.target.name; //chrome
     if (!srcName){
@@ -119,13 +115,11 @@ Template.layer.events({
     }
     console.log("Source name ", srcName);
     var lyrName = e.target.value;
-    console.log('lyrName', lyrName);
 
     // find service id from service selectbox
     var srvName = srcName.replace("nameInService", "service");
     var srvSelect = $('select[name="' + srvName + '"] ');
     var serviceId = srvSelect[0].value;
-    console.log('serviceId', serviceId);
 
     // find lg field 
     var lgName = srcName.replace("nameInService", "legendGraphic");
@@ -148,7 +142,6 @@ Template.layer.events({
           lgImg[0].src = '/images/empty-legendgraphic.png'; //error-legendgraphic.png ??
         } else {
           // url found !!
-          console.log('getLegendGraphicUrl result ', lResponse);
           if (lResponse){
             lg[0].value = lResponse;
             if (_.isEmpty(lResponse)){
@@ -172,8 +165,6 @@ Template.layer.events({
  * 
  */
 Template.layer.onRendered(function(){
-  console.log("onRendered");
-  console.log(this);
   /*
    * if image is empty, fill it with initial png
    * (initially the src of the image is the url of 'edit-layer' route)
@@ -185,8 +176,6 @@ Template.layer.onRendered(function(){
       legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
     }
   }
-  console.log('legendGraphicImage[0].src', legendGraphicImage[0].src);
-
 });
 /**/
  
@@ -197,7 +186,6 @@ AutoForm.addHooks('layerform',{
    * When the viewer reload fails, alert the user.
    */
   onSuccess: function(formType, result) {
-    console.log("submit layer autoform, goto list");
     Meteor.call('triggerViewerReload',
         function(lError, lResponse) {
       if (lError) {
@@ -205,7 +193,6 @@ AutoForm.addHooks('layerform',{
         alert(i18n('alert.viewerRefresh'));
         Router.go('layers.list');
       } else {
-        console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
           alert(i18n('alert.viewerRefresh'));
@@ -218,6 +205,5 @@ AutoForm.addHooks('layerform',{
     console.log("layer autoform error = " + error);
   },
   onRendered: function(formType, error){
-    console.log("layer autoform rendered= " + formType);
   }
 });

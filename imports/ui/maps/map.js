@@ -41,22 +41,18 @@ Template.map.helpers({
 
 Template.map.events({
 	'click #return' : function() {
-		console.log("clicked cancel mapform");
 		Router.go('maps.list');
 	},
 
 	'click #help' : function() {
 		var helpTemplate = i18n('maps.help.template');
-		console.log("clicked help", helpTemplate);
 		Modal.show(helpTemplate);
 	},
 
 	'submit #mapForm' : function(event) {
-		console.log("submit mapForm ");
 	},
 
 	'click .jstree' : function() {
-		console.log("click .jstree");
 		// check which buttons to disable/enable, 
 		// depending on what is selected in the tree
     var ref = $.jstree.reference('#maptree');
@@ -170,24 +166,22 @@ Template.map.events({
   			var lyr = Layers.findOne({
   				_id : sel.data.layerid
   			});
-  			console.log('removenode layer: ', lyr);
   			if (lyr) {
   				if (Meteor.user()) {
   					// a user is logged in
   					var name = Meteor.user().username;
   					var adminLoggedIn = _.isEqual(name, 'idgis-admin');
-  					console.log('adminLoggedIn', adminLoggedIn);
   					if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
-  						console.log('not remove cosurvey-sql if user is no admin ');
+//  						console.log('not remove cosurvey-sql if user is no admin ');
   						return false;
   					}
   				} else {
-  					console.log('no user logged in, no remove allowed');
+//  					console.log('no user logged in, no remove allowed');
   					return false;
   				}
   			} else {
   				// layer not found, remove is ok
-  				console.log('layer not found, remove is ok');
+//  				console.log('layer not found, remove is ok');
   			}
   			ref.delete_node(sel);
         fillLayerSelect();
@@ -353,7 +347,7 @@ AutoForm.addHooks('mapForm',{
 		// object, voordat deze wordt
 		// weggeschreven naar de database
 		update : function(doc) {
-			console.log($.jstree.reference('.tree').get_json('#')[0]);
+//			console.log($.jstree.reference('.tree').get_json('#')[0]);
 			doc.$set.children = $.jstree.reference('.tree')
 					.get_json('#')[0].children;
 			return doc;
@@ -374,7 +368,6 @@ AutoForm.addHooks('mapForm',{
 	onSuccess : function(formType, result) {
 		// Stuur een refresh request naar de viewer en ga naar
 		// de list
-		console.log("submit map autoform, trigger viewer, then goto list");
 		Meteor.call('triggerViewerReload', function(lError,
 				lResponse) {
 			if (lError) {
@@ -382,7 +375,6 @@ AutoForm.addHooks('mapForm',{
 				alert(i18n('alert.viewerRefresh'));
         Router.go('maps.list');
 			} else {
-			  console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
           alert(i18n('alert.viewerRefresh'));

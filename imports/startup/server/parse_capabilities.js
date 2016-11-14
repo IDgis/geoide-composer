@@ -46,7 +46,7 @@ Meteor.methods({
    *   {request: 'GetCapabilities', service:'WMS'} 
    */ 
   getImage : function (host){
-    console.log('getImage() host: ', host);
+//    console.log('getImage() host: ', host);
     try {
       var res = HTTP.get(host, {headers:{
           'User-Agent': 'Meteor/1.3',
@@ -72,7 +72,7 @@ Meteor.methods({
    */ 
   getXml : function (host, params){
     host = Meteor.call("addQmarkToUrl", host);
-    console.log('getXml() host: ', host + ', params: ' + params);
+//    console.log('getXml() host: ', host + ', params: ' + params);
     try {
       var res = HTTP.get(host, {'params' : params, 
         headers:{
@@ -480,7 +480,7 @@ Meteor.methods({
 //    console.log('getLegendGraphicUrl key: ', LEGENDGRAPHICURLKEY);
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
-      console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
+//      console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
       var serv = Services.find({_id: serviceId}).fetch();
 //      console.log('service found: ',serv);
       if (serv[0]){
@@ -521,7 +521,7 @@ Meteor.methods({
               });
     	      }
           }
-          console.log('WMS getLegendGraphic capLayer url: ',result);
+//          console.log('WMS getLegendGraphic capLayer url: ',result);
           if (!result){
             /*
              *  there is no legendgraphic url in the layer itself, use the general one
@@ -593,7 +593,7 @@ Meteor.methods({
       }
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
-    console.log('WMS getLegendGraphic url: ',result);
+//    console.log('WMS getLegendGraphic url: ',result);
     return result;
   },
   
@@ -628,7 +628,7 @@ Meteor.methods({
     if (resultPrintFormat){
       sortedServoptions = resultPrintFormat;
     } else {
-      console.log('getPrintFormat service: ',host, version);
+//      console.log('getPrintFormat service: ',host, version);
       var servoptions = [];
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
   //    console.log("xmlResponse ",xmlResponse);
@@ -677,9 +677,9 @@ Meteor.methods({
    * Get service from collection
    */
   getService: function(serviceId){
-    console.log('getService id:', serviceId);
+//    console.log('getService id:', serviceId);
     var serv = Services.find({_id: serviceId}).fetch();
-    console.log('service found: ',serv);
+//    console.log('service found: ',serv);
     return serv;
   },
   
