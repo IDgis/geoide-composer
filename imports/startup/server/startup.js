@@ -67,7 +67,8 @@ Meteor.methods({
         }
       }
     }
-    return 60 * 60 * 1000; // 60 minutes;
+    // 60 minutes
+    return 60 * 60 * 1000;
   },
 
   /**

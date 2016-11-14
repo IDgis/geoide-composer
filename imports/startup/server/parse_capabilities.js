@@ -57,7 +57,8 @@ Meteor.methods({
       return res;
     } catch (e) {
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
-      return e; // return the error as a valid result, to be analyzed at client side
+      // return the error as a valid result, to be analyzed at client side
+      return e;
     }
   },
   /**
@@ -83,7 +84,8 @@ Meteor.methods({
       return res;
     } catch (e) {
       // Got a network error, time-out or HTTP error in the 400 or 500 range.
-      return e; // return the error as a valid result, to be analyzed at client side
+      // return the error as a valid result, to be analyzed at client side
+      return e;
     }
   },
   /**
@@ -225,7 +227,8 @@ Meteor.methods({
           servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
         });
   //      sortedServoptions = _.sortBy(servoptions, 'title');
-        sortedServoptions = servoptions; // do not sort
+        // do not sort
+        sortedServoptions = servoptions;
         WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
       } else {
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
@@ -289,7 +292,7 @@ Meteor.methods({
         /**
          * get the title from the TileMap and use this as layername and title
          */
-        let layername =  parseResponse.TileMap.Title;//href.slice(first, last);
+        let layername =  parseResponse.TileMap.Title;
         if (layername){
           servoptions.push({label:layername[0], value:layername[0]});
         } else {

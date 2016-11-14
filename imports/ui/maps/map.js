@@ -195,8 +195,10 @@ Template.map.events({
           title: function(){ return i18n('collections.confirmation.delete.title'); },
           cancelText: function(){ return i18n('collections.confirmation.delete.cancel'); },
           okText: function(){ return i18n('collections.confirmation.delete.ok'); },
-          success: false, // whether the button should be green or red
-          focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+          // whether the button should be green or red
+          success: false,
+          // which button to autofocus, "cancel" (default) or "ok", or "none"
+          focus: "ok"
         }, function (ok) {
           // ok is true if the user clicked on "ok", false otherwise
           if (ok){
@@ -377,8 +379,10 @@ AutoForm.addHooks('mapForm',{
           title: function(){ return i18n('viewerRefresh.title'); },
           cancelText: function(){ return i18n('viewerRefresh.cancel'); },
           okText: function(){ return i18n('viewerRefresh.ok'); },
-          success: true, // whether the button should be green or red
-          focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+          // whether the button should be green or red
+          success: true,
+          // which button to autofocus, "cancel" (default) or "ok", or "none"
+          focus: "ok"
         }, function (ok) {
           // ok is true if the user clicked on "ok", false otherwise
         });
@@ -391,8 +395,10 @@ AutoForm.addHooks('mapForm',{
             title: function(){ return i18n('viewerRefresh.title'); },
             cancelText: function(){ return i18n('viewerRefresh.cancel'); },
             okText: function(){ return i18n('viewerRefresh.ok'); },
-            success: true, // whether the button should be green or red
-            focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+            // whether the button should be green or red
+            success: true,
+            // which button to autofocus, "cancel" (default) or "ok", or "none"
+            focus: "ok"
           }, function (ok) {
             // ok is true if the user clicked on "ok", false otherwise
           });

@@ -109,9 +109,11 @@ Template.layer.events({
   'click select[name$=".nameInService"]' : function(e){
     setCursorProgress();
     // get name of  select box
-    var srcName = e.target.name; //chrome
+    // chrome
+    var srcName = e.target.name;
     if (!srcName){
-      srcName = e.target.parentElement.name; // FF, IE
+      // FF, IE
+      srcName = e.target.parentElement.name;
     }
     console.log("Source name ", srcName);
     var lyrName = e.target.value;
@@ -139,7 +141,7 @@ Template.layer.events({
         if (lError) {
           console.log('getLegendGraphicUrl Error ', lError);
           lg[0].value = '';
-          lgImg[0].src = '/images/empty-legendgraphic.png'; //error-legendgraphic.png ??
+          lgImg[0].src = '/images/empty-legendgraphic.png';
         } else {
           // url found !!
           if (lResponse){
@@ -151,7 +153,7 @@ Template.layer.events({
             }
           } else {
             lg[0].value = '';
-            lgImg[0].src = '/images/empty-legendgraphic.png';//undefined-legendgraphic.png ??
+            lgImg[0].src = '/images/empty-legendgraphic.png';
           }
         }
     });
