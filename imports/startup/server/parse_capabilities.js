@@ -225,7 +225,6 @@ Meteor.methods({
           // sub layer(s)
           servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
         });
-  //      sortedServoptions = _.sortBy(servoptions, 'title');
         // do not sort
         sortedServoptions = servoptions;
         WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
@@ -259,7 +258,6 @@ Meteor.methods({
               if (subLayer.Title){
                 const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
                 if (subLayer.Name){
-//                console.log('titleWithPrefix', level, titleWithPrefix);
                   servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
                 } else {
                   servoptions.push({value:'', label:titleWithPrefix, disabled:true});

@@ -219,21 +219,17 @@ Template.map.events({
   					var name = Meteor.user().username;
   					var adminLoggedIn = _.isEqual(name, 'idgis-admin');
   					if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
-//  						console.log('not remove cosurvey-sql if user is no admin ');
   						return false;
   					}
   				} else {
-//  					console.log('no user logged in, no remove allowed');
   					return false;
   				}
   			} else {
   				// layer not found, remove is ok
-//  				console.log('layer not found, remove is ok');
   			}
   			ref.delete_node(sel);
         fillLayerSelect();
         // after remove disable 'remove' button
-//        console.log("disable removenode button after remove");
         $('#removenode').prop('disabled', true);
   		}
       if (ref.get_type(sel) === "group") {
@@ -252,7 +248,6 @@ Template.map.events({
             ref.delete_node([sel]);
             fillLayerSelect();
             // after remove disable 'rename/remove/creategroup' buttons 
-//            console.log("disable renamenode/removenode/creategroup buttons after remove");
             $('#renamenode').prop('disabled', true);
             $('#removenode').prop('disabled', true);
             $('#creategroup').prop('disabled', true);
@@ -350,7 +345,6 @@ AutoForm.addHooks('mapForm',{
 		// object, voordat deze wordt
 		// weggeschreven naar de database
 		update : function(doc) {
-//			console.log($.jstree.reference('.tree').get_json('#')[0]);
 			doc.$set.children = $.jstree.reference('.tree')
 					.get_json('#')[0].children;
 			return doc;

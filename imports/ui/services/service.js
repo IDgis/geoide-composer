@@ -31,7 +31,6 @@ Template.service.helpers({
 			return Services.findOne({
 				_id : Session.get("selectedServiceId")
 			});
-			// return this;
 		} else {
 			return null;
 		}

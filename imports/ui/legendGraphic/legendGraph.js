@@ -9,12 +9,6 @@ Template.legendGraphTemplate.helpers({
   legendGraphicCallback: function() {
     return {
         finished: function(index, fileInfo, context) {
-//          console.log("legendGraphicCallback this", this);
-//          console.log("legendGraphicCallback index", index);
-//          console.log("legendGraphicCallback fileInfo", fileInfo);
-//          console.log("legendGraphicCallback context", context);
-//          console.log("legendGraphicCallback className", context.uploadControl.context.className);
-
           // Get the classname of the div surrounding the upload control template
           // these initial values will get all instances of 
           // legendGraphic input and legendGraphic.img  
@@ -55,7 +49,6 @@ Template.legendGraphTemplate.helpers({
         }
       }
     }
-    //console.log("imgSrc result",result);
     return result;
   },
 });
