@@ -14,11 +14,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-          return true;
-        } else {
-          return false;
-        }
+        return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); },
     },
@@ -63,11 +59,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-          return true;
-        } else {
-          return false;
-        }
+        return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); },
     },
@@ -113,11 +105,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-          return true;
-        } else {
-          return false;
-        }
+        return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
       "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); },
     },
@@ -317,11 +305,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
         * whereas optional, omit, hidden do not 
         */
        disabled: function() {
-         if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-           return true;
-         } else {
-           return false;
-         }
+         return AutoForm.getFieldValue('type', 'layerform') === 'default';
        },
        "type": 'textarea',
        "class": 'initquery',
