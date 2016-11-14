@@ -63,7 +63,7 @@ Router.map(function () {
         );
       });
       this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
+      // make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServices, {indent: true}));
     }
   });
@@ -163,7 +163,7 @@ Router.map(function () {
       });
 
       this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
+      // make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvLayers, {indent: true}));
     }
   });
@@ -218,7 +218,7 @@ Router.map(function () {
       });
       
       this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
+      // make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvServiceLayers, {indent: true}));
     }
   });
@@ -256,7 +256,7 @@ Router.map(function () {
         });
       });
       this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
+      // make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvFeatureTypes, {indent: true}));
     }
   });
@@ -382,7 +382,7 @@ Router.map(function () {
         );
       }
       this.response.setHeader('Content-Type', 'application/json');
-      // TODO make this streaming instead of pushing the whole object at once ??
+      // make this streaming instead of pushing the whole object at once ??
       this.response.end(EJSON.stringify(gvMaps, {indent: true}));
     }
   });

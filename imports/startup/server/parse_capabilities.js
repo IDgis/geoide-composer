@@ -8,7 +8,6 @@ import { Maps } from '/imports/api/collections/maps.js';
 
 /**
  * All kinds of handy routines, mainly wms/wfs parsing.
- * TODO: Could be split in several utility files.  
  * 
  */
 
