@@ -101,7 +101,11 @@ Meteor.methods({
    * 
    */
   parseXml : function(xml){
-    return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
+    if (xml){
+      return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
+    } else {
+      return [];
+    }
   },
 
   /**
@@ -227,7 +231,11 @@ Meteor.methods({
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
         let errorMsg = xmlResponse.statusCode;
         if (!errorMsg){
-          errorMsg = xmlResponse.response.statusCode;
+          if (xmlResponse.response){
+            errorMsg = xmlResponse.response.statusCode;
+          } else {
+            errorMsg = xmlResponse.code;
+          }
         }
         sortedServoptions.push({value:WMSLAYERSKEY, label:'[Error: '+errorMsg+']', disabled:true});
       }
