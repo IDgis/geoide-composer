@@ -63,7 +63,7 @@ export const ServiceSchema = new SimpleSchema({
         if (currentType === 'WMS') {
           return (currentVersion)?((currentVersion === "1.3.0")?currentVersion:"1.1.1"):"1.1.1";
         } else if (currentType === 'WFS') {
-          return (currentVersion)?((currentVersion === "1.0.0" | currentVersion === "2.0.0")?currentVersion:"1.1.0"):"1.1.0";
+          return (currentVersion)?((currentVersion === "1.0.0" || currentVersion === "2.0.0")?currentVersion:"1.1.0"):"1.1.0";
         } else if (currentType === 'TMS') {
           return "1.0.0";
         }

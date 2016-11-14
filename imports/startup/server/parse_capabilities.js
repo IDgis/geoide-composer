@@ -499,7 +499,7 @@ Meteor.methods({
                   if (format === 'image/png'){
                     pngFormat = format;            
                   } 
-                  if (format === 'image/jpg' | format === 'image/jpeg'){
+                  if (format === 'image/jpg' || format === 'image/jpeg'){
                     jpgFormat = format;
                   }
                   if (format === 'image/gif'){

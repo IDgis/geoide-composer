@@ -173,7 +173,7 @@ Template.layer.onRendered(function(){
    */
   var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
   if (legendGraphicImage[0].src){
-    if (_.isEmpty(legendGraphicImage[0].src) | 
+    if (_.isEmpty(legendGraphicImage[0].src) || 
         legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>=0){
       legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
     }
