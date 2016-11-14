@@ -89,7 +89,7 @@ Template.service.events({
 		var url = document.getElementsByName("endpoint")[0].value;
 		if (url.indexOf("?") === -1) {
 			url += "?"
-		}
+		};
 		url += "request=GetCapabilities";
 
 		var types = document.getElementsByName("type");

@@ -328,7 +328,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
        "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); },
      },
   },  
-})
+});
 
 export const LayerSchema = new SimpleSchema({
   name: {

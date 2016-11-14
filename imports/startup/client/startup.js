@@ -23,8 +23,8 @@ Meteor.startup(function() {
 
 setCursorProgress = function() {
   $("body").css("cursor", "wait");
-}
+};
 
 setCursorNormal = function() {
   $("body").css("cursor", "default");
-}
+};

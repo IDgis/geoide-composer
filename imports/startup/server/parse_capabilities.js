@@ -268,7 +268,7 @@ Meteor.methods({
           if (subLayer.$.queryable){
             if (subLayer.$.queryable === '1'){
               if (subLayer.Title){
-                let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0])
+                let titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
                 if (subLayer.Name){
 //                console.log('titleWithPrefix', level, titleWithPrefix);
                   servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});

@@ -42,7 +42,7 @@ Template.legendGraphTemplate.helpers({
           var legendGraphicImage = $("img[name$='"+legendGraphicImageName+"']");
           legendGraphicImage[0].src = fileInfo.url;
         },
-    }
+    };
   },
   imgSrc: function(src){
     var result = '/images/empty-legendgraphic.png';

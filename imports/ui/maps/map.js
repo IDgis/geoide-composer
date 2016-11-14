@@ -227,7 +227,7 @@ Template.map.rendered = function() {
 		};
 		map.state = {
 			"selected": true,
-		}
+		};
 	} else {
 		map = {
 			text : 'Nieuwe kaart',
@@ -292,7 +292,7 @@ Template.map.rendered = function() {
   // disable renamenode/removenode buttons by default
 	$('#renamenode').prop('disabled', true);
 	$('#removenode').prop('disabled', true);  
-}
+};
 
 fillLayerSelect = function() {
 	var layers = Layers.find({}, {
@@ -314,7 +314,7 @@ fillLayerSelect = function() {
 		if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
 				entry._id)) {
 			layerOption = "<option value=" + entry._id + ">" + entry.label
-					+ "</option>"
+					+ "</option>";
 			$('#layerselect').append(layerOption);
 		}
 	});
@@ -325,7 +325,7 @@ fillLayerSelect = function() {
 	} else{
     $('#createlayer').prop('disabled', true);
 	}
-}
+};
 
 layerInTree = function(children, layerId) {
 	for (var j = 0; j < children.length; j++) {
@@ -338,7 +338,7 @@ layerInTree = function(children, layerId) {
 		}
 	};
 	return false;
-}
+};
 
 AutoForm.addHooks('mapForm',{
 	before : {

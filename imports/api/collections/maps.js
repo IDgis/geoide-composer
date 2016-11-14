@@ -193,4 +193,4 @@ Maps.allow({
     // only allow posting if you are logged in
     return !! userId; 
   }
-})
+});

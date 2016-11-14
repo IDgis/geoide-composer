@@ -84,7 +84,7 @@ fillLayerSelect = function() {
   }).fetch();
   layers.forEach(function(entry) {
     var layerOption = "<option value=" + entry._id + ">" + entry.name
-        + "</option>"
+        + "</option>";
     $('#layerselect').append(layerOption);
   });
 };
