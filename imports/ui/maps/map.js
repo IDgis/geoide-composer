@@ -296,7 +296,7 @@ Template.map.rendered = function() {
 	$('#removenode').prop('disabled', true);  
 };
 
-fillLayerSelect = function() {
+var fillLayerSelect = function() {
 	var layers = Layers.find({}, {
 		sort : [ [ "label", "asc" ] ],
 		fields : {
@@ -329,7 +329,7 @@ fillLayerSelect = function() {
 	}
 };
 
-layerInTree = function(children, layerId) {
+var layerInTree = function(children, layerId) {
 	for (var j = 0; j < children.length; j++) {
 		if (children[j].children[0]) {
 			if (layerInTree(children[j].children, layerId)) {

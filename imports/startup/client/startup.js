@@ -22,10 +22,10 @@ Meteor.startup(function() {
 
 });
 
-setCursorProgress = function() {
+var setCursorProgress = function() {
   $("body").css("cursor", "wait");
 };
 
-setCursorNormal = function() {
+var setCursorNormal = function() {
   $("body").css("cursor", "default");
 };

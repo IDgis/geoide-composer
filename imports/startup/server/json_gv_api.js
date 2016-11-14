@@ -277,7 +277,7 @@ Router.map(function () {
       let cursor = Maps.find(); 
       let allMaps = cursor.fetch();
       // loop over allMaps array in reversed order  
-      for (index = allMaps.length-1; index >= 0; index--)  {
+      for (let index = allMaps.length-1; index >= 0; index--)  {
         let gvMapLayers1 = [];
         let map = allMaps[index];
         let mapChildren = map.children;
@@ -287,12 +287,12 @@ Router.map(function () {
             if (child1.type === "group"){
               let gvMapLayers2 = [];
               let child1Children = _.toArray(child1.children);
-              for (index2 = child1Children.length-1; index2 >= 0; index2--)  {
+              for (let index2 = child1Children.length-1; index2 >= 0; index2--)  {
                 let child2 = child1Children[index2];
                 if (child2.type === "group"){
                   let gvMapLayers3 = [];
                   let child2Children = _.toArray(child2.children);
-                  for (index3 = child2Children.length-1; index3 >= 0; index3--)  {
+                  for (let index3 = child2Children.length-1; index3 >= 0; index3--)  {
                     let child3 = child2Children[index3];
                     if (child3.type === "group"){
                       let gvMapLayers4 = [];

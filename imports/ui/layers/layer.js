@@ -75,7 +75,7 @@ Template.layer.helpers({
 	  }
 });
 
-fillLayerSelect = function() {
+var fillLayerSelect = function() {
   var layers = Layers.find({}, {
     fields : {
       name : 1,
