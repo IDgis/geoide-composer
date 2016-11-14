@@ -128,12 +128,12 @@ AutoForm.addHooks('serviceform', {
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
         console.log('triggerViewerReload Error ', lError);
-        alert(i18n('alert.viewerRefresh'));
+        alert(i18n('viewerRefresh.alert'));
         Router.go('services.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
-          alert(i18n('alert.viewerRefresh') + ' ('+lResponse.statusCode+')');
+          alert(i18n('viewerRefresh.alert') + ' ('+lResponse.statusCode+')');
         }
         Router.go('services.list');
       }

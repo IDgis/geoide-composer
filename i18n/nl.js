@@ -391,8 +391,12 @@
     remove: "Verwijder",
     control: "Controleren",
   },
-  alert: {
-    viewerRefresh: 'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
+  viewerRefresh: {
+   alert :  'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
+   title: 'Sturen van configuratie naar Geoide viewer',
+   message: 'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
+   ok: 'OK',
+   cancel : 'Annuleren',  
   },
   yes: 'Ja',
   no: 'Nee',

@@ -190,12 +190,12 @@ AutoForm.addHooks('layerform',{
         function(lError, lResponse) {
       if (lError) {
         console.log('triggerViewerReload Error ', lError);
-        alert(i18n('alert.viewerRefresh'));
+        alert(i18n('viewerRefresh.alert'));
         Router.go('layers.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
-          alert(i18n('alert.viewerRefresh'));
+          alert(i18n('viewerRefresh.alert'));
         }
         Router.go('layers.list');
       }
