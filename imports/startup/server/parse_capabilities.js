@@ -46,7 +46,6 @@ Meteor.methods({
    *   {request: 'GetCapabilities', service:'WMS'} 
    */ 
   getImage : function (host){
-//    console.log('getImage() host: ', host);
     try {
       var res = HTTP.get(host, {headers:{
           'User-Agent': 'Meteor/1.3',
@@ -72,7 +71,6 @@ Meteor.methods({
    */ 
   getXml : function (host, params){
     host = Meteor.call("addQmarkToUrl", host);
-//    console.log('getXml() host: ', host + ', params: ' + params);
     try {
       var res = HTTP.get(host, {'params' : params, 
         headers:{
@@ -113,10 +111,8 @@ Meteor.methods({
     var cursor = Maps.find();
     var result = false;
     cursor.forEach(function(map){
-//      console.log('map', map.text);
       _.each(map.children,function(child){
         if (child.data){
-//          console.log('  child.data.layerid', child.data.layerid);
           if (child.data.layerid){
             if (child.data.layerid === layerId){
               result = true;
@@ -125,7 +121,6 @@ Meteor.methods({
         }
         _.each(child.children,function(child1){
           if (child1.data){
-//            console.log('    child1.data.layerid', child1.data.layerid);
             if (child1.data.layerid){
               if (child1.data.layerid === layerId){
                 result = true;
@@ -134,7 +129,6 @@ Meteor.methods({
           }
           _.each(child1.children,function(child2){
             if (child2.data){
-//              console.log('      child2.data.layerid', child2.data.layerid);
               if (child2.data.layerid){
                 if (child2.data.layerid === layerId){
                   result = true;
@@ -143,7 +137,6 @@ Meteor.methods({
             }
             _.each(child2.children,function(child3){
               if (child3.data){
-//                console.log('        child3.data.layerid', child3.data.layerid);
                 if (child3.data.layerid){
                   if (child3.data.layerid === layerId){
                     result = true;
@@ -155,7 +148,6 @@ Meteor.methods({
         });
       });
     });
-//    console.log('isLayerInMap ' + layerId + ": " + result);
     return result;
   },
 
@@ -166,15 +158,12 @@ Meteor.methods({
     var cursor = Layers.find();
     var result = false;
     cursor.forEach(function(layer){
-//      console.log('layer', layer.name);
       _.each(layer.service_layers,function(serviceLayer){
-//        console.log('  serviceLayer.service', serviceLayer.service);
         if (serviceLayer.service === serviceId){
           result = true;
         }
         if (serviceLayer.featureType){
           if (serviceLayer.featureType[0]){
-//            console.log('    serviceLayer.featureType.service', serviceLayer.featureType[0].service);
             if (serviceLayer.featureType[0].service === serviceId){
               result = true;
             }
@@ -182,7 +171,6 @@ Meteor.methods({
         }
       });
     });
-//    console.log('isServiceInLayer ' + serviceId + ": " + result);
     return result;
   },
   
@@ -192,38 +180,31 @@ Meteor.methods({
   getWmsLayers: function(host, version){
     var sortedServoptions = [];
     var WMSLAYERSKEY = host + "-" + version;
-//    console.log('getWmsLayers key: ', WMSLAYERSKEY);
     var resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
     if (resultWmsLayers){
       sortedServoptions = resultWmsLayers;
     } else {
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-//      console.log('getWmsLayers xmlResponse:', xmlResponse.content);
       if (xmlResponse.content){
         var parseResponse = Meteor.call('parseXml', xmlResponse.content);
         var servoptions = [];
     
-    //    console.log('------- Capability -------');
         var capLayer;
         switch(version) {
         case '1.3.0':
           // version 1.3.0
-    //      console.log('------- WMS Capability main -------', parseResponse.WMS_Capabilities.Capability);
           // main layer
           capLayer= parseResponse.WMS_Capabilities.Capability[0].Layer;
           break;
         case '1.1.1':
         default:
           // version 1.1.1
-    //      console.log('------- WMS Capability main -------', parseResponse.WMT_MS_Capabilities.Capability);
           // main layer
           capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
           break;
         }
       
-    //    console.log('******* main Layers *******');
         _.each(capLayer,function(mainLayer){
-    //      console.log(mainLayer);
           let level = 0;
           if (mainLayer.$){
             if (mainLayer.$.queryable){
@@ -236,7 +217,6 @@ Meteor.methods({
                 }              }
             }
           }
-    //      console.log('**************************');
           // sub layer(s)
           servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
         });
@@ -251,7 +231,6 @@ Meteor.methods({
         }
         sortedServoptions.push({value:WMSLAYERSKEY, label:'[Error: '+errorMsg+']', disabled:true});
       }
-//      console.log('WMS Layers found: ',sortedServoptions);
     }
     return sortedServoptions;
   
@@ -290,7 +269,6 @@ Meteor.methods({
   getTmsLayers: function(host, version){
     var servoptions = [];
     var TMSLAYERSKEY = host + "-" + version;
-//    console.log('getTmsLayers key: ', TMSLAYERSKEY);
     var resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
     if (resultTmsLayers){
       servoptions = resultTmsLayers;
@@ -329,19 +307,12 @@ Meteor.methods({
   getWfsFeatureTypes: function(host, version){
     var sortedServoptions;
     var FEATURETYPESKEY = host + "-" + version;
-//    console.log('getFeatureTypes key: ', FEATURETYPESKEY);
     var resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
     if (resultFeatureTypes){
       sortedServoptions = resultFeatureTypes;
     } else {
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
-  //    console.log('getWfsFeatureTypes xmlResponse:', xmlResponse.content);
       var parseResponse = Meteor.call('parseXml', xmlResponse.content);
-  //    console.log('getWfsFeatureTypes parseResponse:', parseResponse);
-  //    console.log('------- WFS Capability -------', parseResponse);
-  //    console.log('------- WFS Capability main -------', parseResponse.WFS_Capabilities);
-  //    console.log('--------------------------');
-  
       var servoptions = [];
   
       // version:  1.0.0, 1.1.0, 2.0.0
@@ -362,7 +333,6 @@ Meteor.methods({
         
         _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
           _.each(ftList,function(ft){
-  //          console.log(ft);
             if (ft[namePrefix+'Name']){
               if (ft[namePrefix+'Name'][0]._){
                 servoptions.push({value:ft[namePrefix+'Name'][0]._, label:ft[namePrefix+'Title'][0]});
@@ -376,7 +346,6 @@ Meteor.methods({
       sortedServoptions = _.sortBy(servoptions, 'title');
       FEATURETYPES.set(FEATURETYPESKEY, sortedServoptions);
     }
-//    console.log('WFS FeatureTypes found: ',sortedServoptions);
     return sortedServoptions;
   },
   
@@ -387,19 +356,16 @@ Meteor.methods({
   describeFeatureType: function(serviceId, ftName){
     var ft = {options:[]}; 
     var DESCRIBEFEATURETYPESKEY = serviceId + "-" + ftName;
-//    console.log('describeFeatureType key: ', DESCRIBEFEATURETYPESKEY);
     var resultFeatureTypes = DESCRIBEFEATURETYPES.get(DESCRIBEFEATURETYPESKEY);
     if (resultFeatureTypes){
       ft = resultFeatureTypes;
     } else {
       var serv = Services.find({_id: serviceId}).fetch();
-//      console.log('service found: ',serv);
       if (serv[0]){
         var host = serv[0].endpoint;
         var version = serv[0].version;
         if (ftName){
           var xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-      //  console.log('getWfsDescribeFeatureTypes xmlResponse:', xmlResponse.content);
           var parseResponse = Meteor.call('parseXml', xmlResponse.content);
           // find some common tag namespace prefixes
           var namePrefix = '';
@@ -412,41 +378,31 @@ Meteor.methods({
           } else {
             namePrefix = '';
           }
-    //      console.log('------- WFS DescribeFeatureType -------', namePrefix);
           _.each(parseResponse,function(schema){
-    //        console.log('schema', schema);
             ft.targetNamespace = schema.$.targetNamespace;
             _.each(schema,function(nextTag){
-    //          console.log('nextTag', nextTag);
               var complexType = null;
               if (nextTag[0]){
                 // look for nextTag == element or complexType
                 if (nextTag[0][namePrefix+'complexType']){
-      //            element.complexType.complexContent.extension.sequence.element 
                     complexType = nextTag[0][namePrefix+'complexType'];
                 } else if (nextTag[0][namePrefix+'complexContent']){
-      //            complexType.complexContent.extension.sequence.element 
                         complexType = nextTag;
                 }
               }
               if (complexType){
-    //            console.log('complexType', complexType); 
                 if (complexType[0]){
                   if (complexType[0][namePrefix+'complexContent']){
                     _.each(complexType[0],function(complexContent){     
-    //                  console.log('complexContent', complexContent);
                       if (complexContent[0]){
                         if (complexContent[0][namePrefix+'extension']){
                           _.each(complexContent[0],function(extension){     
-    //                        console.log('extension', extension);
                             if (extension[0]){
                               if (extension[0][namePrefix+'sequence']){
                                 _.each(extension[0],function(sequence){     
-    //                              console.log('sequence', sequence);
                                   if (sequence[0]){
                                     if (sequence[0][namePrefix+'element']){
                                       _.each(sequence[0][namePrefix+'element'],function(ftField){     
-    //                                    console.log('FeatureType field: ' + ftField.$.name);
                                         ft.options.push({value:ftField.$.name, label:ftField.$.name});
                                       });
                                     }
@@ -468,7 +424,6 @@ Meteor.methods({
         }
       }
     }
-//    console.log('describeFeatureType found: ', ft.options);
     return ft;
   },
   
@@ -477,12 +432,9 @@ Meteor.methods({
    */
   getLegendGraphicUrl: function(serviceId, layer){
     var LEGENDGRAPHICURLKEY = serviceId + "-" + layer;
-//    console.log('getLegendGraphicUrl key: ', LEGENDGRAPHICURLKEY);
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
-//      console.log('getLegendGraphic serviceId: ' + serviceId + ', layer: ' + layer);
       var serv = Services.find({_id: serviceId}).fetch();
-//      console.log('service found: ',serv);
       if (serv[0]){
         var host = serv[0].endpoint;
         var url = host;
@@ -490,24 +442,18 @@ Meteor.methods({
         var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
         var parseResponse = Meteor.call('parseXml', xmlResponse.content);
         
-  //      console.log('------- Capability -------', parseResponse);
         var capKey = Object.keys(parseResponse);
-  //      console.log('------- capKey -------', capKey);
         var wmsCapObject = parseResponse[capKey];
         if(wmsCapObject.Capability) {
           var capObject = wmsCapObject.Capability[0];      
-    //      console.log('------- capObject -------', capObject);
           var layersObject = capObject.Layer;
-//          console.log('------- layersObject -------', layersObject);
           var capLayer = Meteor.call('getLayerByName',layersObject, layer);
-//          console.log('------- capLayer -------', capLayer);
           if(capLayer) {
     	      if(capLayer.Style) {
     	        // Kies de default style of de laatste in de lijst als er geen default is
     	        var styleDefaultName = 'default';
     	        var styleDefaultFound = false;
               _.each(capLayer.Style,function(style){
-//                console.log('------- capLayer.Style -------', styleDefaultFound,  style);
                 if (!styleDefaultFound){
         	    	  if(style.LegendURL) {
         	    		  if(style.LegendURL[0].OnlineResource[0]) {
@@ -521,28 +467,22 @@ Meteor.methods({
               });
     	      }
           }
-//          console.log('WMS getLegendGraphic capLayer url: ',result);
           if (!result){
             /*
              *  there is no legendgraphic url in the layer itself, use the general one
              */ 
             var capRequest = capObject.Request;
-//            console.log('WMS getLegendGraphic capRequest: ',capRequest);
             if (capRequest){
               var getLegendGraphic = capRequest[0].GetLegendGraphic;
               if (!getLegendGraphic){
                 getLegendGraphic = capRequest[0]["sld:GetLegendGraphic"];
               }
-//              console.log('WMS getLegendGraphic getLegendGraphic: ',getLegendGraphic);
               if (getLegendGraphic){
                 var selectedFormat;
                 var pngFormat, jpgFormat, gifFormat;
                 let prefFormat = serv[0].printFormat;
                 var formats = getLegendGraphic[0].Format; 
-//                console.log("formats", formats);
                 _.each(formats,function(format){
-//                  console.log("format", format);
-                  
                   if (format === prefFormat){
                     selectedFormat = format;            
                   } 
@@ -593,7 +533,6 @@ Meteor.methods({
       }
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
-//    console.log('WMS getLegendGraphic url: ',result);
     return result;
   },
   
@@ -601,7 +540,6 @@ Meteor.methods({
   getLayerByName: function(layers, name){
     let result = null;
     for(var i = 0; i < layers.length; i++){
-//      console.log("layers[i]", i, name, layers[i]);
       if (layers[i].Layer) {
         result = Meteor.call('getLayerByName', layers[i].Layer, name);
       }	
@@ -612,7 +550,6 @@ Meteor.methods({
       }
       if (result) break;
     };
-//    console.log("result", name, result);
     return result;
   },
   
@@ -623,15 +560,12 @@ Meteor.methods({
   getPrintFormat: function(host, version){
     var sortedServoptions;
     var PRINTFORMATKEY = host + "-" + version;
-//    console.log('getPrintFormat key: ', PRINTFORMATKEY);
     var resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
     if (resultPrintFormat){
       sortedServoptions = resultPrintFormat;
     } else {
-//      console.log('getPrintFormat service: ',host, version);
       var servoptions = [];
       var xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-  //    console.log("xmlResponse ",xmlResponse);
       if (xmlResponse.content){
         var parseResponse = Meteor.call('parseXml', xmlResponse.content);
         
@@ -654,12 +588,9 @@ Meteor.methods({
         default:
           break;
         }
-  //      console.log("req ",req);
         if (req){
           if (req[0].GetMap){
-  //            console.log("req[0].GetMap ",req[0].GetMap);
             _.each(req[0].GetMap[0].Format,function(format){
-  //            console.log(format);
               servoptions.push({label:format, value:format});
             });
           }
@@ -668,7 +599,6 @@ Meteor.methods({
       sortedServoptions = _.sortBy(servoptions, 'label');
       PRINTFORMAT.set(PRINTFORMATKEY, sortedServoptions);
     }
-//    console.log('WMS getmap format found: ',sortedServoptions);
     return sortedServoptions;
   },
   
@@ -677,9 +607,7 @@ Meteor.methods({
    * Get service from collection
    */
   getService: function(serviceId){
-//    console.log('getService id:', serviceId);
     var serv = Services.find({_id: serviceId}).fetch();
-//    console.log('service found: ',serv);
     return serv;
   },
   
