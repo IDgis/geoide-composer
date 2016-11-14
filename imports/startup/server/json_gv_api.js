@@ -33,11 +33,11 @@ Router.map(function () {
   /**
    * Objects for Geoide-Viewer json
    */
-  var gvServices = {services:[]};
-  var gvLayers = {layers:[]};
-  var gvMaps = {maps:[]};
-  var gvServiceLayers = {serviceLayers:[]};
-  var gvFeatureTypes = {featureTypes:[]};
+  let gvServices = {services:[]};
+  let gvLayers = {layers:[]};
+  let gvMaps = {maps:[]};
+  let gvServiceLayers = {serviceLayers:[]};
+  let gvFeatureTypes = {featureTypes:[]};
 
   /**
    * Services
@@ -46,7 +46,7 @@ Router.map(function () {
     path: '/json-gv-api-services',
     where: 'server',
     action: function () {
-      var cursor = Services.find(); 
+      let cursor = Services.find(); 
       gvServices = {services:[]};
       cursor.forEach(function(service){
         gvServices.services.push(
@@ -79,10 +79,10 @@ Router.map(function () {
       /*
        * Get normal layers from Layers
        */
-      var cursor = Layers.find(); 
+      let cursor = Layers.find(); 
       cursor.forEach(function(layer){
-        var layerState = {};
-        var layerProps = {};
+        let layerState = {};
+        let layerProps = {};
         if (layer.properties){
           if (layer.properties.initial_visible){
             layerState.visible = layer.properties.initial_visible;
@@ -94,9 +94,9 @@ Router.map(function () {
             layerProps.applayer = layer.properties.applayer;
           }
         }
-        var layerServiceLayers = [];
-        for (var index = layer.service_layers.length-1; index >= 0; index--)  {
-          var serviceLayer = layer.service_layers[index];
+        let layerServiceLayers = [];
+        for (let index = layer.service_layers.length-1; index >= 0; index--)  {
+          let serviceLayer = layer.service_layers[index];
           layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
           if (layer.type !== 'default'){
             // add searchfields to properties
@@ -175,21 +175,21 @@ Router.map(function () {
     path: '/json-gv-api-servicelayers',
     where: 'server',
     action: function () {
-    	var protocol = 	this.request.headers['x-forwarded-proto'];
-    	var host = this.request.headers.host;
-      var cursor = Layers.find(); 
+    	let protocol = 	this.request.headers['x-forwarded-proto'];
+    	let host = this.request.headers.host;
+      let cursor = Layers.find(); 
       gvServiceLayers = {serviceLayers:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
           if (serviceLayer.featureType){
-            var ft;
+            let ft;
             if  (_.isArray(serviceLayer.featureType)){
               ft = serviceLayer.featureType[0];
             } else {
               ft = serviceLayer.featureType;
             }
-            var graphicUrl = serviceLayer.legendGraphic;
+            let graphicUrl = serviceLayer.legendGraphic;
             if(graphicUrl.indexOf("http") === -1){
             	graphicUrl = protocol + "://" + host + "/upload/" + graphicUrl;
             } 
@@ -230,12 +230,12 @@ Router.map(function () {
     path: '/json-gv-api-featuretypes',
     where: 'server',
     action: function () {
-      var cursor = Layers.find(); 
+      let cursor = Layers.find(); 
       gvFeatureTypes = {featureTypes:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           if (serviceLayer.featureType){
-            var ft;
+            let ft;
             if  (_.isArray(serviceLayer.featureType)){
               ft = serviceLayer.featureType[0];
             } else {
@@ -274,28 +274,28 @@ Router.map(function () {
     action: function () {
       gvMaps = {maps:[]};
       // get maps
-      var cursor = Maps.find(); 
-      var allMaps = cursor.fetch();
+      let cursor = Maps.find(); 
+      let allMaps = cursor.fetch();
       // loop over allMaps array in reversed order  
       for (index = allMaps.length-1; index >= 0; index--)  {
-        var gvMapLayers1 = [];
-        var map = allMaps[index];
-        var mapChildren = map.children;
+        let gvMapLayers1 = [];
+        let map = allMaps[index];
+        let mapChildren = map.children;
         if (mapChildren){
-          for (var index1 = mapChildren.length-1; index1 >= 0; index1--)  {
-            var child1 = mapChildren[index1];
+          for (let index1 = mapChildren.length-1; index1 >= 0; index1--)  {
+            let child1 = mapChildren[index1];
             if (child1.type === "group"){
-              var gvMapLayers2 = [];
-              var child1Children = _.toArray(child1.children);
+              let gvMapLayers2 = [];
+              let child1Children = _.toArray(child1.children);
               for (index2 = child1Children.length-1; index2 >= 0; index2--)  {
-                var child2 = child1Children[index2];
+                let child2 = child1Children[index2];
                 if (child2.type === "group"){
-                  var gvMapLayers3 = [];
-                  var child2Children = _.toArray(child2.children);
+                  let gvMapLayers3 = [];
+                  let child2Children = _.toArray(child2.children);
                   for (index3 = child2Children.length-1; index3 >= 0; index3--)  {
-                    var child3 = child2Children[index3];
+                    let child3 = child2Children[index3];
                     if (child3.type === "group"){
-                      var gvMapLayers4 = [];
+                      let gvMapLayers4 = [];
                       // group
                       gvMapLayers3.push(
                           {

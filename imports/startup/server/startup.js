@@ -74,9 +74,9 @@ Meteor.methods({
    * initiate geoide-viewer configuration reload by calling http get on url
    */
   triggerViewerReload : function (){
-    var url = Meteor.call('getViewerReloadConfigUrl');
+    let url = Meteor.call('getViewerReloadConfigUrl');
     if (url){
-        var res = HTTP.get(url, {headers:{
+        let res = HTTP.get(url, {headers:{
             'User-Agent': 'Meteor/1.3',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
           }
@@ -104,7 +104,7 @@ UploadServer.init({
  * Make sure user idgis-admin with administrator role exists,
  * make one if needed 
  */
-var adminUser = Meteor.users.findOne({username: 'idgis-admin'});
+let adminUser = Meteor.users.findOne({username: 'idgis-admin'});
 if (!adminUser){
   adminUser = Accounts.createUser({username:'idgis-admin', password:'koffie'});
   Meteor.users.update(adminUser);

@@ -13,7 +13,7 @@ Router.map(function () {
     path: '/jsonapi-services',
     where: 'server',
     action: function () {
-      var json = Services.find().fetch(); 
+      let json = Services.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
@@ -22,7 +22,7 @@ Router.map(function () {
     path: '/jsonapi-layers',
     where: 'server',
     action: function () {
-      var json = Layers.find().fetch(); 
+      let json = Layers.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
@@ -31,7 +31,7 @@ Router.map(function () {
     path: '/jsonapi-maps',
     where: 'server',
     action: function () {
-      var json = Maps.find().fetch(); 
+      let json = Maps.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
