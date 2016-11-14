@@ -372,12 +372,30 @@ AutoForm.addHooks('mapForm',{
 				lResponse) {
 			if (lError) {
 				console.log('triggerViewerReload Error ', lError);
-				alert(i18n('alert.viewerRefresh'));
+        new Confirmation({
+          message: function(){ return i18n('viewerRefresh.message'); },
+          title: function(){ return i18n('viewerRefresh.title'); },
+          cancelText: function(){ return i18n('viewerRefresh.cancel'); },
+          okText: function(){ return i18n('viewerRefresh.ok'); },
+          success: true, // whether the button should be green or red
+          focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+        }, function (ok) {
+          // ok is true if the user clicked on "ok", false otherwise
+        });
         Router.go('maps.list');
 			} else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
-          alert(i18n('alert.viewerRefresh'));
+          new Confirmation({
+            message: function(){ return i18n('viewerRefresh.message'); },
+            title: function(){ return i18n('viewerRefresh.title'); },
+            cancelText: function(){ return i18n('viewerRefresh.cancel'); },
+            okText: function(){ return i18n('viewerRefresh.ok'); },
+            success: true, // whether the button should be green or red
+            focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+          }, function (ok) {
+            // ok is true if the user clicked on "ok", false otherwise
+          });
         }
 			  Router.go('maps.list');
 			}
