@@ -29,25 +29,16 @@ import { Maps } from '/imports/api/collections/maps.js';
  *  
  */
 
-Router.map(function () {
-  /**
-   * Objects for Geoide-Viewer json
-   */
-  let gvServices = {services:[]};
-  let gvLayers = {layers:[]};
-  let gvMaps = {maps:[]};
-  let gvServiceLayers = {serviceLayers:[]};
-  let gvFeatureTypes = {featureTypes:[]};
-
   /**
    * Services
    */
+Router.map(function () {
   this.route('json-gv-api-services', {
     path: '/json-gv-api-services',
     where: 'server',
     action: function () {
       let cursor = Services.find(); 
-      gvServices = {services:[]};
+      let gvServices = {services:[]};
       cursor.forEach(function(service){
         gvServices.services.push(
             {
@@ -67,15 +58,16 @@ Router.map(function () {
       this.response.end(EJSON.stringify(gvServices, {indent: true}));
     }
   });
-  
+});  
   /**
    * Layers, including grouplayers from Maps
    */
+Router.map(function () {
   this.route('json-gv-api-layers', {
     path: '/json-gv-api-layers',
     where: 'server',
     action: function () {
-      gvLayers = {layers:[]};
+      let gvLayers = {layers:[]};
       /*
        * Get normal layers from Layers
        */
@@ -98,16 +90,14 @@ Router.map(function () {
         for (let index = layer.service_layers.length-1; index >= 0; index--)  {
           let serviceLayer = layer.service_layers[index];
           layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
-          if (layer.type !== 'default'){
-            // add searchfields to properties
-            if (serviceLayer.featureType){
-              layerProps.searchFields = [];
-              _.each(serviceLayer.featureType, function(ft){
-                _.each(ft.searchTemplates, function(st){
-                  layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
-                });            
-              });
-            }
+          // add searchfields to properties
+          if ((layer.type !== 'default') && (serviceLayer.featureType !== undefined)){
+            layerProps.searchFields = [];
+            _.each(serviceLayer.featureType, function(ft){
+              _.each(ft.searchTemplates, function(st){
+                layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
+              });            
+            });
           }
         };
         gvLayers.layers.push(
@@ -167,10 +157,11 @@ Router.map(function () {
       this.response.end(EJSON.stringify(gvLayers, {indent: true}));
     }
   });
-  
+});
   /**
    * ServiceLayers
    */
+Router.map(function () {
   this.route('json-gv-api-servicelayers', {
     path: '/json-gv-api-servicelayers',
     where: 'server',
@@ -178,7 +169,7 @@ Router.map(function () {
     	let protocol = 	this.request.headers['x-forwarded-proto'];
     	let host = this.request.headers.host;
       let cursor = Layers.find(); 
-      gvServiceLayers = {serviceLayers:[]};
+      let gvServiceLayers = {serviceLayers:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
@@ -222,16 +213,18 @@ Router.map(function () {
       this.response.end(EJSON.stringify(gvServiceLayers, {indent: true}));
     }
   });
-    
+});
+
   /**
    * FeatureTypes
    */
+Router.map(function () {
   this.route('json-gv-api-featuretypes', {
     path: '/json-gv-api-featuretypes',
     where: 'server',
     action: function () {
       let cursor = Layers.find(); 
-      gvFeatureTypes = {featureTypes:[]};
+      let gvFeatureTypes = {featureTypes:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           if (serviceLayer.featureType){
@@ -260,7 +253,7 @@ Router.map(function () {
       this.response.end(EJSON.stringify(gvFeatureTypes, {indent: true}));
     }
   });
-
+});
 
   /**
    * Maps
@@ -268,11 +261,12 @@ Router.map(function () {
   /*
    * groups and layers sorted in reverse order as required by Geoide-Viewer
    */
+Router.map(function () {
   this.route('json-gv-api-maps', {
     path: '/json-gv-api-maps',
     where: 'server',
     action: function () {
-      gvMaps = {maps:[]};
+      let gvMaps = {maps:[]};
       // get maps
       let cursor = Maps.find(); 
       let allMaps = cursor.fetch();
