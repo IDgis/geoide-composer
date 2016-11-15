@@ -15,14 +15,10 @@ Template.legendGraphTemplate.helpers({
           var legendGraphicInputName = 'legendGraphic'; 
           var legendGraphicImageName = 'legendGraphic.img';
           var uploadControlName = '';
-          if (context){
-            if (context.uploadControl){
-              if (context.uploadControl.context){
-                if (context.uploadControl.context){
-                  uploadControlName = context.uploadControl.context.className;
-                }
-              }
-            }
+          if ((context !== undefined) && 
+              (context.uploadControl !== undefined) && 
+              (context.uploadControl.context !== undefined)){
+            uploadControlName = context.uploadControl.context.className;
           }
           if (!_.isEmpty(uploadControlName)){
             // this will find the proper indexed input and image from
@@ -40,13 +36,12 @@ Template.legendGraphTemplate.helpers({
   },
   imgSrc: function(src){
     var result = '/images/empty-legendgraphic.png';
-    if (src){
-      if (!_.isEmpty(src)){
-        if(src.indexOf("http") !== -1){
-        	result = src;
-        } else {
-    	  result = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/upload/" + src;
-        }
+    if ((src !== undefined) && 
+      (!_.isEmpty(src))){
+      if(src.indexOf("http") !== -1){
+      	result = src;
+      } else {
+  	  result = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/upload/" + src;
       }
     }
     return result;

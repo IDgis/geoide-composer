@@ -115,7 +115,6 @@ Template.layer.events({
       // FF, IE
       srcName = e.target.parentElement.name;
     }
-    console.log("Source name ", srcName);
     var lyrName = e.target.value;
 
     // find service id from service selectbox
@@ -172,11 +171,10 @@ Template.layer.onRendered(function(){
    * (initially the src of the image is the url of 'edit-layer' route)
    */
   var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
-  if (legendGraphicImage[0].src){
-    if (_.isEmpty(legendGraphicImage[0].src) || 
-        legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>=0){
-      legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
-    }
+  if ((legendGraphicImage[0].src !== undefined) && 
+      (_.isEmpty(legendGraphicImage[0].src) || 
+        (legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>=0))){
+    legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
   }
 });
 /**/
@@ -187,7 +185,7 @@ AutoForm.addHooks('layerform',{
    * Before doing this, trigger the Geoide viewer that the configuration has changed.
    * When the viewer reload fails, alert the user.
    */
-  onSuccess: function(formType, result) {
+  onSuccess: function() {
     Meteor.call('triggerViewerReload',
         function(lError, lResponse) {
       if (lError) {
@@ -206,6 +204,4 @@ AutoForm.addHooks('layerform',{
   onError: function(formType, error){
     console.log("layer autoform error = " + error);
   },
-  onRendered: function(formType, error){
-  }
 });
