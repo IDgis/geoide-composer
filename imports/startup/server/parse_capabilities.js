@@ -566,7 +566,7 @@ Meteor.methods({
         default:
           break;
         }
-        if ((req !== undefined) && (req[0].GetMap)){
+        if ((req !== undefined) && (req[0].GetMap !== undefined)){
           _.each(req[0].GetMap[0].Format,function(format){
             servoptions.push({label:format, value:format});
           });

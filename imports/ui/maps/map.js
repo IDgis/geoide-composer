@@ -95,9 +95,6 @@ Template.map.events({
 		Modal.show(helpTemplate);
 	},
 
-	'submit #mapForm' : function(event) {
-	},
-
 	'click .jstree' : function() {
 		// check which buttons to disable/enable, 
 		// depending on what is selected in the tree
@@ -323,7 +320,7 @@ Template.map.rendered = function() {
 
 	})
 	
-	.on("loaded.jstree", function(e, data) {
+	.on("loaded.jstree", function() {
 		$('#maptree').jstree('open_all');
 		$('.jstree-checkbox').attr('title', i18n('tooltips.maps.jstree.check'));
 		fillLayerSelect();
@@ -362,7 +359,7 @@ AutoForm.addHooks('mapForm',{
 	 * Before doing this, trigger the Geoide viewer that the configuration has changed.
 	 * When the viewer reload fails, alert the user.
 	 */
-	onSuccess : function(formType, result) {
+	onSuccess : function() {
 		// Stuur een refresh request naar de viewer en ga naar
 		// de list
 		Meteor.call('triggerViewerReload', function(lError,
