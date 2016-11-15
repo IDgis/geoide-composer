@@ -114,15 +114,15 @@ export const Services = new Mongo.Collection("services");
 Services.attachSchema(ServiceSchema);
  
 Services.allow({
-	  insert: function(userId, doc) {
+	  insert: function(userId) {
 	    // only allow posting if you are logged in
 	    return !! userId; 
 	  },
-	  update: function(userId, doc) {
+	  update: function(userId) {
 	    // only allow posting if you are logged in
 	    return !! userId; 
 	  },
-	  remove: function(userId, doc) {
+	  remove: function(userId) {
 	    // only allow posting if you are logged in
 	    return !! userId; 
 	  }

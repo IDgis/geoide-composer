@@ -181,15 +181,15 @@ export const Maps = new Mongo.Collection("maps");
 Maps.attachSchema(MapSchema);
 
 Maps.allow({
-  insert: function(userId, doc) {
+  insert: function(userId) {
     // only allow posting if you are logged in
     return !! userId; 
   },
-  update: function(userId, doc) {
+  update: function(userId) {
     // only allow posting if you are logged in
     return !! userId; 
   },
-  remove: function(userId, doc) {
+  remove: function(userId) {
     // only allow posting if you are logged in
     return !! userId; 
   }
