@@ -1,7 +1,26 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Services } from '/imports/api/collections/services.js';
+/**
+ * Definition of Layers Collection.
+ * 
+ * Layer
+ *   |-- ServiceLayer [0-5]
+ *         |-- FeatureType [0-1]
+ *               |-- SearchTemplate [0-3]
+ * ServiceLayer is a layer from a WMS or TMS service [optional]
+ * Featuretype is a featuretype from a WFS [optional]
+ * SearchTemplate is a specific field of a featuretype [optional]
+ */
 
+/*
+ * Definition of schema searchTemplate
+ * 
+ * Searchtemplates can be used in a viewer to filter on featuretype properties 
+ * label: user defined name of this filter
+ * attribute_localname: name of a field in the featuretype
+ * attibute_namespace: namespace of the field in the featuretype
+ */
 SimpleSchema.searchTemplate = new SimpleSchema ({
   label: {
     type: String,
@@ -104,6 +123,14 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
   },		
 });
 
+/*
+ * Definition of featureType
+ * 
+ * label: user defined name
+ * service: name of the WFS service for this featuretype
+ * nameInWfsService: name of the featuretype
+ * searchTemplates: list of searchTemplates based on properties of this featuretype 
+ */
 SimpleSchema.featureType = new SimpleSchema ({
   label: {
     type: String,
@@ -185,6 +212,16 @@ SimpleSchema.featureType = new SimpleSchema ({
       },
 	},   
 });
+
+/*
+ * Definition of serviceLayer
+ * 
+ * label: userdefined name
+ * service: name of the WMS or TMS service for this serviceLayer
+ * nameInService: name of the layer in the service
+ * legendGraphic: name or url of an image that is used as a legendgraphic
+ * featureType: optional featureType
+*/
 
 SimpleSchema.serviceLayer = new SimpleSchema ({
   label: {
@@ -280,6 +317,12 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   },
 });
 
+/*
+ * Definition of layer properties
+ * 
+ * initial_query: optional query belonging to this layer
+ *   defined when layer.type is 'cosurvey-sql'
+ */
 SimpleSchema.layerProperties = new SimpleSchema ({
   initial_query: {
     type: String,
@@ -300,6 +343,14 @@ SimpleSchema.layerProperties = new SimpleSchema ({
   },  
 });
 
+/*
+ * Definition of root element Layer
+ * name: unique userdefined name
+ * label: userdefined label as it can appear in a viewer
+ * type: ['default', 'cosurvey-sql']
+ * properties: optional, holding query when type is cosurvey-sql
+ * service_layers: list of optional serviceLayers
+ */
 export const LayerSchema = new SimpleSchema({
   name: {
     type: String,
@@ -353,17 +404,17 @@ export const LayerSchema = new SimpleSchema({
 export const Layers = new Mongo.Collection("layers");
 Layers.attachSchema(LayerSchema);
 
+/*
+ * Collection manipulation is only allowed when a user is logged in.
+ */
 Layers.allow({
   insert: function(userId) {
-    // only allow posting if you are logged in
     return !! userId; 
   },
   update: function(userId) {
-    // only allow posting if you are logged in
     return !! userId; 
   },
   remove: function(userId) {
-    // only allow posting if you are logged in
     return !! userId; 
   }
 });
