@@ -239,6 +239,9 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
             case 'TMS':
               methodName = 'getTmsLayers';
               break;
+            default:
+                // should never get here
+              break;
           }
           servoptions = ReactiveMethod.call(
               methodName,
