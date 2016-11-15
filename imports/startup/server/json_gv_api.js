@@ -91,7 +91,7 @@ Router.map(function () {
           let serviceLayer = layer.service_layers[index];
           layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
           // add searchfields to properties
-          if ((layer.type !== 'default') && (serviceLayer.featureType !== undefined)){
+          if ((layer.type !== 'default') && (serviceLayer.featureType)){
             layerProps.searchFields = [];
             _.each(serviceLayer.featureType, function(ft){
               _.each(ft.searchTemplates, function(st){

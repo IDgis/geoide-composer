@@ -117,19 +117,19 @@ Meteor.methods({
     let result = false;
     cursor.forEach(function(map){
       _.each(map.children,function(child){
-        if ((child.data !== undefined ) && (child.data.layerid === layerId)){
+        if ((child.data ) && (child.data.layerid === layerId)){
           result = true;
         }
         _.each(child.children,function(child1){
-          if ((child1.data !== undefined) && (child1.data.layerid === layerId)){
+          if ((child1.data) && (child1.data.layerid === layerId)){
             result = true;
           }
           _.each(child1.children,function(child2){
-            if ((child2.data !== undefined) && (child2.data.layerid === layerId)){
+            if ((child2.data) && (child2.data.layerid === layerId)){
               result = true;
             }
             _.each(child2.children,function(child3){
-              if ((child3.data !== undefined) && (child3.data.layerid === layerId)){
+              if ((child3.data) && (child3.data.layerid === layerId)){
                 result = true;
               }
             });
@@ -195,7 +195,7 @@ Meteor.methods({
       
         _.each(capLayer,function(mainLayer){
           let level = 0;
-          if ((mainLayer.$ !== undefined) && (mainLayer.$.queryable === '1')){
+          if ((mainLayer.$) && (mainLayer.$.queryable === '1')){
             level = 2;
             if (mainLayer.Name){
               servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
@@ -233,7 +233,7 @@ Meteor.methods({
     let prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
-        if ((subLayer.$ !== undefined) && (subLayer.$.queryable === '1')){
+        if ((subLayer.$) && (subLayer.$.queryable === '1')){
           if (subLayer.Title){
             const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
             if (subLayer.Name){
@@ -433,13 +433,13 @@ Meteor.methods({
           let capObject = wmsCapObject.Capability[0];      
           let layersObject = capObject.Layer;
           let capLayer = Meteor.call('getLayerByName',layersObject, layer);
-          if ((capLayer !== undefined) && (capLayer.Style !== undefined)) {
+          if ((capLayer) && (capLayer.Style)) {
   	        // Kies de default style of de laatste in de lijst als er geen default is
   	        let styleDefaultName = 'default';
   	        let styleDefaultFound = false;
             _.each(capLayer.Style,function(style){
               if (!styleDefaultFound){
-      	    	  if ((style.LegendURL !== undefined) && (style.LegendURL[0].OnlineResource[0] !== undefined)) {
+      	    	  if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
       	    	    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
       	    	  }
       	    	  if (style.Name[0] === styleDefaultName){
@@ -554,19 +554,19 @@ Meteor.methods({
         let req = null;
         switch(version) {
         case '1.3.0':
-          if ((parseResponse.WMS_Capabilities !== undefined) && (parseResponse.WMS_Capabilities.Capability[0])){
+          if ((parseResponse.WMS_Capabilities) && (parseResponse.WMS_Capabilities.Capability[0])){
             req = parseResponse.WMS_Capabilities.Capability[0].Request;
           }
           break;
         case '1.1.1':
-          if ((parseResponse.WMT_MS_Capabilities !== undefined) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
+          if ((parseResponse.WMT_MS_Capabilities) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
             req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
           }
           break;
         default:
           break;
         }
-        if ((req !== undefined) && (req[0].GetMap !== undefined)){
+        if ((req) && (req[0].GetMap)){
           _.each(req[0].GetMap[0].Format,function(format){
             servoptions.push({label:format, value:format});
           });

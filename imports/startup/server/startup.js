@@ -60,9 +60,9 @@ Meteor.methods({
    * settings: delay of resetting WMS/WFS caches   
    */
   getRequestCacheDelay : function(){
-    if ((Meteor.settings !== undefined) && 
-      (Meteor.settings.requestcache !== undefined)&& 
-      (Meteor.settings.requestcache.delay !== undefined)){
+    if ((Meteor.settings) && 
+      (Meteor.settings.requestcache)&& 
+      (Meteor.settings.requestcache.delay)){
       return Meteor.settings.requestcache.delay;
     }
     // 60 minutes

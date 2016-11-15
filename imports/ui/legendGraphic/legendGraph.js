@@ -15,9 +15,9 @@ Template.legendGraphTemplate.helpers({
           var legendGraphicInputName = 'legendGraphic'; 
           var legendGraphicImageName = 'legendGraphic.img';
           var uploadControlName = '';
-          if ((context !== undefined) && 
-              (context.uploadControl !== undefined) && 
-              (context.uploadControl.context !== undefined)){
+          if ((context) && 
+              (context.uploadControl) && 
+              (context.uploadControl.context)){
             uploadControlName = context.uploadControl.context.className;
           }
           if (!_.isEmpty(uploadControlName)){
@@ -36,7 +36,7 @@ Template.legendGraphTemplate.helpers({
   },
   imgSrc: function(src){
     var result = '/images/empty-legendgraphic.png';
-    if ((src !== undefined) && 
+    if ((src) && 
       (!_.isEmpty(src))){
       if(src.indexOf("http") !== -1){
       	result = src;
