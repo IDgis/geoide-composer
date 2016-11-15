@@ -1,8 +1,21 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Definition of Map schema
+ * 
+ * A map contains layers and groups of layers
+ * It also has a bounding box
+ * 
+ * This schema definition is closely related to the use of jstree as a tree component in the UI.
+ * This definition also depends on the use of AutoForm  
+ */
 
-
+/*
+ * Definition of MapLayerState
+ * 
+ * checked: if true then the layer is initially visible in a viewer
+ */
 SimpleSchema.mapLayerState = new SimpleSchema ({
 	//mapLayer initial visible
 	checked: {
@@ -14,6 +27,11 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 	},
 });
 
+/*
+ * Definition of MapLayerData
+ * 
+ * layerid: stored in the tree component
+ */
 SimpleSchema.mapLayerData = new SimpleSchema ({
 	//id of layer is stored in dataattibute
 	layerid: {
@@ -22,7 +40,12 @@ SimpleSchema.mapLayerData = new SimpleSchema ({
 		
 	}
 });
-//validatie op minx < maxx zie https://github.com/aldeed/meteor-simple-schema#custom-validation
+/*
+ * Definition of initialExtent (bounding box)
+ * 
+ * minx, miny, maxx, maxy: values and ranges are based on RD coordinates (EPSG:28992) 
+ * validation on minx < maxx: see https://github.com/aldeed/meteor-simple-schema#custom-validation
+ */
 SimpleSchema.initialExtent = new SimpleSchema ({
     "minx": {
     	type: Number,
@@ -66,7 +89,39 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     }
 });
 
-
+/*
+ * Definition of Map
+ * 
+ * text: is the name attribute, must be unique
+ * label: userdefined description that can be shown in a viewer instead of name (text)
+ * type: in tree (not relevant for viewerconfig)
+ * initial_extent: bounding box
+ * children:
+ *   all levels of map groups/layers have been written out in this schema
+ *   the behaviour is modelled out in code, 
+ *   for example a layer cannot have another layer as a child etc.
+ *   members:
+ *     id: in tree (not relevant for viewerconfig)
+ *     text: layer name (overrules name in layerconfig)
+ *     state: layer visibility
+ *     type: in tree (not relevant for viewerconfig)
+ *     data: layer id from mongo collection  
+ *     
+ *  Example of map structure:
+ *  Map
+ *   |-- layer 1
+ *   |-- layer 2
+ *   |-- group 1 
+ *   |     |-- layer 1.1
+ *   |     |-- layer 1.2
+ *   |-- layer 3      
+ *   |-- group 2 
+ *   |     |-- group 2.1 
+ *   |           |-- layer 2.1.1
+ *   |           |-- layer 2.1.2
+ *   |-- layer 4
+ *               
+ */
 export const MapSchema= new SimpleSchema({
 	//name of map
 	text: {
@@ -85,7 +140,7 @@ export const MapSchema= new SimpleSchema({
       "title": function(){ return i18n ('tooltips.maps.autoform.fields.label'); },
     },
   }, 
-	//type in tree (not relevant for viewerconfig)
+	
 	type: {
 		type: String,
 		defaultValue: 'map'
@@ -102,31 +157,26 @@ export const MapSchema= new SimpleSchema({
 		type: [Object],
 		optional: true
 	},
-	//id in tree (not relevant for viewerconfig)
 	'children.$.id': {
         type: String,
         optional: true
     },
-    //layer name (overrules name in layerconfig)
     'children.$.text': {
         type: String,
         optional: true
     },
     'children.$.state': {
-    	//layer visibility
     	type: SimpleSchema.mapLayerState,
     	optional: true
 	},
     'children.$.type': {
-       //type in tree (not relevant for viewerconfig)
    	   type: String,
    	   optional: true
     },
     'children.$.data': {
-    	//layer_id
-		type: SimpleSchema.mapLayerData,
-		optional: true
-	},
+  		type: SimpleSchema.mapLayerData,
+  		optional: true
+  	},
     'children.$.children': {
         type: [Object],
         optional: true
@@ -180,17 +230,17 @@ export const MapSchema= new SimpleSchema({
 export const Maps = new Mongo.Collection("maps");
 Maps.attachSchema(MapSchema);
 
+/*
+ * Manipulation of collection only allowed when user is logged in
+ */
 Maps.allow({
   insert: function(userId) {
-    // only allow posting if you are logged in
     return !! userId; 
   },
   update: function(userId) {
-    // only allow posting if you are logged in
     return !! userId; 
   },
   remove: function(userId) {
-    // only allow posting if you are logged in
     return !! userId; 
   }
 });

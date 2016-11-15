@@ -11,6 +11,8 @@ import { Services } from '/imports/api/collections/services.js';
  * ServiceLayer is a layer from a WMS or TMS service [optional]
  * Featuretype is a featuretype from a WFS [optional]
  * SearchTemplate is a specific field of a featuretype [optional]
+ * 
+ * This definition depends on the use of AutoForm  
  */
 
 /*
@@ -345,6 +347,7 @@ SimpleSchema.layerProperties = new SimpleSchema ({
 
 /*
  * Definition of root element Layer
+ * 
  * name: unique userdefined name
  * label: userdefined label as it can appear in a viewer
  * type: ['default', 'cosurvey-sql']

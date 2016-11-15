@@ -1,6 +1,22 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * Definition of Service
+ * 
+ * A service contains a service url, a type of service and a version.
+ * 
+ * This definition depends on the use of AutoForm  
+ */
+
+/*
+ * Definition of Service
+ *   name: userdefined unique name of the service
+ *   endpoint: valid url 
+ *   type: can be 'WMS', 'TMS' or 'WFS'
+ *   version: value depends on type, each type has a specific defaultvalue
+ *   printFormat: preferred format for images in WMS getmap request  
+ */
 export const ServiceSchema = new SimpleSchema({
   name: {
     type: String,
@@ -81,7 +97,7 @@ export const ServiceSchema = new SimpleSchema({
           return currentVersion;
         }
       },
-      // this seems to work
+      // this seems to work reactively
       "defaultValue": function() {
         var currentType = AutoForm.getFieldValue('type', 'serviceform');
         if (currentType === 'WMS') {
@@ -128,18 +144,18 @@ export const ServiceSchema = new SimpleSchema({
 
 export const Services = new Mongo.Collection("services");
 Services.attachSchema(ServiceSchema);
- 
+
+/*
+ * Manipulation of collection only allowed when user is logged in
+ */
 Services.allow({
 	  insert: function(userId) {
-	    // only allow posting if you are logged in
 	    return !! userId; 
 	  },
 	  update: function(userId) {
-	    // only allow posting if you are logged in
 	    return !! userId; 
 	  },
 	  remove: function(userId) {
-	    // only allow posting if you are logged in
 	    return !! userId; 
 	  }
 });
