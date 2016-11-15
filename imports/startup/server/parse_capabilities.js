@@ -117,36 +117,20 @@ Meteor.methods({
     let result = false;
     cursor.forEach(function(map){
       _.each(map.children,function(child){
-        if (child.data){
-          if (child.data.layerid){
-            if (child.data.layerid === layerId){
-              result = true;
-            }
-          }
+        if ((child.data !== undefined ) && (child.data.layerid === layerId)){
+          result = true;
         }
         _.each(child.children,function(child1){
-          if (child1.data){
-            if (child1.data.layerid){
-              if (child1.data.layerid === layerId){
-                result = true;
-              }
-            }
+          if ((child1.data !== undefined) && (child1.data.layerid === layerId)){
+            result = true;
           }
           _.each(child1.children,function(child2){
-            if (child2.data){
-              if (child2.data.layerid){
-                if (child2.data.layerid === layerId){
-                  result = true;
-                }
-              }
+            if ((child2.data !== undefined) && (child2.data.layerid === layerId)){
+              result = true;
             }
             _.each(child2.children,function(child3){
-              if (child3.data){
-                if (child3.data.layerid){
-                  if (child3.data.layerid === layerId){
-                    result = true;
-                  }
-                }
+              if ((child3.data !== undefined) && (child3.data.layerid === layerId)){
+                result = true;
               }
             });
           });
@@ -211,15 +195,12 @@ Meteor.methods({
       
         _.each(capLayer,function(mainLayer){
           let level = 0;
-          if (mainLayer.$){
-            if (mainLayer.$.queryable){
-              if (mainLayer.$.queryable === '1'){
-                level = 2;
-                if (mainLayer.Name){
-                  servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
-                } else {
-                  servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
-                }              }
+          if ((mainLayer.$ !== undefined) && (mainLayer.$.queryable === '1')){
+            level = 2;
+            if (mainLayer.Name){
+              servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
+            } else {
+              servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
             }
           }
           // sub layer(s)
@@ -252,17 +233,13 @@ Meteor.methods({
     let prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
-        if (subLayer.$){
-          if (subLayer.$.queryable){
-            if (subLayer.$.queryable === '1'){
-              if (subLayer.Title){
-                const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
-                if (subLayer.Name){
-                  servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
-                } else {
-                  servoptions.push({value:'', label:titleWithPrefix, disabled:true});
-                }
-              }
+        if ((subLayer.$ !== undefined) && (subLayer.$.queryable === '1')){
+          if (subLayer.Title){
+            const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
+            if (subLayer.Name){
+              servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
+            } else {
+              servoptions.push({value:'', label:titleWithPrefix, disabled:true});
             }
           }
         }
@@ -456,24 +433,20 @@ Meteor.methods({
           let capObject = wmsCapObject.Capability[0];      
           let layersObject = capObject.Layer;
           let capLayer = Meteor.call('getLayerByName',layersObject, layer);
-          if(capLayer) {
-    	      if(capLayer.Style) {
-    	        // Kies de default style of de laatste in de lijst als er geen default is
-    	        let styleDefaultName = 'default';
-    	        let styleDefaultFound = false;
-              _.each(capLayer.Style,function(style){
-                if (!styleDefaultFound){
-        	    	  if(style.LegendURL) {
-        	    		  if(style.LegendURL[0].OnlineResource[0]) {
-        	    		    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
-        	    		  }
-        	    	  }
-        	    	  if (style.Name[0] === styleDefaultName){
-        	    	    styleDefaultFound = true;
-        	    	  }
-                }
-              });
-    	      }
+          if ((capLayer !== undefined) && (capLayer.Style !== undefined)) {
+  	        // Kies de default style of de laatste in de lijst als er geen default is
+  	        let styleDefaultName = 'default';
+  	        let styleDefaultFound = false;
+            _.each(capLayer.Style,function(style){
+              if (!styleDefaultFound){
+      	    	  if ((style.LegendURL !== undefined) && (style.LegendURL[0].OnlineResource[0] !== undefined)) {
+      	    	    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
+      	    	  }
+      	    	  if (style.Name[0] === styleDefaultName){
+      	    	    styleDefaultFound = true;
+      	    	  }
+              }
+            });
           }
           if (!result){
             /*
@@ -581,28 +554,22 @@ Meteor.methods({
         let req = null;
         switch(version) {
         case '1.3.0':
-          if (parseResponse.WMS_Capabilities){
-            if (parseResponse.WMS_Capabilities.Capability[0]){
-              req = parseResponse.WMS_Capabilities.Capability[0].Request;
-            }
+          if ((parseResponse.WMS_Capabilities !== undefined) && (parseResponse.WMS_Capabilities.Capability[0])){
+            req = parseResponse.WMS_Capabilities.Capability[0].Request;
           }
           break;
         case '1.1.1':
-          if (parseResponse.WMT_MS_Capabilities){
-            if (parseResponse.WMT_MS_Capabilities.Capability[0]){
-              req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
-            }
+          if ((parseResponse.WMT_MS_Capabilities !== undefined) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
+            req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
           }
           break;
         default:
           break;
         }
-        if (req){
-          if (req[0].GetMap){
-            _.each(req[0].GetMap[0].Format,function(format){
-              servoptions.push({label:format, value:format});
-            });
-          }
+        if ((req !== undefined) && (req[0].GetMap)){
+          _.each(req[0].GetMap[0].Format,function(format){
+            servoptions.push({label:format, value:format});
+          });
         }
       }
       sortedServoptions = _.sortBy(servoptions, 'label');
