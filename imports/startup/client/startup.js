@@ -15,11 +15,6 @@ Meteor.startup(function() {
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY',
   });
-  
-// enable debugging during development
-//  AutoForm.debug(true);
-//  SimpleSchema.debug = true;
-
 });
 
 var setCursorProgress = function() {
