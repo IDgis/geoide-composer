@@ -578,7 +578,7 @@ Meteor.methods({
       if (xmlResponse.content){
         let parseResponse = Meteor.call('parseXml', xmlResponse.content);
         
-        let req = undefined;
+        let req = null;
         switch(version) {
         case '1.3.0':
           if (parseResponse.WMS_Capabilities){

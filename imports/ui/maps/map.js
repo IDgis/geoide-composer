@@ -67,7 +67,7 @@ var fillLayerSelect = function() {
        .end()
     ;
   
-  var layerOption = undefined;
+  var layerOption = null;
   layers.forEach(function(entry) {
     if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
         entry._id)) {
