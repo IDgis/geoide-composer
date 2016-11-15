@@ -60,12 +60,10 @@ Meteor.methods({
    * settings: delay of resetting WMS/WFS caches   
    */
   getRequestCacheDelay : function(){
-    if (Meteor.settings){
-      if (Meteor.settings.requestcache){
-        if (Meteor.settings.requestcache.delay){
-          return Meteor.settings.requestcache.delay;
-        }
-      }
+    if ((Meteor.settings !== undefined) && 
+      (Meteor.settings.requestcache !== undefined)&& 
+      (Meteor.settings.requestcache.delay !== undefined)){
+      return Meteor.settings.requestcache.delay;
     }
     // 60 minutes
     return 60 * 60 * 1000;
@@ -97,8 +95,6 @@ UploadServer.init({
   //create the directories:
   checkCreateDirectories: true,
   overwrite: true,
-  finished(fileInfo, formFields) {
-  },
 //  uploadUrl: '/GetLegendGraphic/', // ## must be 'upload' ##
 });
 
