@@ -22,7 +22,7 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 		type: Boolean,
 		optional: true,
 		autoform: {
-		  "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
+		  'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
 		},
 	},
 });
@@ -47,44 +47,44 @@ SimpleSchema.mapLayerData = new SimpleSchema ({
  * validation on minx < maxx: see https://github.com/aldeed/meteor-simple-schema#custom-validation
  */
 SimpleSchema.initialExtent = new SimpleSchema ({
-    "minx": {
+    'minx': {
     	type: Number,
     	min: 0,
     	max: 300000,
     	defaultValue: 0,
     	label:  function(){ return i18n('collections.maps.initial_extent.minX.label'); },
     	autoform: {
-    	  "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.minx'); },
+    	  'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.minx'); },
     	},
     },
-    "miny": {
+    'miny': {
     	type: Number,
     	min: 300000,
     	max: 620000,
     	defaultValue: 300000,
     	label: function(){ return i18n('collections.maps.initial_extent.minY.label'); },
       autoform: {
-        "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.miny'); },
+        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.miny'); },
       },
      },
-     "maxx": {
+     'maxx': {
     	type: Number,
     	min: 0,
     	max: 300000,
     	defaultValue: 300000,
     	label: function(){ return i18n('collections.maps.initial_extent.maxX.label'); },
       autoform: {
-        "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxx'); },
+        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxx'); },
       },
     },
-    "maxy":  {
+    'maxy':  {
     	type: Number,
      	min: 300000,
      	max: 620000,
      	defaultValue: 620000,
      	label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
       autoform: {
-        "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxy'); }, 
+        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxy'); }, 
       },
     }
 });
@@ -130,14 +130,14 @@ export const MapSchema= new SimpleSchema({
 		unique: true,
     regEx: /^([a-zA-Z0-9_\-]+)$/,		
     autoform: {
-      "title": function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
+      'title': function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
     },
 	}, 
   label: {
     type: String,
     label: function(){ return i18n('collections.maps.label.label'); },
     autoform: {
-      "title": function(){ return i18n ('tooltips.maps.autoform.fields.label'); },
+      'title': function(){ return i18n ('tooltips.maps.autoform.fields.label'); },
     },
   }, 
 	
@@ -150,7 +150,7 @@ export const MapSchema= new SimpleSchema({
 		label: function(){ return i18n('collections.maps.initialExtent.label'); },
 		optional: true,
     autoform: {
-      "title": function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.label'); },
+      'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.label'); },
     },
 	},
 	children: {
@@ -227,7 +227,7 @@ export const MapSchema= new SimpleSchema({
 	 }
 });
 
-export const Maps = new Mongo.Collection("maps");
+export const Maps = new Mongo.Collection('maps');
 Maps.attachSchema(MapSchema);
 
 /*

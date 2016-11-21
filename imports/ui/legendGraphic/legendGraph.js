@@ -23,13 +23,13 @@ Template.legendGraphTemplate.helpers({
           if (!_.isEmpty(uploadControlName)){
             // this will find the proper indexed input and image from
             // e.g. uploadControlName='servicelayers.1.legendGraphic.uploadCtrl'
-            legendGraphicInputName = uploadControlName.replace(".uploadCtrl", "");
-            legendGraphicImageName = uploadControlName.replace(".uploadCtrl", ".img");
+            legendGraphicInputName = uploadControlName.replace('.uploadCtrl', '');
+            legendGraphicImageName = uploadControlName.replace('.uploadCtrl', '.img');
           }
-          var legendGraphicInput = $("input[name$='"+legendGraphicInputName+"']");
+          var legendGraphicInput = $('input[name$=""+legendGraphicInputName+""]');
           legendGraphicInput[0].value = fileInfo.name;
 
-          var legendGraphicImage = $("img[name$='"+legendGraphicImageName+"']");
+          var legendGraphicImage = $('img[name$=""+legendGraphicImageName+""]');
           legendGraphicImage[0].src = fileInfo.url;
         },
     };
@@ -38,10 +38,10 @@ Template.legendGraphTemplate.helpers({
     var result = '/images/empty-legendgraphic.png';
     if ((src) && 
       (!_.isEmpty(src))){
-      if(src.indexOf("http") !== -1){
+      if(src.indexOf('http') !== -1){
       	result = src;
       } else {
-  	  result = window.location.protocol + "//" + window.location.hostname + ":" + window.location.port + "/upload/" + src;
+  	  result = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/upload/' + src;
       }
     }
     return result;
@@ -51,10 +51,10 @@ Template.legendGraphTemplate.helpers({
 Template.legendGraphTemplate.events ({
   'click .delete-graphic': function () { 
     
-    var legendGraphic = $("input[name$='"+this.name+"']");
-    legendGraphic[0].value = "";
-    var legendGraphicImage = $("img[name$='"+this.name+'.img'+"']");
-    legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
+    var legendGraphic = $('input[name$=""+this.name+""]');
+    legendGraphic[0].value = '';
+    var legendGraphicImage = $('img[name$=""+this.name+".img"]');
+    legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
   },
 });
   
@@ -62,26 +62,26 @@ Template.legendGraphTemplate.events ({
  * This is a special autoform type for legendgraphic
  * Defined in the Layer schema:
  *    afFieldInput: {
- *       type: "legendGraphicType"
+ *       type: 'legendGraphicType'
  *     },
  * This field uses its own html template
  */
-  AutoForm.addInputType("legendGraphicType", {
-    template: "legendGraphTemplate",
+  AutoForm.addInputType('legendGraphicType', {
+    template: 'legendGraphTemplate',
     valueOut: function () {
       return this.val();
     },
     valueConverters: {
-      "stringArray": AutoForm.valueConverters.stringToStringArray,
-      "number": AutoForm.valueConverters.stringToNumber,
-      "numberArray": AutoForm.valueConverters.stringToNumberArray,
-      "boolean": AutoForm.valueConverters.stringToBoolean,
-      "booleanArray": AutoForm.valueConverters.stringToBooleanArray,
-      "date": AutoForm.valueConverters.stringToDate,
-      "dateArray": AutoForm.valueConverters.stringToDateArray
+      'stringArray': AutoForm.valueConverters.stringToStringArray,
+      'number': AutoForm.valueConverters.stringToNumber,
+      'numberArray': AutoForm.valueConverters.stringToNumberArray,
+      'boolean': AutoForm.valueConverters.stringToBoolean,
+      'booleanArray': AutoForm.valueConverters.stringToBooleanArray,
+      'date': AutoForm.valueConverters.stringToDate,
+      'dateArray': AutoForm.valueConverters.stringToDateArray
     },
     contextAdjust: function (context) {
-      if (typeof context.atts.maxlength === "undefined" && typeof context.max === "number") {
+      if (typeof context.atts.maxlength === 'undefined' && typeof context.max === 'number') {
         context.atts.maxlength = context.max;
       }
       return context;

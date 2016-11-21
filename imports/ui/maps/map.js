@@ -23,14 +23,14 @@ Template.map.helpers({
 		return MapSchema;
 	},
 	formType : function() {
-		if (Session.get("selectedMapId")) {
-			return "update";
+		if (Session.get('selectedMapId')) {
+			return 'update';
 		} else {
-			return "insert";
+			return 'insert';
 		}
 	},
 	mapDoc : function() {
-		if (Session.get("selectedMapId")) {
+		if (Session.get('selectedMapId')) {
 			return this;
 		} else {
 			return null;
@@ -54,7 +54,7 @@ var layerInTree = function(children, layerId) {
 
 var fillLayerSelect = function() {
   var layers = Layers.find({}, {
-    sort : [ [ "label", "asc" ] ],
+    sort : [ [ 'label', 'asc' ] ],
     fields : {
       label : 1,
       _id : 1
@@ -71,8 +71,8 @@ var fillLayerSelect = function() {
   layers.forEach(function(entry) {
     if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
         entry._id)) {
-      layerOption = "<option value=" + entry._id + ">" + entry.label
-          + "</option>";
+      layerOption = '<option value=' + entry._id + '>' + entry.label
+          + '</option>';
       $('#layerselect').append(layerOption);
     }
   });
@@ -103,7 +103,7 @@ Template.map.events({
     if (sel){
       // check if select list contains anything
       var numberOfOptions = $('#layerselect option').length;
-      if (ref.get_type(sel) === "group") {
+      if (ref.get_type(sel) === 'group') {
 //      enable renamenode/removenode/creategroup
         $('#renamenode').prop('disabled', false);
         $('#removenode').prop('disabled', false);
@@ -121,7 +121,7 @@ Template.map.events({
         if (depth === (MAX_TREE_DEPTH - 1)){
           $('#creategroup').prop('disabled', true);
         }
-      } else if (ref.get_type(sel) === "layer") {
+      } else if (ref.get_type(sel) === 'layer') {
 //      disable renamenode/creategroup/createlayer, enable removenode
         $('#renamenode').prop('disabled', true);
         $('#removenode').prop('disabled', false);
@@ -153,13 +153,13 @@ Template.map.events({
 		if (layerLabel){
   		var layerId = $('#layerselect option:selected').val();
   		ref.create_node(sel, {
-  			"type" : "layer",
-  			"text" : layerLabel,
-  			"data" : {
-  				"layerid" : layerId
+  			'type' : 'layer',
+  			'text' : layerLabel,
+  			'data' : {
+  				'layerid' : layerId
   			},
-  			"state" : {
-  				"checked" : true
+  			'state' : {
+  				'checked' : true
   			}
   		});
 		}
@@ -175,9 +175,9 @@ Template.map.events({
 			return false;
 		}
 		sel = ref.create_node(sel, {
-			"type" : "group",
-			"state" : {
-				"checked" : true
+			'type' : 'group',
+			'state' : {
+				'checked' : true
 			}
 		});
 		if (sel) {
@@ -189,8 +189,8 @@ Template.map.events({
 	'click #renamenode' : function() {	
 		var ref = $.jstree.reference('#maptree'), sel = ref
 				.get_selected();
-		if (!sel.length || ref.get_type(sel) === "map"
-				|| ref.get_type(sel) === "layer") {
+		if (!sel.length || ref.get_type(sel) === 'map'
+				|| ref.get_type(sel) === 'layer') {
 			return false;
 		}
 		sel = sel[0];
@@ -203,10 +203,10 @@ Template.map.events({
 		var ref = $.jstree.reference('#maptree');
 		var selObjects = ref.get_selected(true);
 		_.each(selObjects, function(sel){
-		  if (ref.get_type(sel) === "map") {
+		  if (ref.get_type(sel) === 'map') {
 		    return false;
 		  }
-		  if (ref.get_type(sel) === "layer") {
+		  if (ref.get_type(sel) === 'layer') {
   			var lyr = Layers.findOne({
   				_id : sel.data.layerid
   			});
@@ -229,7 +229,7 @@ Template.map.events({
         // after remove disable 'remove' button
         $('#removenode').prop('disabled', true);
   		}
-      if (ref.get_type(sel) === "group") {
+      if (ref.get_type(sel) === 'group') {
         new Confirmation({
           message: function(){ return i18n('collections.confirmation.delete.message.groups') + ': ' + sel.text; },
           title: function(){ return i18n('collections.confirmation.delete.title'); },
@@ -237,10 +237,10 @@ Template.map.events({
           okText: function(){ return i18n('collections.confirmation.delete.ok'); },
           // whether the button should be green or red
           success: false,
-          // which button to autofocus, "cancel" (default) or "ok", or "none"
-          focus: "ok"
+          // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
+          focus: 'ok'
         }, function (ok) {
-          // ok is true if the user clicked on "ok", false otherwise
+          // ok is true if the user clicked on 'ok', false otherwise
           if (ok){
             ref.delete_node([sel]);
             fillLayerSelect();
@@ -257,17 +257,17 @@ Template.map.events({
 });
 
 Template.map.rendered = function() {
-	var mapId = Session.get("selectedMapId");
+	var mapId = Session.get('selectedMapId');
 	var map;
 	if (mapId) {
 		map = Maps.find({
 			_id : mapId
 		}).fetch()[0];
 		map.a_attr = {
-			class : "no_checkbox",
+			class : 'no_checkbox',
 		};
 		map.state = {
-			"selected": true,
+			'selected': true,
 		};
 	} else {
 		map = {
@@ -275,10 +275,10 @@ Template.map.rendered = function() {
 			type : 'map',
 			'children' : [],
 			'a_attr' : {
-				class : "no_checkbox"
+				class : 'no_checkbox'
 			},
 			state: {
-				"selected": true, 
+				'selected': true, 
 			}
 		};
 	}
@@ -289,26 +289,26 @@ Template.map.rendered = function() {
 			check_callback : true,
 		},
 		types : {
-			"#" : {
-				"max_children" : 1,
-				"max_depth" : MAX_TREE_DEPTH,
-				"valid_children" : [ "map" ]
+			'#' : {
+				'max_children' : 1,
+				'max_depth' : MAX_TREE_DEPTH,
+				'valid_children' : [ 'map' ]
 			},
 			map : {
-				"icon" : "glyphicon glyphicon-tree-deciduous",
-				"valid_children" : [ "group", "layer" ],
+				'icon' : 'glyphicon glyphicon-tree-deciduous',
+				'valid_children' : [ 'group', 'layer' ],
 			},
 			group : {
-				"icon" : "glyphicon glyphicon-duplicate",
-				"valid_children" : [ "group", "layer" ]
+				'icon' : 'glyphicon glyphicon-duplicate',
+				'valid_children' : [ 'group', 'layer' ]
 			},
 			layer : {
-				"icon" : "glyphicon glyphicon-file",
-				"valid_children" : [ "servicelayer" ],
+				'icon' : 'glyphicon glyphicon-file',
+				'valid_children' : [ 'servicelayer' ],
 			},
 			servicelayer : {
-				"icon" : "null",
-				"valid_children" : [],
+				'icon' : 'null',
+				'valid_children' : [],
 			}
 		},
 		checkbox : {
@@ -316,17 +316,17 @@ Template.map.rendered = function() {
 			tie_selection: false,
 			whole_node : false,
 		},
-		plugins : [ "checkbox","dnd","types"]
+		plugins : [ 'checkbox','dnd','types']
 
 	})
 	
-	.on("loaded.jstree", function() {
+	.on('loaded.jstree', function() {
 		$('#maptree').jstree('open_all');
 		$('.jstree-checkbox').attr('title', i18n('tooltips.maps.jstree.check'));
 		fillLayerSelect();
 	})
 	
-  .on("move_node.jstree", function(e, data) {
+  .on('move_node.jstree', function(e, data) {
     $('#maptree').jstree('open_node',data.parent);
   });
   
@@ -373,10 +373,10 @@ AutoForm.addHooks('mapForm',{
           okText: function(){ return i18n('viewerRefresh.ok'); },
           // whether the button should be green or red
           success: true,
-          // which button to autofocus, "cancel" (default) or "ok", or "none"
-          focus: "ok"
+          // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
+          focus: 'ok'
         }, function (ok) {
-          // ok is true if the user clicked on "ok", false otherwise
+          // ok is true if the user clicked on 'ok', false otherwise
         });
         Router.go('maps.list');
 			} else {
@@ -389,10 +389,10 @@ AutoForm.addHooks('mapForm',{
             okText: function(){ return i18n('viewerRefresh.ok'); },
             // whether the button should be green or red
             success: true,
-            // which button to autofocus, "cancel" (default) or "ok", or "none"
-            focus: "ok"
+            // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
+            focus: 'ok'
           }, function (ok) {
-            // ok is true if the user clicked on "ok", false otherwise
+            // ok is true if the user clicked on 'ok', false otherwise
           });
         }
 			  Router.go('maps.list');
@@ -401,6 +401,6 @@ AutoForm.addHooks('mapForm',{
 	},
 
 	onError : function(formType, error) {
-		console.log("map autoform error = " + error);
+		console.log('map autoform error = ' + error);
 	}
 });

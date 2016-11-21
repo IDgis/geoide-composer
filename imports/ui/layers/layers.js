@@ -18,9 +18,9 @@ Template.layers.helpers({
         adminLoggedIn = _.isEqual(name, 'idgis-admin');
       }
       if (adminLoggedIn){
-        return Layers.find({},{sort:[["name", "asc"]]});
+        return Layers.find({},{sort:[['name', 'asc']]});
       } else {
-        return Layers.find({type: 'default'},{sort:[["name", "asc"]]});
+        return Layers.find({type: 'default'},{sort:[['name', 'asc']]});
       }
     },
     setDisabled: function(id){
@@ -31,11 +31,11 @@ Template.layers.helpers({
 
 Template.layers.events({
   'click .edit-layer': function () { 
-	  Session.set("selectedLayerId", this._id);
+	  Session.set('selectedLayerId', this._id);
 	  Router.go('layer.edit', {_id: this._id});
   },
   'click .insert-layer': function () {
-	  Session.set("selectedLayerId", null);
+	  Session.set('selectedLayerId', null);
 	  Router.go('layer.insert');
   },
   'click .delete-layer': function() {
@@ -48,10 +48,10 @@ Template.layers.events({
       okText: function(){ return i18n('collections.confirmation.delete.ok'); },
       // whether the button should be green or red:
       success: false,
-      // which button to autofocus, "cancel" (default) or "ok", or "none"
-      focus: "ok"
+      // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
+      focus: 'ok'
     }, function (ok) {
-      // ok is true if the user clicked on "ok", false otherwise
+      // ok is true if the user clicked on 'ok', false otherwise
       if (ok){
         Layers.remove({_id:layerId});
       }

@@ -47,7 +47,7 @@ Router.map(function () {
               id: service.name, 
               identification: {
                 serviceType: service.type,
-                serviceEndpoint: Meteor.call("removeQmarkFromUrl", service.endpoint),
+                serviceEndpoint: Meteor.call('removeQmarkFromUrl', service.endpoint),
                 serviceVersion: service.version,
               },
               printFormat: service.printFormat,
@@ -119,16 +119,16 @@ Router.map(function () {
       cursor = Maps.find(); 
       cursor.forEach(function(map){
         _.each(map.children, function(child1){
-          if (child1.type === "group"){
+          if (child1.type === 'group'){
             _.each(child1.children, function(child2){
-              if (child2.type === "group"){
+              if (child2.type === 'group'){
                 _.each(child2.children, function(child3){
-                  if (child3.type === "group"){
+                  if (child3.type === 'group'){
                     gvLayers.layers.push(
                         {
                           id: child3.text , 
                           label: child3.text,
-                          layerType: "default",
+                          layerType: 'default',
                         }
                     );
                   }
@@ -137,7 +137,7 @@ Router.map(function () {
                     {
                       id: child2.text , 
                       label: child2.text,
-                      layerType: "default",
+                      layerType: 'default',
                     }
                 );
               }
@@ -146,7 +146,7 @@ Router.map(function () {
                 {
                   id: child1.text , 
                   label: child1.text,
-                  layerType: "default",
+                  layerType: 'default',
                 }
             );
           }
@@ -182,13 +182,13 @@ Router.map(function () {
               ft = serviceLayer.featureType;
             }
             let graphicUrl = serviceLayer.legendGraphic;
-            if(graphicUrl.indexOf("http") === -1){
-            	graphicUrl = protocol + "://" + host + "/upload/" + graphicUrl;
+            if(graphicUrl.indexOf('http') === -1){
+            	graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
             } 
             gvServiceLayers.serviceLayers.push(
                 {
                   id: layer.name + '.' + serviceLayer.nameInService, 
-                  label: (serviceLayer.label ? serviceLayer.label : ""),
+                  label: (serviceLayer.label ? serviceLayer.label : ''),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
                   legendGraphicUrl: graphicUrl,
@@ -240,7 +240,7 @@ Router.map(function () {
               gvFeatureTypes.featureTypes.push(
                   {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
-                    label: (ft.label.label ? ft.label.label : ""),
+                    label: (ft.label.label ? ft.label.label : ''),
                     name: ft.nameInWfsService,
                     service: aService.name, //ft.service,
                   }
@@ -279,17 +279,17 @@ Router.map(function () {
         if (mapChildren){
           for (let index1 = mapChildren.length-1; index1 >= 0; index1--)  {
             let child1 = mapChildren[index1];
-            if (child1.type === "group"){
+            if (child1.type === 'group'){
               let gvMapLayers2 = [];
               let child1Children = _.toArray(child1.children);
               for (let index2 = child1Children.length-1; index2 >= 0; index2--)  {
                 let child2 = child1Children[index2];
-                if (child2.type === "group"){
+                if (child2.type === 'group'){
                   let gvMapLayers3 = [];
                   let child2Children = _.toArray(child2.children);
                   for (let index3 = child2Children.length-1; index3 >= 0; index3--)  {
                     let child3 = child2Children[index3];
-                    if (child3.type === "group"){
+                    if (child3.type === 'group'){
                       let gvMapLayers4 = [];
                       // group
                       gvMapLayers3.push(
@@ -371,7 +371,7 @@ Router.map(function () {
             {
               id: map.text, 
               label: map.label,
-              "initial-extent": map["initial_extent"],
+              'initial-extent': map['initial_extent'],
               maplayers: gvMapLayers1,
             }
         );

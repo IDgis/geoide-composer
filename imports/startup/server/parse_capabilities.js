@@ -31,7 +31,7 @@ Meteor.setInterval(function(){
   FEATURETYPES.clear();
   DESCRIBEFEATURETYPES.clear();
   LEGENDGRAPHICURL.clear();
-  console.log("Cleared WMS/WFS request caches");
+  console.log('Cleared WMS/WFS request caches');
 }, DELAY);
 
 Meteor.methods({
@@ -70,7 +70,7 @@ Meteor.methods({
    *   {request: 'GetCapabilities', service:'WMS'} 
    */ 
   getXml : function (host, params){
-    host = Meteor.call("addQmarkToUrl", host);
+    host = Meteor.call('addQmarkToUrl', host);
     try {
       let res = HTTP.get(host, {'params' : params, 
         headers:{
@@ -168,7 +168,7 @@ Meteor.methods({
    */
   getWmsLayers: function(host, version){
     let sortedServoptions = [];
-    let WMSLAYERSKEY = host + "-" + version;
+    let WMSLAYERSKEY = host + '-' + version;
     let resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
     if (resultWmsLayers){
       sortedServoptions = resultWmsLayers;
@@ -253,7 +253,7 @@ Meteor.methods({
    */
   getTmsLayers: function(host, version){
     let servoptions = [];
-    let TMSLAYERSKEY = host + "-" + version;
+    let TMSLAYERSKEY = host + '-' + version;
     let resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
     if (resultTmsLayers){
       servoptions = resultTmsLayers;
@@ -291,7 +291,7 @@ Meteor.methods({
    */
   getWfsFeatureTypes: function(host, version){
     let sortedServoptions;
-    let FEATURETYPESKEY = host + "-" + version;
+    let FEATURETYPESKEY = host + '-' + version;
     let resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
     if (resultFeatureTypes){
       sortedServoptions = resultFeatureTypes;
@@ -340,7 +340,7 @@ Meteor.methods({
    */
   describeFeatureType: function(serviceId, ftName){
     let ft = {options:[]}; 
-    let DESCRIBEFEATURETYPESKEY = serviceId + "-" + ftName;
+    let DESCRIBEFEATURETYPESKEY = serviceId + '-' + ftName;
     let resultFeatureTypes = DESCRIBEFEATURETYPES.get(DESCRIBEFEATURETYPESKEY);
     if (resultFeatureTypes){
       ft = resultFeatureTypes;
@@ -416,7 +416,7 @@ Meteor.methods({
    * GetLegendGraphic from a WMS LAYER
    */
   getLegendGraphicUrl: function(serviceId, layer){
-    let LEGENDGRAPHICURLKEY = serviceId + "-" + layer;
+    let LEGENDGRAPHICURLKEY = serviceId + '-' + layer;
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
       let serv = Services.find({_id: serviceId}).fetch();
@@ -456,7 +456,7 @@ Meteor.methods({
             if (capRequest){
               let getLegendGraphic = capRequest[0].GetLegendGraphic;
               if (!getLegendGraphic){
-                getLegendGraphic = capRequest[0]["sld:GetLegendGraphic"];
+                getLegendGraphic = capRequest[0]['sld:GetLegendGraphic'];
               }
               if (getLegendGraphic){
                 let selectedFormat;
@@ -541,7 +541,7 @@ Meteor.methods({
    */
   getPrintFormat: function(host, version){
     let sortedServoptions;
-    let PRINTFORMATKEY = host + "-" + version;
+    let PRINTFORMATKEY = host + '-' + version;
     let resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
     if (resultPrintFormat){
       sortedServoptions = resultPrintFormat;
@@ -591,7 +591,7 @@ Meteor.methods({
    * remove '?' from service endpoint
    */
   removeQmarkFromUrl: function(url){
-    let q = url.indexOf("?");
+    let q = url.indexOf('?');
     if (q !== -1) {
       url = url.substr(0,q);
     }
@@ -602,8 +602,8 @@ Meteor.methods({
    * add '?' to service endpoint
    */
   addQmarkToUrl: function(url){
-    if (url.indexOf("?") === -1) {
-      url += "?";
+    if (url.indexOf('?') === -1) {
+      url += '?';
     }
     return url;
   },

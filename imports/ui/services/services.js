@@ -11,7 +11,7 @@ Template.services.helpers({
 	 * List of services
 	 */
   services: function(){
-        return Services.find({},{sort:[["name", "asc"]]});
+        return Services.find({},{sort:[['name', 'asc']]});
     },
     setDisabled: function(id){
       return ReactiveMethod.call('isServiceInLayer', id)?'disabled':'';
@@ -21,11 +21,11 @@ Template.services.helpers({
 
 Template.services.events({
   'click .edit-service': function () { 
-	  Session.set("selectedServiceId", this._id);
+	  Session.set('selectedServiceId', this._id);
 	  Router.go('service.edit', {_id: this._id});
   },
   'click .insert-service': function () {
-	  Session.set("selectedServiceId", null);
+	  Session.set('selectedServiceId', null);
 	  Router.go('service.insert');
   },
   'click .delete-service': function() {
@@ -38,10 +38,10 @@ Template.services.events({
 	   okText: function(){ return i18n('collections.confirmation.delete.ok'); },
 	   // whether the button should be green or red
 	   success: false,
-	   // which button to autofocus, "cancel" (default) or "ok", or "none"
-	   focus: "ok"
+	   // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
+	   focus: 'ok'
 	 }, function (ok) {
-	   // ok is true if the user clicked on "ok", false otherwise
+	   // ok is true if the user clicked on 'ok', false otherwise
 	   if (ok){
 	     Services.remove({_id:serviceId});
 	   }

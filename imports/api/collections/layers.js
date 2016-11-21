@@ -29,7 +29,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.label.label'); },
     optional: false,
     autoform: {
-      "class": 'namelabel',
+      'class': 'namelabel',
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
@@ -37,7 +37,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       disabled: function() {
         return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); },
     },
   },
   attribute_localname : {
@@ -45,9 +45,9 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
       options: function(){
-        var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
+        var serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
         var service = AutoForm.getFieldValue(serviceField);
-        var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
+        var ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
         var ftName = AutoForm.getFieldValue(ftField);
         /*
          * Fill the attribute_localname options list
@@ -78,7 +78,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       disabled: function() {
         return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); },
     },
   },
   attibute_namespace: {
@@ -86,14 +86,14 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
       value: function(){
-        var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
+        var serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
         var service = AutoForm.getFieldValue(serviceField);
-        var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
+        var ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
         var ftName = AutoForm.getFieldValue(ftField);
         /*
          * Fill the attribute_localname options list
          */
-        var namespace = "";
+        var namespace = '';
   
         if (service && ftName){
           /*
@@ -111,8 +111,8 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
         }
         return namespace;
       },    
-      "class": 'namespace',
-      "readonly": true,
+      'class': 'namespace',
+      'readonly': true,
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
@@ -120,7 +120,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       disabled: function() {
         return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); },
     },
   },		
 });
@@ -139,8 +139,8 @@ SimpleSchema.featureType = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.label.label'); },
     optional: false,
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); },
     },
   }, 
 	//service_id WFS
@@ -150,7 +150,7 @@ SimpleSchema.featureType = new SimpleSchema ({
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type:"WFS"},{fields:{name:1,_id:1}, sort:[["name", "asc"]]}).fetch();
+          var serv = Services.find({type:'WFS'},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
           var servoptions = [];
           serv.forEach(function(entry) {
             servoptions.push({label:entry.name, value:entry._id});
@@ -158,7 +158,7 @@ SimpleSchema.featureType = new SimpleSchema ({
           return servoptions;
         },
         firstOption: function(){ return i18n('collections.firstOption'); },
-        "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); },
     },
 	},
 	
@@ -167,7 +167,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options: function(){
-        var service = AutoForm.getFieldValue(this.name.replace(".nameInWfsService", ".service"));
+        var service = AutoForm.getFieldValue(this.name.replace('.nameInWfsService', '.service'));
         /*
          * Fill the nameInWfsService options list
          */
@@ -188,7 +188,7 @@ SimpleSchema.featureType = new SimpleSchema ({
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); },
     },
 	},
 	searchTemplates: {
@@ -200,7 +200,7 @@ SimpleSchema.featureType = new SimpleSchema ({
       autoform: {
         type: function() {
           if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-            return "hidden";
+            return 'hidden';
           }
         },
         maxCount: function() {
@@ -210,7 +210,7 @@ SimpleSchema.featureType = new SimpleSchema ({
             return 3;
           }
         },
-        "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); },
       },
 	},   
 });
@@ -231,8 +231,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.label.label'); },
     optional: true,
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.label'); },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.label'); },
     },
   }, 
   //services_id WMS/TMS
@@ -242,7 +242,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type: {$in: ["WMS","TMS"] }},{fields:{name:1,_id:1}, sort:[["name", "asc"]]}).fetch();
+          var serv = Services.find({type: {$in: ['WMS','TMS'] }},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
           var servoptions = [];
           serv.forEach(function(entry) {
             servoptions.push({label:entry.name, value:entry._id});
@@ -250,7 +250,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
           return servoptions;
         },
         firstOption: function(){ return i18n('collections.firstOption'); },
-        "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.service'); },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.service'); },
     },
   },
   
@@ -259,7 +259,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
       options: function(){
-        var service = AutoForm.getFieldValue(this.name.replace(".nameInService", ".service"));
+        var service = AutoForm.getFieldValue(this.name.replace('.nameInService', '.service'));
         /*
          * Fill the nameInService options list
          */
@@ -291,7 +291,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); },
     },
   }, 
   
@@ -301,9 +301,9 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     optional: true,
     autoform: {
       afFieldInput: {
-        type: "legendGraphicType"
+        type: 'legendGraphicType'
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); },
     },
   }, 
   
@@ -314,7 +314,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     minCount: 0,
     maxCount: 1,
     autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.featureType'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.featureType'); },
     },
   },
 });
@@ -338,9 +338,9 @@ SimpleSchema.layerProperties = new SimpleSchema ({
        disabled: function() {
          return AutoForm.getFieldValue('type', 'layerform') === 'default';
        },
-       "type": 'textarea',
-       "class": 'initquery',
-       "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); },
+       'type': 'textarea',
+       'class': 'initquery',
+       'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); },
      },
   },  
 });
@@ -361,16 +361,16 @@ export const LayerSchema = new SimpleSchema({
     unique: true,
     regEx: /^([a-zA-Z0-9_\-]+)$/,
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.name'); },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.name'); },
     },
   }, 
   label: {
     type: String,
     label: function(){ return i18n('collections.layers.label.label'); },
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.label'); },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.label'); },
     },
   }, 
   type: {
@@ -379,8 +379,8 @@ export const LayerSchema = new SimpleSchema({
     allowedValues: ['default','cosurvey-sql'],
     defaultValue: 'default',
     autoform: {
-      "type": 'select-radio-inline',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.type'); },
+      'type': 'select-radio-inline',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.type'); },
     },
   }, 
   properties:  {
@@ -388,7 +388,7 @@ export const LayerSchema = new SimpleSchema({
     label: function(){ return i18n('collections.layers.properties.label'); },
     optional: true,
     autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); },
     },
   },
   service_layers: {
@@ -398,13 +398,13 @@ export const LayerSchema = new SimpleSchema({
     minCount: 0,
     maxCount: 5,
     autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); },
     },
   }, 
   
 });
 
-export const Layers = new Mongo.Collection("layers");
+export const Layers = new Mongo.Collection('layers');
 Layers.attachSchema(LayerSchema);
 
 /*

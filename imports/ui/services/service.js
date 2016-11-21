@@ -20,16 +20,16 @@ Template.service.helpers({
 		return ServiceSchema;
 	},
 	formType : function() {
-		if (Session.get("selectedServiceId")) {
-			return "update";
+		if (Session.get('selectedServiceId')) {
+			return 'update';
 		} else {
-			return "insert";
+			return 'insert';
 		}
 	},
 	serviceDoc : function() {
-		if (Session.get("selectedServiceId")) {
+		if (Session.get('selectedServiceId')) {
 			return Services.findOne({
-				_id : Session.get("selectedServiceId")
+				_id : Session.get('selectedServiceId')
 			});
 		} else {
 			return null;
@@ -37,41 +37,41 @@ Template.service.helpers({
 	},
 	serviceTypes : function() {
 		return [ {
-			label : "WMS",
-			value : "WMS"
+			label : 'WMS',
+			value : 'WMS'
 		}, {
-			label : "WFS",
-			value : "WFS"
+			label : 'WFS',
+			value : 'WFS'
 		}, {
-			label : "TMS",
-			value : "TMS"
+			label : 'TMS',
+			value : 'TMS'
 		} ];
 	},
 	wmsVersions : function() {
 		return [ {
-			label : "1.1.1",
-			value : "1.1.1"
+			label : '1.1.1',
+			value : '1.1.1'
 		}, {
-			label : "1.3.0",
-			value : "1.3.0"
+			label : '1.3.0',
+			value : '1.3.0'
 		} ];
 	},
 	wfsVersions : function() {
 		return [ {
-			label : "1.0.0",
-			value : "1.0.0"
+			label : '1.0.0',
+			value : '1.0.0'
 		}, {
-			label : "1.1.0",
-			value : "1.1.0"
+			label : '1.1.0',
+			value : '1.1.0'
 		}, {
-			label : "2.0.0",
-			value : "2.0.0"
+			label : '2.0.0',
+			value : '2.0.0'
 		} ];
 	},
 	tmsVersions : function() {
 		return [ {
-			label : "1.0.0",
-			value : "1.0.0"
+			label : '1.0.0',
+			value : '1.0.0'
 		} ];
 	}
 });
@@ -85,29 +85,29 @@ Template.service.events({
 	},
 	'click #control' : function(e) {
 
-		var url = document.getElementsByName("endpoint")[0].value;
-		if (url.indexOf("?") === -1) {
-			url += "?";
+		var url = document.getElementsByName('endpoint')[0].value;
+		if (url.indexOf('?') === -1) {
+			url += '?';
 		};
-		url += "request=GetCapabilities";
+		url += 'request=GetCapabilities';
 
-		var types = document.getElementsByName("type");
+		var types = document.getElementsByName('type');
 		for (var i = 0; i < types.length; i++) {
 			if (types[i].checked) {
-				url += "&service=" + types[i].value;
+				url += '&service=' + types[i].value;
 				break;
 			}
 		}
 
-		var versions = document.getElementsByName("version");
+		var versions = document.getElementsByName('version');
 		for (var j = 0; j < versions.length; j++) {
 			if (versions[j].checked) {
-				url += "&version=" + versions[j].value;
+				url += '&version=' + versions[j].value;
 				break;
 			}
 		}
 
-		window.open(url, "_blank");
+		window.open(url, '_blank');
 
 	},
 	'click #help' : function() {
@@ -139,6 +139,6 @@ AutoForm.addHooks('serviceform', {
 		});
 	},
 	onError : function(formType, error) {
-		console.log("service autoform error = " + error);
+		console.log('service autoform error = ' + error);
 	}
 });
