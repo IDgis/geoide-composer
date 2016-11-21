@@ -1,5 +1,11 @@
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+/**
+ * i18n Dutch text for standard SimpleSchema messages
+ * 
+ * These texts should eventually go to /i18n/LANG.js files to make this file proper i18n.
+ */
+
 SimpleSchema.messages({
   required: "[label] is verplicht",
   minString: "[label] moet tenminste [min] karakters bevatten",

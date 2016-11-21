@@ -31,6 +31,7 @@ import { Maps } from '/imports/api/collections/maps.js';
 
   /**
    * Services
+   * Deliver services as json
    */
 Router.map(function () {
   this.route('json-gv-api-services', {

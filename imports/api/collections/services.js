@@ -10,7 +10,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
  */
 
 /*
- * Definition of Service
+ * Definition of Service schema
  *   name: userdefined unique name of the service
  *   endpoint: valid url 
  *   type: can be 'WMS', 'TMS' or 'WFS'
@@ -57,7 +57,7 @@ export const ServiceSchema = new SimpleSchema({
 				return ["1.0.0"];
 			}
     },
-    // this does not seem to work
+    // this does not seem to work reactively
     "defaultValue": function() {
       if (this.type === 'WMS') {
         return "1.1.1";

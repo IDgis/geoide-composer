@@ -17,6 +17,10 @@ import '../../ui/maps/maps.js';
 
 import '../../ui/i18n/home/home.html';
 
+/**
+ * Router client routes
+ */
+
 Router.configure({
     layoutTemplate: 'main'
 });
