@@ -6,6 +6,7 @@ import {Layers} from '/imports/api/collections/layers.js';
 
 import './map.html';
 import '../i18n/maps/help.html';
+import '../i18n/alerts/geoide-viewer.html';
 
 const MAX_TREE_DEPTH = 4;
 
@@ -91,8 +92,8 @@ Template.map.events({
 	},
 
 	'click #help' : function() {
-		var helpTemplate = i18n('maps.help.template');
-		Modal.show(helpTemplate);
+    // peppelg:bootstrap-3-modal
+    Modal.show(i18n('maps.help.template'));
 	},
 
 	'click .jstree' : function() {
@@ -366,34 +367,12 @@ AutoForm.addHooks('mapForm',{
 				lResponse) {
 			if (lError) {
 				console.log('triggerViewerReload Error ', lError);
-        new Confirmation({
-          message: function(){ return i18n('viewerRefresh.message'); },
-          title: function(){ return i18n('viewerRefresh.title'); },
-          cancelText: function(){ return i18n('viewerRefresh.cancel'); },
-          okText: function(){ return i18n('viewerRefresh.ok'); },
-          // whether the button should be green or red
-          success: true,
-          // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
-          focus: 'ok'
-        }, function (ok) {
-          // ok is true if the user clicked on 'ok', false otherwise
-        });
+				Modal.show('alert-geoide-viewer-refresh');
         Router.go('maps.list');
 			} else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
-          new Confirmation({
-            message: function(){ return i18n('viewerRefresh.message'); },
-            title: function(){ return i18n('viewerRefresh.title'); },
-            cancelText: function(){ return i18n('viewerRefresh.cancel'); },
-            okText: function(){ return i18n('viewerRefresh.ok'); },
-            // whether the button should be green or red
-            success: true,
-            // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
-            focus: 'ok'
-          }, function (ok) {
-            // ok is true if the user clicked on 'ok', false otherwise
-          });
+          Modal.show('alert-geoide-viewer-refresh');
         }
 			  Router.go('maps.list');
 			}

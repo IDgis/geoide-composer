@@ -34,7 +34,6 @@ accounts-ui@1.1.9
 tomi:upload-jquery
 tomi:upload-server
 npm-bcrypt@0.9.1
-matdutour:popup-confirm
-peppelg:bootstrap-3-modal
 simple:reactive-method
 shell-server
+peppelg:bootstrap-3-modal

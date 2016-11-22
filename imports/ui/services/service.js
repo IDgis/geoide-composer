@@ -5,6 +5,7 @@ import {Services, ServiceSchema} from '/imports/api/collections/services.js';
 
 import './service.html';
 import '../i18n/services/help.html';
+import '../i18n/alerts/geoide-viewer.html';
 
 Template.service.helpers({
 	/**
@@ -111,8 +112,8 @@ Template.service.events({
 
 	},
 	'click #help' : function() {
-		var helpTemplate = i18n('services.help.template');
-		Modal.show(helpTemplate);
+		// peppelg:bootstrap-3-modal
+		Modal.show(i18n('services.help.template'));
 	}
 
 });
@@ -127,12 +128,12 @@ AutoForm.addHooks('serviceform', {
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
         console.log('triggerViewerReload Error ', lError);
-        alert(i18n('viewerRefresh.alert'));
+        Modal.show('alert-geoide-viewer-refresh');
         Router.go('services.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
-          alert(i18n('viewerRefresh.alert') + ' ('+lResponse.statusCode+')');
+          Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('services.list');
       }

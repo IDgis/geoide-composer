@@ -9,6 +9,7 @@ import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
 
 import './layer.html';
 import '../i18n/layers/help.html';
+import '../i18n/alerts/geoide-viewer.html';
 
 Template.layer.helpers({
   /**
@@ -112,8 +113,8 @@ Template.layer.events({
   },
   
   'click #help': function () {
-    var helpTemplate = i18n ('layers.help.template');
-    Modal.show(helpTemplate);
+    // peppelg:bootstrap-3-modal
+    Modal.show(i18n('layers.help.template'));
   },
   
   /**
@@ -204,12 +205,12 @@ AutoForm.addHooks('layerform',{
         function(lError, lResponse) {
       if (lError) {
         console.log('triggerViewerReload Error ', lError);
-        alert(i18n('viewerRefresh.alert'));
+        Modal.show('alert-geoide-viewer-refresh');
         Router.go('layers.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== '200' ){
-          alert(i18n('viewerRefresh.alert'));
+          Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('layers.list');
       }

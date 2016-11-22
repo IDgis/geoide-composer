@@ -392,11 +392,11 @@
     control: "Controleren",
   },
   viewerRefresh: {
-   alert :  'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
-   title: 'Sturen van configuratie naar Geoide viewer',
-   message: 'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
-   ok: 'OK',
-   cancel : 'Annuleren',  
+   alert : {
+     title: 'Sturen van configuratie naar Geoide viewer',
+     message: 'Pas op: de Geoide viewer heeft de aanpassingen mogelijk niet verwerkt',
+     ok: 'OK'
+   }
   },
   yes: 'Ja',
   no: 'Nee',
