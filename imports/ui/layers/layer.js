@@ -204,7 +204,6 @@ AutoForm.addHooks('layerform',{
     Meteor.call('triggerViewerReload',
         function(lError, lResponse) {
       if (lError) {
-        console.log('triggerViewerReload Error ', lError);
         Modal.show('alert-geoide-viewer-refresh');
         Router.go('layers.list');
       } else {

@@ -366,7 +366,6 @@ AutoForm.addHooks('mapForm',{
 		Meteor.call('triggerViewerReload', function(lError,
 				lResponse) {
 			if (lError) {
-				console.log('triggerViewerReload Error ', lError);
 				Modal.show('alert-geoide-viewer-refresh');
         Router.go('maps.list');
 			} else {
