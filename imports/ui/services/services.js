@@ -15,7 +15,7 @@ Template.services.helpers({
     },
     setDisabled: function(id){
       return ReactiveMethod.call('isServiceInLayer', id)?'disabled':'';
-    },
+    }
 });
 
 
@@ -46,7 +46,7 @@ Template.services.events({
 	     Services.remove({_id:serviceId});
 	   }
 	 });
-  },
+  }
 });
 
 

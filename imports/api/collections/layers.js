@@ -37,8 +37,8 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       disabled: function() {
         return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); }
+    }
   },
   attribute_localname : {
     type: String,
@@ -78,8 +78,8 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       disabled: function() {
         return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); }
+    }
   },
   attibute_namespace: {
     type: String,
@@ -120,9 +120,9 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       disabled: function() {
         return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); },
-    },
-  },		
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); }
+    }
+  }		
 });
 
 /*
@@ -140,8 +140,8 @@ SimpleSchema.featureType = new SimpleSchema ({
     optional: false,
     autoform: {
       'class': 'namelabel',
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); }
+    }
   }, 
 	//service_id WFS
 	service: {
@@ -158,8 +158,8 @@ SimpleSchema.featureType = new SimpleSchema ({
           return servoptions;
         },
         firstOption: function(){ return i18n('collections.firstOption'); },
-        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); },
-    },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); }
+    }
 	},
 	
 	nameInWfsService: {
@@ -188,8 +188,8 @@ SimpleSchema.featureType = new SimpleSchema ({
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); }
+    }
 	},
 	searchTemplates: {
     	type: [SimpleSchema.searchTemplate],
@@ -210,9 +210,9 @@ SimpleSchema.featureType = new SimpleSchema ({
             return 3;
           }
         },
-        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); },
-      },
-	},   
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); }
+      }
+	}   
 });
 
 /*
@@ -232,8 +232,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     optional: true,
     autoform: {
       'class': 'namelabel',
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.label'); }
+    }
   }, 
   //services_id WMS/TMS
   service: {
@@ -250,8 +250,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
           return servoptions;
         },
         firstOption: function(){ return i18n('collections.firstOption'); },
-        'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.service'); },
-    },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.service'); }
+    }
   },
   
   nameInService: {
@@ -291,8 +291,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); }
+    }
   }, 
   
   legendGraphic: {
@@ -303,8 +303,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       afFieldInput: {
         type: 'legendGraphicType'
       },
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); }
+    }
   }, 
   
   featureType: {
@@ -314,9 +314,9 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     minCount: 0,
     maxCount: 1,
     autoform: {
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.featureType'); },
-    },
-  },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.featureType'); }
+    }
+  }
 });
 
 /*
@@ -340,9 +340,9 @@ SimpleSchema.layerProperties = new SimpleSchema ({
        },
        'type': 'textarea',
        'class': 'initquery',
-       'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); },
-     },
-  },  
+       'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); }
+     }
+  }  
 });
 
 /*
@@ -362,16 +362,16 @@ export const LayerSchema = new SimpleSchema({
     regEx: /^([a-zA-Z0-9_\-]+)$/,
     autoform: {
       'class': 'namelabel',
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.name'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.name'); }
+    }
   }, 
   label: {
     type: String,
     label: function(){ return i18n('collections.layers.label.label'); },
     autoform: {
       'class': 'namelabel',
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.label'); }
+    }
   }, 
   type: {
     type: String,
@@ -380,16 +380,16 @@ export const LayerSchema = new SimpleSchema({
     defaultValue: 'default',
     autoform: {
       'type': 'select-radio-inline',
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.type'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.type'); }
+    }
   }, 
   properties:  {
     type: SimpleSchema.layerProperties,
     label: function(){ return i18n('collections.layers.properties.label'); },
     optional: true,
     autoform: {
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); }
+    }
   },
   service_layers: {
     type: [SimpleSchema.serviceLayer],
@@ -398,9 +398,9 @@ export const LayerSchema = new SimpleSchema({
     minCount: 0,
     maxCount: 5,
     autoform: {
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); },
-    },
-  }, 
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); }
+    }
+  }
   
 });
 

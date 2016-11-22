@@ -606,7 +606,7 @@ Meteor.methods({
       url += '?';
     }
     return url;
-  },
+  }
   
 
 });

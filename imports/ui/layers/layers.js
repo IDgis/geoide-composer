@@ -25,7 +25,7 @@ Template.layers.helpers({
     },
     setDisabled: function(id){
       return ReactiveMethod.call('isLayerInMap', id)?'disabled':'';
-    },
+    }
 });
 
 
@@ -56,7 +56,7 @@ Template.layers.events({
         Layers.remove({_id:layerId});
       }
     });
-  },
+  }
 });
 
 

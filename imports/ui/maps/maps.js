@@ -9,7 +9,7 @@ import './maps.html';
 Template.maps.helpers({
 	maps: function(){
 	    return Maps.find({},{sort:[['name', 'asc']]});
-	},
+	}
 });
 
 Template.maps.events ({
@@ -39,5 +39,5 @@ Template.maps.events ({
         Maps.remove({_id:mapId});
       }
     });
-  },
+  }
 });

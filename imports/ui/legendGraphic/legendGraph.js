@@ -31,7 +31,7 @@ Template.legendGraphTemplate.helpers({
 
           var legendGraphicImage = $('img[name$=""+legendGraphicImageName+""]');
           legendGraphicImage[0].src = fileInfo.url;
-        },
+        }
     };
   },
   imgSrc: function(src){
@@ -45,7 +45,7 @@ Template.legendGraphTemplate.helpers({
       }
     }
     return result;
-  },
+  }
 });
 
 Template.legendGraphTemplate.events ({
@@ -55,7 +55,7 @@ Template.legendGraphTemplate.events ({
     legendGraphic[0].value = '';
     var legendGraphicImage = $('img[name$=""+this.name+".img"]');
     legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
-  },
+  }
 });
   
 /**

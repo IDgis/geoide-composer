@@ -24,24 +24,24 @@ export const ServiceSchema = new SimpleSchema({
     unique : true,
     regEx: /^([a-zA-Z0-9_\-]+)$/,
     autoform: {
-      'title': function(){ return i18n ('tooltips.services.autoform.fields.name'); },
-    },
+      'title': function(){ return i18n ('tooltips.services.autoform.fields.name'); }
+    }
   },
   endpoint: {
   	type: String,
   	label: function(){ return i18n('collections.services.endpoint.label'); },
     regEx: /^((http:|https:)\/\/[a-zA-Z0-9\.-]{2,}(:[0-9]{2,5})?(\/)(([a-zA-Z0-9_\-@:]+)(\/|\.)?){1,}([a-zA-Z0-9_\-@:]+)([\?]{0,1}))$/,
     autoform: {
-      'title': function(){ return i18n ('tooltips.services.autoform.fields.endpoint'); },
-    },
+      'title': function(){ return i18n ('tooltips.services.autoform.fields.endpoint'); }
+    }
   },
   type: {
   	type: String,
   	label: function(){ return i18n('collections.services.type.label'); },
   	allowedValues: ['WMS', 'WFS', 'TMS'],
     autoform: {
-      'title': function(){ return i18n ('tooltips.services.autoform.fields.type'); },
-    },
+      'title': function(){ return i18n ('tooltips.services.autoform.fields.type'); }
+    }
 	},
 	version: {
     type: String,
@@ -110,8 +110,8 @@ export const ServiceSchema = new SimpleSchema({
           // should not get here
           return '';
         }
-      },
-    },
+      }
+    }
 	},
 	
   printFormat: {
@@ -137,9 +137,9 @@ export const ServiceSchema = new SimpleSchema({
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
       'title': function(){ return i18n ('tooltips.services.autoform.fields.printFormat'); },
-      'defaultValue': function() {return 'image/png'; },
-    },
-  },
+      'defaultValue': function() {return 'image/png'; }
+    }
+  }
 });
 
 export const Services = new Mongo.Collection('services');

@@ -35,7 +35,7 @@ Template.map.helpers({
 		} else {
 			return null;
 		}
-	},
+	}
 
 });
 
@@ -252,7 +252,7 @@ Template.map.events({
         });
       }
 		});
-	},
+	}
 
 });
 
@@ -264,10 +264,10 @@ Template.map.rendered = function() {
 			_id : mapId
 		}).fetch()[0];
 		map.a_attr = {
-			class : 'no_checkbox',
+			class : 'no_checkbox'
 		};
 		map.state = {
-			'selected': true,
+			'selected': true
 		};
 	} else {
 		map = {
@@ -278,7 +278,7 @@ Template.map.rendered = function() {
 				class : 'no_checkbox'
 			},
 			state: {
-				'selected': true, 
+				'selected': true 
 			}
 		};
 	}
@@ -286,7 +286,7 @@ Template.map.rendered = function() {
 	$('#maptree').jstree({
 		'core' : {
 			'data' : [ map ],
-			check_callback : true,
+			check_callback : true
 		},
 		types : {
 			'#' : {
@@ -296,7 +296,7 @@ Template.map.rendered = function() {
 			},
 			map : {
 				'icon' : 'glyphicon glyphicon-tree-deciduous',
-				'valid_children' : [ 'group', 'layer' ],
+				'valid_children' : [ 'group', 'layer' ]
 			},
 			group : {
 				'icon' : 'glyphicon glyphicon-duplicate',
@@ -304,17 +304,17 @@ Template.map.rendered = function() {
 			},
 			layer : {
 				'icon' : 'glyphicon glyphicon-file',
-				'valid_children' : [ 'servicelayer' ],
+				'valid_children' : [ 'servicelayer' ]
 			},
 			servicelayer : {
 				'icon' : 'null',
-				'valid_children' : [],
+				'valid_children' : []
 			}
 		},
 		checkbox : {
 			three_state: false,
 			tie_selection: false,
-			whole_node : false,
+			whole_node : false
 		},
 		plugins : [ 'checkbox','dnd','types']
 

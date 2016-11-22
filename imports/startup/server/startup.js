@@ -82,7 +82,7 @@ Meteor.methods({
         });
         return res;
     }
-  },
+  }
 
 });
 
@@ -94,7 +94,7 @@ UploadServer.init({
   uploadDir: Meteor.call('getLegendGraphicUploadFolder'),
   //create the directories:
   checkCreateDirectories: true,
-  overwrite: true,
+  overwrite: true
 //  uploadUrl: '/GetLegendGraphic/', // ## must be 'upload' ##
 });
 

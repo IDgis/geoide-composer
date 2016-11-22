@@ -113,7 +113,7 @@ Template.service.events({
 	'click #help' : function() {
 		var helpTemplate = i18n('services.help.template');
 		Modal.show(helpTemplate);
-	},
+	}
 
 });
 

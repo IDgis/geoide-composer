@@ -1,5 +1,4 @@
 import { EJSON } from 'meteor/ejson';
-
 import { Router } from 'meteor/iron:router';
 import { Services } from '/imports/api/collections/services.js';
 import { Layers } from '/imports/api/collections/layers.js';
@@ -48,9 +47,9 @@ Router.map(function () {
               identification: {
                 serviceType: service.type,
                 serviceEndpoint: Meteor.call('removeQmarkFromUrl', service.endpoint),
-                serviceVersion: service.version,
+                serviceVersion: service.version
               },
-              printFormat: service.printFormat,
+              printFormat: service.printFormat
             }
         );
       });
@@ -128,7 +127,7 @@ Router.map(function () {
                         {
                           id: child3.text , 
                           label: child3.text,
-                          layerType: 'default',
+                          layerType: 'default'
                         }
                     );
                   }
@@ -137,7 +136,7 @@ Router.map(function () {
                     {
                       id: child2.text , 
                       label: child2.text,
-                      layerType: 'default',
+                      layerType: 'default'
                     }
                 );
               }
@@ -146,7 +145,7 @@ Router.map(function () {
                 {
                   id: child1.text , 
                   label: child1.text,
-                  layerType: 'default',
+                  layerType: 'default'
                 }
             );
           }
@@ -192,7 +191,7 @@ Router.map(function () {
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
                   legendGraphicUrl: graphicUrl,
-                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService,
+                  featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService
                 }
             );
           } else {
@@ -202,7 +201,7 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  legendGraphicUrl: serviceLayer.legendGraphic,
+                  legendGraphicUrl: serviceLayer.legendGraphic
                 }
             );
           }
@@ -242,7 +241,7 @@ Router.map(function () {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
                     label: (ft.label.label ? ft.label.label : ''),
                     name: ft.nameInWfsService,
-                    service: aService.name, //ft.service,
+                    service: aService.name
                   }
               );
             }
@@ -296,9 +295,9 @@ Router.map(function () {
                           {
                             layer: child3.text,
                             state: {
-                              visible : child3.state.checked,
+                              visible : child3.state.checked
                             },
-                            maplayers: gvMapLayers4,
+                            maplayers: gvMapLayers4
                           }
                       );
                     } else {
@@ -309,8 +308,8 @@ Router.map(function () {
                             {
                               layer: aLayer.name,//child3.data.layerid,
                               state: {
-                                visible : child3.state.checked,
-                              },
+                                visible : child3.state.checked
+                              }
                             }
                         );
                       }
@@ -321,9 +320,9 @@ Router.map(function () {
                       {
                         layer: child2.text,
                         state: {
-                          visible : child2.state.checked,
+                          visible : child2.state.checked
                         },
-                        maplayers: gvMapLayers3,
+                        maplayers: gvMapLayers3
                       }
                   );
                 } else {
@@ -334,8 +333,8 @@ Router.map(function () {
                         {
                           layer: aLayer.name,//child2.data.layerid,
                           state: {
-                            visible : child2.state.checked,
-                          },
+                            visible : child2.state.checked
+                          }
                         }
                     );
                   }
@@ -346,9 +345,9 @@ Router.map(function () {
                   {
                     layer: child1.text,
                     state: {
-                      visible : child1.state.checked,
+                      visible : child1.state.checked
                     },
-                    maplayers: gvMapLayers2,
+                    maplayers: gvMapLayers2
                   }
               );
             } else {
@@ -359,8 +358,8 @@ Router.map(function () {
                     {
                       layer: aLayer.name,//child1.data.layerid,
                       state: {
-                        visible : child1.state.checked,
-                      },
+                        visible : child1.state.checked
+                      }
                     }
                 );
               }              
@@ -372,7 +371,7 @@ Router.map(function () {
               id: map.text, 
               label: map.label,
               'initial-extent': map['initial_extent'],
-              maplayers: gvMapLayers1,
+              maplayers: gvMapLayers1
             }
         );
       }

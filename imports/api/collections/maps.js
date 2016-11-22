@@ -22,9 +22,9 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
 		type: Boolean,
 		optional: true,
 		autoform: {
-		  'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); },
-		},
-	},
+		  'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_visible'); }
+		}
+	}
 });
 
 /*
@@ -54,8 +54,8 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	defaultValue: 0,
     	label:  function(){ return i18n('collections.maps.initial_extent.minX.label'); },
     	autoform: {
-    	  'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.minx'); },
-    	},
+    	  'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.minx'); }
+    	}
     },
     'miny': {
     	type: Number,
@@ -64,8 +64,8 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	defaultValue: 300000,
     	label: function(){ return i18n('collections.maps.initial_extent.minY.label'); },
       autoform: {
-        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.miny'); },
-      },
+        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.miny'); }
+      }
      },
      'maxx': {
     	type: Number,
@@ -74,8 +74,8 @@ SimpleSchema.initialExtent = new SimpleSchema ({
     	defaultValue: 300000,
     	label: function(){ return i18n('collections.maps.initial_extent.maxX.label'); },
       autoform: {
-        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxx'); },
-      },
+        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxx'); }
+      }
     },
     'maxy':  {
     	type: Number,
@@ -84,8 +84,8 @@ SimpleSchema.initialExtent = new SimpleSchema ({
      	defaultValue: 620000,
      	label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
       autoform: {
-        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxy'); }, 
-      },
+        'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxy'); } 
+      }
     }
 });
 
@@ -130,15 +130,15 @@ export const MapSchema= new SimpleSchema({
 		unique: true,
     regEx: /^([a-zA-Z0-9_\-]+)$/,		
     autoform: {
-      'title': function(){ return i18n ('tooltips.maps.autoform.fields.name'); },
-    },
+      'title': function(){ return i18n ('tooltips.maps.autoform.fields.name'); }
+    }
 	}, 
   label: {
     type: String,
     label: function(){ return i18n('collections.maps.label.label'); },
     autoform: {
-      'title': function(){ return i18n ('tooltips.maps.autoform.fields.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.maps.autoform.fields.label'); }
+    }
   }, 
 	
 	type: {
@@ -150,8 +150,8 @@ export const MapSchema= new SimpleSchema({
 		label: function(){ return i18n('collections.maps.initialExtent.label'); },
 		optional: true,
     autoform: {
-      'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.label'); }
+    }
 	},
 	children: {
 		type: [Object],

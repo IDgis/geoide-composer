@@ -75,6 +75,20 @@ Template.layer.helpers({
 	  }
 });
 
+/*
+ * set the mouse cursor to a waiting cursor
+ */
+var setCursorProgress = function() {
+  $("body").css("cursor", "wait");
+};
+
+/*
+ * set the mouse cursor to default (arrow) cursor
+ */
+var setCursorNormal = function() {
+  $("body").css("cursor", "default");
+};
+
 var fillLayerSelect = function() {
   var layers = Layers.find({}, {
     fields : {
@@ -118,17 +132,17 @@ Template.layer.events({
     var lyrName = e.target.value;
 
     // find service id from service selectbox
-    var srvName = srcName.replace('nameInService', 'service');
-    var srvSelect = $('select[name="" + srvName + ""] ');
+    var srvName = srcName.replace("nameInService", "service");
+    var srvSelect = $('select[name="' + srvName + '"] ');
     var serviceId = srvSelect[0].value;
 
     // find lg field 
-    var lgName = srcName.replace('nameInService', 'legendGraphic');
-    var lg = $('input[name="" + lgName + ""] ');
+    var lgName = srcName.replace("nameInService", "legendGraphic");
+    var lg = $('input[name="' + lgName + '"] ');
     
     // find lg image field 
-    var lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
-    var lgImg = $('img[name="" + lgImgName + ""] ');
+    var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
+    var lgImg = $('img[name="' + lgImgName + '"] ');
     
     // retrieve url for GetLegendGraphic
     // and put it in hidden field and image
@@ -156,7 +170,7 @@ Template.layer.events({
           }
         }
     });
-  },  
+  }  
   
 });
 
@@ -170,7 +184,7 @@ Template.layer.onRendered(function(){
    * if image is empty, fill it with initial png
    * (initially the src of the image is the url of 'edit-layer' route)
    */
-  var legendGraphicImage = this.$('img[name$="legendGraphic.img"]');
+  var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
   if ((legendGraphicImage[0].src) && 
       (_.isEmpty(legendGraphicImage[0].src) || 
         (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0))){
@@ -203,5 +217,5 @@ AutoForm.addHooks('layerform',{
   },
   onError: function(formType, error){
     console.log('layer autoform error = ' + error);
-  },
+  }
 });

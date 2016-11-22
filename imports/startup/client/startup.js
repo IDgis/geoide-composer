@@ -17,7 +17,7 @@ Meteor.startup(function() {
   Meteor.subscribe('userData');
   
   Accounts.ui.config({
-    passwordSignupFields: 'USERNAME_ONLY',
+    passwordSignupFields: 'USERNAME_ONLY'
   });
 });
 
@@ -25,12 +25,12 @@ Meteor.startup(function() {
  * set the mouse cursor to a waiting cursor
  */
 var setCursorProgress = function() {
-  $('body').css('cursor', 'wait');
+  $("body").css("cursor", "wait");
 };
 
 /*
  * set the mouse cursor to default (arrow) cursor
  */
 var setCursorNormal = function() {
-  $('body').css('cursor', 'default');
+  $("body").css("cursor", "default");
 };
