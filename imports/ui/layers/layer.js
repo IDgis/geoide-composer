@@ -80,14 +80,14 @@ Template.layer.helpers({
  * set the mouse cursor to a waiting cursor
  */
 var setCursorProgress = function() {
-  $("body").css("cursor", "wait");
+  $('body').css('cursor', 'wait');
 };
 
 /*
  * set the mouse cursor to default (arrow) cursor
  */
 var setCursorNormal = function() {
-  $("body").css("cursor", "default");
+  $('body').css('cursor', 'default');
 };
 
 var fillLayerSelect = function() {
@@ -133,16 +133,16 @@ Template.layer.events({
     var lyrName = e.target.value;
 
     // find service id from service selectbox
-    var srvName = srcName.replace("nameInService", "service");
+    var srvName = srcName.replace('nameInService', 'service');
     var srvSelect = $('select[name="' + srvName + '"] ');
     var serviceId = srvSelect[0].value;
 
     // find lg field 
-    var lgName = srcName.replace("nameInService", "legendGraphic");
+    var lgName = srcName.replace('nameInService', 'legendGraphic');
     var lg = $('input[name="' + lgName + '"] ');
     
     // find lg image field 
-    var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
+    var lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
     var lgImg = $('img[name="' + lgImgName + '"] ');
     
     // retrieve url for GetLegendGraphic
