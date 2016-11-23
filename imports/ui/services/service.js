@@ -84,7 +84,7 @@ Template.service.events({
 	'click #return' : function() {
 		Router.go('services.list');
 	},
-	'click #control' : function(e) {
+	'click #control' : function() {
 
 		var url = document.getElementsByName('endpoint')[0].value;
 		if (url.indexOf('?') === -1) {
@@ -124,23 +124,18 @@ AutoForm.addHooks('serviceform', {
    * Before doing this, trigger the Geoide viewer that the configuration has changed.
    * When the viewer reload fails, alert the user.
    */
-	onSuccess : function(formType, result) {
+	onSuccess : function() {
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
-//        console.log('lError: ', lError);
         Modal.show('alert-geoide-viewer-refresh');
         Router.go('services.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
         if (lResponse.statusCode !== 200 ){
-//          console.log('lResponse: ', lResponse);
           Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('services.list');
       }
 		});
-	},
-	onError : function(formType, error) {
-		console.log('service autoform error = ' + error);
 	}
 });

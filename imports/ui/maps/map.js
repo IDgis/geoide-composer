@@ -48,6 +48,8 @@ var layerInTree = function(children, layerId) {
       };
     } else if (children[j].data.layerid === layerId) {
       return true;
+    } else {
+      // nothing to do
     }
   };
   return false;
@@ -374,15 +376,12 @@ AutoForm.addHooks('mapForm',{
         Router.go('maps.list');
 			} else {
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode !== '200' ){
+        if (lResponse.statusCode !== 200 ){
           Modal.show('alert-geoide-viewer-refresh');
         }
 			  Router.go('maps.list');
 			}
 		});
-	},
-
-	onError : function(formType, error) {
-//		console.log('map autoform error = ' + error);
 	}
+
 });

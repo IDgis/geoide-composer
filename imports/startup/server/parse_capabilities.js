@@ -228,8 +228,12 @@ Meteor.methods({
   
   getOptionsFromLayers: function(mainLayer, servoptions, level){
     const prefixChars = '______________..';
-    if (level < 0) {level = 0;}
-    if (level > prefixChars.length) {level = prefixChars.length;}
+    if (level < 0) {
+      level = 0;
+    }
+    if (level > prefixChars.length) {
+      level = prefixChars.length;
+    }
     const prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
@@ -373,6 +377,8 @@ Meteor.methods({
                     complexType = nextTag[0][namePrefix+'complexType'];
                 } else if (nextTag[0][namePrefix+'complexContent']){
                         complexType = nextTag;
+                } else {
+                  // nothing to do
                 }
               }
               if (complexType){
@@ -426,7 +432,6 @@ Meteor.methods({
         const version = serv[0].version;
         const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
         const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        
         const capKey = Object.keys(parseResponse);
         const wmsCapObject = parseResponse[capKey];
         if ((wmsCapObject) && (wmsCapObject.Capability)) {
@@ -527,6 +532,8 @@ Meteor.methods({
         if (layers[i].Name[0] === name ) {
           result =  layers[i];
         }	
+      } else {
+        // nothing to do
       }
       if (result){ 
         break;
