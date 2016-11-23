@@ -73,9 +73,9 @@ Meteor.methods({
    * initiate geoide-viewer configuration reload by calling http get on url
    */
   triggerViewerReload : function (){
-    let url = Meteor.call('getViewerReloadConfigUrl');
+    const url = Meteor.call('getViewerReloadConfigUrl');
     if (url){
-        let res = HTTP.get(url, {headers:{
+        const res = HTTP.get(url, {headers:{
             'User-Agent': 'Meteor/1.3',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
           }

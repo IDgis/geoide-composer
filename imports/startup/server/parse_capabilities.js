@@ -15,12 +15,12 @@ import { Maps } from '/imports/api/collections/maps.js';
  * Global variables used for caching WMS/WFS request results
  * 
  */
-let PRINTFORMAT = new Map();
-let WMSLAYERS = new Map();
-let TMSLAYERS = new Map();
-let FEATURETYPES = new Map();
-let DESCRIBEFEATURETYPES = new Map();
-let LEGENDGRAPHICURL = new Map();
+const PRINTFORMAT = new Map();
+const WMSLAYERS = new Map();
+const TMSLAYERS = new Map();
+const FEATURETYPES = new Map();
+const DESCRIBEFEATURETYPES = new Map();
+const LEGENDGRAPHICURL = new Map();
 
 // clear all caches every DELAY milliseconds
 const DELAY = Meteor.call('getRequestCacheDelay');
@@ -46,7 +46,7 @@ Meteor.methods({
    */ 
   getImage : function (host){
     try {
-      let res = HTTP.get(host, {headers:{
+      const res = HTTP.get(host, {headers:{
           'User-Agent': 'Meteor/1.3',
 //          'Accept-Language': 'en-US,en;q=0.7,nl;q=0.3',
 //          'Accept-Encoding': 'gzip, deflate',
@@ -72,7 +72,7 @@ Meteor.methods({
   getXml : function (host, params){
     host = Meteor.call('addQmarkToUrl', host);
     try {
-      let res = HTTP.get(host, {'params' : params, 
+      const res = HTTP.get(host, {'params' : params, 
         headers:{
           'User-Agent': 'Meteor/1.3',
 //          'Accept-Language': 'en-US,en;q=0.7,nl;q=0.3',
@@ -113,7 +113,7 @@ Meteor.methods({
    * Find if the layer with layerId is use in a map
    */
   isLayerInMap: function(layerId){
-    let cursor = Maps.find();
+    const cursor = Maps.find();
     let result = false;
     cursor.forEach(function(map){
       _.each(map.children,function(child){
@@ -144,8 +144,8 @@ Meteor.methods({
    * Find if the service with serviceId is use in a layer
    */
   isServiceInLayer: function(serviceId){
-    let cursor = Layers.find();
     let result = false;
+    const cursor = Layers.find();
     cursor.forEach(function(layer){
       _.each(layer.service_layers,function(serviceLayer){
         if (serviceLayer.service === serviceId){
@@ -168,14 +168,14 @@ Meteor.methods({
    */
   getWmsLayers: function(host, version){
     let sortedServoptions = [];
-    let WMSLAYERSKEY = host + '-' + version;
-    let resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
+    const WMSLAYERSKEY = host + '-' + version;
+    const resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
     if (resultWmsLayers){
       sortedServoptions = resultWmsLayers;
     } else {
-      let xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+      const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
       if (xmlResponse.content){
-        let parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
         let servoptions = [];
     
         let capLayer;
@@ -227,10 +227,10 @@ Meteor.methods({
   },
   
   getOptionsFromLayers: function(mainLayer, servoptions, level){
-    let prefixChars = '______________..';
+    const prefixChars = '______________..';
     if (level < 0) {level = 0;}
     if (level > prefixChars.length) {level = prefixChars.length;}
-    let prefix = prefixChars.substr(0, level);
+    const prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
         if ((subLayer.$) && (subLayer.$.queryable === '1')){
@@ -253,20 +253,20 @@ Meteor.methods({
    */
   getTmsLayers: function(host, version){
     let servoptions = [];
-    let TMSLAYERSKEY = host + '-' + version;
-    let resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
+    const TMSLAYERSKEY = host + '-' + version;
+    const resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
     if (resultTmsLayers){
       servoptions = resultTmsLayers;
     } else {
-      let xmlResponse = Meteor.call('getXml', host, {});
+      const xmlResponse = Meteor.call('getXml', host, {});
       if (xmlResponse.content){
-        let parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
         
         //version 1.0.0
         /**
          * get the title from the TileMap and use this as layername and title
          */
-        let layername =  parseResponse.TileMap.Title;
+        const layername =  parseResponse.TileMap.Title;
         if (layername){
           servoptions.push({label:layername[0], value:layername[0]});
         } else {
@@ -291,14 +291,14 @@ Meteor.methods({
    */
   getWfsFeatureTypes: function(host, version){
     let sortedServoptions;
-    let FEATURETYPESKEY = host + '-' + version;
-    let resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
+    const FEATURETYPESKEY = host + '-' + version;
+    const resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
     if (resultFeatureTypes){
       sortedServoptions = resultFeatureTypes;
     } else {
-      let xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
-      let parseResponse = Meteor.call('parseXml', xmlResponse.content);
-      let servoptions = [];
+      const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WFS', version: version});
+      const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      const servoptions = [];
   
       // version:  1.0.0, 1.1.0, 2.0.0
       // using this 'each' construction instead of 'parseResponse.WFS_Capabilities' makes it prefix unaware
@@ -340,18 +340,18 @@ Meteor.methods({
    */
   describeFeatureType: function(serviceId, ftName){
     let ft = {options:[]}; 
-    let DESCRIBEFEATURETYPESKEY = serviceId + '-' + ftName;
-    let resultFeatureTypes = DESCRIBEFEATURETYPES.get(DESCRIBEFEATURETYPESKEY);
+    const DESCRIBEFEATURETYPESKEY = serviceId + '-' + ftName;
+    const resultFeatureTypes = DESCRIBEFEATURETYPES.get(DESCRIBEFEATURETYPESKEY);
     if (resultFeatureTypes){
       ft = resultFeatureTypes;
     } else {
-      let serv = Services.find({_id: serviceId}).fetch();
+      const serv = Services.find({_id: serviceId}).fetch();
       if (serv[0]){
-        let host = serv[0].endpoint;
-        let version = serv[0].version;
+        const host = serv[0].endpoint;
+        const version = serv[0].version;
         if (ftName){
-          let xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-          let parseResponse = Meteor.call('parseXml', xmlResponse.content);
+          const xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+          const parseResponse = Meteor.call('parseXml', xmlResponse.content);
           // find some common tag namespace prefixes
           let namePrefix = '';
           if (parseResponse['xsd:schema']){
@@ -416,26 +416,26 @@ Meteor.methods({
    * GetLegendGraphic from a WMS LAYER
    */
   getLegendGraphicUrl: function(serviceId, layer){
-    let LEGENDGRAPHICURLKEY = serviceId + '-' + layer;
+    const LEGENDGRAPHICURLKEY = serviceId + '-' + layer;
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
-      let serv = Services.find({_id: serviceId}).fetch();
+      const serv = Services.find({_id: serviceId}).fetch();
       if (serv[0]){
-        let host = serv[0].endpoint;
+        const host = serv[0].endpoint;
         let url = host;
-        let version = serv[0].version;
-        let xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-        let parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        const version = serv[0].version;
+        const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
         
-        let capKey = Object.keys(parseResponse);
-        let wmsCapObject = parseResponse[capKey];
+        const capKey = Object.keys(parseResponse);
+        const wmsCapObject = parseResponse[capKey];
         if ((wmsCapObject) && (wmsCapObject.Capability)) {
-          let capObject = wmsCapObject.Capability[0];      
-          let layersObject = capObject.Layer;
-          let capLayer = Meteor.call('getLayerByName',layersObject, layer);
+          const capObject = wmsCapObject.Capability[0];      
+          const layersObject = capObject.Layer;
+          const capLayer = Meteor.call('getLayerByName',layersObject, layer);
           if ((capLayer) && (capLayer.Style)) {
   	        // Kies de default style of de laatste in de lijst als er geen default is
-  	        let styleDefaultName = 'default';
+  	        const styleDefaultName = 'default';
   	        let styleDefaultFound = false;
             _.each(capLayer.Style,function(style){
               if (!styleDefaultFound){
@@ -452,7 +452,7 @@ Meteor.methods({
             /*
              *  there is no legendgraphic url in the layer itself, use the general one
              */ 
-            let capRequest = capObject.Request;
+            const capRequest = capObject.Request;
             if (capRequest){
               let getLegendGraphic = capRequest[0].GetLegendGraphic;
               if (!getLegendGraphic){
@@ -461,8 +461,8 @@ Meteor.methods({
               if (getLegendGraphic){
                 let selectedFormat;
                 let pngFormat, jpgFormat, gifFormat;
-                let prefFormat = serv[0].printFormat;
-                let formats = getLegendGraphic[0].Format; 
+                const prefFormat = serv[0].printFormat;
+                const formats = getLegendGraphic[0].Format; 
                 _.each(formats,function(format){
                   if (format === prefFormat){
                     selectedFormat = format;            
@@ -541,15 +541,15 @@ Meteor.methods({
    */
   getPrintFormat: function(host, version){
     let sortedServoptions;
-    let PRINTFORMATKEY = host + '-' + version;
-    let resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
+    const PRINTFORMATKEY = host + '-' + version;
+    const resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
     if (resultPrintFormat){
       sortedServoptions = resultPrintFormat;
     } else {
-      let servoptions = [];
-      let xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+      const servoptions = [];
+      const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
       if (xmlResponse.content){
-        let parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
         
         let req = null;
         switch(version) {
@@ -583,7 +583,7 @@ Meteor.methods({
    * Get service from collection
    */
   getService: function(serviceId){
-    let serv = Services.find({_id: serviceId}).fetch();
+    const serv = Services.find({_id: serviceId}).fetch();
     return serv;
   },
   
@@ -591,7 +591,7 @@ Meteor.methods({
    * remove '?' from service endpoint
    */
   removeQmarkFromUrl: function(url){
-    let q = url.indexOf('?');
+    const q = url.indexOf('?');
     if (q !== -1) {
       url = url.substr(0,q);
     }
