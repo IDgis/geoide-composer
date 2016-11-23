@@ -20,17 +20,3 @@ Meteor.startup(function() {
     passwordSignupFields: 'USERNAME_ONLY'
   });
 });
-
-/*
- * set the mouse cursor to a waiting cursor
- */
-var setCursorProgress = function() {
-  $("body").css("cursor", "wait");
-};
-
-/*
- * set the mouse cursor to default (arrow) cursor
- */
-var setCursorNormal = function() {
-  $("body").css("cursor", "default");
-};
