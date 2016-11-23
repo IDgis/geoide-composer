@@ -104,38 +104,42 @@ Template.map.events({
     if (sel){
       // check if select list contains anything
       var numberOfOptions = $('#layerselect option').length;
+      var renamenode  = $('#renamenode');
+      var removenode  = $('#removenode');
+      var creategroup = $('#creategroup');
+      var createlayer  = $('#createlayer');
       if (ref.get_type(sel) === 'group') {
 //      enable renamenode/removenode/creategroup
-        $('#renamenode').prop('disabled', false);
-        $('#removenode').prop('disabled', false);
-        $('#creategroup').prop('disabled', false);
+        renamenode.prop('disabled', false);
+        removenode.prop('disabled', false);
+        creategroup.prop('disabled', false);
         if (numberOfOptions > 0){
-          $('#createlayer').prop('disabled', false);
+          createlayer.prop('disabled', false);
         }
         var depth = ref.get_selected(true)[0].parents.length;
         // max depth does not allow another group or layer to be added
         if (depth === MAX_TREE_DEPTH){
-          $('#createlayer').prop('disabled', true);
-          $('#creategroup').prop('disabled', true);
+          createlayer.prop('disabled', true);
+          creategroup.prop('disabled', true);
         }
         // (max depth - 1) does not allow another group to be added
         if (depth === (MAX_TREE_DEPTH - 1)){
-          $('#creategroup').prop('disabled', true);
+          creategroup.prop('disabled', true);
         }
       } else if (ref.get_type(sel) === 'layer') {
 //      disable renamenode/creategroup/createlayer, enable removenode
-        $('#renamenode').prop('disabled', true);
-        $('#removenode').prop('disabled', false);
-        $('#creategroup').prop('disabled', true);
-        $('#createlayer').prop('disabled', true);
+        renamenode.prop('disabled', true);
+        removenode.prop('disabled', false);
+        creategroup.prop('disabled', true);
+        createlayer.prop('disabled', true);
       } else {
         // top node 'map' is selected
 //      disable renamenode/removenode, enable creategroup
-        $('#renamenode').prop('disabled', true);
-        $('#removenode').prop('disabled', true);        
-        $('#creategroup').prop('disabled', false);
+        renamenode.prop('disabled', true);
+        removenode.prop('disabled', true);        
+        creategroup.prop('disabled', false);
         if (numberOfOptions > 0){
-          $('#createlayer').prop('disabled', false);
+          createlayer.prop('disabled', false);
         }
       }
     }
