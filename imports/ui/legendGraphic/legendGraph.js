@@ -26,10 +26,10 @@ Template.legendGraphTemplate.helpers({
             legendGraphicInputName = uploadControlName.replace('.uploadCtrl', '');
             legendGraphicImageName = uploadControlName.replace('.uploadCtrl', '.img');
           }
-          var legendGraphicInput = $('input[name$=""+legendGraphicInputName+""]');
+          var legendGraphicInput = $('input[name$="'+legendGraphicInputName+'"]');
           legendGraphicInput[0].value = fileInfo.name;
 
-          var legendGraphicImage = $('img[name$=""+legendGraphicImageName+""]');
+          var legendGraphicImage = $('img[name$="'+legendGraphicImageName+'"]');
           legendGraphicImage[0].src = fileInfo.url;
         }
     };
