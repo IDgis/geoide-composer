@@ -429,7 +429,7 @@ Meteor.methods({
         
         let capKey = Object.keys(parseResponse);
         let wmsCapObject = parseResponse[capKey];
-        if(wmsCapObject.Capability) {
+        if ((wmsCapObject) && (wmsCapObject.Capability)) {
           let capObject = wmsCapObject.Capability[0];      
           let layersObject = capObject.Layer;
           let capLayer = Meteor.call('getLayerByName',layersObject, layer);
