@@ -134,16 +134,16 @@ Template.layer.events({
 
     // find service id from service selectbox
     var srvName = srcName.replace('nameInService', 'service');
-    var srvSelect = $('select[name="' + srvName + '"] ');
-    var serviceId = srvSelect[0].value;
+    var $srvSelect = $('select[name="' + srvName + '"] ');
+    var serviceId = $srvSelect[0].value;
 
     // find lg field 
     var lgName = srcName.replace('nameInService', 'legendGraphic');
-    var lg = $('input[name="' + lgName + '"] ');
+    var $lg = $('input[name="' + lgName + '"] ');
     
     // find lg image field 
     var lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
-    var lgImg = $('img[name="' + lgImgName + '"] ');
+    var $lgImg = $('img[name="' + lgImgName + '"] ');
     
     // retrieve url for GetLegendGraphic
     // and put it in hidden field and image
@@ -154,20 +154,20 @@ Template.layer.events({
         setCursorNormal();
         if (lError) {
           console.log('getLegendGraphicUrl Error ', lError);
-          lg[0].value = '';
-          lgImg[0].src = '/images/empty-legendgraphic.png';
+          $lg[0].value = '';
+          $lgImg[0].src = '/images/empty-legendgraphic.png';
         } else {
           // url found !!
           if (lResponse){
-            lg[0].value = lResponse;
+            $lg[0].value = lResponse;
             if (_.isEmpty(lResponse)){
-              lgImg[0].src = '/images/empty-legendgraphic.png';
+              $lgImg[0].src = '/images/empty-legendgraphic.png';
             } else {
-              lgImg[0].src = lResponse;
+              $lgImg[0].src = lResponse;
             }
           } else {
-            lg[0].value = '';
-            lgImg[0].src = '/images/empty-legendgraphic.png';
+            $lg[0].value = '';
+            $lgImg[0].src = '/images/empty-legendgraphic.png';
           }
         }
     });

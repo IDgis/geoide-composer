@@ -26,11 +26,11 @@ Template.legendGraphTemplate.helpers({
             legendGraphicInputName = uploadControlName.replace('.uploadCtrl', '');
             legendGraphicImageName = uploadControlName.replace('.uploadCtrl', '.img');
           }
-          var legendGraphicInput = $('input[name$="'+legendGraphicInputName+'"]');
-          legendGraphicInput[0].value = fileInfo.name;
+          var $legendGraphicInput = $('input[name$="'+legendGraphicInputName+'"]');
+          $legendGraphicInput[0].value = fileInfo.name;
 
-          var legendGraphicImage = $('img[name$="'+legendGraphicImageName+'"]');
-          legendGraphicImage[0].src = fileInfo.url;
+          var $legendGraphicImage = $('img[name$="'+legendGraphicImageName+'"]');
+          $legendGraphicImage[0].src = fileInfo.url;
         }
     };
   },
@@ -51,10 +51,10 @@ Template.legendGraphTemplate.helpers({
 Template.legendGraphTemplate.events ({
   'click .delete-graphic': function () { 
     
-    var legendGraphic = $('input[name$=""+this.name+""]');
-    legendGraphic[0].value = '';
-    var legendGraphicImage = $('img[name$=""+this.name+".img"]');
-    legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
+    var $legendGraphic = $('input[name$=""+this.name+""]');
+    $legendGraphic[0].value = '';
+    var $legendGraphicImage = $('img[name$=""+this.name+".img"]');
+    $legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
   }
 });
   
