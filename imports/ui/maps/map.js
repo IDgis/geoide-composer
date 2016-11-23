@@ -103,7 +103,7 @@ Template.map.events({
     var sel = ref.get_selected();
     if (sel){
       // check if select list contains anything
-      var numberOfOptions = $('#layerselect option').length;
+      var numberOfOptions = $('#layerselect').find('option').length;
       var renamenode  = $('#renamenode');
       var removenode  = $('#removenode');
       var creategroup = $('#creategroup');
@@ -154,9 +154,9 @@ Template.map.events({
 			return false;
 		}
 
-		var layerLabel = $('#layerselect option:selected').text();
+		var layerLabel = $('#layerselect').find('option:selected').text();
 		if (layerLabel){
-  		var layerId = $('#layerselect option:selected').val();
+  		var layerId = $('#layerselect').find('option:selected').val();
   		ref.create_node(sel, {
   			'type' : 'layer',
   			'text' : layerLabel,
