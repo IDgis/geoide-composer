@@ -383,6 +383,6 @@ AutoForm.addHooks('mapForm',{
 	},
 
 	onError : function(formType, error) {
-		console.log('map autoform error = ' + error);
+//		console.log('map autoform error = ' + error);
 	}
 });
