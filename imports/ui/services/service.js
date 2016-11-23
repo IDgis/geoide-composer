@@ -127,11 +127,13 @@ AutoForm.addHooks('serviceform', {
 	onSuccess : function(formType, result) {
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
+//        console.log('lError: ', lError);
         Modal.show('alert-geoide-viewer-refresh');
         Router.go('services.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode !== '200' ){
+        if (lResponse.statusCode !== 200 ){
+//          console.log('lResponse: ', lResponse);
           Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('services.list');
