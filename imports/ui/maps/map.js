@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import {Template} from 'meteor/templating';
 import {Router} from 'meteor/iron:router';
 import {Session} from 'meteor/session';
@@ -45,13 +52,13 @@ var layerInTree = function(children, layerId) {
     if (children[j].children[0]) {
       if (layerInTree(children[j].children, layerId)) {
         return true;
-      };
+      }
     } else if (children[j].data.layerid === layerId) {
       return true;
     } else {
       // nothing to do
     }
-  };
+  }
   return false;
 };
 

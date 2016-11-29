@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Services } from '/imports/api/collections/services.js';

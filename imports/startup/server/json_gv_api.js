@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import { EJSON } from 'meteor/ejson';
 import { Router } from 'meteor/iron:router';
 import { Services } from '/imports/api/collections/services.js';
@@ -101,7 +108,7 @@ Router.map(function () {
               });            
             });
           }
-        };
+        }
         gvLayers.layers.push(
             {
 //              id: layer._id, 
