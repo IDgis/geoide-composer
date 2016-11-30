@@ -1,40 +1,61 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Services } from '/imports/api/collections/services.js';
+/**
+ * Definition of Layers Collection.
+ * 
+ * Layer
+ *   |-- ServiceLayer [0-5]
+ *         |-- FeatureType [0-1]
+ *               |-- SearchTemplate [0-3]
+ * ServiceLayer is a layer from a WMS or TMS service [optional]
+ * Featuretype is a featuretype from a WFS [optional]
+ * SearchTemplate is a specific field of a featuretype [optional]
+ * 
+ * This definition depends on the use of AutoForm  
+ */
 
+/*
+ * Definition of schema searchTemplate
+ * 
+ * Searchtemplates can be used in a viewer to filter on featuretype properties 
+ * label: user defined name of this filter
+ * attribute_localname: name of a field in the featuretype
+ * attibute_namespace: namespace of the field in the featuretype
+ */
 SimpleSchema.searchTemplate = new SimpleSchema ({
   label: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.label.label'); },
     optional: false,
     autoform: {
-      "class": 'namelabel',
+      'class': 'namelabel',
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
-          return true;
-        } else {
-          return false;
-        }
+        return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); }
+    }
   },
   attribute_localname : {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
       options: function(){
-//        console.log("attribute_localname name", this.name);
-        var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
+        var serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
         var service = AutoForm.getFieldValue(serviceField);
-//        console.log("attribute_localname service", serviceField, service);
-        var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
+        var ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
         var ftName = AutoForm.getFieldValue(ftField);
-//        console.log("attribute_localname ftName", ftField, ftName);
         /*
          * Fill the attribute_localname options list
          */
@@ -54,7 +75,6 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
             servoptions = featuretypeFields.options;
           }
         }
-//        console.log("return options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
@@ -63,31 +83,24 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
-          return true;
-        } else {
-          return false;
-        }
+        return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); }
+    }
   },
   attibute_namespace: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
       value: function(){
-//        console.log("attibute_namespace name", this.name);
-        var serviceField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "service";
+        var serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
         var service = AutoForm.getFieldValue(serviceField);
-//        console.log("attibute_namespace service", serviceField, service);
-        var ftField = this.name.substr(0, this.name.indexOf("searchTemplates")) + "nameInWfsService";
+        var ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
         var ftName = AutoForm.getFieldValue(ftField);
-//        console.log("attibute_namespace ftName", ftField, ftName);
         /*
          * Fill the attribute_localname options list
          */
-        var namespace = "";
+        var namespace = '';
   
         if (service && ftName){
           /*
@@ -103,36 +116,39 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
             namespace = featuretypeFields.targetNamespace;
           }
         }
-//        console.log("return namespace",namespace);
         return namespace;
       },    
-      "class": 'namespace',
-      "readonly": true,
+      'class': 'namespace',
+      'readonly': true,
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
        */
       disabled: function() {
-        if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
-          return true;
-        } else {
-          return false;
-        }
+        return AutoForm.getFieldValue('type', 'layerform') === 'default';
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); },
-    },
-  },		
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); }
+    }
+  }		
 });
 
+/*
+ * Definition of featureType
+ * 
+ * label: user defined name
+ * service: name of the WFS service for this featuretype
+ * nameInWfsService: name of the featuretype
+ * searchTemplates: list of searchTemplates based on properties of this featuretype 
+ */
 SimpleSchema.featureType = new SimpleSchema ({
   label: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.label.label'); },
     optional: false,
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); },
-    },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); }
+    }
   }, 
 	//service_id WFS
 	service: {
@@ -141,7 +157,7 @@ SimpleSchema.featureType = new SimpleSchema ({
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type:"WFS"},{fields:{name:1,_id:1}, sort:[["name", "asc"]]}).fetch();
+          var serv = Services.find({type:'WFS'},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
           var servoptions = [];
           serv.forEach(function(entry) {
             servoptions.push({label:entry.name, value:entry._id});
@@ -149,8 +165,8 @@ SimpleSchema.featureType = new SimpleSchema ({
           return servoptions;
         },
         firstOption: function(){ return i18n('collections.firstOption'); },
-        "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); },
-    },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); }
+    }
 	},
 	
 	nameInWfsService: {
@@ -158,9 +174,7 @@ SimpleSchema.featureType = new SimpleSchema ({
 		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options: function(){
-//        console.log("nameInWfsService name", this.name);
-        var service = AutoForm.getFieldValue(this.name.replace(".nameInWfsService", ".service"));
-//        console.log("nameInWfsService service", service);
+        var service = AutoForm.getFieldValue(this.name.replace('.nameInWfsService', '.service'));
         /*
          * Fill the nameInWfsService options list
          */
@@ -168,23 +182,21 @@ SimpleSchema.featureType = new SimpleSchema ({
 
         if (service){
           var serv = Services.findOne({_id:service});
-//          console.log("Found service in DB", serv);
           /*
            * Retrieve the featuretypes from the service
            * and put them in the options
            */
-          var servoptions = ReactiveMethod.call(
+          servoptions = ReactiveMethod.call(
               'getWfsFeatureTypes',
               serv.endpoint,
               serv.version
           );
         }
-//        console.log("return options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); }
+    }
 	},
 	searchTemplates: {
     	type: [SimpleSchema.searchTemplate],
@@ -194,21 +206,31 @@ SimpleSchema.featureType = new SimpleSchema ({
 //      maxCount: 3,
       autoform: {
         type: function() {
-          if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
-            return "hidden";
+          if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
+            return 'hidden';
           }
         },
         maxCount: function() {
-          if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
+          if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
             return 0;
           } else {
             return 3;
           }
         },
-        "title": function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); },
-      },
-	},   
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); }
+      }
+	}   
 });
+
+/*
+ * Definition of serviceLayer
+ * 
+ * label: userdefined name
+ * service: name of the WMS or TMS service for this serviceLayer
+ * nameInService: name of the layer in the service
+ * legendGraphic: name or url of an image that is used as a legendgraphic
+ * featureType: optional featureType
+*/
 
 SimpleSchema.serviceLayer = new SimpleSchema ({
   label: {
@@ -216,9 +238,9 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.label.label'); },
     optional: true,
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.label'); },
-    },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.label'); }
+    }
   }, 
   //services_id WMS/TMS
   service: {
@@ -227,7 +249,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type: {$in: ["WMS","TMS"] }},{fields:{name:1,_id:1}, sort:[["name", "asc"]]}).fetch();
+          var serv = Services.find({type: {$in: ['WMS','TMS'] }},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
           var servoptions = [];
           serv.forEach(function(entry) {
             servoptions.push({label:entry.name, value:entry._id});
@@ -235,8 +257,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
           return servoptions;
         },
         firstOption: function(){ return i18n('collections.firstOption'); },
-        "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.service'); },
-    },
+        'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.service'); }
+    }
   },
   
   nameInService: {
@@ -244,16 +266,13 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
       options: function(){
-        var service = AutoForm.getFieldValue(this.name.replace(".nameInService", ".service"));
-//        console.log("nameInService service", service);
-
+        var service = AutoForm.getFieldValue(this.name.replace('.nameInService', '.service'));
         /*
          * Fill the nameInService options list
          */
         var servoptions = [];
         if (service){
           var serv = Services.findOne({_id:service});
-//          console.log("Found service in DB", serv);
           /*
            * Retrieve the layers from the service
            * and put them in the options
@@ -266,20 +285,21 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
             case 'TMS':
               methodName = 'getTmsLayers';
               break;
+            default:
+                // should never get here
+              break;
           }
-          var servoptions = ReactiveMethod.call(
+          servoptions = ReactiveMethod.call(
               methodName,
               serv.endpoint,
               serv.version
           );
-//          console.log("nameInService servoptions",servoptions);
         }
-//        console.log("nameInService options",servoptions);
         return servoptions;
       },    
       firstOption: function(){ return i18n('collections.firstOption'); },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); }
+    }
   }, 
   
   legendGraphic: {
@@ -288,10 +308,10 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     optional: true,
     autoform: {
       afFieldInput: {
-        type: "legendGraphicType"
+        type: 'legendGraphicType'
       },
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.legendGraphic'); }
+    }
   }, 
   
   featureType: {
@@ -301,11 +321,17 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     minCount: 0,
     maxCount: 1,
     autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.featureType'); },
-    },
-  },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.featureType'); }
+    }
+  }
 });
 
+/*
+ * Definition of layer properties
+ * 
+ * initial_query: optional query belonging to this layer
+ *   defined when layer.type is 'cosurvey-sql'
+ */
 SimpleSchema.layerProperties = new SimpleSchema ({
   initial_query: {
     type: String,
@@ -317,19 +343,24 @@ SimpleSchema.layerProperties = new SimpleSchema ({
         * whereas optional, omit, hidden do not 
         */
        disabled: function() {
-         if (AutoForm.getFieldValue('type', 'layerform') == 'default') {
-           return true;
-         } else {
-           return false;
-         }
+         return AutoForm.getFieldValue('type', 'layerform') === 'default';
        },
-       "type": 'textarea',
-       "class": 'initquery',
-       "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); },
-     },
-  },  
-})
+       'type': 'textarea',
+       'class': 'initquery',
+       'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.initialQuery'); }
+     }
+  }  
+});
 
+/*
+ * Definition of root element Layer
+ * 
+ * name: unique userdefined name
+ * label: userdefined label as it can appear in a viewer
+ * type: ['default', 'cosurvey-sql']
+ * properties: optional, holding query when type is cosurvey-sql
+ * service_layers: list of optional serviceLayers
+ */
 export const LayerSchema = new SimpleSchema({
   name: {
     type: String,
@@ -337,17 +368,17 @@ export const LayerSchema = new SimpleSchema({
     unique: true,
     regEx: /^([a-zA-Z0-9_\-]+)$/,
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.name'); },
-    },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.name'); }
+    }
   }, 
   label: {
     type: String,
     label: function(){ return i18n('collections.layers.label.label'); },
     autoform: {
-      "class": 'namelabel',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.label'); },
-    },
+      'class': 'namelabel',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.label'); }
+    }
   }, 
   type: {
     type: String,
@@ -355,17 +386,17 @@ export const LayerSchema = new SimpleSchema({
     allowedValues: ['default','cosurvey-sql'],
     defaultValue: 'default',
     autoform: {
-      "type": 'select-radio-inline',
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.type'); },
-    },
+      'type': 'select-radio-inline',
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.type'); }
+    }
   }, 
   properties:  {
     type: SimpleSchema.layerProperties,
     label: function(){ return i18n('collections.layers.properties.label'); },
     optional: true,
     autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); },
-    },
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.properties.main'); }
+    }
   },
   service_layers: {
     type: [SimpleSchema.serviceLayer],
@@ -374,26 +405,26 @@ export const LayerSchema = new SimpleSchema({
     minCount: 0,
     maxCount: 5,
     autoform: {
-      "title": function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); },
-    },
-  }, 
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.main'); }
+    }
+  }
   
 });
 
-export const Layers = new Mongo.Collection("layers");
+export const Layers = new Mongo.Collection('layers');
 Layers.attachSchema(LayerSchema);
 
+/*
+ * Collection manipulation is only allowed when a user is logged in.
+ */
 Layers.allow({
-  insert: function(userId, doc) {
-    // only allow posting if you are logged in
+  insert: function(userId) {
     return !! userId; 
   },
-  update: function(userId, doc) {
-    // only allow posting if you are logged in
+  update: function(userId) {
     return !! userId; 
   },
-  remove: function(userId, doc) {
-    // only allow posting if you are logged in
+  remove: function(userId) {
     return !! userId; 
   }
 });

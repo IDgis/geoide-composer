@@ -18,48 +18,45 @@ Template.layers.helpers({
         adminLoggedIn = _.isEqual(name, 'idgis-admin');
       }
       if (adminLoggedIn){
-        return Layers.find({},{sort:[["name", "asc"]]});
+        return Layers.find({},{sort:[['name', 'asc']]});
       } else {
-        return Layers.find({type: 'default'},{sort:[["name", "asc"]]});
+        return Layers.find({type: 'default'},{sort:[['name', 'asc']]});
       }
     },
     setDisabled: function(id){
-      return (ReactiveMethod.call('isLayerInMap', id)?'disabled':'');
-    },
+      return ReactiveMethod.call('isLayerInMap', id)?'disabled':'';
+    }
 });
 
 
 Template.layers.events({
   'click .edit-layer': function () { 
-	  Session.set("selectedLayerId", this._id);
-    console.log("edit layer " + this._id); 
+	  Session.set('selectedLayerId', this._id);
 	  Router.go('layer.edit', {_id: this._id});
   },
   'click .insert-layer': function () {
-	  Session.set("selectedLayerId", null);
-    console.log("insert layer "); 
+	  Session.set('selectedLayerId', null);
 	  Router.go('layer.insert');
   },
   'click .delete-layer': function() {
     // zie atmosphere package matdutour:popup-confirm
-    console.log("verwijder layer " + this._id);
     var layerId = this._id;
     new Confirmation({
       message: function(){ return i18n('collections.confirmation.delete.message.layers'); },
       title: function(){ return i18n('collections.confirmation.delete.title'); },
       cancelText: function(){ return i18n('collections.confirmation.delete.cancel'); },
       okText: function(){ return i18n('collections.confirmation.delete.ok'); },
-      success: false, // whether the button should be green or red
-      focus: "ok" // which button to autofocus, "cancel" (default) or "ok", or "none"
+      // whether the button should be green or red:
+      success: false,
+      // which button to autofocus, 'cancel' (default) or 'ok', or 'none'
+      focus: 'ok'
     }, function (ok) {
-      console.log("confirmation", ok);
-      // ok is true if the user clicked on "ok", false otherwise
+      // ok is true if the user clicked on 'ok', false otherwise
       if (ok){
-        console.log("id", layerId);
         Layers.remove({_id:layerId});
       }
     });
-  },
+  }
 });
 
 

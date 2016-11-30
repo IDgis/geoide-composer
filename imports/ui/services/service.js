@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import {Template} from 'meteor/templating';
 import {Router} from 'meteor/iron:router';
 import {Session} from 'meteor/session';
@@ -5,6 +12,7 @@ import {Services, ServiceSchema} from '/imports/api/collections/services.js';
 
 import './service.html';
 import '../i18n/services/help.html';
+import '../i18n/alerts/geoide-viewer.html';
 
 Template.service.helpers({
 	/**
@@ -20,59 +28,58 @@ Template.service.helpers({
 		return ServiceSchema;
 	},
 	formType : function() {
-		if (Session.get("selectedServiceId")) {
-			return "update";
+		if (Session.get('selectedServiceId')) {
+			return 'update';
 		} else {
-			return "insert";
+			return 'insert';
 		}
 	},
 	serviceDoc : function() {
-		if (Session.get("selectedServiceId")) {
+		if (Session.get('selectedServiceId')) {
 			return Services.findOne({
-				_id : Session.get("selectedServiceId")
+				_id : Session.get('selectedServiceId')
 			});
-			// return this;
 		} else {
 			return null;
 		}
 	},
 	serviceTypes : function() {
 		return [ {
-			label : "WMS",
-			value : "WMS"
+			label : 'WMS',
+			value : 'WMS'
 		}, {
-			label : "WFS",
-			value : "WFS"
+			label : 'WFS',
+			value : 'WFS'
 		}, {
-			label : "TMS",
-			value : "TMS"
+			label : 'TMS',
+			value : 'TMS'
 		} ];
 	},
 	wmsVersions : function() {
 		return [ {
-			label : "1.1.1",
-			value : "1.1.1"
+			label : '1.1.1',
+			value : '1.1.1'
 		}, {
-			label : "1.3.0",
-			value : "1.3.0"
+			label : '1.3.0',
+			value : '1.3.0'
 		} ];
 	},
 	wfsVersions : function() {
 		return [ {
-			label : "1.0.0",
-			value : "1.0.0"
+			label : '1.0.0',
+			value : '1.0.0'
 		}, {
-			label : "1.1.0",
-			value : "1.1.0"
+			label : '1.1.0',
+			value : '1.1.0'
 		}, {
-			label : "2.0.0",
-			value : "2.0.0"
+			label : '2.0.0',
+			value : '2.0.0'
 		} ];
 	},
 	tmsVersions : function() {
 		return [ {
-			label : "1.0.0",
-			value : "1.0.0"
+			label : '1.0.0',
+			value : '1.0.0'
 		} ];
 	}
 });
@@ -82,42 +89,39 @@ Template.service.helpers({
  */
 Template.service.events({
 	'click #return' : function() {
-		console.log("clicked cancel serviceform");
 		Router.go('services.list');
 	},
-	'click #control' : function(e) {
-		console.log("clicked control serviceform");
+	'click #control' : function() {
 
-		var url = document.getElementsByName("endpoint")[0].value;
-		if (url.indexOf("?") == -1) {
-			url += "?"
+		var url = document.getElementsByName('endpoint')[0].value;
+		if (url.indexOf('?') === -1) {
+			url += '?';
 		}
-		url += "request=GetCapabilities";
+		url += 'request=GetCapabilities';
 
-		var types = document.getElementsByName("type");
+		var types = document.getElementsByName('type');
 		for (var i = 0; i < types.length; i++) {
 			if (types[i].checked) {
-				url += "&service=" + types[i].value;
+				url += '&service=' + types[i].value;
 				break;
 			}
 		}
 
-		var versions = document.getElementsByName("version");
+		var versions = document.getElementsByName('version');
 		for (var j = 0; j < versions.length; j++) {
 			if (versions[j].checked) {
-				url += "&version=" + versions[j].value;
+				url += '&version=' + versions[j].value;
 				break;
 			}
 		}
 
-		window.open(url, "_blank");
+		window.open(url, '_blank');
 
 	},
 	'click #help' : function() {
-		var helpTemplate = i18n('services.help.template');
-		console.log("clicked help", helpTemplate);
-		Modal.show(helpTemplate);
-	},
+		// peppelg:bootstrap-3-modal
+		Modal.show(i18n('services.help.template'));
+	}
 
 });
 
@@ -127,24 +131,18 @@ AutoForm.addHooks('serviceform', {
    * Before doing this, trigger the Geoide viewer that the configuration has changed.
    * When the viewer reload fails, alert the user.
    */
-	onSuccess : function(formType, result) {
-		console.log("submit service autoform, goto list");
+	onSuccess : function() {
 		Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
-        console.log('triggerViewerReload Error ', lError);
-        alert(i18n('alert.viewerRefresh'));
+        Modal.show('alert-geoide-viewer-refresh');
         Router.go('services.list');
       } else {
-        console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode != '200' ){
-          alert(i18n('alert.viewerRefresh') + ' ('+lResponse.statusCode+')');
+        if (lResponse.statusCode !== 200 ){
+          Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('services.list');
       }
 		});
-	},
-	onError : function(formType, error) {
-		console.log("service autoform error = " + error);
 	}
 });

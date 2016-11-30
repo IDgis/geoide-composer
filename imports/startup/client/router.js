@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import { Meteor } from 'meteor/meteor';
 import { Router } from 'meteor/iron:router';
 import { Services } from '/imports/api/collections/services.js';
@@ -16,6 +23,10 @@ import '../../ui/maps/map.js';
 import '../../ui/maps/maps.js';
 
 import '../../ui/i18n/home/home.html';
+
+/**
+ * Router client routes
+ */
 
 Router.configure({
     layoutTemplate: 'main'

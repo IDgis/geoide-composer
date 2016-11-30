@@ -9,6 +9,7 @@ import { Layers, LayerSchema } from '/imports/api/collections/layers.js';
 
 import './layer.html';
 import '../i18n/layers/help.html';
+import '../i18n/alerts/geoide-viewer.html';
 
 Template.layer.helpers({
   /**
@@ -43,22 +44,22 @@ Template.layer.helpers({
 	    return LayerSchema;
 	  },
 	  formType: function () {
-	    if (Session.get("selectedLayerId")) {
-	        return "update";
+	    if (Session.get('selectedLayerId')) {
+	        return 'update';
 	     } else {
-	        return "insert";
+	        return 'insert';
 	     }
 	  },
 	  layerDoc: function () {
-	    if (Session.get("selectedLayerId")) {
-	      return Layers.findOne({_id: Session.get("selectedLayerId")});
+	    if (Session.get('selectedLayerId')) {
+	      return Layers.findOne({_id: Session.get('selectedLayerId')});
 	     } else {
 	        return null ;
 	     }
 	  },
 	  layerTypes: function () {
-	    return[{label: "default", value: "default"},
-	           {label: "sql", value: "cosurvey-sql"}];
+	    return[{label: 'default', value: 'default'},
+	           {label: 'sql', value: 'cosurvey-sql'}];
 	  },
 	
 	  adminLoggedIn: function(){
@@ -67,16 +68,29 @@ Template.layer.helpers({
         // a user is logged in
         var name = Meteor.user().username;
         admin = _.isEqual(name, 'idgis-admin');
-        return admin;
       }
-      return false;
+      return admin;
 	  },
 	  buttonSubmitLabel: function(){
 	    return i18n ('button.save');
 	  }
 });
 
-fillLayerSelect = function() {
+/*
+ * set the mouse cursor to a waiting cursor
+ */
+var setCursorProgress = function() {
+  $('body').css('cursor', 'wait');
+};
+
+/*
+ * set the mouse cursor to default (arrow) cursor
+ */
+var setCursorNormal = function() {
+  $('body').css('cursor', 'default');
+};
+
+var fillLayerSelect = function() {
   var layers = Layers.find({}, {
     fields : {
       name : 1,
@@ -84,8 +98,8 @@ fillLayerSelect = function() {
     }
   }).fetch();
   layers.forEach(function(entry) {
-    var layerOption = "<option value=" + entry._id + ">" + entry.name
-        + "</option>"
+    var layerOption = '<option value=' + entry._id + '>' + entry.name
+        + '</option>';
     $('#layerselect').append(layerOption);
   });
 };
@@ -95,14 +109,12 @@ Template.layer.events({
    *  When the Cancel button is pressed go to the layer list
    */
   'click #returnLayer': function () {
-    console.log("clicked cancel layerform" );
     Router.go('layers.list');
   },
   
-  "click #help": function () {
-    var helpTemplate = i18n ('layers.help.template');
-    console.log("clicked help", helpTemplate );
-    Modal.show(helpTemplate);
+  'click #help': function () {
+    // peppelg:bootstrap-3-modal
+    Modal.show(i18n('layers.help.template'));
   },
   
   /**
@@ -111,30 +123,27 @@ Template.layer.events({
    */
   'click select[name$=".nameInService"]' : function(e){
     setCursorProgress();
-    console.log("change on wms layer select ");
-    console.log(e);
     // get name of  select box
-    var srcName = e.target.name; //chrome
+    // chrome
+    var srcName = e.target.name;
     if (!srcName){
-      srcName = e.target.parentElement.name; // FF, IE
+      // FF, IE
+      srcName = e.target.parentElement.name;
     }
-    console.log("Source name ", srcName);
     var lyrName = e.target.value;
-    console.log('lyrName', lyrName);
 
     // find service id from service selectbox
-    var srvName = srcName.replace("nameInService", "service");
-    var srvSelect = $('select[name="' + srvName + '"] ');
-    var serviceId = srvSelect[0].value;
-    console.log('serviceId', serviceId);
+    var srvName = srcName.replace('nameInService', 'service');
+    var $srvSelect = $('select[name="' + srvName + '"] ');
+    var serviceId = $srvSelect[0].value;
 
     // find lg field 
-    var lgName = srcName.replace("nameInService", "legendGraphic");
-    var lg = $('input[name="' + lgName + '"] ');
+    var lgName = srcName.replace('nameInService', 'legendGraphic');
+    var $lg = $('input[name="' + lgName + '"] ');
     
     // find lg image field 
-    var lgImgName = srcName.replace("nameInService", "legendGraphic.img");
-    var lgImg = $('img[name="' + lgImgName + '"] ');
+    var lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
+    var $lgImg = $('img[name="' + lgImgName + '"] ');
     
     // retrieve url for GetLegendGraphic
     // and put it in hidden field and image
@@ -145,25 +154,24 @@ Template.layer.events({
         setCursorNormal();
         if (lError) {
           console.log('getLegendGraphicUrl Error ', lError);
-          lg[0].value = '';
-          lgImg[0].src = '/images/empty-legendgraphic.png'; //error-legendgraphic.png ??
+          $lg[0].value = '';
+          $lgImg[0].src = '/images/empty-legendgraphic.png';
         } else {
           // url found !!
-          console.log('getLegendGraphicUrl result ', lResponse);
           if (lResponse){
-            lg[0].value = lResponse;
+            $lg[0].value = lResponse;
             if (_.isEmpty(lResponse)){
-              lgImg[0].src = '/images/empty-legendgraphic.png';
+              $lgImg[0].src = '/images/empty-legendgraphic.png';
             } else {
-              lgImg[0].src = lResponse;
+              $lgImg[0].src = lResponse;
             }
           } else {
-            lg[0].value = '';
-            lgImg[0].src = '/images/empty-legendgraphic.png';//undefined-legendgraphic.png ??
+            $lg[0].value = '';
+            $lgImg[0].src = '/images/empty-legendgraphic.png';
           }
         }
     });
-  },  
+  }  
   
 });
 
@@ -173,21 +181,16 @@ Template.layer.events({
  * 
  */
 Template.layer.onRendered(function(){
-  console.log("onRendered");
-  console.log(this);
   /*
    * if image is empty, fill it with initial png
    * (initially the src of the image is the url of 'edit-layer' route)
    */
   var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
-  if (legendGraphicImage[0].src){
-    if (_.isEmpty(legendGraphicImage[0].src) | 
-        legendGraphicImage[0].src.indexOf("/layer/"+this.data._id)>0){
-      legendGraphicImage[0].src = "/images/empty-legendgraphic.png";
-    }
+  if ((legendGraphicImage[0].src) && 
+      (_.isEmpty(legendGraphicImage[0].src) || 
+        (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0))){
+    legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
   }
-  console.log('legendGraphicImage[0].src', legendGraphicImage[0].src);
-
 });
 /**/
  
@@ -197,28 +200,22 @@ AutoForm.addHooks('layerform',{
    * Before doing this, trigger the Geoide viewer that the configuration has changed.
    * When the viewer reload fails, alert the user.
    */
-  onSuccess: function(formType, result) {
-    console.log("submit layer autoform, goto list");
+  onSuccess: function() {
     Meteor.call('triggerViewerReload',
         function(lError, lResponse) {
       if (lError) {
-        console.log('triggerViewerReload Error ', lError);
-        alert(i18n('alert.viewerRefresh'));
+        Modal.show('alert-geoide-viewer-refresh');
         Router.go('layers.list');
       } else {
-        console.log('triggerViewerReload Response ', lResponse);
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode != '200' ){
-          alert(i18n('alert.viewerRefresh'));
+        if (lResponse.statusCode !== 200 ){
+          Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('layers.list');
       }
     });
   },
   onError: function(formType, error){
-    console.log("layer autoform error = " + error);
-  },
-  onRendered: function(formType, error){
-    console.log("layer autoform rendered= " + formType);
+    console.log('layer autoform error = ' + error);
   }
 });

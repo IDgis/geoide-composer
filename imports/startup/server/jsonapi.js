@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import { EJSON } from 'meteor/ejson';
 
 import { Router } from 'meteor/iron:router';
@@ -13,7 +20,7 @@ Router.map(function () {
     path: '/jsonapi-services',
     where: 'server',
     action: function () {
-      var json = Services.find().fetch(); 
+      const  json = Services.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
@@ -22,7 +29,7 @@ Router.map(function () {
     path: '/jsonapi-layers',
     where: 'server',
     action: function () {
-      var json = Layers.find().fetch(); 
+      const  json = Layers.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
@@ -31,7 +38,7 @@ Router.map(function () {
     path: '/jsonapi-maps',
     where: 'server',
     action: function () {
-      var json = Maps.find().fetch(); 
+      const  json = Maps.find().fetch(); 
       this.response.setHeader('Content-Type', 'application/json');
       this.response.end(EJSON.stringify(json, {indent: true}));
     }
