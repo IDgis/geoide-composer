@@ -182,6 +182,12 @@ Router.map(function () {
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
+          let graphicUrl = serviceLayer.legendGraphic;
+          if (graphicUrl){
+	          if(graphicUrl.indexOf('http') === -1){
+	          	graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
+	          } 
+          }       
           if (serviceLayer.featureType){
             let ft;
             if  (_.isArray(serviceLayer.featureType)){
@@ -189,10 +195,6 @@ Router.map(function () {
             } else {
               ft = serviceLayer.featureType;
             }
-            let graphicUrl = serviceLayer.legendGraphic;
-            if(graphicUrl.indexOf('http') === -1){
-            	graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
-            } 
             gvServiceLayers.serviceLayers.push(
                 {
                   id: layer.name + '.' + serviceLayer.nameInService, 
@@ -210,7 +212,7 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  legendGraphicUrl: serviceLayer.legendGraphic
+                  legendGraphicUrl: graphicUrl
                 }
             );
           }
