@@ -433,22 +433,42 @@ Meteor.methods({
   },
   
   /**
-   * GetLegendGraphic from a WMS LAYER
+   * Get a legendGraphic url of a WMS layer.
+   * Checks if a url already exists in cache.
+   * If not it tries to retrieve the url, belonging to the given layer, from the WMS capabilities.
+   * If no specific layer url is found, a general url is assembled using the specification 
+   * of the GetLegendGraphic request. 
+   * The url found is saved in cache.
    * 
-   * 
+   * @param {number} serviceId The database id of the service
+   * @param {string} layerName The name of the layer
+   * @return {string} url that results in a legendgraphic image for the layer. 
+   *         Can be undefined if no url was found in the service capabilities.
    */
-  getLegendGraphicUrl: function(serviceId, layer){
-    const LEGENDGRAPHICURLKEY = serviceId + '-' + layer;
+  getLegendGraphicUrl: function(serviceId, layerName){
+    const LEGENDGRAPHICURLKEY = serviceId + '-' + layerName;
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
-      result = Meteor.call('findLegendGraphicUrl', serviceId, layer);
+      result = Meteor.call('findLegendGraphicUrl', serviceId, layerName);
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
     return result;
   },
   
-  findLegendGraphicUrl: function(serviceId, layer){
-    let result;
+  /**
+   * Get a legendGraphic url of a WMS layer
+   * It first tries to retrieve the url defined within the layer itself.
+   * If no specific layer url is found, a general url is assembled using the specification 
+   * of the GetLegendGraphic request.
+   * 
+   * @private
+   * @param {number} serviceId The database id of the service
+   * @param {string} layerName The name of the layer
+   * @return {string} url that results in a legendgraphic image for the layer. 
+   *         Can be undefined if no url was found in the service capabilities.
+   */
+  findLegendGraphicUrl: function(serviceId, layerName){
+    let lgUrl;
     const serv = Services.find({_id: serviceId}).fetch();
     if (serv[0]){
       const host = serv[0].endpoint;
@@ -458,9 +478,9 @@ Meteor.methods({
       const capKey = Object.keys(parseResponse);
       const wmsCapObject = parseResponse[capKey];
       if ((wmsCapObject) && (wmsCapObject.Capability)) {
-        const capObject = wmsCapObject.Capability[0];      
-        const layersObject = capObject.Layer;
-        const capLayer = Meteor.call('getLayerByName',layersObject, layer);
+        const capObject = wmsCapObject.Capability[0];
+        const layer = capObject.Layer;
+        const capLayer = Meteor.call('getLayerByName',layer, layerName);
         if ((capLayer) && (capLayer.Style)) {
           // Kies de default style of de laatste in de lijst als er geen default is
           const styleDefaultName = 'default';
@@ -468,7 +488,7 @@ Meteor.methods({
           _.each(capLayer.Style,function(style){
             if (!styleDefaultFound){
               if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
-                result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
+                lgUrl = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
               }
               if (style.Name[0] === styleDefaultName){
                 styleDefaultFound = true;
@@ -476,99 +496,125 @@ Meteor.methods({
             }
           });
         }
-        if (!result){
+        if (!lgUrl){
           /*
-           *  there is no legendgraphic url in the layer itself, use the general one
-           */ 
-          result = Meteor.call('findGenericLegendGraphicUrl', host, capObject);
+           *  there is no legendgraphic url in the layer itself, find the general url
+           */
+          let getLegendGraphic = capObject.Request[0].GetLegendGraphic;
+          if (!getLegendGraphic){
+            // not defined, try again with the following tag name
+            getLegendGraphic = capObject.Request[0]['sld:GetLegendGraphic'];
+          }
+          if (getLegendGraphic && getLegendGraphic[0].Format){
+            lgUrl = Meteor.call('findGenericLegendGraphicUrl', serv[0], layerName, getLegendGraphic[0].Format);
+          }
         }
       }
+    } else {
+      // no service found, lgUrl is undefined
     }
-    return result;
+    return lgUrl;
   },
 
-  findGenericLegendGraphicUrl: function(capObject, host){
+  /**
+   * Retrieve a Layer from WMS Capabilities with a given name.
+   * Will find a layer with a given name,
+   * by searching recursively in the hierarchy of layers.
+   * 
+   * @private
+   * @param {object} layer contains Layer object, with possible sub layers
+   * @param {string} layerName name of the Layer
+   * @return {object} Layer object having the given name
+   *         returns 'undefined' when no layer with the given name was found
+   */
+  getLayerByName: function(layer, layerName){
     let result;
-    let url = host;
-    const capRequest = capObject.Request;
-    if (capRequest){
-      let getLegendGraphic = capRequest[0].GetLegendGraphic;
-      if (!getLegendGraphic){
-        getLegendGraphic = capRequest[0]['sld:GetLegendGraphic'];
-      }
-      if (getLegendGraphic){
-        let selectedFormat;
-        let pngFormat, jpgFormat, gifFormat;
-        const prefFormat = serv[0].printFormat;
-        const formats = getLegendGraphic[0].Format; 
-        _.each(formats,function(format){
-          if (format === prefFormat){
-            selectedFormat = format;            
-          } 
-          if (format === 'image/png'){
-            pngFormat = format;            
-          } 
-          if (format === 'image/jpg' || format === 'image/jpeg'){
-            jpgFormat = format;
-          }
-          if (format === 'image/gif'){
-            gifFormat = format;
-          }
-        });
-        // select a preferred format (png, then jpg, then gif)
-        if (!selectedFormat){
-          if (pngFormat){
-            selectedFormat = pngFormat;
-          } else if (jpgFormat){
-            selectedFormat = jpgFormat;
-          } else if (gifFormat){
-            selectedFormat = gifFormat;
-          } else {
-            // no preferable formats found: selectedFormat = undefined
-          }
-        }
-        /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
-         * because in the capabilities it can be listed as 'http://localhost:8081/...'
-         */ 
-        if (selectedFormat){
-          if (url.lastIndexOf('?') < 0){
-            url = url + '?';
-          }
-          url = url + 'request=GetLegendGraphic&service=WMS'
-            + '&layer=' + layer 
-            + '&format=' + selectedFormat
-            // tbv Mapserver:
-            // (wordt genegeerd door deegree en geoserver)
-            + '&version=' + version
-            + '&sld_version=1.1.0';          
-        } else {
-          url = null;
-        }
-        result = url;
-      }
-    }
-    return result;
-  },
-
-  
-  getLayerByName: function(layers, name){
-    let result = null;
-    for(let i = 0; i < layers.length; i++){
-      if (layers[i].Layer) {
-        result = Meteor.call('getLayerByName', layers[i].Layer, name);
-      } else if(layers[i].Name) {
-        if (layers[i].Name[0] === name ) {
-          result =  layers[i];
-        }	
+    for(let i = 0; i < layer.length; i++){
+      if (layer[i].Layer) {
+        result = Meteor.call('getLayerByName', layer[i].Layer, layerName);
+      } else if(layer[i].Name) {
+        if (layer[i].Name[0] === layerName ) {
+          result =  layer[i];
+        } 
       } else {
         // nothing to do
       }
+      // stop as soon as a matching layer is found
       if (result){ 
         break;
       }
     }
     return result;
   },
+  
+
+  /**
+   * Get a legendGraphic url for a WMS layer
+   * A general url is assembled, from the service host url,  
+   * layername and preferred image format.
+   * 
+   * @private
+   * @param {object} service service Object
+   * @param {string} layerName name of the layer
+   * @param {object} lgFormats array of GetLegendGraphic.Format tags from the GetCapabilities xml
+   * @return {string} url that results in a legendgraphic image for the layer. 
+   *         Can be undefined if no url was found in the service capabilities.
+   */
+  findGenericLegendGraphicUrl: function(service, layerName, lgFormats){
+    let url;
+    let selectedFormat;
+    let pngFormat, jpgFormat, gifFormat;
+    const preferredPrintFormat = service.printFormat;
+    // loop over all formats to find a preferred format
+    _.each(lgFormats,function(format){
+      if (format === preferredPrintFormat){
+        selectedFormat = preferredPrintFormat;
+      } 
+      if (format === 'image/png'){
+        pngFormat = format;            
+      } 
+      if (format === 'image/jpg' || format === 'image/jpeg'){
+        jpgFormat = format;
+      }
+      if (format === 'image/gif'){
+        gifFormat = format;
+      }
+    });
+    if (!selectedFormat){
+      // select a preferred format (png, then jpg, then gif)
+      if (pngFormat){
+        selectedFormat = pngFormat;
+      } else if (jpgFormat){
+        selectedFormat = jpgFormat;
+      } else if (gifFormat){
+        selectedFormat = gifFormat;
+      } else {
+        // no preferable formats found: selectedFormat = undefined
+      }
+    }
+    /* looking for a base url (DCPType) of the GetLegendGraphic request is not foolproof 
+     * because in the capabilities it could be listed as e.g. 'http://localhost:8081/...', 
+     * or could end in e.g. '?service=WMS&' instead of in '?'.
+     * Instead use the service endpoint as base url for the request.
+     */ 
+    if (selectedFormat){
+      url = service.endpoint;
+      if (url.lastIndexOf('?') < 0){
+        url = url + '?';
+      }
+      url = url + 'request=GetLegendGraphic&service=WMS'
+        + '&layer=' + layerName 
+        + '&format=' + selectedFormat
+        // tbv Mapserver:
+        // (wordt genegeerd door deegree en geoserver)
+        + '&version=' + service.version
+        + '&sld_version=1.1.0';          
+    } else {
+      // selectedFormat is undefined, leave url undefined
+    }
+    return url;
+  },
+
   
   
   /**
