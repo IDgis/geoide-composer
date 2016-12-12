@@ -172,6 +172,13 @@ Meteor.methods({
   
   /**
    * Get layers from a WMS
+   * parameters:
+   *   host - String url of the WMS e.g. http://host.examples.com:8080/wms/services?
+   *   version - String version of the WMS service (supported 1.1.1, 1.3.0)
+   * returns - list of name, title pairs of all WMS layers found; array [name, title, depth]
+   *   The label reflects the hierarchy of the WMS layers
+   *      example: [{name: 'layerName', title: 'layerTitle', depth: 1 }, {...},...]
+   * exceptions: ...   
    */
   getWmsLayers: function(host, version){
     let sortedServoptions = [];
@@ -427,108 +434,122 @@ Meteor.methods({
   
   /**
    * GetLegendGraphic from a WMS LAYER
+   * 
+   * 
    */
   getLegendGraphicUrl: function(serviceId, layer){
     const LEGENDGRAPHICURLKEY = serviceId + '-' + layer;
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
-      const serv = Services.find({_id: serviceId}).fetch();
-      if (serv[0]){
-        const host = serv[0].endpoint;
-        let url = host;
-        const version = serv[0].version;
-        const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        const capKey = Object.keys(parseResponse);
-        const wmsCapObject = parseResponse[capKey];
-        if ((wmsCapObject) && (wmsCapObject.Capability)) {
-          const capObject = wmsCapObject.Capability[0];      
-          const layersObject = capObject.Layer;
-          const capLayer = Meteor.call('getLayerByName',layersObject, layer);
-          if ((capLayer) && (capLayer.Style)) {
-  	        // Kies de default style of de laatste in de lijst als er geen default is
-  	        const styleDefaultName = 'default';
-  	        let styleDefaultFound = false;
-            _.each(capLayer.Style,function(style){
-              if (!styleDefaultFound){
-      	    	  if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
-      	    	    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
-      	    	  }
-      	    	  if (style.Name[0] === styleDefaultName){
-      	    	    styleDefaultFound = true;
-      	    	  }
-              }
-            });
-          }
-          if (!result){
-            /*
-             *  there is no legendgraphic url in the layer itself, use the general one
-             */ 
-            const capRequest = capObject.Request;
-            if (capRequest){
-              let getLegendGraphic = capRequest[0].GetLegendGraphic;
-              if (!getLegendGraphic){
-                getLegendGraphic = capRequest[0]['sld:GetLegendGraphic'];
-              }
-              if (getLegendGraphic){
-                let selectedFormat;
-                let pngFormat, jpgFormat, gifFormat;
-                const prefFormat = serv[0].printFormat;
-                const formats = getLegendGraphic[0].Format; 
-                _.each(formats,function(format){
-                  if (format === prefFormat){
-                    selectedFormat = format;            
-                  } 
-                  if (format === 'image/png'){
-                    pngFormat = format;            
-                  } 
-                  if (format === 'image/jpg' || format === 'image/jpeg'){
-                    jpgFormat = format;
-                  }
-                  if (format === 'image/gif'){
-                    gifFormat = format;
-                  }
-                });
-                // select a preferred format (png, then jpg, then gif)
-                if (!selectedFormat){
-                  if (pngFormat){
-                    selectedFormat = pngFormat;
-                  } else if (jpgFormat){
-                    selectedFormat = jpgFormat;
-                  } else if (gifFormat){
-                    selectedFormat = gifFormat;
-                  } else {
-                    // no preferable formats found: selectedFormat = undefined
-                  }
-                }
-                /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
-                 * because in the capabilities it can be listed as 'http://localhost:8081/...'
-                 */ 
-                if (selectedFormat){
-                  if (url.lastIndexOf('?') < 0){
-                    url = url + '?';
-                  }
-                  url = url + 'request=GetLegendGraphic&service=WMS'
-                    + '&layer=' + layer 
-                    + '&format=' + selectedFormat
-                    // tbv Mapserver:
-                    // (wordt genegeerd door deegree en geoserver)
-                    + '&version=' + version
-                    + '&sld_version=1.1.0';          
-                } else {
-                  url = null;
-                }
-                result = url;
-              }
-            }
-          }
-        }
-      }
+      result = Meteor.call('findLegendGraphicUrl', serviceId, layer);
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
     return result;
   },
   
+  findLegendGraphicUrl: function(serviceId, layer){
+    let result;
+    const serv = Services.find({_id: serviceId}).fetch();
+    if (serv[0]){
+      const host = serv[0].endpoint;
+      const version = serv[0].version;
+      const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+      const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      const capKey = Object.keys(parseResponse);
+      const wmsCapObject = parseResponse[capKey];
+      if ((wmsCapObject) && (wmsCapObject.Capability)) {
+        const capObject = wmsCapObject.Capability[0];      
+        const layersObject = capObject.Layer;
+        const capLayer = Meteor.call('getLayerByName',layersObject, layer);
+        if ((capLayer) && (capLayer.Style)) {
+          // Kies de default style of de laatste in de lijst als er geen default is
+          const styleDefaultName = 'default';
+          let styleDefaultFound = false;
+          _.each(capLayer.Style,function(style){
+            if (!styleDefaultFound){
+              if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
+                result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
+              }
+              if (style.Name[0] === styleDefaultName){
+                styleDefaultFound = true;
+              }
+            }
+          });
+        }
+        if (!result){
+          /*
+           *  there is no legendgraphic url in the layer itself, use the general one
+           */ 
+          result = Meteor.call('findGenericLegendGraphicUrl', host, capObject);
+        }
+      }
+    }
+    return result;
+  },
+
+  findGenericLegendGraphicUrl: function(capObject, host){
+    let result;
+    let url = host;
+    const capRequest = capObject.Request;
+    if (capRequest){
+      let getLegendGraphic = capRequest[0].GetLegendGraphic;
+      if (!getLegendGraphic){
+        getLegendGraphic = capRequest[0]['sld:GetLegendGraphic'];
+      }
+      if (getLegendGraphic){
+        let selectedFormat;
+        let pngFormat, jpgFormat, gifFormat;
+        const prefFormat = serv[0].printFormat;
+        const formats = getLegendGraphic[0].Format; 
+        _.each(formats,function(format){
+          if (format === prefFormat){
+            selectedFormat = format;            
+          } 
+          if (format === 'image/png'){
+            pngFormat = format;            
+          } 
+          if (format === 'image/jpg' || format === 'image/jpeg'){
+            jpgFormat = format;
+          }
+          if (format === 'image/gif'){
+            gifFormat = format;
+          }
+        });
+        // select a preferred format (png, then jpg, then gif)
+        if (!selectedFormat){
+          if (pngFormat){
+            selectedFormat = pngFormat;
+          } else if (jpgFormat){
+            selectedFormat = jpgFormat;
+          } else if (gifFormat){
+            selectedFormat = gifFormat;
+          } else {
+            // no preferable formats found: selectedFormat = undefined
+          }
+        }
+        /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
+         * because in the capabilities it can be listed as 'http://localhost:8081/...'
+         */ 
+        if (selectedFormat){
+          if (url.lastIndexOf('?') < 0){
+            url = url + '?';
+          }
+          url = url + 'request=GetLegendGraphic&service=WMS'
+            + '&layer=' + layer 
+            + '&format=' + selectedFormat
+            // tbv Mapserver:
+            // (wordt genegeerd door deegree en geoserver)
+            + '&version=' + version
+            + '&sld_version=1.1.0';          
+        } else {
+          url = null;
+        }
+        result = url;
+      }
+    }
+    return result;
+  },
+
   
   getLayerByName: function(layers, name){
     let result = null;
