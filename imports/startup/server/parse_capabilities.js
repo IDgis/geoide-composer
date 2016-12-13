@@ -158,11 +158,9 @@ Meteor.methods({
         if (serviceLayer.service === serviceId){
           result = true;
         }
-        if (serviceLayer.featureType){
-          if (serviceLayer.featureType[0]){
-            if (serviceLayer.featureType[0].service === serviceId){
-              result = true;
-            }
+        if (serviceLayer.featureType && serviceLayer.featureType[0]){
+          if (serviceLayer.featureType[0].service === serviceId){
+            result = true;
           }
         }
       });
@@ -191,7 +189,6 @@ Meteor.methods({
       if (xmlResponse.content){
         const parseResponse = Meteor.call('parseXml', xmlResponse.content);
         let servoptions = [];
-    
         let capLayer;
         switch(version) {
         case '1.3.0':
@@ -206,7 +203,6 @@ Meteor.methods({
           capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
           break;
         }
-      
         _.each(capLayer,function(mainLayer){
           let level = 0;
           if ((mainLayer.$) && (mainLayer.$.queryable === '1')){
@@ -251,14 +247,12 @@ Meteor.methods({
     const prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
-        if ((subLayer.$) && (subLayer.$.queryable === '1')){
-          if (subLayer.Title){
-            const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
-            if (subLayer.Name){
-              servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
-            } else {
-              servoptions.push({value:'', label:titleWithPrefix, disabled:true});
-            }
+        if ((subLayer.$) && (subLayer.$.queryable === '1') && (subLayer.Title)){
+          const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
+          if (subLayer.Name){
+            servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
+          } else {
+            servoptions.push({value:'', label:titleWithPrefix, disabled:true});
           }
         }
         servoptions = Meteor.call('getOptionsFromLayers', subLayer, servoptions, (level + 2));
@@ -279,7 +273,6 @@ Meteor.methods({
       const xmlResponse = Meteor.call('getXml', host, {});
       if (xmlResponse.content){
         const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        
         //version 1.0.0
         /**
          * get the title from the TileMap and use this as layername and title
@@ -367,66 +360,54 @@ Meteor.methods({
       if (serv[0]){
         const host = serv[0].endpoint;
         const version = serv[0].version;
-        if (ftName){
-          const xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-          const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-          // find some common tag namespace prefixes
-          let namePrefix = '';
-          if (parseResponse['xsd:schema']){
-            namePrefix = 'xsd:';
-          } else if (parseResponse['xs:schema']){
-            namePrefix = 'xs:';
-          } else if (parseResponse['wfs:schema']){
-            namePrefix = 'wfs:';
-          } else {
-            namePrefix = '';
-          }
-          _.each(parseResponse,function(schema){
-            ft.targetNamespace = schema.$.targetNamespace;
-            _.each(schema,function(nextTag){
-              let complexType = null;
-              if (nextTag[0]){
-                // look for nextTag == element or complexType
-                if (nextTag[0][namePrefix+'complexType']){
-                    complexType = nextTag[0][namePrefix+'complexType'];
-                } else if (nextTag[0][namePrefix+'complexContent']){
-                        complexType = nextTag;
-                } else {
-                  // nothing to do
-                }
+        const xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        // find some common tag namespace prefixes
+        let namePrefix = '';
+        if (parseResponse['xsd:schema']){
+          namePrefix = 'xsd:';
+        } else if (parseResponse['xs:schema']){
+          namePrefix = 'xs:';
+        } else if (parseResponse['wfs:schema']){
+          namePrefix = 'wfs:';
+        } else {
+          namePrefix = '';
+        }
+        _.each(parseResponse,function(schema){
+          ft.targetNamespace = schema.$.targetNamespace;
+          _.each(schema,function(nextTag){
+            let complexType = null;
+            if (nextTag[0]){
+              // look for nextTag == element or complexType
+              if (nextTag[0][namePrefix+'complexType']){
+                  complexType = nextTag[0][namePrefix+'complexType'];
+              } else if (nextTag[0][namePrefix+'complexContent']){
+                      complexType = nextTag;
+              } else {
+                // nothing to do
               }
-              if (complexType){
-                if (complexType[0]){
-                  if (complexType[0][namePrefix+'complexContent']){
-                    _.each(complexType[0],function(complexContent){     
-                      if (complexContent[0]){
-                        if (complexContent[0][namePrefix+'extension']){
-                          _.each(complexContent[0],function(extension){     
-                            if (extension[0]){
-                              if (extension[0][namePrefix+'sequence']){
-                                _.each(extension[0],function(sequence){     
-                                  if (sequence[0]){
-                                    if (sequence[0][namePrefix+'element']){
-                                      _.each(sequence[0][namePrefix+'element'],function(ftField){     
-                                        ft.options.push({value:ftField.$.name, label:ftField.$.name});
-                                      });
-                                    }
-                                  }
-                                });
-                              }
-                            }
+            }
+            if ( (complexType) && (complexType[0]) && (complexType[0][namePrefix+'complexContent'])){
+              _.each(complexType[0],function(complexContent){     
+                if ((complexContent[0]) && (complexContent[0][namePrefix+'extension'])){
+                  _.each(complexContent[0],function(extension){     
+                    if ((extension[0]) && (extension[0][namePrefix+'sequence'])){
+                      _.each(extension[0],function(sequence){     
+                        if ((sequence[0]) && (sequence[0][namePrefix+'element'])){
+                          _.each(sequence[0][namePrefix+'element'],function(ftField){     
+                            ft.options.push({value:ftField.$.name, label:ftField.$.name});
                           });
                         }
-                      }
-                    });
-                  }
+                      });
+                    }
+                  });
                 }
-              }
-            });
+              });
+            }
           });
-          ft.options = _.sortBy(ft.options, 'title');
-          DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
-        }
+        });
+        ft.options = _.sortBy(ft.options, 'title');
+        DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
       }
     }
     return ft;
