@@ -175,8 +175,8 @@ Router.map(function () {
     path: '/json-gv-api-servicelayers',
     where: 'server',
     action: function () {
-    	const protocol = 	this.request.headers['x-forwarded-proto'];
-    	const host = this.request.headers.host;
+      const protocol =   this.request.headers['x-forwarded-proto'];
+      const host = this.request.headers.host;
       const cursor = Layers.find(); 
       const gvServiceLayers = {serviceLayers:[]};
       cursor.forEach(function(layer){
@@ -191,7 +191,7 @@ Router.map(function () {
             }
             let graphicUrl = serviceLayer.legendGraphic;
             if(graphicUrl.indexOf('http') === -1){
-            	graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
+              graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
             } 
             gvServiceLayers.serviceLayers.push(
                 {

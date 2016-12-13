@@ -7,14 +7,14 @@ import { Layers } from '/imports/api/collections/layers.js';
 import './layers.html';
 
 Template.layers.helpers({
-	/**
-	 * List of layers
-	 * Only retrieve all layers when idgis-admin user is logged in 
-	 */
+  /**
+   * List of layers
+   * Only retrieve all layers when idgis-admin user is logged in 
+   */
   layers: function(){
-      var adminLoggedIn = false; 
+      let adminLoggedIn = false; 
       if (Meteor.user()){
-        var name = Meteor.user().username;
+        const name = Meteor.user().username;
         adminLoggedIn = _.isEqual(name, 'idgis-admin');
       }
       if (adminLoggedIn){
@@ -31,16 +31,16 @@ Template.layers.helpers({
 
 Template.layers.events({
   'click .edit-layer': function () { 
-	  Session.set('selectedLayerId', this._id);
-	  Router.go('layer.edit', {_id: this._id});
+    Session.set('selectedLayerId', this._id);
+    Router.go('layer.edit', {_id: this._id});
   },
   'click .insert-layer': function () {
-	  Session.set('selectedLayerId', null);
-	  Router.go('layer.insert');
+    Session.set('selectedLayerId', null);
+    Router.go('layer.insert');
   },
   'click .delete-layer': function() {
     // zie atmosphere package matdutour:popup-confirm
-    var layerId = this._id;
+    const layerId = this._id;
     new Confirmation({
       message: function(){ return i18n('collections.confirmation.delete.message.layers'); },
       title: function(){ return i18n('collections.confirmation.delete.title'); },

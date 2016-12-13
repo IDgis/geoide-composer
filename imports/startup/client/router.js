@@ -58,7 +58,7 @@ Router.route('/service/insert', function () {
 });
 
 Router.route('/service/:_id', function () {
-    var service = Services.findOne({_id: this.params._id});
+    const service = Services.findOne({_id: this.params._id});
     this.render('service', {data: service});
 }, {
     name: 'service.edit'
@@ -79,7 +79,7 @@ Router.route('/map/insert', function () {
 });
 
 Router.route('/map/:_id', function () {
-    var map = Maps.findOne({_id: this.params._id});
+    const map = Maps.findOne({_id: this.params._id});
     this.render('map', {data: map});
 }, {
     name: 'map.edit'
@@ -99,7 +99,7 @@ Router.route('/layer/insert', function () {
 });
 
 Router.route('/layer/:_id', function () {
-    var layer = Layers.findOne({_id: this.params._id});
+    const layer = Layers.findOne({_id: this.params._id});
     this.render('layer', {data: layer});
 }, {
     name: 'layer.edit'

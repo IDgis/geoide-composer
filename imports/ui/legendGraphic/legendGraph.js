@@ -19,9 +19,9 @@ Template.legendGraphTemplate.helpers({
           // Get the classname of the div surrounding the upload control template
           // these initial values will get all instances of 
           // legendGraphic input and legendGraphic.img  
-          var legendGraphicInputName = 'legendGraphic'; 
-          var legendGraphicImageName = 'legendGraphic.img';
-          var uploadControlName = '';
+          let legendGraphicInputName = 'legendGraphic'; 
+          let legendGraphicImageName = 'legendGraphic.img';
+          let uploadControlName = '';
           if ((context) && 
               (context.uploadControl) && 
               (context.uploadControl.context)){
@@ -33,22 +33,22 @@ Template.legendGraphTemplate.helpers({
             legendGraphicInputName = uploadControlName.replace('.uploadCtrl', '');
             legendGraphicImageName = uploadControlName.replace('.uploadCtrl', '.img');
           }
-          var $legendGraphicInput = $('input[name$="'+legendGraphicInputName+'"]');
+          const $legendGraphicInput = $('input[name$="'+legendGraphicInputName+'"]');
           $legendGraphicInput[0].value = fileInfo.name;
 
-          var $legendGraphicImage = $('img[name$="'+legendGraphicImageName+'"]');
+          const $legendGraphicImage = $('img[name$="'+legendGraphicImageName+'"]');
           $legendGraphicImage[0].src = fileInfo.url;
         }
     };
   },
   imgSrc: function(src){
-    var result = '/images/empty-legendgraphic.png';
+    let result = '/images/empty-legendgraphic.png';
     if ((src) && 
       (!_.isEmpty(src))){
       if(src.indexOf('http') !== -1){
-      	result = src;
+        result = src;
       } else {
-  	  result = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/upload/' + src;
+      result = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/upload/' + src;
       }
     }
     return result;
@@ -58,9 +58,9 @@ Template.legendGraphTemplate.helpers({
 Template.legendGraphTemplate.events ({
   'click .delete-graphic': function () { 
     
-    var $legendGraphic = $('input[name$=""+this.name+""]');
+    const $legendGraphic = $('input[name$=""+this.name+""]');
     $legendGraphic[0].value = '';
-    var $legendGraphicImage = $('img[name$=""+this.name+".img"]');
+    const $legendGraphicImage = $('img[name$=""+this.name+".img"]');
     $legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
   }
 });
