@@ -147,7 +147,7 @@ Template.map.events({
         $renamenode.prop('disabled', true);
         $removenode.prop('disabled', true);        
         $creategroup.prop('disabled', false);
-        if (numberOfOptions > 0){
+        if ($numberOfOptions > 0){
           $createlayer.prop('disabled', false);
         }
       }
@@ -216,32 +216,29 @@ Template.map.events({
   'click #removenode' : function() {
     const ref = $.jstree.reference('#maptree');
     const selObjects = ref.get_selected(true);
+    let okToRemove = true;
     _.each(selObjects, function(sel){
       if (ref.get_type(sel) === 'map') {
-        return false;
+        okToRemove = false;
       }
       if (ref.get_type(sel) === 'layer') {
-        const lyr = Layers.findOne({
-          _id : sel.data.layerid
-        });
-        if (lyr) {
-          if (Meteor.user()) {
-            // a user is logged in
-            const name = Meteor.user().username;
-            const adminLoggedIn = _.isEqual(name, 'idgis-admin');
-            if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
-              return false;
-            }
-          } else {
-            return false;
+        const lyr = Layers.findOne({_id : sel.data.layerid});
+        if ((lyr) && (Meteor.user())) {
+          // a user is logged in
+          const name = Meteor.user().username;
+          const adminLoggedIn = _.isEqual(name, 'idgis-admin');
+          if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
+            okToRemove = false;
           }
         } else {
-          // layer not found, remove is ok
+          okToRemove = false;
         }
-        ref.delete_node(sel);
-        fillLayerSelect();
-        // after remove disable 'remove' button
-        $('#removenode').prop('disabled', true);
+        if (okToRemove === true){
+          ref.delete_node(sel);
+          fillLayerSelect();
+          // after remove disable 'remove' button
+          $('#removenode').prop('disabled', true);
+        }
       }
       if (ref.get_type(sel) === 'group') {
         new Confirmation({

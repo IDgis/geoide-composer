@@ -83,26 +83,23 @@ export const ServiceSchema = new SimpleSchema({
       'value': function() {
         const currentVersion = AutoForm.getFieldValue('version', 'serviceform');
         const currentType = AutoForm.getFieldValue('type', 'serviceform');
+        let newVersionValue = currentVersion;
         if (currentType === 'WMS') {
           // 1.1.1. is default
-          if (currentVersion === '1.3.0'){
-            return '1.3.0';
-          } else {
-            return '1.1.1';
+          if (currentVersion !== '1.3.0'){
+            newVersionValue = '1.1.1';
           }
         } else if (currentType === 'WFS') {
           // 1.1.0. is default
-          if (currentVersion === '1.0.0' || currentVersion === '2.0.0'){
-            return currentVersion;
-          } else {
-            return '1.1.0';
+          if (currentVersion !== '1.0.0' && currentVersion !== '2.0.0'){
+            newVersionValue = '1.1.0';
           }
         } else if (currentType === 'TMS') {
-          return '1.0.0';
+          newVersionValue = '1.0.0';
         } else {
           // should not get here
-          return currentVersion;
         }
+        return newVersionValue;
       },
       // this seems to work reactively
       'defaultValue': function() {

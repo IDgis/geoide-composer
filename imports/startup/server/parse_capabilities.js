@@ -610,29 +610,26 @@ Meteor.methods({
     } else {
       const servoptions = [];
       const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-      if (xmlResponse.content){
-        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        
-        let req = null;
-        switch(version) {
-        case '1.3.0':
-          if ((parseResponse.WMS_Capabilities) && (parseResponse.WMS_Capabilities.Capability[0])){
-            req = parseResponse.WMS_Capabilities.Capability[0].Request;
-          }
-          break;
-        case '1.1.1':
-          if ((parseResponse.WMT_MS_Capabilities) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
-            req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
-          }
-          break;
-        default:
-          break;
+      const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      let req = null;
+      switch(version) {
+      case '1.3.0':
+        if ((parseResponse.WMS_Capabilities) && (parseResponse.WMS_Capabilities.Capability[0])){
+          req = parseResponse.WMS_Capabilities.Capability[0].Request;
         }
-        if ((req) && (req[0].GetMap)){
-          _.each(req[0].GetMap[0].Format,function(format){
-            servoptions.push({label:format, value:format});
-          });
+        break;
+      case '1.1.1':
+        if ((parseResponse.WMT_MS_Capabilities) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
+          req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
         }
+        break;
+      default:
+        break;
+      }
+      if ((req) && (req[0].GetMap)){
+        _.each(req[0].GetMap[0].Format,function(format){
+          servoptions.push({label:format, value:format});
+        });
       }
       sortedServoptions = _.sortBy(servoptions, 'label');
       PRINTFORMAT.set(PRINTFORMATKEY, sortedServoptions);
