@@ -37,3 +37,4 @@ npm-bcrypt@0.9.2
 simple:reactive-method
 shell-server@0.2.1
 peppelg:bootstrap-3-modal
+matdutour:popup-confirm
