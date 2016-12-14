@@ -222,12 +222,10 @@ Meteor.methods({
       } else {
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
         let errorMsg = xmlResponse.statusCode;
-        if (!errorMsg){
-          if (xmlResponse.response){
-            errorMsg = xmlResponse.response.statusCode;
-          } else {
-            errorMsg = xmlResponse.code;
-          }
+        if ((!errorMsg) && (xmlResponse.response)){
+          errorMsg = xmlResponse.response.statusCode;
+        } else {
+          errorMsg = xmlResponse.code;
         }
         sortedServoptions.push({value:WMSLAYERSKEY, label:'[Error: '+errorMsg+']', disabled:true});
       }
