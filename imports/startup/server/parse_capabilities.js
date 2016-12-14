@@ -43,13 +43,11 @@ Meteor.setInterval(function(){
 
 Meteor.methods({
   /**
-   * Get result from a server as image. 
+   * Get image from a url. 
    * host: url of host
-   *   example:
-   *   'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' 
-   * params : array of key/value pairs
-   *   example:  
-   *   {request: 'GetCapabilities', service:'WMS'} 
+   * 
+   * @param {string} url that will result in an image
+   * @return {object} image in jpg, png or gif format.
    */ 
   getImage : function (host){
     try {
@@ -68,13 +66,14 @@ Meteor.methods({
     }
   },
   /**
-   * Get result from a server as xml. 
-   * host: url of host
-   *   example:
-   *   'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' 
-   * params : array of key/value pairs
+   * Get result from a server as xml.
+   *  
+   * @param {string} host url of the server
+   * @param {array} params array of key/value pairs
    *   example:  
-   *   {request: 'GetCapabilities', service:'WMS'} 
+   *   {request: 'GetCapabilities', service:'WMS'}
+   * @return {string} xml as returned by the server
+   *     or  {object} error that was thrown
    */ 
   getXml : function (host, params){
     host = Meteor.call('addQmarkToUrl', host);
@@ -107,6 +106,8 @@ Meteor.methods({
    *  This means code restructuring.
    *  But the result will be cleaner and robust.  
    * 
+   * @param {string} xml that will be parsed into a Javascript object
+   * @return {object} Javascript object which members will reflect content of xml
    */
   parseXml : function(xml){
     if (xml){
@@ -117,7 +118,10 @@ Meteor.methods({
   },
 
   /**
-   * Find if the layer with layerId is use in a map
+   * Find if the layer with layerId is use in a map.
+   * 
+   * @param {number} layerId mongo database id of the layer
+   * @return {boolean} true if this layer is used in any map, false otherwise 
    */
   isLayerInMap: function(layerId){
     const cursor = Maps.find();
@@ -148,7 +152,10 @@ Meteor.methods({
   },
 
   /**
-   * Find if the service with serviceId is use in a layer
+   * Find if the service with serviceId is use in a layer.
+   * 
+   * @param {number} serviceId mongo database id of the service
+   * @return {boolean} true if this service is used in any layer, false otherwise 
    */
   isServiceInLayer: function(serviceId){
     let result = false;
@@ -170,13 +177,15 @@ Meteor.methods({
   
   /**
    * Get layers from a WMS
-   * parameters:
-   *   host - String url of the WMS e.g. http://host.examples.com:8080/wms/services?
-   *   version - String version of the WMS service (supported 1.1.1, 1.3.0)
-   * returns - list of name, title pairs of all WMS layers found; array [name, title, depth]
+   * 
+   * @param {string} host url of the WMS service
+   * @parm {string} version of the service
+   * @return {object} sorted list of name, label pairs of all WMS layers found; 
+   *   array [value, label, [disabled]]
    *   The label reflects the hierarchy of the WMS layers
-   *      example: [{name: 'layerName', title: 'layerTitle', depth: 1 }, {...},...]
-   * exceptions: ...   
+   *      example: [{value: 'layerName', label: 'layerTitle'}, {...},...] 
+   *   This result can be use in a listbox.
+   *   Layers that have no name (only title) will be flagged as disabled
    */
   getWmsLayers: function(host, version){
     let sortedServoptions = [];
@@ -222,10 +231,12 @@ Meteor.methods({
       } else {
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
         let errorMsg = xmlResponse.statusCode;
-        if ((!errorMsg) && (xmlResponse.response)){
-          errorMsg = xmlResponse.response.statusCode;
-        } else {
-          errorMsg = xmlResponse.code;
+        if (!errorMsg){
+          if (xmlResponse.response){
+            errorMsg = xmlResponse.response.statusCode;
+          } else {
+            errorMsg = xmlResponse.code;
+          }
         }
         sortedServoptions.push({value:WMSLAYERSKEY, label:'[Error: '+errorMsg+']', disabled:true});
       }
@@ -234,6 +245,22 @@ Meteor.methods({
   
   },
   
+  /**
+   * Search a hierarchy of layers and put their name and title 
+   * into value, label pairs for use in a listbox.
+   * 
+   * @private
+   * @param {object} mainLayer layer object
+   * @param {object} servoptions listbox options to append to
+   * @param {number} level current level of mainLayer 
+   * @return {object} sorted list of value, label pairs of all WMS layers found; 
+   *   The label will be prefixed to show hierarchy of the WMS layers:
+   *      _main-layer
+   *      ___level-1a-layer
+   *      ___level-1b-layer
+   *      ______level-2-layer
+   *   Layers that have no name (only title) will be flagged as disabled
+   */
   getOptionsFromLayers: function(mainLayer, servoptions, level){
     const prefixChars = '______________..';
     if (level < 0) {
@@ -258,8 +285,15 @@ Meteor.methods({
     }
     return servoptions;
   },
+  
   /**
    * Get layers from a TMS
+   * 
+   * @param {string} host url of the TMS service
+   * @parm {string} version of the service
+   * @return {object} list of name, title pairs of all TMS layers found; array [name, title, depth]
+   *   The label reflects the hierarchy of the TMS layers
+   *      example: [{name: 'layerName', title: 'layerTitle', depth: 1 }, {...},...] 
    */
   getTmsLayers: function(host, version){
     let servoptions = [];

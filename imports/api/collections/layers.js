@@ -19,7 +19,10 @@ import { Services } from '/imports/api/collections/services.js';
  * Featuretype is a featuretype from a WFS [optional]
  * SearchTemplate is a specific field of a featuretype [optional]
  * 
- * This definition depends on the use of AutoForm  
+ * This definition depends on the use of AutoForm.
+ * Heavy use is being made of AutoForm reactivity in getFieldValue().
+ * The number of nested serviceLayer and searchTemplates
+ * has been limited because the UI will get very unresponsive otherwise.   
  */
 
 /*
@@ -301,7 +304,10 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); }
     }
   }, 
-  
+  /*
+   * This input uses a special defined type of input,
+   * defined in ui/legendGraphic/legendGraph.js
+   */
   legendGraphic: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.legendGraphic.label'); },

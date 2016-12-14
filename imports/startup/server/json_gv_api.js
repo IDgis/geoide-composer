@@ -13,6 +13,7 @@ import { Maps } from '/imports/api/collections/maps.js';
 
 /**
  *  REST api for delivering json for Geoide-Viewer
+ *  
  *  NOTE:
  *  Identifiers cannot be represented by Mongo _id's, but must be human readable,
  *  because they are also edited in CRS2.
@@ -266,9 +267,8 @@ Router.map(function () {
 
   /**
    * Maps
-   */
-  /*
    * groups and layers sorted in reverse order as required by Geoide-Viewer
+   * 
    */
 Router.map(function () {
   this.route('json-gv-api-maps', {

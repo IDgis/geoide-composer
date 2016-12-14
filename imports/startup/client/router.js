@@ -35,8 +35,9 @@ Router.configure({
 /**
  * Main entry: home page
  * Note: 
- *   The name of the home page template name, is stored in the i18n file.
- *   The home page html contains all templates for all supported languages.
+ *   The name of the home page template name in ui/i18n/home/home.html,
+ *   is stored in the i18n file i18n/nl.js.
+ *   The home page html must contain all templates for all supported languages.
  */
 Router.route('/', function () {
   this.render(i18n ('main.home.template'));

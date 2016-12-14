@@ -11,7 +11,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 /**
  * Definition of Service
  * 
- * A service contains a service url, a type of service and a version.
+ * A service contains 
+ *   service url, 
+ *   type of service,
+ *   version,
+ *   preferred printFormat.
  * 
  * This definition depends on the use of AutoForm  
  */
