@@ -22,22 +22,22 @@ import { Maps } from '/imports/api/collections/maps.js';
  * Global variables used for caching WMS/WFS request results
  * 
  */
-const PRINTFORMAT = new Map();
-const WMSLAYERS = new Map();
-const TMSLAYERS = new Map();
-const FEATURETYPES = new Map();
-const DESCRIBEFEATURETYPES = new Map();
-const LEGENDGRAPHICURL = new Map();
+const PRINTFORMAT_CACHE = new Map();
+const WMSLAYERS_CACHE = new Map();
+const TMSLAYERS_CACHE = new Map();
+const FEATURETYPES_CACHE = new Map();
+const DESCRIBEFEATURETYPES_CACHE = new Map();
+const LEGENDGRAPHICURL_CACHE = new Map();
 
 // clear all caches every DELAY milliseconds
 const DELAY = Meteor.call('getRequestCacheDelay');
 Meteor.setInterval(function(){
-  PRINTFORMAT.clear();
-  WMSLAYERS.clear();
-  TMSLAYERS.clear();
-  FEATURETYPES.clear();
-  DESCRIBEFEATURETYPES.clear();
-  LEGENDGRAPHICURL.clear();
+  PRINTFORMAT_CACHE.clear();
+  WMSLAYERS_CACHE.clear();
+  TMSLAYERS_CACHE.clear();
+  FEATURETYPES_CACHE.clear();
+  DESCRIBEFEATURETYPES_CACHE.clear();
+  LEGENDGRAPHICURL_CACHE.clear();
   console.log('Cleared WMS/WFS request caches');
 }, DELAY);
 
@@ -192,7 +192,7 @@ Meteor.methods({
   getWmsLayers: function(host, version){
     let sortedServoptions = [];
     const WMSLAYERSKEY = host + '-' + version;
-    const resultWmsLayers = WMSLAYERS.get(WMSLAYERSKEY);
+    const resultWmsLayers = WMSLAYERS_CACHE.get(WMSLAYERSKEY);
     if (resultWmsLayers){
       sortedServoptions = resultWmsLayers;
     } else {
@@ -229,7 +229,7 @@ Meteor.methods({
         });
         // do not sort
         sortedServoptions = servoptions;
-        WMSLAYERS.set(WMSLAYERSKEY, sortedServoptions);
+        WMSLAYERS_CACHE.set(WMSLAYERSKEY, sortedServoptions);
       } else {
         console.log('getWmsLayers ERROR xmlResponse:', xmlResponse);
         let errorMsg = xmlResponse.statusCode;
@@ -308,7 +308,7 @@ Meteor.methods({
   getTmsLayers: function(host, version){
     let servoptions = [];
     const TMSLAYERSKEY = host + '-' + version;
-    const resultTmsLayers = TMSLAYERS.get(TMSLAYERSKEY);
+    const resultTmsLayers = TMSLAYERS_CACHE.get(TMSLAYERSKEY);
     if (resultTmsLayers){
       servoptions = resultTmsLayers;
     } else {
@@ -325,7 +325,7 @@ Meteor.methods({
         } else {
           servoptions.push({label:'not found', value:'not found', disabled:true});
         }
-        TMSLAYERS.set(TMSLAYERSKEY, servoptions);
+        TMSLAYERS_CACHE.set(TMSLAYERSKEY, servoptions);
       } else {
         console.log('getTmsLayers ERROR xmlResponse:', xmlResponse);
         let errorMsg = xmlResponse.statusCode;
@@ -359,7 +359,7 @@ Meteor.methods({
   getWfsFeatureTypes: function(host, version){
     let sortedServoptions;
     const FEATURETYPESKEY = host + '-' + version;
-    const resultFeatureTypes = FEATURETYPES.get(FEATURETYPESKEY);
+    const resultFeatureTypes = FEATURETYPES_CACHE.get(FEATURETYPESKEY);
     if (resultFeatureTypes){
       sortedServoptions = resultFeatureTypes;
     } else {
@@ -396,7 +396,7 @@ Meteor.methods({
         });
       });
       sortedServoptions = _.sortBy(servoptions, 'title');
-      FEATURETYPES.set(FEATURETYPESKEY, sortedServoptions);
+      FEATURETYPES_CACHE.set(FEATURETYPESKEY, sortedServoptions);
     }
     return sortedServoptions;
   },
@@ -422,7 +422,7 @@ Meteor.methods({
   describeFeatureType: function(serviceId, ftName){
     let ft = {options:[]}; 
     const DESCRIBEFEATURETYPESKEY = serviceId + '-' + ftName;
-    const resultFeatureTypes = DESCRIBEFEATURETYPES.get(DESCRIBEFEATURETYPESKEY);
+    const resultFeatureTypes = DESCRIBEFEATURETYPES_CACHE.get(DESCRIBEFEATURETYPESKEY);
     if (resultFeatureTypes){
       ft = resultFeatureTypes;
     } else {
@@ -477,7 +477,7 @@ Meteor.methods({
           });
         });
         ft.options = _.sortBy(ft.options, 'title');
-        DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
+        DESCRIBEFEATURETYPES_CACHE.set(DESCRIBEFEATURETYPESKEY, ft);
       }
     }
     return ft;
@@ -498,10 +498,10 @@ Meteor.methods({
    */
   getLegendGraphicUrl: function(serviceId, layerName){
     const LEGENDGRAPHICURLKEY = serviceId + '-' + layerName;
-    let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
+    let result = LEGENDGRAPHICURL_CACHE.get(LEGENDGRAPHICURLKEY);
     if (!result){
       result = Meteor.call('findLegendGraphicUrl', serviceId, layerName);
-      LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
+      LEGENDGRAPHICURL_CACHE.set(LEGENDGRAPHICURLKEY, result);
     }
     return result;
   },
@@ -683,7 +683,7 @@ Meteor.methods({
   getPrintFormat: function(host, version){
     let sortedServoptions;
     const PRINTFORMATKEY = host + '-' + version;
-    const resultPrintFormat = PRINTFORMAT.get(PRINTFORMATKEY);
+    const resultPrintFormat = PRINTFORMAT_CACHE.get(PRINTFORMATKEY);
     if (resultPrintFormat){
       sortedServoptions = resultPrintFormat;
     } else {
@@ -711,7 +711,7 @@ Meteor.methods({
         });
       }
       sortedServoptions = _.sortBy(servoptions, 'label');
-      PRINTFORMAT.set(PRINTFORMATKEY, sortedServoptions);
+      PRINTFORMAT_CACHE.set(PRINTFORMATKEY, sortedServoptions);
     }
     return sortedServoptions;
   },
