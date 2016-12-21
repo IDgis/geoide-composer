@@ -42,7 +42,7 @@ Meteor.methods({
       return Meteor.settings.version;
     } else {
       // update before release
-      return '1.0.3-SNAPSHOT';
+      return '1.0.5-SNAPSHOT';
     }
   },
 
