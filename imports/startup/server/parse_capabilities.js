@@ -104,7 +104,7 @@ Meteor.methods({
    *  There is one option (xmlns=true) that saves the tagname 
    *  without prefix in the js object. 
    *  This means code restructuring.
-   *  But the result will be cleaner and robust.  
+   *  But the result will be cleaner and more robust.  
    * 
    * @param {string} xml that will be parsed into a Javascript object
    * @return {object} Javascript object which members will reflect content of xml
@@ -176,15 +176,17 @@ Meteor.methods({
   },
   
   /**
-   * Get layers from a WMS
+   * Get layers from a WMS as a listbox options list.
+   * Checks if a list of layers already exist in cache.
+   * If not it tries to retrieve it from the WMS.
    * 
    * @param {string} host url of the WMS service
-   * @parm {string} version of the service
+   * @param {string} version of the service
    * @return {object} sorted list of name, label pairs of all WMS layers found; 
    *   array [value, label, [disabled]]
    *   The label reflects the hierarchy of the WMS layers
    *      example: [{value: 'layerName', label: 'layerTitle'}, {...},...] 
-   *   This result can be use in a listbox.
+   *   This result can be used in a listbox.
    *   Layers that have no name (only title) will be flagged as disabled
    */
   getWmsLayers: function(host, version){
@@ -287,13 +289,21 @@ Meteor.methods({
   },
   
   /**
-   * Get layers from a TMS
+   * Get layers from a TMS as a listbox options list.
+   * Checks if a list of layers already exist in cache.
+   * If not it tries to retrieve it from the TMS.
    * 
    * @param {string} host url of the TMS service
-   * @parm {string} version of the service
-   * @return {object} list of name, title pairs of all TMS layers found; array [name, title, depth]
-   *   The label reflects the hierarchy of the TMS layers
-   *      example: [{name: 'layerName', title: 'layerTitle', depth: 1 }, {...},...] 
+   * @param {string} version of the TMS service
+   * @return {object} sorted list of names of all TMS layers found; 
+   *   array [value, label, [disabled]]
+   *      example: [{value: 'layerName', label: 'layerName'}, {...},...] 
+   *   This result can be used in a listbox.
+   *   When no layername can be found the listbox entry is flagged as disabled.
+   *   When an error occurs, the error value is put in the label of the options list.
+   *   
+   * NB this implementation delivers only one layerName.
+   * This layerName is retrieved from the title of the TileMap tag. 
    */
   getTmsLayers: function(host, version){
     let servoptions = [];
@@ -330,7 +340,21 @@ Meteor.methods({
   },
   
   /**
-   * Get feature types from a WFS
+   * Get featuretypes from a WFS as a listbox options list.
+   * Checks if a list of featuretypes already exists in cache.
+   * If not it tries to retrieve it from the WFS.
+   * 
+   * @param {string} host url of the WFS service
+   * @param {string} version of the WFS service
+   * @return {object} sorted list of value, label pairs of all WFS featuretypes  found; 
+   *   array [value, label]
+   *   The label reflects the hierarchy of the WMS layers
+   *      example: [{value: 'feature type name', label: 'feature type title'}, {...},...] 
+   *   
+   *   This result can be used in a listbox.
+   *   
+   * NB The parseXml function delivers prefixes as part of the tag names.
+   * Therefore an attempt is made to find a common tag prefix.   
    */
   getWfsFeatureTypes: function(host, version){
     let sortedServoptions;
@@ -378,8 +402,22 @@ Meteor.methods({
   },
   
   /**
-   * DescribeFeatureType
-   * Retrieve fields and namespace from a featuretype
+   * Retrieve fields and namespace from a featuretype.
+   * Uses DescribeFeaturetype request on a WFS.
+   * Checks if a list of featuretype fields already exists in cache.
+   * If not it tries to retrieve it from the WFS.
+   * 
+   * @param {number} serviceId mongo database id of the service
+   * @param [string] ftName naem of the featuretype
+   * @result [object] 
+   * @return {object} object {options:[], nameSpace} 
+   *   options contains a sorted list of value, label pairs of all featuretype fields found;
+   *      example: options:[{value: 'featuretype field name', label: 'featuretype field name'}, {...},...] 
+   *      This part can be used in a listbox.
+   *   nameSpace contains the namespace of the featuretype. 
+   * 
+   * NB The parseXml function delivers prefixes as part of the tag names.
+   * Therefore an attempt is made to find a common tag prefix.   
    */
   describeFeatureType: function(serviceId, ftName){
     let ft = {options:[]}; 
@@ -531,14 +569,15 @@ Meteor.methods({
 
   /**
    * Retrieve a Layer from WMS Capabilities with a given name.
-   * Will find a layer with a given name,
+   * Tries to find a layer with a given name,
    * by searching recursively in the hierarchy of layers.
    * 
    * @private
-   * @param {object} layer contains Layer object, with possible sub layers
-   * @param {string} layerName name of the Layer
+   * @param {object} layer array containing  Layer objects, each with possible sub layers
+   * @param {string} layerName name of the Layer to be found
    * @return {object} Layer object having the given name
    *         returns 'undefined' when no layer with the given name was found
+   *         Contains all layer tags like Name, Title, Style, etc
    */
   getLayerByName: function(layer, layerName){
     let result;
@@ -631,7 +670,15 @@ Meteor.methods({
   
   
   /**
-   * getPrintFormat from a WMS 
+   * getPrintFormat from a WMS
+   * Finds a list of WMS GetMap Formats.
+   *  
+   * @param {string} host url of the WMS service
+   * @param {string} version of the WMFS service
+   * @return {object} sorted list of value, label pairs containing WMS GetMap Formats; 
+   *   array [value, label]
+   *      example: [{value: 'format', label: 'format'}, {...},...] 
+   *   This result can be used in a listbox.
    */
   getPrintFormat: function(host, version){
     let sortedServoptions;
@@ -672,6 +719,9 @@ Meteor.methods({
   
   /**
    * Get service from collection
+   * 
+   * @param {number} serviceId mongo database id of the service
+   * @result [object] service object, undefined if none found
    */
   getService: function(serviceId){
     const serv = Services.find({_id: serviceId}).fetch();
@@ -679,7 +729,16 @@ Meteor.methods({
   },
   
   /**
-   * remove '?' from service endpoint
+   * Remove trailing '?' from service endpoint
+   * 
+   * @param [string] url of service endpoint 
+   * @result [string] url of service endpoint with '?' removed
+   * 
+   * NB: Not only the '?' will be removed if found, 
+   * but every character after it as well.
+   * This function looks for the first occurrence of '?',
+   * reading from left to right. 
+   * No attempt is being made to check for a valid url.
    */
   removeQmarkFromUrl: function(url){
     const q = url.indexOf('?');
@@ -690,7 +749,14 @@ Meteor.methods({
   },
   
   /**
-   * add '?' to service endpoint
+   * Add '?' to service endpoint
+   * 
+   * @param [string] url of service endpoint 
+   * @result [string] url of service endpoint with '?' as last character
+   * 
+   * NB: if no '?' is found in the endpoint string,
+   * a '?' will be pasted at the end of the string.
+   * No attempt is being made to check for a valid url.
    */
   addQmarkToUrl: function(url){
     if (url.indexOf('?') === -1) {
