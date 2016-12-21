@@ -185,7 +185,12 @@ Router.map(function () {
           const aService = Services.findOne({_id: serviceLayer.service});
           let graphicUrl = serviceLayer.legendGraphic;
           if ((graphicUrl) && (graphicUrl.indexOf('http') === -1)){
-              graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
+            /*
+             * if the url does not contain http(s),
+             * then it only contains the name of an uploaded image.
+             * Change this into a full url.
+             */
+             graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
           }
           if (serviceLayer.featureType){
             let ft;
