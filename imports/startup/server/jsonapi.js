@@ -13,7 +13,7 @@ import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
 /**
- * Helper routines to show the collections as json
+ * Helper routines to retrieve the collections as json
  */
 Router.map(function () {
   this.route('jsonapi-services', {

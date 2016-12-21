@@ -13,6 +13,7 @@ import { Maps } from '/imports/api/collections/maps.js';
 
 /**
  *  REST api for delivering json for Geoide-Viewer
+ *  
  *  NOTE:
  *  Identifiers cannot be represented by Mongo _id's, but must be human readable,
  *  because they are also edited in CRS2.
@@ -175,19 +176,13 @@ Router.map(function () {
     path: '/json-gv-api-servicelayers',
     where: 'server',
     action: function () {
-    	const protocol = 	this.request.headers['x-forwarded-proto'];
-    	const host = this.request.headers.host;
+      const protocol =   this.request.headers['x-forwarded-proto'];
+      const host = this.request.headers.host;
       const cursor = Layers.find(); 
       const gvServiceLayers = {serviceLayers:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           const aService = Services.findOne({_id: serviceLayer.service});
-          let graphicUrl = serviceLayer.legendGraphic;
-          if (graphicUrl){
-	          if(graphicUrl.indexOf('http') === -1){
-	          	graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
-	          } 
-          }       
           if (serviceLayer.featureType){
             let ft;
             if  (_.isArray(serviceLayer.featureType)){
@@ -195,6 +190,10 @@ Router.map(function () {
             } else {
               ft = serviceLayer.featureType;
             }
+            let graphicUrl = serviceLayer.legendGraphic;
+            if(graphicUrl.indexOf('http') === -1){
+              graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
+            } 
             gvServiceLayers.serviceLayers.push(
                 {
                   id: layer.name + '.' + serviceLayer.nameInService, 
@@ -268,9 +267,8 @@ Router.map(function () {
 
   /**
    * Maps
-   */
-  /*
    * groups and layers sorted in reverse order as required by Geoide-Viewer
+   * 
    */
 Router.map(function () {
   this.route('json-gv-api-maps', {

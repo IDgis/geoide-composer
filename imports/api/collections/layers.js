@@ -19,7 +19,10 @@ import { Services } from '/imports/api/collections/services.js';
  * Featuretype is a featuretype from a WFS [optional]
  * SearchTemplate is a specific field of a featuretype [optional]
  * 
- * This definition depends on the use of AutoForm  
+ * This definition depends on the use of AutoForm.
+ * Heavy use is being made of AutoForm reactivity in getFieldValue().
+ * The number of nested serviceLayer and searchTemplates
+ * has been limited because the UI will get very unresponsive otherwise.   
  */
 
 /*
@@ -52,21 +55,21 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
       options: function(){
-        var serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
-        var service = AutoForm.getFieldValue(serviceField);
-        var ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
-        var ftName = AutoForm.getFieldValue(ftField);
+        const serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
+        const service = AutoForm.getFieldValue(serviceField);
+        const ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
+        const ftName = AutoForm.getFieldValue(ftField);
         /*
          * Fill the attribute_localname options list
          */
-        var servoptions = [];
+        let servoptions = [];
   
         if (service && ftName){
           /*
            * Retrieve the featuretype fields from the service
            * and put them in the options
            */
-          var featuretypeFields = ReactiveMethod.call(
+          const featuretypeFields = ReactiveMethod.call(
               'describeFeatureType',
               service,
               ftName
@@ -93,21 +96,21 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
       value: function(){
-        var serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
-        var service = AutoForm.getFieldValue(serviceField);
-        var ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
-        var ftName = AutoForm.getFieldValue(ftField);
+        const serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
+        const service = AutoForm.getFieldValue(serviceField);
+        const ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
+        const ftName = AutoForm.getFieldValue(ftField);
         /*
          * Fill the attribute_localname options list
          */
-        var namespace = '';
+        let namespace = '';
   
         if (service && ftName){
           /*
            * Retrieve the featuretype fields from the service
            * and put them in the options
            */
-          var featuretypeFields = ReactiveMethod.call(
+          const featuretypeFields = ReactiveMethod.call(
               'describeFeatureType',
               service,
               ftName
@@ -129,7 +132,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       },
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); }
     }
-  }		
+  }
 });
 
 /*
@@ -150,15 +153,15 @@ SimpleSchema.featureType = new SimpleSchema ({
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.label'); }
     }
   }, 
-	//service_id WFS
-	service: {
-		type: String,
-		label: function(){ return i18n('collections.layers.serviceLayer.featureType.service.label'); },
+  //service_id WFS
+  service: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.service.label'); },
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type:'WFS'},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
-          var servoptions = [];
+          const serv = Services.find({type:'WFS'},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
+          const servoptions = [];
           serv.forEach(function(entry) {
             servoptions.push({label:entry.name, value:entry._id});
           });
@@ -167,21 +170,21 @@ SimpleSchema.featureType = new SimpleSchema ({
         firstOption: function(){ return i18n('collections.firstOption'); },
         'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.service'); }
     }
-	},
-	
-	nameInWfsService: {
-		type: String,
-		label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
+  },
+  
+  nameInWfsService: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.nameInService.label'); },
     autoform: {
       options: function(){
-        var service = AutoForm.getFieldValue(this.name.replace('.nameInWfsService', '.service'));
+        const service = AutoForm.getFieldValue(this.name.replace('.nameInWfsService', '.service'));
         /*
          * Fill the nameInWfsService options list
          */
-        var servoptions = [];
+        let servoptions = [];
 
         if (service){
-          var serv = Services.findOne({_id:service});
+          const serv = Services.findOne({_id:service});
           /*
            * Retrieve the featuretypes from the service
            * and put them in the options
@@ -197,10 +200,10 @@ SimpleSchema.featureType = new SimpleSchema ({
       firstOption: function(){ return i18n('collections.firstOption'); },
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.nameInWfsService'); }
     }
-	},
-	searchTemplates: {
-    	type: [SimpleSchema.searchTemplate],
-    	label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
+  },
+  searchTemplates: {
+      type: [SimpleSchema.searchTemplate],
+      label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
       optional: true,
       minCount: 0,
 //      maxCount: 3,
@@ -219,7 +222,7 @@ SimpleSchema.featureType = new SimpleSchema ({
         },
         'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); }
       }
-	}   
+  }   
 });
 
 /*
@@ -249,8 +252,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     autoform: {
       options: 
         function(){
-          var serv = Services.find({type: {$in: ['WMS','TMS'] }},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
-          var servoptions = [];
+          const serv = Services.find({type: {$in: ['WMS','TMS'] }},{fields:{name:1,_id:1}, sort:[['name', 'asc']]}).fetch();
+          const servoptions = [];
           serv.forEach(function(entry) {
             servoptions.push({label:entry.name, value:entry._id});
           });
@@ -266,18 +269,18 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     label: function(){ return i18n('collections.layers.serviceLayer.nameInService.label'); },
     autoform: {
       options: function(){
-        var service = AutoForm.getFieldValue(this.name.replace('.nameInService', '.service'));
+        const service = AutoForm.getFieldValue(this.name.replace('.nameInService', '.service'));
         /*
          * Fill the nameInService options list
          */
-        var servoptions = [];
+        let servoptions = [];
         if (service){
-          var serv = Services.findOne({_id:service});
+          const serv = Services.findOne({_id:service});
           /*
            * Retrieve the layers from the service
            * and put them in the options
            */
-          var methodName = '';
+          let methodName = '';
           switch(serv.type) {
             case 'WMS':
                 methodName = 'getWmsLayers';
@@ -301,7 +304,10 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); }
     }
   }, 
-  
+  /*
+   * This input uses a special defined type of input,
+   * defined in ui/legendGraphic/legendGraph.js
+   */
   legendGraphic: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.legendGraphic.label'); },

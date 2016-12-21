@@ -1,3 +1,10 @@
+/*
+ * Geoide Composer, configuration tool for Geoide Viewer 
+ * Copyright (C) 2016 IDgis
+ * See license: 
+ * https://github.com/IDgis/geoide-admin/blob/master/LICENSE
+*/
+
 import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Router } from 'meteor/iron:router';
@@ -15,90 +22,90 @@ Template.layer.helpers({
   /**
    * Retrieve a list of services options for a selectbox
    */
-	services: function(){
-		var serv = Services.find({},{fields:{name:1,_id:1}}).fetch();
-		var servoptions = [];
-		serv.forEach(function(entry) {
-			servoptions.push({label:entry.name, value:entry._id});
-		});
-		return servoptions;
-	},
-	/**
-	 * Find a specific service
-	 */
+  services: function(){
+    const serv = Services.find({},{fields:{name:1,_id:1}}).fetch();
+    const servoptions = [];
+    serv.forEach(function(entry) {
+      servoptions.push({label:entry.name, value:entry._id});
+    });
+    return servoptions;
+  },
+  /**
+   * Find a specific service
+   */
   service: function(thisid){
-    var serv = Services.find({_id: thisid}).fetch();
+    const serv = Services.find({_id: thisid}).fetch();
     return serv;
   },
   
-	  /**
-	   * Layers collection
-	   */
-	  layers: function(){
-	    return Layers;
-	  },
-	  /**
-	   * Layers schema
-	   */
-	  layerSchema: function(){
-	    return LayerSchema;
-	  },
-	  formType: function () {
-	    if (Session.get('selectedLayerId')) {
-	        return 'update';
-	     } else {
-	        return 'insert';
-	     }
-	  },
-	  layerDoc: function () {
-	    if (Session.get('selectedLayerId')) {
-	      return Layers.findOne({_id: Session.get('selectedLayerId')});
-	     } else {
-	        return null ;
-	     }
-	  },
-	  layerTypes: function () {
-	    return[{label: 'default', value: 'default'},
-	           {label: 'sql', value: 'cosurvey-sql'}];
-	  },
-	
-	  adminLoggedIn: function(){
-      var admin = false; 
+    /**
+     * Layers collection
+     */
+    layers: function(){
+      return Layers;
+    },
+    /**
+     * Layers schema
+     */
+    layerSchema: function(){
+      return LayerSchema;
+    },
+    formType: function () {
+      if (Session.get('selectedLayerId')) {
+          return 'update';
+       } else {
+          return 'insert';
+       }
+    },
+    layerDoc: function () {
+      if (Session.get('selectedLayerId')) {
+        return Layers.findOne({_id: Session.get('selectedLayerId')});
+       } else {
+          return null ;
+       }
+    },
+    layerTypes: function () {
+      return[{label: 'default', value: 'default'},
+             {label: 'sql', value: 'cosurvey-sql'}];
+    },
+  
+    adminLoggedIn: function(){
+      let admin = false; 
       if (Meteor.user()){
         // a user is logged in
-        var name = Meteor.user().username;
+        const name = Meteor.user().username;
         admin = _.isEqual(name, 'idgis-admin');
       }
       return admin;
-	  },
-	  buttonSubmitLabel: function(){
-	    return i18n ('button.save');
-	  }
+    },
+    buttonSubmitLabel: function(){
+      return i18n ('button.save');
+    }
 });
 
 /*
  * set the mouse cursor to a waiting cursor
  */
-var setCursorProgress = function() {
+const setCursorProgress = function() {
   $('body').css('cursor', 'wait');
 };
 
 /*
  * set the mouse cursor to default (arrow) cursor
  */
-var setCursorNormal = function() {
+const setCursorNormal = function() {
   $('body').css('cursor', 'default');
 };
 
-var fillLayerSelect = function() {
-  var layers = Layers.find({}, {
+const fillLayerSelect = function() {
+  const layers = Layers.find({}, {
     fields : {
       name : 1,
       _id : 1
     }
   }).fetch();
   layers.forEach(function(entry) {
-    var layerOption = '<option value=' + entry._id + '>' + entry.name
+    const layerOption = '<option value=' + entry._id + '>' + entry.name
         + '</option>';
     $('#layerselect').append(layerOption);
   });
@@ -125,25 +132,25 @@ Template.layer.events({
     setCursorProgress();
     // get name of  select box
     // chrome
-    var srcName = e.target.name;
+    let srcName = e.target.name;
     if (!srcName){
       // FF, IE
       srcName = e.target.parentElement.name;
     }
-    var lyrName = e.target.value;
+    const lyrName = e.target.value;
 
     // find service id from service selectbox
-    var srvName = srcName.replace('nameInService', 'service');
-    var $srvSelect = $('select[name="' + srvName + '"] ');
-    var serviceId = $srvSelect[0].value;
+    const srvName = srcName.replace('nameInService', 'service');
+    const $srvSelect = $('select[name="' + srvName + '"] ');
+    const serviceId = $srvSelect[0].value;
 
     // find lg field 
-    var lgName = srcName.replace('nameInService', 'legendGraphic');
-    var $lg = $('input[name="' + lgName + '"] ');
+    const lgName = srcName.replace('nameInService', 'legendGraphic');
+    const $lg = $('input[name="' + lgName + '"] ');
     
     // find lg image field 
-    var lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
-    var $lgImg = $('img[name="' + lgImgName + '"] ');
+    const lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
+    const $lgImg = $('img[name="' + lgImgName + '"] ');
     
     // retrieve url for GetLegendGraphic
     // and put it in hidden field and image
@@ -185,7 +192,7 @@ Template.layer.onRendered(function(){
    * if image is empty, fill it with initial png
    * (initially the src of the image is the url of 'edit-layer' route)
    */
-  var legendGraphicImage = this.$("img[name$='legendGraphic.img']");
+  const legendGraphicImage = this.$("img[name$='legendGraphic.img']");
   if ((legendGraphicImage[0].src) && 
       (_.isEmpty(legendGraphicImage[0].src) || 
         (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0))){

@@ -11,7 +11,11 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 /**
  * Definition of Service
  * 
- * A service contains a service url, a type of service and a version.
+ * A service contains 
+ *   service url, 
+ *   type of service,
+ *   version,
+ *   preferred printFormat.
  * 
  * This definition depends on the use of AutoForm  
  */
@@ -35,34 +39,34 @@ export const ServiceSchema = new SimpleSchema({
     }
   },
   endpoint: {
-  	type: String,
-  	label: function(){ return i18n('collections.services.endpoint.label'); },
+    type: String,
+    label: function(){ return i18n('collections.services.endpoint.label'); },
     regEx: /^((http:|https:)\/\/[a-zA-Z0-9\.-]{2,}(:[0-9]{2,5})?(\/)(([a-zA-Z0-9_\-@:]+)(\/|\.)?){1,}([a-zA-Z0-9_\-@:]+)([\?]{0,1}))$/,
     autoform: {
       'title': function(){ return i18n ('tooltips.services.autoform.fields.endpoint'); }
     }
   },
   type: {
-  	type: String,
-  	label: function(){ return i18n('collections.services.type.label'); },
-  	allowedValues: ['WMS', 'WFS', 'TMS'],
+    type: String,
+    label: function(){ return i18n('collections.services.type.label'); },
+    allowedValues: ['WMS', 'WFS', 'TMS'],
     autoform: {
       'title': function(){ return i18n ('tooltips.services.autoform.fields.type'); }
     }
-	},
-	version: {
+  },
+  version: {
     type: String,
     label: function(){ return i18n('collections.services.version.label'); },
     allowedValues: function() {
-			if (this.type === 'WMS') {
-				return ['1.1.1','1.3.0'];
-			}
-			if (this.type === 'WFS') {
-				return ['1.0.0','1.1.0','2.0.0'];
-			} 
-			if (this.type === 'TMS') {
-				return ['1.0.0'];
-			}
+      if (this.type === 'WMS') {
+        return ['1.1.1','1.3.0'];
+      }
+      if (this.type === 'WFS') {
+        return ['1.0.0','1.1.0','2.0.0'];
+      } 
+      if (this.type === 'TMS') {
+        return ['1.0.0'];
+      }
     },
     // this does not seem to work reactively
     'defaultValue': function() {
@@ -81,32 +85,29 @@ export const ServiceSchema = new SimpleSchema({
       // this is added, because the default value does not work 
       // after a value has already been selected
       'value': function() {
-        var currentVersion = AutoForm.getFieldValue('version', 'serviceform');
-        var currentType = AutoForm.getFieldValue('type', 'serviceform');
+        const currentVersion = AutoForm.getFieldValue('version', 'serviceform');
+        const currentType = AutoForm.getFieldValue('type', 'serviceform');
+        let newVersionValue = currentVersion;
         if (currentType === 'WMS') {
           // 1.1.1. is default
-          if (currentVersion === '1.3.0'){
-            return '1.3.0';
-          } else {
-            return '1.1.1';
+          if (currentVersion !== '1.3.0'){
+            newVersionValue = '1.1.1';
           }
         } else if (currentType === 'WFS') {
           // 1.1.0. is default
-          if (currentVersion === '1.0.0' || currentVersion === '2.0.0'){
-            return currentVersion;
-          } else {
-            return '1.1.0';
+          if (currentVersion !== '1.0.0' && currentVersion !== '2.0.0'){
+            newVersionValue = '1.1.0';
           }
         } else if (currentType === 'TMS') {
-          return '1.0.0';
+          newVersionValue = '1.0.0';
         } else {
           // should not get here
-          return currentVersion;
         }
+        return newVersionValue;
       },
       // this seems to work reactively
       'defaultValue': function() {
-        var currentType = AutoForm.getFieldValue('type', 'serviceform');
+        const currentType = AutoForm.getFieldValue('type', 'serviceform');
         if (currentType === 'WMS') {
           return '1.1.1';
         } else if (currentType === 'WFS') {
@@ -119,20 +120,20 @@ export const ServiceSchema = new SimpleSchema({
         }
       }
     }
-	},
-	
+  },
+  
   printFormat: {
     type: String,
     label: function(){ return i18n('collections.services.printFormat.label'); },
     optional: true,
     autoform: {
       options: function(){
-        var host = AutoForm.getFieldValue(this.name.replace('printFormat', 'endpoint'));
-        var version = AutoForm.getFieldValue(this.name.replace('printFormat', 'version'));
+        const host = AutoForm.getFieldValue(this.name.replace('printFormat', 'endpoint'));
+        const version = AutoForm.getFieldValue(this.name.replace('printFormat', 'version'));
         /*
          * Fill the printFormat options list
          */
-        var printFormatOptions = [];
+        let printFormatOptions = [];
         if (host){
           printFormatOptions = ReactiveMethod.call(
               'getPrintFormat',
@@ -156,13 +157,13 @@ Services.attachSchema(ServiceSchema);
  * Manipulation of collection only allowed when user is logged in
  */
 Services.allow({
-	  insert: function(userId) {
-	    return !! userId; 
-	  },
-	  update: function(userId) {
-	    return !! userId; 
-	  },
-	  remove: function(userId) {
-	    return !! userId; 
-	  }
+    insert: function(userId) {
+      return !! userId; 
+    },
+    update: function(userId) {
+      return !! userId; 
+    },
+    remove: function(userId) {
+      return !! userId; 
+    }
 });

@@ -14,23 +14,23 @@ import { Maps } from '/imports/api/collections/maps.js';
 import './maps.html';
 
 Template.maps.helpers({
-	maps: function(){
-	    return Maps.find({},{sort:[['name', 'asc']]});
-	}
+  maps: function(){
+      return Maps.find({},{sort:[['name', 'asc']]});
+  }
 });
 
 Template.maps.events ({
   'click .edit-map': function () { 
-	  Session.set('selectedMapId', this._id);
-	  Router.go('map.edit', {_id: this._id});
+    Session.set('selectedMapId', this._id);
+    Router.go('map.edit', {_id: this._id});
   },
   'click .insert-map': function () {
-	  Session.set('selectedMapId', null);
-	  Router.go('map.insert');
+    Session.set('selectedMapId', null);
+    Router.go('map.insert');
   },
   'click .delete-map': function() {
     // zie atmosphere package matdutour:popup-confirm
-    var mapId = this._id;
+    const mapId = this._id;
     new Confirmation({
       message: function(){ return i18n('collections.confirmation.delete.message.maps'); },
       title: function(){ return i18n('collections.confirmation.delete.title'); },

@@ -31,13 +31,18 @@ Meteor.startup(function() {
 
 Meteor.methods({
   /**
-   * settings: version   
+   * settings: version
+   * !!!!!!!!!!!!!!!!!!!!!
+   * UPDATE VERSION STRING 
+   * BEFORE EVERY RELEASE
+   * !!!!!!!!!!!!!!!!!!!!!
    */
   getVersion : function(){
-    if (Meteor.settings){
+    if ((Meteor.settings) && (Meteor.settings.version)){
       return Meteor.settings.version;
     } else {
-      return null;
+      // update before release
+      return '1.0.3-SNAPSHOT';
     }
   },
 

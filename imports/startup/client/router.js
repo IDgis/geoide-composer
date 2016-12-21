@@ -35,8 +35,9 @@ Router.configure({
 /**
  * Main entry: home page
  * Note: 
- *   The name of the home page template name, is stored in the i18n file.
- *   The home page html contains all templates for all supported languages.
+ *   The name of the home page template name in ui/i18n/home/home.html,
+ *   is stored in the i18n file i18n/nl.js.
+ *   The home page html must contain all templates for all supported languages.
  */
 Router.route('/', function () {
   this.render(i18n ('main.home.template'));
@@ -58,7 +59,7 @@ Router.route('/service/insert', function () {
 });
 
 Router.route('/service/:_id', function () {
-    var service = Services.findOne({_id: this.params._id});
+    const service = Services.findOne({_id: this.params._id});
     this.render('service', {data: service});
 }, {
     name: 'service.edit'
@@ -79,7 +80,7 @@ Router.route('/map/insert', function () {
 });
 
 Router.route('/map/:_id', function () {
-    var map = Maps.findOne({_id: this.params._id});
+    const map = Maps.findOne({_id: this.params._id});
     this.render('map', {data: map});
 }, {
     name: 'map.edit'
@@ -99,7 +100,7 @@ Router.route('/layer/insert', function () {
 });
 
 Router.route('/layer/:_id', function () {
-    var layer = Layers.findOne({_id: this.params._id});
+    const layer = Layers.findOne({_id: this.params._id});
     this.render('layer', {data: layer});
 }, {
     name: 'layer.edit'

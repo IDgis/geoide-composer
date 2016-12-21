@@ -22,7 +22,10 @@ Meteor.startup(function() {
   Meteor.subscribe('maps');
   Meteor.subscribe('allUsers');
   Meteor.subscribe('userData');
-  
+
+  /**
+   * Accounts configuration
+   */
   Accounts.ui.config({
     passwordSignupFields: 'USERNAME_ONLY'
   });

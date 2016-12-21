@@ -43,13 +43,11 @@ Meteor.setInterval(function(){
 
 Meteor.methods({
   /**
-   * Get result from a server as image. 
+   * Get image from a url. 
    * host: url of host
-   *   example:
-   *   'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' 
-   * params : array of key/value pairs
-   *   example:  
-   *   {request: 'GetCapabilities', service:'WMS'} 
+   * 
+   * @param {string} url that will result in an image
+   * @return {object} image in jpg, png or gif format.
    */ 
   getImage : function (host){
     try {
@@ -68,13 +66,14 @@ Meteor.methods({
     }
   },
   /**
-   * Get result from a server as xml. 
-   * host: url of host
-   *   example:
-   *   'http://acc-services.inspire-provincies.nl/ProtectedSites/services/view_PS' 
-   * params : array of key/value pairs
+   * Get result from a server as xml.
+   *  
+   * @param {string} host url of the server
+   * @param {array} params array of key/value pairs
    *   example:  
-   *   {request: 'GetCapabilities', service:'WMS'} 
+   *   {request: 'GetCapabilities', service:'WMS'}
+   * @return {string} xml as returned by the server
+   *     or  {object} error that was thrown
    */ 
   getXml : function (host, params){
     host = Meteor.call('addQmarkToUrl', host);
@@ -105,8 +104,10 @@ Meteor.methods({
    *  There is one option (xmlns=true) that saves the tagname 
    *  without prefix in the js object. 
    *  This means code restructuring.
-   *  But the result will be cleaner and robust.  
+   *  But the result will be cleaner and more robust.  
    * 
+   * @param {string} xml that will be parsed into a Javascript object
+   * @return {object} Javascript object which members will reflect content of xml
    */
   parseXml : function(xml){
     if (xml){
@@ -117,7 +118,10 @@ Meteor.methods({
   },
 
   /**
-   * Find if the layer with layerId is use in a map
+   * Find if the layer with layerId is use in a map.
+   * 
+   * @param {number} layerId mongo database id of the layer
+   * @return {boolean} true if this layer is used in any map, false otherwise 
    */
   isLayerInMap: function(layerId){
     const cursor = Maps.find();
@@ -148,7 +152,10 @@ Meteor.methods({
   },
 
   /**
-   * Find if the service with serviceId is use in a layer
+   * Find if the service with serviceId is use in a layer.
+   * 
+   * @param {number} serviceId mongo database id of the service
+   * @return {boolean} true if this service is used in any layer, false otherwise 
    */
   isServiceInLayer: function(serviceId){
     let result = false;
@@ -158,11 +165,9 @@ Meteor.methods({
         if (serviceLayer.service === serviceId){
           result = true;
         }
-        if (serviceLayer.featureType){
-          if (serviceLayer.featureType[0]){
-            if (serviceLayer.featureType[0].service === serviceId){
-              result = true;
-            }
+        if (serviceLayer.featureType && serviceLayer.featureType[0]){
+          if (serviceLayer.featureType[0].service === serviceId){
+            result = true;
           }
         }
       });
@@ -171,7 +176,18 @@ Meteor.methods({
   },
   
   /**
-   * Get layers from a WMS
+   * Get layers from a WMS as a listbox options list.
+   * Checks if a list of layers already exist in cache.
+   * If not it tries to retrieve it from the WMS.
+   * 
+   * @param {string} host url of the WMS service
+   * @param {string} version of the service
+   * @return {object} sorted list of name, label pairs of all WMS layers found; 
+   *   array [value, label, [disabled]]
+   *   The label reflects the hierarchy of the WMS layers
+   *      example: [{value: 'layerName', label: 'layerTitle'}, {...},...] 
+   *   This result can be used in a listbox.
+   *   Layers that have no name (only title) will be flagged as disabled
    */
   getWmsLayers: function(host, version){
     let sortedServoptions = [];
@@ -184,7 +200,6 @@ Meteor.methods({
       if (xmlResponse.content){
         const parseResponse = Meteor.call('parseXml', xmlResponse.content);
         let servoptions = [];
-    
         let capLayer;
         switch(version) {
         case '1.3.0':
@@ -199,7 +214,6 @@ Meteor.methods({
           capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
           break;
         }
-      
         _.each(capLayer,function(mainLayer){
           let level = 0;
           if ((mainLayer.$) && (mainLayer.$.queryable === '1')){
@@ -233,6 +247,22 @@ Meteor.methods({
   
   },
   
+  /**
+   * Search a hierarchy of layers and put their name and title 
+   * into value, label pairs for use in a listbox.
+   * 
+   * @private
+   * @param {object} mainLayer layer object
+   * @param {object} servoptions listbox options to append to
+   * @param {number} level current level of mainLayer 
+   * @return {object} sorted list of value, label pairs of all WMS layers found; 
+   *   The label will be prefixed to show hierarchy of the WMS layers:
+   *      _main-layer
+   *      ___level-1a-layer
+   *      ___level-1b-layer
+   *      ______level-2-layer
+   *   Layers that have no name (only title) will be flagged as disabled
+   */
   getOptionsFromLayers: function(mainLayer, servoptions, level){
     const prefixChars = '______________..';
     if (level < 0) {
@@ -244,14 +274,12 @@ Meteor.methods({
     const prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
-        if ((subLayer.$) && (subLayer.$.queryable === '1')){
-          if (subLayer.Title){
-            const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
-            if (subLayer.Name){
-              servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
-            } else {
-              servoptions.push({value:'', label:titleWithPrefix, disabled:true});
-            }
+        if ((subLayer.$) && (subLayer.$.queryable === '1') && (subLayer.Title)){
+          const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
+          if (subLayer.Name){
+            servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
+          } else {
+            servoptions.push({value:'', label:titleWithPrefix, disabled:true});
           }
         }
         servoptions = Meteor.call('getOptionsFromLayers', subLayer, servoptions, (level + 2));
@@ -259,8 +287,23 @@ Meteor.methods({
     }
     return servoptions;
   },
+  
   /**
-   * Get layers from a TMS
+   * Get layers from a TMS as a listbox options list.
+   * Checks if a list of layers already exist in cache.
+   * If not it tries to retrieve it from the TMS.
+   * 
+   * @param {string} host url of the TMS service
+   * @param {string} version of the TMS service
+   * @return {object} sorted list of names of all TMS layers found; 
+   *   array [value, label, [disabled]]
+   *      example: [{value: 'layerName', label: 'layerName'}, {...},...] 
+   *   This result can be used in a listbox.
+   *   When no layername can be found the listbox entry is flagged as disabled.
+   *   When an error occurs, the error value is put in the label of the options list.
+   *   
+   * NB this implementation delivers only one layerName.
+   * This layerName is retrieved from the title of the TileMap tag. 
    */
   getTmsLayers: function(host, version){
     let servoptions = [];
@@ -272,7 +315,6 @@ Meteor.methods({
       const xmlResponse = Meteor.call('getXml', host, {});
       if (xmlResponse.content){
         const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        
         //version 1.0.0
         /**
          * get the title from the TileMap and use this as layername and title
@@ -298,7 +340,21 @@ Meteor.methods({
   },
   
   /**
-   * Get feature types from a WFS
+   * Get featuretypes from a WFS as a listbox options list.
+   * Checks if a list of featuretypes already exists in cache.
+   * If not it tries to retrieve it from the WFS.
+   * 
+   * @param {string} host url of the WFS service
+   * @param {string} version of the WFS service
+   * @return {object} sorted list of value, label pairs of all WFS featuretypes  found; 
+   *   array [value, label]
+   *   The label reflects the hierarchy of the WMS layers
+   *      example: [{value: 'feature type name', label: 'feature type title'}, {...},...] 
+   *   
+   *   This result can be used in a listbox.
+   *   
+   * NB The parseXml function delivers prefixes as part of the tag names.
+   * Therefore an attempt is made to find a common tag prefix.   
    */
   getWfsFeatureTypes: function(host, version){
     let sortedServoptions;
@@ -346,8 +402,22 @@ Meteor.methods({
   },
   
   /**
-   * DescribeFeatureType
-   * Retrieve fields and namespace from a featuretype
+   * Retrieve fields and namespace from a featuretype.
+   * Uses DescribeFeaturetype request on a WFS.
+   * Checks if a list of featuretype fields already exists in cache.
+   * If not it tries to retrieve it from the WFS.
+   * 
+   * @param {number} serviceId mongo database id of the service
+   * @param [string] ftName naem of the featuretype
+   * @result [object] 
+   * @return {object} object {options:[], nameSpace} 
+   *   options contains a sorted list of value, label pairs of all featuretype fields found;
+   *      example: options:[{value: 'featuretype field name', label: 'featuretype field name'}, {...},...] 
+   *      This part can be used in a listbox.
+   *   nameSpace contains the namespace of the featuretype. 
+   * 
+   * NB The parseXml function delivers prefixes as part of the tag names.
+   * Therefore an attempt is made to find a common tag prefix.   
    */
   describeFeatureType: function(serviceId, ftName){
     let ft = {options:[]}; 
@@ -360,188 +430,168 @@ Meteor.methods({
       if (serv[0]){
         const host = serv[0].endpoint;
         const version = serv[0].version;
-        if (ftName){
-          const xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-          const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-          // find some common tag namespace prefixes
-          let namePrefix = '';
-          if (parseResponse['xsd:schema']){
-            namePrefix = 'xsd:';
-          } else if (parseResponse['xs:schema']){
-            namePrefix = 'xs:';
-          } else if (parseResponse['wfs:schema']){
-            namePrefix = 'wfs:';
-          } else {
-            namePrefix = '';
-          }
-          _.each(parseResponse,function(schema){
-            ft.targetNamespace = schema.$.targetNamespace;
-            _.each(schema,function(nextTag){
-              let complexType = null;
-              if (nextTag[0]){
-                // look for nextTag == element or complexType
-                if (nextTag[0][namePrefix+'complexType']){
-                    complexType = nextTag[0][namePrefix+'complexType'];
-                } else if (nextTag[0][namePrefix+'complexContent']){
-                        complexType = nextTag;
-                } else {
-                  // nothing to do
-                }
+        const xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
+        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+        // find some common tag namespace prefixes
+        let namePrefix = '';
+        if (parseResponse['xsd:schema']){
+          namePrefix = 'xsd:';
+        } else if (parseResponse['xs:schema']){
+          namePrefix = 'xs:';
+        } else if (parseResponse['wfs:schema']){
+          namePrefix = 'wfs:';
+        } else {
+          namePrefix = '';
+        }
+        _.each(parseResponse,function(schema){
+          ft.targetNamespace = schema.$.targetNamespace;
+          _.each(schema,function(nextTag){
+            let complexType = null;
+            if (nextTag[0]){
+              // look for nextTag == element or complexType
+              if (nextTag[0][namePrefix+'complexType']){
+                  complexType = nextTag[0][namePrefix+'complexType'];
+              } else if (nextTag[0][namePrefix+'complexContent']){
+                      complexType = nextTag;
+              } else {
+                // nothing to do
               }
-              if (complexType){
-                if (complexType[0]){
-                  if (complexType[0][namePrefix+'complexContent']){
-                    _.each(complexType[0],function(complexContent){     
-                      if (complexContent[0]){
-                        if (complexContent[0][namePrefix+'extension']){
-                          _.each(complexContent[0],function(extension){     
-                            if (extension[0]){
-                              if (extension[0][namePrefix+'sequence']){
-                                _.each(extension[0],function(sequence){     
-                                  if (sequence[0]){
-                                    if (sequence[0][namePrefix+'element']){
-                                      _.each(sequence[0][namePrefix+'element'],function(ftField){     
-                                        ft.options.push({value:ftField.$.name, label:ftField.$.name});
-                                      });
-                                    }
-                                  }
-                                });
-                              }
-                            }
+            }
+            if ( (complexType) && (complexType[0]) && (complexType[0][namePrefix+'complexContent'])){
+              _.each(complexType[0],function(complexContent){     
+                if ((complexContent[0]) && (complexContent[0][namePrefix+'extension'])){
+                  _.each(complexContent[0],function(extension){     
+                    if ((extension[0]) && (extension[0][namePrefix+'sequence'])){
+                      _.each(extension[0],function(sequence){     
+                        if ((sequence[0]) && (sequence[0][namePrefix+'element'])){
+                          _.each(sequence[0][namePrefix+'element'],function(ftField){     
+                            ft.options.push({value:ftField.$.name, label:ftField.$.name});
                           });
                         }
-                      }
-                    });
-                  }
+                      });
+                    }
+                  });
                 }
-              }
-            });
+              });
+            }
           });
-          ft.options = _.sortBy(ft.options, 'title');
-          DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
-        }
+        });
+        ft.options = _.sortBy(ft.options, 'title');
+        DESCRIBEFEATURETYPES.set(DESCRIBEFEATURETYPESKEY, ft);
       }
     }
     return ft;
   },
   
   /**
-   * GetLegendGraphic from a WMS LAYER
+   * Get a legendGraphic url of a WMS layer.
+   * Checks if a url already exists in cache.
+   * If not it tries to retrieve the url, belonging to the given layer, from the WMS capabilities.
+   * If no specific layer url is found, a general url is assembled using the specification 
+   * of the GetLegendGraphic request. 
+   * The url found is saved in cache.
+   * 
+   * @param {number} serviceId The database id of the service
+   * @param {string} layerName The name of the layer
+   * @return {string} url that results in a legendgraphic image for the layer. 
+   *         Can be undefined if no url was found in the service capabilities.
    */
-  getLegendGraphicUrl: function(serviceId, layer){
-    const LEGENDGRAPHICURLKEY = serviceId + '-' + layer;
+  getLegendGraphicUrl: function(serviceId, layerName){
+    const LEGENDGRAPHICURLKEY = serviceId + '-' + layerName;
     let result = LEGENDGRAPHICURL.get(LEGENDGRAPHICURLKEY);
     if (!result){
-      const serv = Services.find({_id: serviceId}).fetch();
-      if (serv[0]){
-        const host = serv[0].endpoint;
-        let url = host;
-        const version = serv[0].version;
-        const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        const capKey = Object.keys(parseResponse);
-        const wmsCapObject = parseResponse[capKey];
-        if ((wmsCapObject) && (wmsCapObject.Capability)) {
-          const capObject = wmsCapObject.Capability[0];      
-          const layersObject = capObject.Layer;
-          const capLayer = Meteor.call('getLayerByName',layersObject, layer);
-          if ((capLayer) && (capLayer.Style)) {
-  	        // Kies de default style of de laatste in de lijst als er geen default is
-  	        const styleDefaultName = 'default';
-  	        let styleDefaultFound = false;
-            _.each(capLayer.Style,function(style){
-              if (!styleDefaultFound){
-      	    	  if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
-      	    	    result = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
-      	    	  }
-      	    	  if (style.Name[0] === styleDefaultName){
-      	    	    styleDefaultFound = true;
-      	    	  }
-              }
-            });
-          }
-          if (!result){
-            /*
-             *  there is no legendgraphic url in the layer itself, use the general one
-             */ 
-            const capRequest = capObject.Request;
-            if (capRequest){
-              let getLegendGraphic = capRequest[0].GetLegendGraphic;
-              if (!getLegendGraphic){
-                getLegendGraphic = capRequest[0]['sld:GetLegendGraphic'];
-              }
-              if (getLegendGraphic){
-                let selectedFormat;
-                let pngFormat, jpgFormat, gifFormat;
-                const prefFormat = serv[0].printFormat;
-                const formats = getLegendGraphic[0].Format; 
-                _.each(formats,function(format){
-                  if (format === prefFormat){
-                    selectedFormat = format;            
-                  } 
-                  if (format === 'image/png'){
-                    pngFormat = format;            
-                  } 
-                  if (format === 'image/jpg' || format === 'image/jpeg'){
-                    jpgFormat = format;
-                  }
-                  if (format === 'image/gif'){
-                    gifFormat = format;
-                  }
-                });
-                // select a preferred format (png, then jpg, then gif)
-                if (!selectedFormat){
-                  if (pngFormat){
-                    selectedFormat = pngFormat;
-                  } else if (jpgFormat){
-                    selectedFormat = jpgFormat;
-                  } else if (gifFormat){
-                    selectedFormat = gifFormat;
-                  } else {
-                    // no preferable formats found: selectedFormat = undefined
-                  }
-                }
-                /* looking for a base url (DCPType) of the GetLegendGraphic request has no use
-                 * because in the capabilities it can be listed as 'http://localhost:8081/...'
-                 */ 
-                if (selectedFormat){
-                  if (url.lastIndexOf('?') < 0){
-                    url = url + '?';
-                  }
-                  url = url + 'request=GetLegendGraphic&service=WMS'
-                    + '&layer=' + layer 
-                    + '&format=' + selectedFormat
-                    // tbv Mapserver:
-                    // (wordt genegeerd door deegree en geoserver)
-                    + '&version=' + version
-                    + '&sld_version=1.1.0';          
-                } else {
-                  url = null;
-                }
-                result = url;
-              }
-            }
-          }
-        }
-      }
+      result = Meteor.call('findLegendGraphicUrl', serviceId, layerName);
       LEGENDGRAPHICURL.set(LEGENDGRAPHICURLKEY, result);
     }
     return result;
   },
   
-  
-  getLayerByName: function(layers, name){
-    let result = null;
-    for(let i = 0; i < layers.length; i++){
-      if (layers[i].Layer) {
-        result = Meteor.call('getLayerByName', layers[i].Layer, name);
-      } else if(layers[i].Name) {
-        if (layers[i].Name[0] === name ) {
-          result =  layers[i];
-        }	
+  /**
+   * Get a legendGraphic url of a WMS layer
+   * It first tries to retrieve the url defined within the layer itself.
+   * If no specific layer url is found, a general url is assembled using the specification 
+   * of the GetLegendGraphic request.
+   * 
+   * @private
+   * @param {number} serviceId The database id of the service
+   * @param {string} layerName The name of the layer
+   * @return {string} url that results in a legendgraphic image for the layer. 
+   *         Can be undefined if no url was found in the service capabilities.
+   */
+  findLegendGraphicUrl: function(serviceId, layerName){
+    let lgUrl;
+    const serv = Services.find({_id: serviceId}).fetch();
+    if (serv[0]){
+      const host = serv[0].endpoint;
+      const version = serv[0].version;
+      const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
+      const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      const capKey = Object.keys(parseResponse);
+      const wmsCapObject = parseResponse[capKey];
+      if ((wmsCapObject) && (wmsCapObject.Capability)) {
+        const capObject = wmsCapObject.Capability[0];
+        const layer = capObject.Layer;
+        const capLayer = Meteor.call('getLayerByName',layer, layerName);
+        if ((capLayer) && (capLayer.Style)) {
+          // Kies de default style of de laatste in de lijst als er geen default is
+          const styleDefaultName = 'default';
+          let styleDefaultFound = false;
+          _.each(capLayer.Style,function(style){
+            if (!styleDefaultFound){
+              if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
+                lgUrl = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
+              }
+              if (style.Name[0] === styleDefaultName){
+                styleDefaultFound = true;
+              }
+            }
+          });
+        }
+        if (!lgUrl){
+          /*
+           *  there is no legendgraphic url in the layer itself, find the general url
+           */
+          let getLegendGraphic = capObject.Request[0].GetLegendGraphic;
+          if (!getLegendGraphic){
+            // not defined, try again with the following tag name
+            getLegendGraphic = capObject.Request[0]['sld:GetLegendGraphic'];
+          }
+          if (getLegendGraphic && getLegendGraphic[0].Format){
+            lgUrl = Meteor.call('findGenericLegendGraphicUrl', serv[0], layerName, getLegendGraphic[0].Format);
+          }
+        }
+      }
+    } else {
+      // no service found, lgUrl is undefined
+    }
+    return lgUrl;
+  },
+
+  /**
+   * Retrieve a Layer from WMS Capabilities with a given name.
+   * Tries to find a layer with a given name,
+   * by searching recursively in the hierarchy of layers.
+   * 
+   * @private
+   * @param {object} layer array containing  Layer objects, each with possible sub layers
+   * @param {string} layerName name of the Layer to be found
+   * @return {object} Layer object having the given name
+   *         returns 'undefined' when no layer with the given name was found
+   *         Contains all layer tags like Name, Title, Style, etc
+   */
+  getLayerByName: function(layer, layerName){
+    let result;
+    for(let i = 0; i < layer.length; i++){
+      if (layer[i].Layer) {
+        result = Meteor.call('getLayerByName', layer[i].Layer, layerName);
+      } else if(layer[i].Name) {
+        if (layer[i].Name[0] === layerName ) {
+          result =  layer[i];
+        } 
       } else {
         // nothing to do
       }
+      // stop as soon as a matching layer is found
       if (result){ 
         break;
       }
@@ -549,9 +599,86 @@ Meteor.methods({
     return result;
   },
   
+
+  /**
+   * Get a legendGraphic url for a WMS layer
+   * A general url is assembled, from the service host url,  
+   * layername and preferred image format.
+   * 
+   * @private
+   * @param {object} service service Object
+   * @param {string} layerName name of the layer
+   * @param {object} lgFormats array of GetLegendGraphic.Format tags from the GetCapabilities xml
+   * @return {string} url that results in a legendgraphic image for the layer. 
+   *         Can be undefined if no url was found in the service capabilities.
+   */
+  findGenericLegendGraphicUrl: function(service, layerName, lgFormats){
+    let url;
+    let selectedFormat;
+    let pngFormat, jpgFormat, gifFormat;
+    const preferredPrintFormat = service.printFormat;
+    // loop over all formats to find a preferred format
+    _.each(lgFormats,function(format){
+      if (format === preferredPrintFormat){
+        selectedFormat = preferredPrintFormat;
+      } 
+      if (format === 'image/png'){
+        pngFormat = format;            
+      } 
+      if (format === 'image/jpg' || format === 'image/jpeg'){
+        jpgFormat = format;
+      }
+      if (format === 'image/gif'){
+        gifFormat = format;
+      }
+    });
+    if (!selectedFormat){
+      // select a preferred format (png, then jpg, then gif)
+      if (pngFormat){
+        selectedFormat = pngFormat;
+      } else if (jpgFormat){
+        selectedFormat = jpgFormat;
+      } else if (gifFormat){
+        selectedFormat = gifFormat;
+      } else {
+        // no preferable formats found: selectedFormat = undefined
+      }
+    }
+    /* looking for a base url (DCPType) of the GetLegendGraphic request is not foolproof 
+     * because in the capabilities it could be listed as e.g. 'http://localhost:8081/...', 
+     * or could end in e.g. '?service=WMS&' instead of in '?'.
+     * Instead use the service endpoint as base url for the request.
+     */ 
+    if (selectedFormat){
+      url = service.endpoint;
+      if (url.lastIndexOf('?') < 0){
+        url = url + '?';
+      }
+      url = url + 'request=GetLegendGraphic&service=WMS'
+        + '&layer=' + layerName 
+        + '&format=' + selectedFormat
+        // tbv Mapserver:
+        // (wordt genegeerd door deegree en geoserver)
+        + '&version=' + service.version
+        + '&sld_version=1.1.0';          
+    } else {
+      // selectedFormat is undefined, leave url undefined
+    }
+    return url;
+  },
+
+  
   
   /**
-   * getPrintFormat from a WMS 
+   * getPrintFormat from a WMS
+   * Finds a list of WMS GetMap Formats.
+   *  
+   * @param {string} host url of the WMS service
+   * @param {string} version of the WMFS service
+   * @return {object} sorted list of value, label pairs containing WMS GetMap Formats; 
+   *   array [value, label]
+   *      example: [{value: 'format', label: 'format'}, {...},...] 
+   *   This result can be used in a listbox.
    */
   getPrintFormat: function(host, version){
     let sortedServoptions;
@@ -562,29 +689,26 @@ Meteor.methods({
     } else {
       const servoptions = [];
       const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
-      if (xmlResponse.content){
-        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        
-        let req = null;
-        switch(version) {
-        case '1.3.0':
-          if ((parseResponse.WMS_Capabilities) && (parseResponse.WMS_Capabilities.Capability[0])){
-            req = parseResponse.WMS_Capabilities.Capability[0].Request;
-          }
-          break;
-        case '1.1.1':
-          if ((parseResponse.WMT_MS_Capabilities) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
-            req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
-          }
-          break;
-        default:
-          break;
+      const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+      let req = null;
+      switch(version) {
+      case '1.3.0':
+        if ((parseResponse.WMS_Capabilities) && (parseResponse.WMS_Capabilities.Capability[0])){
+          req = parseResponse.WMS_Capabilities.Capability[0].Request;
         }
-        if ((req) && (req[0].GetMap)){
-          _.each(req[0].GetMap[0].Format,function(format){
-            servoptions.push({label:format, value:format});
-          });
+        break;
+      case '1.1.1':
+        if ((parseResponse.WMT_MS_Capabilities) && (parseResponse.WMT_MS_Capabilities.Capability[0])){
+          req = parseResponse.WMT_MS_Capabilities.Capability[0].Request;
         }
+        break;
+      default:
+        break;
+      }
+      if ((req) && (req[0].GetMap)){
+        _.each(req[0].GetMap[0].Format,function(format){
+          servoptions.push({label:format, value:format});
+        });
       }
       sortedServoptions = _.sortBy(servoptions, 'label');
       PRINTFORMAT.set(PRINTFORMATKEY, sortedServoptions);
@@ -595,6 +719,9 @@ Meteor.methods({
   
   /**
    * Get service from collection
+   * 
+   * @param {number} serviceId mongo database id of the service
+   * @result [object] service object, undefined if none found
    */
   getService: function(serviceId){
     const serv = Services.find({_id: serviceId}).fetch();
@@ -602,7 +729,16 @@ Meteor.methods({
   },
   
   /**
-   * remove '?' from service endpoint
+   * Remove trailing '?' from service endpoint
+   * 
+   * @param [string] url of service endpoint 
+   * @result [string] url of service endpoint with '?' removed
+   * 
+   * NB: Not only the '?' will be removed if found, 
+   * but every character after it as well.
+   * This function looks for the first occurrence of '?',
+   * reading from left to right. 
+   * No attempt is being made to check for a valid url.
    */
   removeQmarkFromUrl: function(url){
     const q = url.indexOf('?');
@@ -613,7 +749,14 @@ Meteor.methods({
   },
   
   /**
-   * add '?' to service endpoint
+   * Add '?' to service endpoint
+   * 
+   * @param [string] url of service endpoint 
+   * @result [string] url of service endpoint with '?' as last character
+   * 
+   * NB: if no '?' is found in the endpoint string,
+   * a '?' will be pasted at the end of the string.
+   * No attempt is being made to check for a valid url.
    */
   addQmarkToUrl: function(url){
     if (url.indexOf('?') === -1) {
