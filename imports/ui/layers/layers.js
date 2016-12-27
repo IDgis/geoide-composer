@@ -15,8 +15,11 @@ import './layers.html';
 
 Template.layers.helpers({
   /**
-   * List of layers
-   * Only retrieve all layers when idgis-admin user is logged in 
+   * Get cursor of layers
+   * 
+   * @return {cursor} cursor of layers found
+   *    retrieve all layers when idgis-admin user is logged in,
+   *    otherwise retrieve only layers with type='default' 
    */
   layers: function(){
       let adminLoggedIn = false; 
@@ -30,6 +33,13 @@ Template.layers.helpers({
         return Layers.find({type: 'default'},{sort:[['name', 'asc']]});
       }
     },
+    
+    /**
+     * Check whether a layer is used in a map
+     * 
+     * @param {string} id of the layer
+     * @return {string} 'disabled' if layer is used in a map 
+     */
     setDisabled: function(id){
       return ReactiveMethod.call('isLayerInMap', id)?'disabled':'';
     }
@@ -37,14 +47,28 @@ Template.layers.helpers({
 
 
 Template.layers.events({
+  /**
+   * Save layer id in a Session object when edit layer button is pressed
+   * Then render the layer form
+   */
   'click .edit-layer': function () { 
     Session.set('selectedLayerId', this._id);
     Router.go('layer.edit', {_id: this._id});
   },
+  
+  /**
+   * Set a Session object (to null) when insert layer button is pressed
+   * Then render the layer form
+   */
   'click .insert-layer': function () {
     Session.set('selectedLayerId', null);
     Router.go('layer.insert');
   },
+  
+  /**
+   * Show confirmation dialog when delete layer button is pressed
+   * When user presses OK button, delete the layer from the layer collection
+   */
   'click .delete-layer': function() {
     // zie atmosphere package matdutour:popup-confirm
     const layerId = this._id;
