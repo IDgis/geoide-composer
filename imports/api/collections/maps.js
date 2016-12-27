@@ -40,7 +40,7 @@ SimpleSchema.mapLayerState = new SimpleSchema ({
  * layerid: stored in the tree component
  */
 SimpleSchema.mapLayerData = new SimpleSchema ({
-  //id of layer is stored in dataattibute
+  //id of layer is stored in data-attribute
   layerid: {
     type: String,
     optional: true
@@ -105,8 +105,8 @@ SimpleSchema.initialExtent = new SimpleSchema ({
  * initial_extent: bounding box
  * children:
  *   all levels of map groups/layers have been written out in this schema
- *   the behaviour is modelled out in code, 
- *   for example a layer cannot have another layer as a child etc.
+ *   the behaviour is modelled out in code, for example: 
+ *      a layer cannot have another layer as a child etc.
  *   members:
  *     id: in tree (not relevant for viewerconfig)
  *     text: layer name (overrules name in layerconfig)
