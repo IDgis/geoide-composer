@@ -19,7 +19,10 @@ Template.layers.helpers({
    * 
    * @return {cursor} cursor of layers found
    *    retrieve all layers when idgis-admin user is logged in,
-   *    otherwise retrieve only layers with type='default' 
+   *    otherwise retrieve only layers with type='default'
+   *
+   * Note:
+   *  layers are sorted by name
    */
   layers: function(){
       let adminLoggedIn = false; 

@@ -15,26 +15,52 @@ import './services.html';
 
 Template.services.helpers({
   /**
-   * List of services
+   * Get cursor of services
+   * 
+   * @return {cursor} cursor of services found
+   *
+   * Note:
+   *  services are sorted by name
    */
   services: function(){
         return Services.find({},{sort:[['name', 'asc']]});
-    },
-    setDisabled: function(id){
-      return ReactiveMethod.call('isServiceInLayer', id)?'disabled':'';
-    }
+  },
+  
+  /**
+   * Check whether a service is used in a layer
+   * 
+   * @param {string} id of the service
+   * @return {string} 'disabled' if service is used in a layer 
+   */
+  setDisabled: function(id){
+    return ReactiveMethod.call('isServiceInLayer', id)?'disabled':'';
+  }
 });
 
 
 Template.services.events({
+  /**
+   * Save service id in a Session object when edit service button is pressed
+   * Then render the service form
+   */
   'click .edit-service': function () { 
     Session.set('selectedServiceId', this._id);
     Router.go('service.edit', {_id: this._id});
   },
+  
+  /**
+   * Set a Session object (to null) when insert service button is pressed
+   * Then render the service form
+   */
   'click .insert-service': function () {
     Session.set('selectedServiceId', null);
     Router.go('service.insert');
   },
+  
+  /**
+   * Show confirmation dialog when delete service button is pressed
+   * When user presses OK button, delete the service from the service collection
+   */
   'click .delete-service': function() {
    // zie atmosphere package matdutour:popup-confirm
    const serviceId = this._id;

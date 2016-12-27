@@ -128,6 +128,9 @@ Template.layer.events({
     Router.go('layers.list');
   },
   
+  /**
+   * Show help pop-up
+   */
   'click #help': function () {
     // peppelg:bootstrap-3-modal
     Modal.show(i18n('layers.help.template'));

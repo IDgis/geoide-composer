@@ -31,12 +31,16 @@ const MAX_TREE_DEPTH = 4;
 Template.map.helpers({
   /**
    * Map collection
+   * 
+   * called in autoform
    */
   maps : function() {
     return Maps;
   },
   /**
    * Map schema
+   * 
+   * called in autoform
    */
   mapSchema : function() {
     return MapSchema;
@@ -71,7 +75,8 @@ Template.map.helpers({
 });
 
 /**
- * Check whether a layer exists in the map hierarchy
+ * Check whether a layer exists in the map hierarchy.
+ * Calls itself recursively if needed.
  * 
  * @param {array} children array from where the search will start
  * @param {string} id of the layer to be found
@@ -139,7 +144,7 @@ Template.map.events({
   },
 
   /**
-   * Show help popup
+   * Show help pop-up
    */
   'click #help' : function() {
     // peppelg:bootstrap-3-modal
