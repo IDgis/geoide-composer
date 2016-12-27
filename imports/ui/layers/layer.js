@@ -21,6 +21,7 @@ import '../i18n/alerts/geoide-viewer.html';
 Template.layer.helpers({
   /**
    * Retrieve a list of services options for a selectbox
+   * @return {object} array of {label, value} 
    */
   services: function(){
     const serv = Services.find({},{fields:{name:1,_id:1}}).fetch();
@@ -30,85 +31,93 @@ Template.layer.helpers({
     });
     return servoptions;
   },
+  
   /**
    * Find a specific service
+   * @return {object} all matching services as an Array.
    */
   service: function(thisid){
     const serv = Services.find({_id: thisid}).fetch();
     return serv;
   },
   
-    /**
-     * Layers collection
-     */
-    layers: function(){
-      return Layers;
-    },
-    /**
-     * Layers schema
-     */
-    layerSchema: function(){
-      return LayerSchema;
-    },
-    formType: function () {
-      if (Session.get('selectedLayerId')) {
-          return 'update';
-       } else {
-          return 'insert';
-       }
-    },
-    layerDoc: function () {
-      if (Session.get('selectedLayerId')) {
-        return Layers.findOne({_id: Session.get('selectedLayerId')});
-       } else {
-          return null ;
-       }
-    },
-    layerTypes: function () {
-      return[{label: 'default', value: 'default'},
-             {label: 'sql', value: 'cosurvey-sql'}];
-    },
+  /**
+   * Layers collection
+   */
+  layers: function(){
+    return Layers;
+  },
   
-    adminLoggedIn: function(){
-      let admin = false; 
-      if (Meteor.user()){
-        // a user is logged in
-        const name = Meteor.user().username;
-        admin = _.isEqual(name, 'idgis-admin');
-      }
-      return admin;
-    },
-    buttonSubmitLabel: function(){
-      return i18n ('button.save');
+  /**
+   * Layers schema
+   */
+  layerSchema: function(){
+    return LayerSchema;
+  },
+  
+  /**
+   * Called in autoform type to determine if this is an insert or update form.
+   * Depends on Session object.
+   * @return {string} 'update' or 'insert'
+   */
+  formType: function () {
+    if (Session.get('selectedLayerId')) {
+        return 'update';
+     } else {
+        return 'insert';
+     }
+  },
+  
+  /**
+   * Called in autoform doc to find the Layer object for the form
+   * Depends on Session object.
+   * @return {object} layer that was previously selected or null if new layer
+   */
+  layerDoc: function () {
+    if (Session.get('selectedLayerId')) {
+      return Layers.findOne({_id: Session.get('selectedLayerId')});
+     } else {
+        return null ;
+     }
+  },
+  
+  /**
+   * Returns options for a selectbox with fixed values.
+   * @return {object} options list
+   */
+  layerTypes: function () {
+    return[{label: 'default', value: 'default'},
+           {label: 'sql', value: 'cosurvey-sql'}];
+  },
+
+  /**
+   * Determines if an administrator is logged in
+   * @return {boolean} true if an administrator is logged in,
+   *    false if no user or no administrator is logged in 
+   */
+  adminLoggedIn: function(){
+    let admin = false; 
+    if (Meteor.user()){
+      // a user is logged in
+      const name = Meteor.user().username;
+      admin = _.isEqual(name, 'idgis-admin');
     }
+    return admin;
+  },
 });
 
-/*
+/**
  * set the mouse cursor to a waiting cursor
  */
 const setCursorProgress = function() {
   $('body').css('cursor', 'wait');
 };
 
-/*
+/**
  * set the mouse cursor to default (arrow) cursor
  */
 const setCursorNormal = function() {
   $('body').css('cursor', 'default');
-};
-
-const fillLayerSelect = function() {
-  const layers = Layers.find({}, {
-    fields : {
-      name : 1,
-      _id : 1
-    }
-  }).fetch();
-  layers.forEach(function(entry) {
-    const layerOption = '<option value=' + entry._id + '>' + entry.name
-        + '</option>';
-    $('#layerselect').append(layerOption);
-  });
 };
 
 Template.layer.events({
@@ -125,13 +134,21 @@ Template.layer.events({
   },
   
   /**
-   * Act on a change of the wms layer select list:
-   * fill legendgraphic 
+   * Act on a select in the wms layer select list 
+   * in order to fill the legendgraphic image and url.
+   * 
+   * Most interactivity of the layer form is coded in the layer schema.
+   * This is coded here because it does not depend on full reactivity, 
+   * but on a simple select.  
+   * 
+   * the cursor changes in a 'wait' cursor for the duration 
+   * of finding a legendgraphic url in the wms 
    */
   'click select[name$=".nameInService"]' : function(e){
     setCursorProgress();
     // get name of  select box
-    // chrome
+    // depends on browser used:
+    // Chrome
     let srcName = e.target.name;
     if (!srcName){
       // FF, IE
@@ -144,7 +161,7 @@ Template.layer.events({
     const $srvSelect = $('select[name="' + srvName + '"] ');
     const serviceId = $srvSelect[0].value;
 
-    // find lg field 
+    // find lg hidden input field 
     const lgName = srcName.replace('nameInService', 'legendGraphic');
     const $lg = $('input[name="' + lgName + '"] ');
     
@@ -152,8 +169,11 @@ Template.layer.events({
     const lgImgName = srcName.replace('nameInService', 'legendGraphic.img');
     const $lgImg = $('img[name="' + lgImgName + '"] ');
     
-    // retrieve url for GetLegendGraphic
-    // and put it in hidden field and image
+    /* 
+     * retrieve url for GetLegendGraphic
+     * and put it in hidden input field and in the image tag 
+     * to show the image in the form
+     */ 
     Meteor.call('getLegendGraphicUrl',
       serviceId,
       lyrName,
@@ -189,8 +209,10 @@ Template.layer.events({
  */
 Template.layer.onRendered(function(){
   /*
-   * if image is empty, fill it with initial png
-   * (initially the src of the image is the url of 'edit-layer' route)
+   * if image src is empty, fill it with an initial 'empty' png
+   * Note:
+   *  initially the src of the image is the url of 'edit-layer' route
+   *  in this case also the image src is replace by an 'empty' png
    */
   const legendGraphicImage = this.$("img[name$='legendGraphic.img']");
   if ((legendGraphicImage[0].src) && 
@@ -208,13 +230,12 @@ AutoForm.addHooks('layerform',{
    * When the viewer reload fails, alert the user.
    */
   onSuccess: function() {
-    Meteor.call('triggerViewerReload',
-        function(lError, lResponse) {
+    Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
         Modal.show('alert-geoide-viewer-refresh');
         Router.go('layers.list');
       } else {
-        // check op bepaalde inhoud van response of refresh gelukt is
+        // check op bepaalde inhoud van response of de refresh gelukt is
         if (lResponse.statusCode !== 200 ){
           Modal.show('alert-geoide-viewer-refresh');
         }
