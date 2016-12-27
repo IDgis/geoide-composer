@@ -36,10 +36,28 @@ import { Maps } from '/imports/api/collections/maps.js';
  *  
  */
 
-  /**
-   * Services
-   * Deliver services as json
-   */
+/**
+ * Services
+ * Deliver services collection as json.
+ * 
+ * The json structure that Geoide-Viewer expects 
+ * is assembled in the gvServices object: 
+ * {services:[
+ * 
+ *   {
+ *     id: ,
+ *     identification: 
+ *     {
+ *       serviceType: ,
+ *       serviceEndpoint: ,
+ *       serviceVersion: 
+ *     },
+ *     printFormat: 
+ *   }
+ * ]}
+ * Note: 
+ *    serviceEndpoint is assembled without trailing '?'
+ */
 Router.map(function () {
   this.route('json-gv-api-services', {
     path: '/json-gv-api-services',
@@ -66,10 +84,41 @@ Router.map(function () {
       this.response.end(EJSON.stringify(gvServices, {indent: true}));
     }
   });
-});  
-  /**
-   * Layers, including grouplayers from Maps
-   */
+});
+
+/**
+ * Layers
+ * Deliver layers collection as json,
+ * including grouplayers from Maps collection
+ * 
+ * The json structure that Geoide-Viewer expects 
+ * is assembled in the gvLayers object:
+ *  
+ * First write the layers: 
+ * {layers:[
+ *   {
+ *     id: ,
+ *     label: ,
+ *     layerType: ,
+ *     serviceLayers: ,
+ *     state: ,
+ *     properties: 
+ *   }
+ * ]}
+ * 
+ * then write grouplayers:
+ * {layers:[
+ *   {
+ *     id: ,
+ *     label: ,
+ *     layerType: 'default'
+ *   }
+ * ]}
+ * 
+ * Note:
+ *   The nesting in the map for the grouplayer structure is written out in code.
+ * 
+ */
 Router.map(function () {
   this.route('json-gv-api-layers', {
     path: '/json-gv-api-layers',
@@ -77,7 +126,7 @@ Router.map(function () {
     action: function () {
       const gvLayers = {layers:[]};
       /*
-       * Get normal layers from Layers
+       * Get normal layers from Layers collection
        */
       const layerCursor = Layers.find(); 
       layerCursor.forEach(function(layer){
@@ -168,9 +217,29 @@ Router.map(function () {
     }
   });
 });
-  /**
-   * ServiceLayers
-   */
+
+/**
+ * ServiceLayers
+ * Deliver serviceLayers from layers collection as json
+ * 
+ * The json structure that Geoide-Viewer expects 
+ * is assembled in the gvServiceLayers object:
+ *  
+ * {serviceLayers:[
+ *     {
+ *       id: ,
+ *       label: ,
+ *       name: ,
+ *       service: ,
+ *       legendGraphicUrl: ,
+ *       featureType: 
+ *     }
+ * ]}
+ * 
+ * Note:
+ *   The featureType field is only added when it exists.
+ * 
+ */
 Router.map(function () {
   this.route('json-gv-api-servicelayers', {
     path: '/json-gv-api-servicelayers',
@@ -230,9 +299,23 @@ Router.map(function () {
   });
 });
 
-  /**
-   * FeatureTypes
-   */
+/**
+ * FeatureTypes
+ * Deliver FeatureTypes from layers collection as json
+ * 
+ * The json structure that Geoide-Viewer expects 
+ * is assembled in the gvFeatureTypes object:
+ *  
+ * {featureTypes:[
+ *     {
+ *       id: ,
+ *       label: ,
+ *       name: ,
+ *       service: 
+ *     }
+ * ]}
+ * 
+ */
 Router.map(function () {
   this.route('json-gv-api-featuretypes', {
     path: '/json-gv-api-featuretypes',
@@ -270,11 +353,46 @@ Router.map(function () {
   });
 });
 
-  /**
-   * Maps
-   * groups and layers sorted in reverse order as required by Geoide-Viewer
-   * 
-   */
+/**
+ * 
+ */
+
+/**
+ * Maps
+ * Deliver Maps from the maps collection as json
+ * 
+ * Groups and layers are sorted in reverse order 
+ * as is required by Geoide-Viewer.
+ * 
+ * The json structure that Geoide-Viewer expects 
+ * is assembled in the gvMaps object:
+ *  
+ * {maps:[
+ *   {
+ *     id: , 
+ *     label: ,
+ *     'initial-extent': ,
+ *     maplayers: gvMapLayers
+ *   }
+ * ]}
+ * 
+ * where gvMapLayers has the following recursive structure:
+ * [
+ *   {
+ *     layer: ,
+ *     state: {
+ *       visible : 
+ *     },
+ *     maplayers: gvMapLayers
+ *   }
+ * ]
+ * 
+ * The deepest level of gvMapLayers is an empty array
+ *   gvMapLayers = [];
+ *   
+ * Note:
+ *   The nesting depth in the mapLayers structure is written out in code.
+ */
 Router.map(function () {
   this.route('json-gv-api-maps', {
     path: '/json-gv-api-maps',

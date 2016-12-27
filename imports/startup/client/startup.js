@@ -20,6 +20,9 @@ Meteor.startup(function() {
   Meteor.subscribe('services');
   Meteor.subscribe('layers');
   Meteor.subscribe('maps');
+  /**
+   * Default Meteor collections
+   */
   Meteor.subscribe('allUsers');
   Meteor.subscribe('userData');
 
