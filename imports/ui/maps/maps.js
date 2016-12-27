@@ -20,7 +20,7 @@ Template.maps.helpers({
    *   the map name is stored in field 'text'
    */
   maps: function(){
-      return Maps.find({},{sort:[['name', 'asc']]});
+      return Maps.find({},{sort:[['text', 'asc']]});
   }
 });
 
