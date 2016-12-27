@@ -31,9 +31,15 @@ Meteor.startup(function() {
 
 Meteor.methods({
   /**
-   * settings: version
+   * settings: 
+   *   version to be displayed in GUI
+   * 
+   * @return [string] version string
+   *   a default value is returned, 
+   *   if this item is not found in the settings file
+   * 
    * !!!!!!!!!!!!!!!!!!!!!
-   * UPDATE VERSION STRING 
+   * UPDATE DEFAULT VERSION 
    * BEFORE EVERY RELEASE
    * !!!!!!!!!!!!!!!!!!!!!
    */
@@ -47,7 +53,11 @@ Meteor.methods({
   },
 
   /**
-   * settings: url initiating geoide-viewer configuration reload   
+   * settings: 
+   *   url initiating geoide-viewer configuration reload
+   *   
+   * @return [string] url to call after every form save action
+   *    null if no value found in the settings file
    */
   getViewerReloadConfigUrl : function(){
     if (Meteor.settings){
@@ -58,7 +68,12 @@ Meteor.methods({
   },
 
   /**
-   * settings: folder where uploaded legendGraphics are stored   
+   * settings: 
+   *   folder where uploaded legendGraphics are stored
+   *   
+   * @return [string] location of folder
+   *   a default value is returned, 
+   *   if this item is not found in the settings file
    */
   getLegendGraphicUploadFolder : function(){
     if (Meteor.settings){
@@ -69,7 +84,11 @@ Meteor.methods({
   },
 
   /**
-   * settings: delay of resetting WMS/WFS caches   
+   * settings: 
+   *   delay of resetting WMS/WFS caches
+   * @return [number] delay time in milliseconds
+   *   a default value is returned, 
+   *   if this item is not found in the settings file
    */
   getRequestCacheDelay : function(){
     if ((Meteor.settings) && 
@@ -82,7 +101,8 @@ Meteor.methods({
   },
 
   /**
-   * initiate geoide-viewer configuration reload by calling http get on url
+   * Initiate geoide-viewer configuration reload 
+   * by calling http get on url found in settings
    */
   triggerViewerReload : function (){
     const url = Meteor.call('getViewerReloadConfigUrl');
@@ -99,7 +119,8 @@ Meteor.methods({
 });
 
 /**
- * Set up for upload package tomi:upload-server (used for legendGraphics)
+ * Set up for upload package tomi:upload-server 
+ * (used for legendGraphics)
  */
 UploadServer.init({
   tmpDir: Meteor.call('getLegendGraphicUploadFolder') + 'tmp',
@@ -111,8 +132,10 @@ UploadServer.init({
 });
 
 /**
- * Make sure user idgis-admin with administrator role exists,
- * make one if needed 
+ * Make sure user 'idgis-admin' exists,
+ * make one if needed. 
+ * 
+ * This user has implicit administrator role. 
  */
 let adminUser = Meteor.users.findOne({username: 'idgis-admin'});
 if (!adminUser){
