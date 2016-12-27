@@ -15,21 +15,38 @@ import './map.html';
 import '../i18n/maps/help.html';
 import '../i18n/alerts/geoide-viewer.html';
 
+/**
+ * Constant defining the maximum depth of a map tree.
+ * Example:
+ *       Item:                      Level:
+ * map                                1
+ *  |-- group1                        2
+ *  |     |-- group1.1                3
+ *  |           |-- layer1.1.1        4
+ *  |-- group2                        2
+ *  !-- layer3                        2
+ */
 const MAX_TREE_DEPTH = 4;
 
 Template.map.helpers({
   /**
-   * Mapscollection
+   * Map collection
    */
   maps : function() {
     return Maps;
   },
   /**
-   * Maps schema
+   * Map schema
    */
   mapSchema : function() {
     return MapSchema;
   },
+  
+  /**
+   * Called in autoform type to determine if this is an insert or update form.
+   * Depends on Session object.
+   * @return {string} 'update' or 'insert'
+   */
   formType : function() {
     if (Session.get('selectedMapId')) {
       return 'update';
@@ -37,6 +54,12 @@ Template.map.helpers({
       return 'insert';
     }
   },
+  
+  /**
+   * Called in autoform doc to find the right Map object for the form
+   * Depends on Session object.
+   * @return {object} map that was previously selected or null if new map is started
+   */
   mapDoc : function() {
     if (Session.get('selectedMapId')) {
       return this;
@@ -47,6 +70,13 @@ Template.map.helpers({
 
 });
 
+/**
+ * Check whether a layer exists in the map hierarchy
+ * 
+ * @param {array} children array from where the search will start
+ * @param {string} id of the layer to be found
+ * @return true if layer was found, false otherwise 
+ */
 const layerInTree = function(children, layerId) {
   for (let j = 0; j < children.length; j++) {
     if (children[j].children[0]) {
@@ -62,6 +92,10 @@ const layerInTree = function(children, layerId) {
   return false;
 };
 
+/**
+ * Fill the select box that shows available layers not already used in the map.
+ * If the select box is empty (no options), then disable the 'create layer' button.
+ */
 const fillLayerSelect = function() {
   const layers = Layers.find({}, {
     sort : [ [ 'label', 'asc' ] ],
@@ -90,21 +124,31 @@ const fillLayerSelect = function() {
   // if the select box is empty, then disable button
   if (layerOption){
     $('#createlayer').prop('disabled', false);
-  } else{
+  } else {
     $('#createlayer').prop('disabled', true);
   }
 };
 
 Template.map.events({
+  
+  /**
+   * Return to the map list, when the cancel button has been pressed
+   */
   'click #return' : function() {
     Router.go('maps.list');
   },
 
+  /**
+   * Show help popup
+   */
   'click #help' : function() {
     // peppelg:bootstrap-3-modal
     Modal.show(i18n('maps.help.template'));
   },
 
+  /**
+   * Enable and disable buttons, depending on where in the map tree the user has clicked.
+   */
   'click .jstree' : function() {
     // check which buttons to disable/enable, 
     // depending on what is selected in the tree
@@ -154,10 +198,16 @@ Template.map.events({
     }
   },
 
+  /**
+   * Add a new layer to the map (tree),
+   * when the create layer button has been pressed.
+   * 
+   * Fill the layer select box with available layers.
+   */
   'click #createlayer' : function() {
 
-    const ref = $.jstree.reference('#maptree'), sel = ref
-        .get_top_selected();
+    const ref = $.jstree.reference('#maptree'); 
+    const sel = ref.get_top_selected();
 
     if (!sel) {
       return false;
@@ -200,6 +250,9 @@ Template.map.events({
     
   },
 
+  /**
+   * Enable renaming of a tree node only when it is of type 'group'.
+   */
   'click #renamenode' : function() {  
     const ref = $.jstree.reference('#maptree');
     let sel = ref.get_selected();
@@ -213,6 +266,15 @@ Template.map.events({
     $('#renamenode').prop('disabled', true);
   },
 
+  /**
+   * Remove selected node(s) from the tree when it is of type 'layer' or 'group'.
+   * 
+   * Layers of type 'cosurvey-sql' can only be removed by administrator.
+   * When a group is about to be removed, show a confirmation pop-up.
+   * 
+   * Repopulate the layer select box and disable appropriate buttons.
+   * 
+   */
   'click #removenode' : function() {
     const ref = $.jstree.reference('#maptree');
     const selObjects = ref.get_selected(true);
@@ -267,6 +329,11 @@ Template.map.events({
 
 });
 
+/**
+ * Define and render a new map tree component.
+ * 
+ * See for definitions and use package: jss:jstree
+ */
 Template.map.rendered = function() {
   const mapId = Session.get('selectedMapId');
   let map;
@@ -341,11 +408,14 @@ Template.map.rendered = function() {
     $('#maptree').jstree('open_node',data.parent);
   });
   
-  // disable $renamenode/removenode buttons by default
+  // disable renamenode/removenode buttons by default
   $('#renamenode').prop('disabled', true);
   $('#removenode').prop('disabled', true);  
 };
 
+/**
+ * Add autoform action for insert and update.
+ */
 AutoForm.addHooks('mapForm',{
   before : {
     
@@ -371,8 +441,6 @@ AutoForm.addHooks('mapForm',{
    * When the viewer reload fails, alert the user.
    */
   onSuccess : function() {
-    // Stuur een refresh request naar de viewer en ga naar
-    // de list
     Meteor.call('triggerViewerReload', function(lError,
         lResponse) {
       if (lError) {
