@@ -16,6 +16,8 @@ import './maps.html';
 Template.maps.helpers({
   /**
    * Get a cursor containing Map collection sorted by name
+   * Note:
+   *   the map name is stored in field 'text'
    */
   maps: function(){
       return Maps.find({},{sort:[['name', 'asc']]});
