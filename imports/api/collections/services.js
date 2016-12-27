@@ -12,22 +12,16 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
  * Definition of Service
  * 
  * A service contains 
- *   service url, 
- *   type of service,
- *   version,
- *   preferred printFormat.
- * 
- * This definition depends on the use of AutoForm  
- */
-
-/*
- * Definition of Service schema
  *   name: userdefined unique name of the service
  *   endpoint: valid url 
  *   type: can be 'WMS', 'TMS' or 'WFS'
  *   version: value depends on type, each type has a specific defaultvalue
  *   printFormat: preferred format for images in WMS getmap request  
+ * 
+ * This definition depends on the use of AutoForm
+ * Reactivity is performed by AutoForm.getFieldValue()   
  */
+
 export const ServiceSchema = new SimpleSchema({
   name: {
     type: String,
@@ -57,6 +51,7 @@ export const ServiceSchema = new SimpleSchema({
   version: {
     type: String,
     label: function(){ return i18n('collections.services.version.label'); },
+    // fix allowed versions
     allowedValues: function() {
       if (this.type === 'WMS') {
         return ['1.1.1','1.3.0'];
@@ -69,6 +64,7 @@ export const ServiceSchema = new SimpleSchema({
       }
     },
     // this does not seem to work reactively
+    // and therefore could be deleted altogether?
     'defaultValue': function() {
       if (this.type === 'WMS') {
         return '1.1.1';
@@ -82,9 +78,11 @@ export const ServiceSchema = new SimpleSchema({
     },
     autoform: {
       'title': function(){ return i18n ('tooltips.services.autoform.fields.version'); },
-      // this is added, because the default value does not work 
-      // after a value has already been selected
+      // field value is added, because the defaultValue does not work 
+      // after a value has already been selected:
       'value': function() {
+        // depending on choices made in type and version, 
+        // the current version or default version is returned
         const currentVersion = AutoForm.getFieldValue('version', 'serviceform');
         const currentType = AutoForm.getFieldValue('type', 'serviceform');
         let newVersionValue = currentVersion;
@@ -105,7 +103,7 @@ export const ServiceSchema = new SimpleSchema({
         }
         return newVersionValue;
       },
-      // this seems to work reactively
+      // this works in a reactive way
       'defaultValue': function() {
         const currentType = AutoForm.getFieldValue('type', 'serviceform');
         if (currentType === 'WMS') {
@@ -121,7 +119,10 @@ export const ServiceSchema = new SimpleSchema({
       }
     }
   },
-  
+  /*
+   * Let the user choose a preferred format from the list of GetMap formats.
+   * This value is used by Geoide-Viewer when performing a print.
+   */
   printFormat: {
     type: String,
     label: function(){ return i18n('collections.services.printFormat.label'); },

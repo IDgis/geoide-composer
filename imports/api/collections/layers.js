@@ -19,10 +19,10 @@ import { Services } from '/imports/api/collections/services.js';
  * Featuretype is a featuretype from a WFS [optional]
  * SearchTemplate is a specific field of a featuretype [optional]
  * 
- * This definition depends on the use of AutoForm.
+ * This definition depends on the use of AutoForm (aldeed:autoform).
  * Heavy use is being made of AutoForm reactivity in getFieldValue().
  * The number of nested serviceLayer and searchTemplates
- * has been limited because the UI will get very unresponsive otherwise.   
+ * has been limited, the UI can get very unresponsive otherwise.   
  */
 
 /*
@@ -100,15 +100,11 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
         const service = AutoForm.getFieldValue(serviceField);
         const ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
         const ftName = AutoForm.getFieldValue(ftField);
-        /*
-         * Fill the attribute_localname options list
-         */
         let namespace = '';
   
         if (service && ftName){
           /*
-           * Retrieve the featuretype fields from the service
-           * and put them in the options
+           * Retrieve the featuretype targetNamespace from the service
            */
           const featuretypeFields = ReactiveMethod.call(
               'describeFeatureType',
@@ -206,7 +202,6 @@ SimpleSchema.featureType = new SimpleSchema ({
       label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
       optional: true,
       minCount: 0,
-//      maxCount: 3,
       autoform: {
         type: function() {
           if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
@@ -277,8 +272,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
         if (service){
           const serv = Services.findOne({_id:service});
           /*
-           * Retrieve the layers from the service
-           * and put them in the options
+           * Decide which method to call
            */
           let methodName = '';
           switch(serv.type) {
@@ -292,6 +286,10 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
                 // should never get here
               break;
           }
+          /*
+           * Retrieve the layers from the service
+           * and put them in the options
+           */
           servoptions = ReactiveMethod.call(
               methodName,
               serv.endpoint,
@@ -337,6 +335,7 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
  * 
  * initial_query: optional query belonging to this layer
  *   defined when layer.type is 'cosurvey-sql'
+ *   disabled when layer.type is 'default'
  */
 SimpleSchema.layerProperties = new SimpleSchema ({
   initial_query: {
