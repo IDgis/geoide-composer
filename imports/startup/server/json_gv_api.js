@@ -12,11 +12,11 @@ import { Layers } from '/imports/api/collections/layers.js';
 import { Maps } from '/imports/api/collections/maps.js';
 
 /**
- *  REST api for delivering json for Geoide-Viewer
+ *  REST api for delivering json for the already existing Geoide-Viewer.
  *  
  *  NOTE:
- *  Identifiers cannot be represented by Mongo _id's, but must be human readable,
- *  because they are also edited in CRS2.
+ *  Identifiers cannot be represented by Mongo _id's, but must be stable and unique.
+ *  The identifiers can have meaning because they may also be visible in other programs e.g. CRS2.
  *  
  *  They are made (as) unique (as possible) in the following way:
  *  1. id of an object at the highest level is equal to its name:
@@ -68,7 +68,6 @@ Router.map(function () {
       cursor.forEach(function(service){
         gvServices.services.push(
             {
-//              id: service._id, 
               id: service.name, 
               identification: {
                 serviceType: service.type,

@@ -730,15 +730,16 @@ Meteor.methods({
   
   /**
    * Remove trailing '?' from service endpoint
+   * Note: 
+   *  Not only the '?' will be removed if found, 
+   *  but every character after it as well.
+   *  This function looks for the first occurrence of '?',
+   *  reading from left to right. 
+   *  No attempt is being made to check for a valid url.
    * 
    * @param [string] url of service endpoint 
    * @result [string] url of service endpoint with '?' removed
    * 
-   * NB: Not only the '?' will be removed if found, 
-   * but every character after it as well.
-   * This function looks for the first occurrence of '?',
-   * reading from left to right. 
-   * No attempt is being made to check for a valid url.
    */
   removeQmarkFromUrl: function(url){
     const q = url.indexOf('?');
@@ -750,13 +751,14 @@ Meteor.methods({
   
   /**
    * Add '?' to service endpoint
+   * Note: 
+   *  if no '?' is found in the endpoint string,
+   *  a '?' will be pasted at the end of the string.
+   *  No attempt is being made to check for a valid url.
    * 
    * @param [string] url of service endpoint 
    * @result [string] url of service endpoint with '?' as last character
    * 
-   * NB: if no '?' is found in the endpoint string,
-   * a '?' will be pasted at the end of the string.
-   * No attempt is being made to check for a valid url.
    */
   addQmarkToUrl: function(url){
     if (url.indexOf('?') === -1) {
