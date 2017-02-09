@@ -143,24 +143,25 @@ Router.map(function () {
           }
         }
         const layerServiceLayers = [];
-        for (let index = layer.service_layers.length-1; index >= 0; index--)  {
-          const serviceLayer = layer.service_layers[index];
-          layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
-          // add searchfields to properties
-          if ((layer.type !== 'default') && (serviceLayer.featureType)){
-            layerProps.searchFields = [];
-            _.each(serviceLayer.featureType, function(ft){
-              _.each(ft.searchTemplates, function(st){
-                if (st){
-                  layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
-                }
-              });            
-            });
-          }
+        if (layer.service_layers) {
+	        for (let index = layer.service_layers.length-1; index >= 0; index--)  {
+	          const serviceLayer = layer.service_layers[index];
+	          layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
+	          // add searchfields to properties
+	          if ((layer.type !== 'default') && (serviceLayer.featureType)){
+	            layerProps.searchFields = [];
+	            _.each(serviceLayer.featureType, function(ft){
+	              _.each(ft.searchTemplates, function(st){
+	                if (st){
+	                  layerProps.searchFields.push({name:st.attribute_localname, label:st.label});
+	                }
+	              });            
+	            });
+	          }
+	        }    
         }
         gvLayers.layers.push(
             {
-//              id: layer._id, 
               id: layer.name, 
               label: layer.label,
               layerType: layer.type,
