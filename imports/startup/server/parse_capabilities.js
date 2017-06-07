@@ -193,7 +193,7 @@ Meteor.methods({
     let sortedServoptions = [];
     const WMSLAYERSKEY = host + '-' + version;
     const resultWmsLayers = WMSLAYERS_CACHE.get(WMSLAYERSKEY);
-    if (resultWmsLayers){
+    if (resultWmsLayers && resultWmsLayers.length > 0){
       sortedServoptions = resultWmsLayers;
     } else {
       const xmlResponse = Meteor.call('getXml', host, {request: 'GetCapabilities', service:'WMS', version: version});
@@ -215,15 +215,12 @@ Meteor.methods({
           break;
         }
         _.each(capLayer,function(mainLayer){
-          let level = 0;
-          if ((mainLayer.$) && (mainLayer.$.queryable === '1')){
-            level = 2;
-            if (mainLayer.Name){
-              servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
-            } else {
-              servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
-            }
-          }
+          let level = 2;
+	      if (mainLayer.Name){
+	    	  servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
+	      } else {
+	    	  servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
+	      }
           // sub layer(s)
           servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
         });
@@ -274,7 +271,7 @@ Meteor.methods({
     const prefix = prefixChars.substr(0, level);
     if (mainLayer.Layer){
       _.each(mainLayer.Layer,function(subLayer){
-        if ((subLayer.$) && (subLayer.$.queryable === '1') && (subLayer.Title)){
+        if ((subLayer) && (subLayer.Title)){
           const titleWithPrefix = (prefix + ' ' +  subLayer.Title[0]);
           if (subLayer.Name){
             servoptions.push({value:subLayer.Name[0], label:titleWithPrefix});
@@ -319,7 +316,11 @@ Meteor.methods({
         /**
          * get the title from the TileMap and use this as layername and title
          */
-        const layername =  parseResponse.TileMap.Title;
+        let layername = null;
+        if (parseResponse.TileMap) {
+        	layername =  (parseResponse.TileMap.Title ? parseResponse.TileMap.Title : 
+        						(parseResponse.TileMap.title ? parseResponse.TileMap.title : null));
+        }	
         if (layername){
           servoptions.push({label:layername[0], value:layername[0]});
         } else {
