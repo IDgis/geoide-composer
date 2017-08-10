@@ -117,24 +117,30 @@ Template.service.events({
    */
   'click #control' : function() {
     let url = document.getElementsByName('endpoint')[0].value;
-    if (url.indexOf('?') === -1) {
-      url += '?';
-    }
-    url += 'request=GetCapabilities';
+    let type = "";
+    
     const types = document.getElementsByName('type');
     for (let i = 0; i < types.length; i++) {
       if (types[i].checked) {
-        url += '&service=' + types[i].value;
+        type = types[i].value;
         break;
       }
     }
-    const versions = document.getElementsByName('version');
-    for (let j = 0; j < versions.length; j++) {
-      if (versions[j].checked) {
-        url += '&version=' + versions[j].value;
-        break;
-      }
+    
+    if(type !== "TMS") {
+	    if (url.indexOf('?') === -1) {
+	      url += '?';
+	    }
+	    url += 'request=GetCapabilities&service=' + type;
+	    const versions = document.getElementsByName('version');
+	    for (let j = 0; j < versions.length; j++) {
+	      if (versions[j].checked) {
+	        url += '&version=' + versions[j].value;
+	        break;
+	      }
+	    }
     }
+    
     window.open(url, '_blank');
   },
   
