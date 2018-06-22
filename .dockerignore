@@ -1,1 +1,7 @@
 .meteor/local/
+.git
+.sonar
+.deploy.sh
+.docker-compose.yml
+sonar-project.properties
+node_modules

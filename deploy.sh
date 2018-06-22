@@ -4,7 +4,7 @@ echo deploying geoide composer...
 
 export ROOT_URL=http://192.168.99.100
 export PORT=8090
-export COMPOSER_VERSION=1.0.8
+export COMPOSER_VERSION=1.0.10
 
 export METEOR_SETTINGS='{
 	"viewer": {
