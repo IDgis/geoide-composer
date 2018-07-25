@@ -448,18 +448,21 @@ Meteor.methods({
           ft.targetNamespace = schema.$.targetNamespace;
           _.each(schema,function(nextTag){
             let complexType = null;
-            if (nextTag[0]){
-              // look for nextTag == element or complexType
-              if (nextTag[0][namePrefix+'complexType']){
-                  complexType = nextTag[0][namePrefix+'complexType'];
-              } else if (nextTag[0][namePrefix+'complexContent']){
-                      complexType = nextTag;
-              } else {
-                // nothing to do
-              }
+            if (nextTag.length > 0) {
+              _.each(nextTag,function(element){
+                if(ftName.indexOf(element.$.name) !== -1) {
+            	  if(element[namePrefix+'complexType']) {
+            		complexType = element[namePrefix+'complexType'];
+            	  } else if (element[namePrefix+'complexContent']){
+            		complexType = nextTag;
+            	  } else {
+            		// nothing to do
+            	  }
+            	}
+              });
             }
             if ( (complexType) && (complexType[0]) && (complexType[0][namePrefix+'complexContent'])){
-              _.each(complexType[0],function(complexContent){     
+              _.each(complexType[0],function(complexContent){   
                 if ((complexContent[0]) && (complexContent[0][namePrefix+'extension'])){
                   _.each(complexContent[0],function(extension){     
                     if ((extension[0]) && (extension[0][namePrefix+'sequence'])){
