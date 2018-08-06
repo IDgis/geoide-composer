@@ -226,6 +226,8 @@ SimpleSchema.featureType = new SimpleSchema ({
  * label: userdefined name
  * service: name of the WMS or TMS service for this serviceLayer
  * nameInService: name of the layer in the service
+ * minZoom: Minimum zoom level of layer. Default: 0
+ * maxZoom: Maximum zoom level of layer. Default: 16
  * legendGraphic: name or url of an image that is used as a legendgraphic
  * featureType: optional featureType
 */
@@ -301,7 +303,26 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       firstOption: function(){ return i18n('collections.firstOption'); },
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); }
     }
-  }, 
+  },
+
+  minZoom: {
+    type: Number,
+    label: function(){ return i18n('collections.layers.serviceLayer.minZoom.label'); },
+    autoform: {
+      placeholder: 1,
+      defaultValue: 1,
+    },
+  },
+
+  maxZoom: {
+    type: Number,
+    label: function(){ return i18n('collections.layers.serviceLayer.maxZoom.label'); },
+    autoform: {
+      placeholder: 16,
+      defaultValue: 16,
+    },
+  },
+
   /*
    * This input uses a special defined type of input,
    * defined in ui/legendGraphic/legendGraph.js
