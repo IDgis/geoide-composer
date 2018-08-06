@@ -308,6 +308,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   minZoom: {
     type: Number,
     label: function(){ return i18n('collections.layers.serviceLayer.minZoom.label'); },
+    min: 0,
+    max: function() {return 16-1}, // should be one less then maxZoom value
     autoform: {
       placeholder: 1,
       defaultValue: 1,
@@ -317,6 +319,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
   maxZoom: {
     type: Number,
     label: function(){ return i18n('collections.layers.serviceLayer.maxZoom.label'); },
+    min: function(){return 0+1}, //  should be one more then minZoom value
+    max: 16,
     autoform: {
       placeholder: 16,
       defaultValue: 16,
