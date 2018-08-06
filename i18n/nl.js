@@ -296,7 +296,13 @@
 				},
 				wfsService : {
 					label : 'WFS service',
-				},
+        },
+        minZoom : {
+          label: 'Minimaal zoomniveau',
+        },
+        maxZoom : {
+          label : 'Maximaal zoomniveau',
+        },
 				legendGraphic : {
           label : 'Legenda plaatje'
         },
