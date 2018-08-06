@@ -31,7 +31,7 @@ import { Services } from '/imports/api/collections/services.js';
  * Searchtemplates can be used in a viewer to filter on featuretype properties 
  * label: user defined name of this filter
  * attribute_localname: name of a field in the featuretype
- * attibute_namespace: namespace of the field in the featuretype
+ * attribute_namespace: namespace of the field in the featuretype
  */
 SimpleSchema.searchTemplate = new SimpleSchema ({
   label: {
@@ -91,7 +91,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); }
     }
   },
-  attibute_namespace: {
+  attribute_namespace: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
