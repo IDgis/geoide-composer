@@ -121,7 +121,7 @@ const fillLayerSelect = function() {
   layers.forEach(function(entry) {
     if (!layerInTree($.jstree.reference('.tree').get_json('#')[0].children,
         entry._id)) {
-      layerOption = '<option value=' + entry._id + '>' + entry.label + ' - ' + name
+      layerOption = '<option value=' + entry._id + '>' + entry.label + ' - ' + entry.name
           + '</option>';
       $('#layerselect').append(layerOption);
     }
