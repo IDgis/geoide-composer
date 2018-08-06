@@ -31,7 +31,7 @@ import { Services } from '/imports/api/collections/services.js';
  * Searchtemplates can be used in a viewer to filter on featuretype properties 
  * label: user defined name of this filter
  * attribute_localname: name of a field in the featuretype
- * attibute_namespace: namespace of the field in the featuretype
+ * attribute_namespace: namespace of the field in the featuretype
  */
 SimpleSchema.searchTemplate = new SimpleSchema ({
   label: {
@@ -91,7 +91,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); }
     }
   },
-  attibute_namespace: {
+  attribute_namespace: {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeNamespace.label'); },
     autoform: {
@@ -226,6 +226,8 @@ SimpleSchema.featureType = new SimpleSchema ({
  * label: userdefined name
  * service: name of the WMS or TMS service for this serviceLayer
  * nameInService: name of the layer in the service
+ * minZoom: Minimum zoom level of layer. Default: 0
+ * maxZoom: Maximum zoom level of layer. Default: 16
  * legendGraphic: name or url of an image that is used as a legendgraphic
  * featureType: optional featureType
 */
@@ -301,7 +303,30 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
       firstOption: function(){ return i18n('collections.firstOption'); },
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.nameInService'); }
     }
-  }, 
+  },
+
+  minZoom: {
+    type: Number,
+    label: function(){ return i18n('collections.layers.serviceLayer.minZoom.label'); },
+    min: 0,
+    max: function() {return 16-1}, // should be one less then maxZoom value
+    autoform: {
+      placeholder: 1,
+      defaultValue: 1,
+    },
+  },
+
+  maxZoom: {
+    type: Number,
+    label: function(){ return i18n('collections.layers.serviceLayer.maxZoom.label'); },
+    min: function(){return 0+1}, //  should be one more then minZoom value
+    max: 16,
+    autoform: {
+      placeholder: 16,
+      defaultValue: 16,
+    },
+  },
+
   /*
    * This input uses a special defined type of input,
    * defined in ui/legendGraphic/legendGraph.js
