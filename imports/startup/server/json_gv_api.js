@@ -274,6 +274,8 @@ Router.map(function () {
                   label: (serviceLayer.label ? serviceLayer.label : ''),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
+                  minZoom: serviceLayer.minZoom,
+                  maxZoom: serviceLayer.maxZoom,
                   legendGraphicUrl: graphicUrl,
                   featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService
                 }
@@ -285,6 +287,8 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
+                  minZoom: serviceLayer.minZoom,
+                  maxZoom: serviceLayer.maxZoom,
                   legendGraphicUrl: graphicUrl
                 }
             );
