@@ -14,24 +14,17 @@
 </div>
  
 {{#autoForm collection=layers schema=layerSchema id="layerform" doc=layerDoc type=formType
-  label-class="col-lg-0" input-col-class="col-lg-12" class="form-inline"
- 	}}
+  label-class="col-lg-0" input-col-class="col-lg-12" class="form-inline" }}
         <fieldset>
-            {{> afQuickField name="name" 
-            }}
-            {{> afQuickField name="label" 
-            }}
+            {{> afQuickField name="name" }}
+            {{> afQuickField name="label" }}
             {{#if adminLoggedIn }} 
-        		{{> afQuickField name="type" type='select-radio-inline' options=layerTypes 
-        		}}
+        		{{> afQuickField name="type" type='select-radio-inline' options=layerTypes }}
         	{{else}}
-        		{{> afQuickField name="type" disabled="true" type='select-radio-inline' options=layerTypes 
-        		}}
+        		{{> afQuickField name="type" disabled="true" type='select-radio-inline' options=layerTypes }}
         	{{/if}}
-        	{{> afQuickField name="properties" 
-        	}}
-        	{{> afQuickField name="service_layers" 
-        	}}
+        	{{> afQuickField name="properties" }}
+        	{{> afQuickField name="service_layers" }}
         </fieldset>  
         <button type="submit" class="btn btn-primary" title="{{i18n 'tooltips.layers.autoform.button.save'}}">{{ i18n 'button.save' }}</button>     
         <a id="returnLayer" class="btn btn-primary" title="{{i18n 'tooltips.layers.autoform.button.cancel'}}">{{ i18n 'button.cancel' }}</a>
