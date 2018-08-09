@@ -226,8 +226,8 @@ SimpleSchema.featureType = new SimpleSchema ({
  * label: userdefined name
  * service: name of the WMS or TMS service for this serviceLayer
  * nameInService: name of the layer in the service
- * minZoom: Minimum zoom level of layer. Default: 0
- * maxZoom: Maximum zoom level of layer. Default: 16
+ * minZoom: Minimum zoom level of layer. Default: 2
+ * maxZoom: Maximum zoom level of layer. Default: 14
  * legendGraphic: name or url of an image that is used as a legendgraphic
  * featureType: optional featureType
 */
@@ -311,8 +311,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     min: 0,
     max: function() {return 16-1}, // should be one less then maxZoom value
     autoform: {
-      placeholder: 1,
-      defaultValue: 1,
+      placeholder: 2, // Gives an image of the netherlands.
+      defaultValue: 2,
     },
   },
 
@@ -322,8 +322,8 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     min: function(){return 0+1}, //  should be one more then minZoom value
     max: 16,
     autoform: {
-      placeholder: 16,
-      defaultValue: 16,
+      placeholder: 14, // around a scale of 1:750. End of well known tile set.
+      defaultValue: 14,
     },
   },
 
