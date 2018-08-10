@@ -407,5 +407,5 @@
   yes: 'Ja',
   no: 'Nee',
   notFound: 'Niet gevonden',
-
+  scale: '1:',
 });

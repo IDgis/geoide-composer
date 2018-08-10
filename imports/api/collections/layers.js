@@ -25,6 +25,22 @@ import { Services } from '/imports/api/collections/services.js';
  * has been limited, the UI can get very unresponsive otherwise.   
  */
 
+ // Constants
+ const scaleOptions = [
+  {label: "750", value: 750},
+  {label: "1500", value: 1500},
+  {label: "2500", value: 2500},
+  {label: "5000", value: 5000},
+  {label: "7500", value: 7500},
+  {label: "10000", value: 10000},
+  {label: "25000", value: 25000},
+  {label: "50000", value: 50000},
+  {label: "100000", value: 100000},
+  {label: "500000", value: 500000},
+  {label: "1000000", value: 1000000},
+  {label: "3000000", value: 3000000},
+];
+
 /*
  * Definition of schema searchTemplate
  * 
@@ -226,8 +242,8 @@ SimpleSchema.featureType = new SimpleSchema ({
  * label: userdefined name
  * service: name of the WMS or TMS service for this serviceLayer
  * nameInService: name of the layer in the service
- * minZoom: Minimum zoom level of layer. Default: 0
- * maxZoom: Maximum zoom level of layer. Default: 16
+ * maxScale: Maximum scale of the layer. Default: 3000000 (This corresponds with a zoom level of ~2.00)
+ * minScale: Minimum scale of the layer. Default: 750 (zoom level of 14)
  * legendGraphic: name or url of an image that is used as a legendgraphic
  * featureType: optional featureType
 */
@@ -305,25 +321,27 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     }
   },
 
-  minZoom: {
+  // scale works the other ways as zoom.
+  // That's why min and max from scale corresponds to max and min respectivly of zoom
+  maxScale: { // Should be higher the minScale
     type: Number,
-    label: function(){ return i18n('collections.layers.serviceLayer.minZoom.label'); },
-    min: 0,
-    max: function() {return 16-1}, // should be one less then maxZoom value
+    label: function(){ return i18n('collections.layers.serviceLayer.minZoom.label')+' '+i18n('scale'); },
+    max: 12288000,
+    min: 188,
     autoform: {
-      placeholder: 1,
-      defaultValue: 1,
+      options: Object.assign([], scaleOptions).reverse(), // reverse() works on the array, thus need to return a new array
+      firstOption: false,
     },
   },
 
-  maxZoom: {
+  minScale: { // Should be lower the maxScale
     type: Number,
-    label: function(){ return i18n('collections.layers.serviceLayer.maxZoom.label'); },
-    min: function(){return 0+1}, //  should be one more then minZoom value
-    max: 16,
+    label: function(){ return i18n('collections.layers.serviceLayer.maxZoom.label')+' '+i18n('scale'); },
+    max: 12288000,
+    min: 188,
     autoform: {
-      placeholder: 16,
-      defaultValue: 16,
+      options: scaleOptions,
+      firstOption: false,
     },
   },
 
