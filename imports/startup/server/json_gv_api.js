@@ -274,8 +274,10 @@ Router.map(function () {
                   label: (serviceLayer.label ? serviceLayer.label : ''),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  minZoom: serviceLayer.minZoom,
-                  maxZoom: serviceLayer.maxZoom,
+                  minZoom: calculateZoomFromScale(serviceLayer.maxScale, 0.25),
+                  maxZoom: calculateZoomFromScale(serviceLayer.minScale, 0.25),
+                  minScale: serviceLayer.minScale,
+                  maxScale: serviceLayer.maxScale,
                   legendGraphicUrl: graphicUrl,
                   featureType: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService
                 }
@@ -287,8 +289,10 @@ Router.map(function () {
                   label: serviceLayer.label,
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
-                  minZoom: serviceLayer.minZoom,
-                  maxZoom: serviceLayer.maxZoom,
+                  minZoom: calculateZoomFromScale(serviceLayer.maxScale, 0.25),
+                  maxZoom: calculateZoomFromScale(serviceLayer.minScale, 0.25),
+                  minScale: serviceLayer.minScale,
+                  maxScale: serviceLayer.maxScale,
                   legendGraphicUrl: graphicUrl
                 }
             );
@@ -518,3 +522,42 @@ Router.map(function () {
   });
  
 });
+
+/**
+ * 
+ * @param {Number} scale The scalefactor -> 1:'scalefactor'
+ * @param {Number} precision Multiple where the resulting zoom will be rounded to.
+ * 
+ * Calculates the zoom level (required by leaflet/openlayers) out of a given scalefactor (the number after 1:)
+ * If precision is set to 1, it rounds to integers.
+ * If scale is outside the range of 188 to 12288000 (see well known scale set for Rd new) the function returns false.
+ * 
+ * calculateZoomFromScale(750) // 14
+ * calculateZoomFromScale(1500) // 13
+ * calculateZoomFromScale(12000) // 10
+ */
+function calculateZoomFromScale(scale, precision) {
+  const maxScale = 12288000; // max scale (zoom = 0) within the RD new well known scale set
+  const minScale = 188; // min scale (zoom = 16) within the RD new well known scale set
+  if (scale > maxScale || scale < minScale) {
+    return false
+  } else {
+    const zoom = Math.log2(maxScale/scale);
+    return roundTo(zoom, precision);
+  }
+}
+
+/**
+ * 
+ * @param {Number} x A Number to round
+ * @param {Number} f A number acting as multiple to round to.
+ * 
+ * The result will be a number closest to x that is a multiple of f
+ * 
+ * roundTo(10, 3); // 9
+ * roundTo(4, 5); // 5
+ *  
+ */
+function roundTo(x, f) {
+  return Math.round(x/f) * f;
+}
