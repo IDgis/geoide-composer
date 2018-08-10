@@ -48,7 +48,7 @@ Meteor.methods({
       return Meteor.settings.version;
     } else {
       // update before release
-      return '1.1.1';
+      return '1.1.0';
     }
   },
 
