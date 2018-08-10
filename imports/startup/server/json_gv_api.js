@@ -231,6 +231,10 @@ Router.map(function () {
  *       label: ,
  *       name: ,
  *       service: ,
+ *       minZoom: ,
+ *       maxZoom: ,
+ *       minScale: ,
+ *       maxScale: ,
  *       legendGraphicUrl: ,
  *       featureType: 
  *     }

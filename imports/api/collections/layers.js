@@ -242,8 +242,8 @@ SimpleSchema.featureType = new SimpleSchema ({
  * label: userdefined name
  * service: name of the WMS or TMS service for this serviceLayer
  * nameInService: name of the layer in the service
- * minZoom: Minimum zoom level of layer. Default: 2
- * maxZoom: Maximum zoom level of layer. Default: 14
+ * maxScale: Maximum scale of the layer. Default: 3000000 (This corresponds with a zoom level of ~2.00)
+ * minScale: Minimum scale of the layer. Default: 750 (zoom level of 14)
  * legendGraphic: name or url of an image that is used as a legendgraphic
  * featureType: optional featureType
 */
