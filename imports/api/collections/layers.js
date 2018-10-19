@@ -60,9 +60,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
        */
-      disabled: function() {
-        return AutoForm.getFieldValue('type', 'layerform') === 'default';
-      },
+      disabled: false,
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); }
     }
   },
@@ -101,9 +99,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
        */
-      disabled: function() {
-        return AutoForm.getFieldValue('type', 'layerform') === 'default';
-      },
+      disabled: false,
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); }
     }
   },
@@ -139,9 +135,7 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
        */
-      disabled: function() {
-        return AutoForm.getFieldValue('type', 'layerform') === 'default';
-      },
+      disabled: false,
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attibuteNamespace'); }
     }
   }
@@ -219,18 +213,7 @@ SimpleSchema.featureType = new SimpleSchema ({
       optional: true,
       minCount: 0,
       autoform: {
-        type: function() {
-          if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-            return 'hidden';
-          }
-        },
-        maxCount: function() {
-          if (AutoForm.getFieldValue('type', 'layerform') === 'default') {
-            return 0;
-          } else {
-            return 3;
-          }
-        },
+        maxCount: 3,
         'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); }
       }
   }   
