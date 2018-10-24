@@ -375,7 +375,25 @@ Router.map(function () {
 });
 
 /**
+ * PropertyTypes
+ * Deliver PropertyTypes from layers collection as json
  * 
+ * The propertTypes are called searchTemplates in the code and in the database schema.
+ * Before it was only used to search, but now it can be used to hide properties from an information request or show a different label for that property.
+ * 
+ * The json structure that Geoide-Viewer expects
+ * is assembled in the gvPropertyTypes object:
+ * 
+ * {propertyTypes:[
+ *     {
+ *       id: ,
+ *       name: ,
+ *       label: ,
+ *       enableSearch: ,
+ *       enableInfo: ,
+ *       namespace: ,
+ *     }
+ * ]}
  */
 
 Router.map(function(){
