@@ -231,6 +231,7 @@ Router.map(function () {
  *       label: ,
  *       name: ,
  *       service: ,
+ *       metadataURL: ,
  *       minZoom: ,
  *       maxZoom: ,
  *       minScale: ,
