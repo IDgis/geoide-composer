@@ -278,6 +278,7 @@ Router.map(function () {
                   label: (serviceLayer.label ? serviceLayer.label : ''),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
+                  metadataURL: serviceLayer.metadataURL,
                   minZoom: calculateZoomFromScale(serviceLayer.maxScale, 0.25),
                   maxZoom: calculateZoomFromScale(serviceLayer.minScale, 0.25),
                   minScale: serviceLayer.minScale,

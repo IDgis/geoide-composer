@@ -368,6 +368,16 @@ SimpleSchema.serviceLayer = new SimpleSchema ({
     }
   },
 
+  metadataURL: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.metadataURL.label'); },
+    optional: true,
+    autoform: {
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.serviceLayers.metadataURL'); }
+    }
+
+  },
+
   // scale works the other ways as zoom.
   // That's why min and max from scale corresponds to max and min respectivly of zoom
   maxScale: { // Should be higher the minScale

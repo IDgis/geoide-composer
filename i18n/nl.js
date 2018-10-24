@@ -152,6 +152,7 @@
             main: "Servicelagen",
             service: "Kies de WMS of TMS service",
             nameInService: "Kies laag van de WMS / TMS",
+            metadataURL: "Geef de URL naar een pagina met metadata van deze laag",
             featureType: "Het featuretype bij deze laag",
             legendGraphic: "De legenda bij deze laag, kan worden vervangen door een eigen legenda afbeelding",
           },
@@ -295,7 +296,10 @@
 				},
 				nameInService : {
 					label : 'Service laagnaam',
-				},
+        },
+        metadataURL : {
+          label : 'Metadata URL'
+        },
 				wfsService : {
 					label : 'WFS service',
         },
