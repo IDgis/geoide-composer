@@ -415,10 +415,8 @@ Router.map(function(){
             } else {
               ft = serviceLayer.featureType;
             }
-            console.log(ft);
             if (ft.searchTemplates && ft.searchTemplates.length > 0) {
               _.each(ft.searchTemplates, function(pt){
-                console.log(pt);
                 gvPropertyTypes.propertyTypes.push(
                   {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + pt.attribute_localname,
