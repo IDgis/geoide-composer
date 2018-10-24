@@ -148,7 +148,7 @@ Router.map(function () {
 	          const serviceLayer = layer.service_layers[index];
 	          layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
 	          // add searchfields to properties
-	          if ((layer.type !== 'default') && (serviceLayer.featureType)){
+	          if (serviceLayer.featureType){
 	            layerProps.searchFields = [];
 	            _.each(serviceLayer.featureType, function(ft){
 	              _.each(ft.searchTemplates, function(st){
@@ -349,7 +349,7 @@ Router.map(function () {
               gvFeatureTypes.featureTypes.push(
                   {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
-                    label: (ft.label.label ? ft.label.label : ''),
+                    label: (ft.label ? ft.label : ''),
                     name: ft.nameInWfsService,
                     service: aService.name
                   }
