@@ -87,18 +87,8 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
             });
           }
         }
-        /*
-        if (propertyTypes.length === 0) {
-          // console.log('Select a featureType from a WFS-service')
-          return i18n('collections.layers.serviceLayer.featureType.searchTemplate.selectWfsFirst.label');
-        } else if (attribute_nr >= propertyTypes.length) {
-          return i18n('collections.layers.serviceLayer.featureType.searchTemplate.removeProperty.label');
-        } else {
-          return propertyTypes[attribute_nr].value
-        }*/
         return propertyTypes;
-      },    
-      //firstOption: function(){ return i18n('collections.firstOption'); },
+      },
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
