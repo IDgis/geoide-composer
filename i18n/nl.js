@@ -163,8 +163,10 @@
 
           },
           searchTemplate: {
-            label: "Geef de titel van de zoekingang waarmee deze getond moet worden in de viewer",
+            label: "Geef een label op waarmee deze eigenschap getoond moet worden in een viewer",
             attributeLocalname: "Veld van het featuretype",
+            enableSearch: "Geeft aan of op deze eigenschap gezocht mag worden",
+            enableInfo: "Geeft aan of de waarde van deze eigenschap getoond mag worden in een informatievenster",
             attributeNamespace: "Namespace van het featuretype (wordt automatisch gevuld)",
           }
         },
@@ -320,21 +322,33 @@
 						label : 'Service',
 					},
 					nameInService : {
-						label : 'FeatureType naam'
+						label : 'FeatureType'
 					},
 					searchTemplates : {
-						label : 'Zoekingangen'
+						label : 'Properties'
 					},
 					searchTemplate : {
 						label : {
 							label : 'Label',
 						},
 						attributeLocalname : {
-							label : 'Zoekveld',
+							label : 'Property',
 						},
 						attributeNamespace : {
 							label : 'Namespace',
 						},
+						enableSearch : {
+							label : 'Zoeken',
+						},
+						enableInfo : {
+							label : 'Info',
+            },
+            selectWfsFirst : {
+              label : 'Selecteer eerst een featureType',
+            },
+            removeProperty : {
+              label : 'Verwijder dit property',
+            },
 					},
 				},
 			},

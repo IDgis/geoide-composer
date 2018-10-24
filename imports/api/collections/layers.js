@@ -44,40 +44,30 @@ import { Services } from '/imports/api/collections/services.js';
 /*
  * Definition of schema searchTemplate
  * 
- * Searchtemplates can be used in a viewer to filter on featuretype properties 
- * label: user defined name of this filter
+ * Searchtemplates can be used in a viewer to filter on featuretype properties
  * attribute_localname: name of a field in the featuretype
+ * label: user defined name of this filter
+ * enableSearch: Boolean to indicate if this property should be able to search on
+ * enableInfo: Boolean to indicate if this property should visible in a featureInfo request
  * attribute_namespace: namespace of the field in the featuretype
  */
 SimpleSchema.searchTemplate = new SimpleSchema ({
-  label: {
-    type: String,
-    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.label.label'); },
-    optional: false,
-    autoform: {
-      'class': 'namelabel',
-      /*
-       * 'disabled' works reactive i.e. after the form is rendered
-       * whereas optional, omit, hidden do not 
-       */
-      disabled: false,
-      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); }
-    }
-  },
   attribute_localname : {
     type: String,
     label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.attributeLocalname.label'); },
     autoform: {
-      options: function(){
-        const serviceField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'service';
+      firstOption: function(){ return i18n('collections.firstOption'); },
+      options: function() {
+        const base = this.name;
+        const serviceField = base.substr(0, base.indexOf('searchTemplates')) + 'service';
         const service = AutoForm.getFieldValue(serviceField);
-        const ftField = this.name.substr(0, this.name.indexOf('searchTemplates')) + 'nameInWfsService';
+        const ftField = base.substr(0, base.indexOf('searchTemplates')) + 'nameInWfsService';
         const ftName = AutoForm.getFieldValue(ftField);
+
         /*
          * Fill the attribute_localname options list
          */
-        let servoptions = [];
-  
+        let propertyTypes = [];
         if (service && ftName){
           /*
            * Retrieve the featuretype fields from the service
@@ -88,19 +78,63 @@ SimpleSchema.searchTemplate = new SimpleSchema ({
               service,
               ftName
           );
-          if (featuretypeFields){
-            servoptions = featuretypeFields.options;
+          if (featuretypeFields) {
+            propertyTypes = featuretypeFields.options.filter((option) => {
+              // Remove the geometry from the properties.
+              // Not needed in search nor as information.
+              const v = option.value
+              return v != "geometry" && v != "geom" && v != "the_geom";
+            });
           }
         }
-        return servoptions;
+        /*
+        if (propertyTypes.length === 0) {
+          // console.log('Select a featureType from a WFS-service')
+          return i18n('collections.layers.serviceLayer.featureType.searchTemplate.selectWfsFirst.label');
+        } else if (attribute_nr >= propertyTypes.length) {
+          return i18n('collections.layers.serviceLayer.featureType.searchTemplate.removeProperty.label');
+        } else {
+          return propertyTypes[attribute_nr].value
+        }*/
+        return propertyTypes;
       },    
-      firstOption: function(){ return i18n('collections.firstOption'); },
+      //firstOption: function(){ return i18n('collections.firstOption'); },
       /*
        * 'disabled' works reactive i.e. after the form is rendered
        * whereas optional, omit, hidden do not 
        */
       disabled: false,
       'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.attributeLocalname'); }
+    }
+  },
+  label: {
+    type: String,
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.label.label'); },
+    optional: false,
+    autoform: {
+      'class': 'namelabel',
+      /*
+       * 'disabled' works reactive i.e. after the form is rendered
+       * whereas optional, omit, hidden do not
+       */
+      disabled: false,
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.label'); }
+    }
+  },
+  enableSearch: {
+    type: Boolean,
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.enableSearch.label'); },
+    autoform: {
+      defaultValue: false,
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.enableSearch'); }
+    }
+  },
+  enableInfo: {
+    type: Boolean,
+    label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplate.enableInfo.label'); },
+    autoform: {
+      defaultValue: true,
+      'title': function(){ return i18n ('tooltips.layers.autoform.fields.searchTemplate.enableInfo'); }
     }
   },
   attribute_namespace: {
@@ -211,9 +245,39 @@ SimpleSchema.featureType = new SimpleSchema ({
       type: [SimpleSchema.searchTemplate],
       label: function(){ return i18n('collections.layers.serviceLayer.featureType.searchTemplates.label'); },
       optional: true,
-      minCount: 0,
       autoform: {
-        maxCount: 3,
+      minCount: 0,
+      maxCount: function(){
+        const base = 'service_layers.0.featureType.0.searchTemplates';
+        const serviceField = base.substr(0, base.indexOf('searchTemplates')) + 'service';
+        const service = AutoForm.getFieldValue(serviceField);
+        const ftField = base.substr(0, base.indexOf('searchTemplates')) + 'nameInWfsService';
+        const ftName = AutoForm.getFieldValue(ftField);
+        /*
+          * Fill the attribute_localname options list
+          */
+        let propertyTypes = [];
+        if (service && ftName){
+          /*
+            * Retrieve the featuretype fields from the service
+            * and put them in the options
+            */
+          const featuretypeFields = ReactiveMethod.call(
+              'describeFeatureType',
+              service,
+              ftName
+          );
+          if (featuretypeFields) {
+            propertyTypes = featuretypeFields.options.filter((option) => {
+              const v = option.value;
+              return v != "geometry" && v != "geom" && v != "the_geom";
+            });
+          }
+
+          console.log(propertyTypes.length)
+        return propertyTypes.length;
+        }
+      },
         'title': function(){ return i18n ('tooltips.layers.autoform.fields.featureType.searchTemplates'); }
       }
   }   
