@@ -263,8 +263,6 @@ SimpleSchema.featureType = new SimpleSchema ({
               return v != "geometry" && v != "geom" && v != "the_geom";
             });
           }
-
-          console.log(propertyTypes.length)
         return propertyTypes.length;
         }
       },

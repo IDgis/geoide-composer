@@ -347,12 +347,6 @@
 						enableInfo : {
 							label : 'Info',
             },
-            selectWfsFirst : {
-              label : 'Selecteer eerst een featureType',
-            },
-            removeProperty : {
-              label : 'Verwijder dit property',
-            },
 					},
 				},
 			},
