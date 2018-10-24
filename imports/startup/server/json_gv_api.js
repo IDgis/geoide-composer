@@ -335,6 +335,7 @@ Router.map(function () {
     action: function () {
       const cursor = Layers.find(); 
       const gvFeatureTypes = {featureTypes:[]};
+      const gvPropertyTypes = {propertyTypes:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           if (serviceLayer.featureType){
@@ -346,12 +347,20 @@ Router.map(function () {
             }
             const aService = Services.findOne({_id: ft.service});
             if (aService){
+              if (ft.searchTemplates && ft.searchTemplates.length > 0) {
+                _.each(ft.searchTemplates, function(pt){
+                  gvPropertyTypes.propertyTypes.push({
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + pt.attribute_localname,
+                  });
+                });
+              }
               gvFeatureTypes.featureTypes.push(
                   {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
                     label: (ft.label ? ft.label : ''),
                     name: ft.nameInWfsService,
-                    service: aService.name
+                    service: aService.name,
+                    propertyTypes: gvPropertyTypes.propertyTypes,
                   }
               );
             }
@@ -368,6 +377,50 @@ Router.map(function () {
 /**
  * 
  */
+
+Router.map(function(){
+  this.route('json-gv-api-propertytypes', {
+    path: '/json-gv-api-propertytypes',
+    where: 'server',
+    action: function () {
+      const gvPropertyTypes = {propertyTypes:[]};
+
+      const cursor = Layers.find();
+      cursor.forEach(function(layer){
+        _.each(layer.service_layers, function(serviceLayer){
+          if (serviceLayer.featureType){
+            let ft;
+            if (_.isArray(serviceLayer.featureType)){
+              ft = serviceLayer.featureType[0];
+            } else {
+              ft = serviceLayer.featureType;
+            }
+            console.log(ft);
+            if (ft.searchTemplates && ft.searchTemplates.length > 0) {
+              _.each(ft.searchTemplates, function(pt){
+                console.log(pt);
+                gvPropertyTypes.propertyTypes.push(
+                  {
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + pt.attribute_localname,
+                    name:  pt.attribute_localname,
+                    label: pt.label,
+                    enableSearch: pt.enableSearch,
+                    enableInfo: pt.enableInfo,
+                    namespace: pt.attribute_namespace,
+                  }
+                );
+              });
+            }
+          }
+        });
+      });
+
+      this.response.setHeader('Content-Type', 'application/json');
+      // make this streaming instead of pushing the whole object at once ??
+      this.response.end(EJSON.stringify(gvPropertyTypes, {indent: true}));
+    }
+  });
+});
 
 /**
  * Maps
