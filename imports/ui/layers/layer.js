@@ -220,7 +220,8 @@ Template.layer.onRendered(function(){
   const legendGraphicImage = this.$("img[name$='legendGraphic.img']");
   if ((legendGraphicImage[0].src) && 
       (_.isEmpty(legendGraphicImage[0].src) || 
-        (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0))){
+        (this.data &&
+        (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0)))) {
     legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
   }
 });
