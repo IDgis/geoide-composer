@@ -60,7 +60,7 @@ Meteor.methods({
    *    null if no value found in the settings file
    */
   getViewerReloadConfigUrl : function(){
-    if (Meteor.settings){
+    if (Meteor.settings && Meteor.settings.viewer && Meteor.settings.viewer.reloadConfigUrl){
       return Meteor.settings.viewer.reloadConfigUrl;
     } else {
       return null;
@@ -76,7 +76,7 @@ Meteor.methods({
    *   if this item is not found in the settings file
    */
   getLegendGraphicUploadFolder : function(){
-    if (Meteor.settings){
+    if (Meteor.settings && Meteor.settings.legendGraphic && Meteor.settings.legendGraphic.uploadFolder){
       return Meteor.settings.legendGraphic.uploadFolder;
     } else {
       return '/tmp/.uploads/';
@@ -113,6 +113,8 @@ Meteor.methods({
           }
         });
         return res;
+    } else {
+      return null;
     }
   }
 
