@@ -544,6 +544,9 @@ Meteor.methods({
             if (!styleDefaultFound){
               if ((style.LegendURL) && (style.LegendURL[0].OnlineResource[0])) {
                 lgUrl = style.LegendURL[0].OnlineResource[0].$['xlink:href'];
+                if (lgUrl.startsWith("http:") && host.startsWith("https:")) {
+                  lgUrl = lgUrl.replace("http:", "https:");
+                }
               }
               if (style.Name[0] === styleDefaultName){
                 styleDefaultFound = true;
