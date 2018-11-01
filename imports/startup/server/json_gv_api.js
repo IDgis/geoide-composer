@@ -611,10 +611,10 @@ Router.map(function () {
  * calculateZoomFromScale(1500) // 13
  * calculateZoomFromScale(12000) // 10
  */
-function calculateZoomFromScale(scale, precision) {
+function calculateZoomFromScale(scale, precision=1) {
   const maxScale = 12288000; // max scale (zoom = 0) within the RD new well known scale set
   const minScale = 188; // min scale (zoom = 16) within the RD new well known scale set
-  if (scale > maxScale || scale < minScale) {
+  if (!scale || scale > maxScale || scale < minScale) {
     return false
   } else {
     const zoom = Math.log2(maxScale/scale);
