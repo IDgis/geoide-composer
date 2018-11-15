@@ -83,7 +83,7 @@ function createMapsApi(maps) {
             label: m.label,
             initial_extent: m.initial_extent,
         }
-        mapApi.maplayers = m.children.map(getMapLayers)
+        mapApi.children = m.children.map(getMapLayers)
 
         mapsApi.maps.push(mapApi);
     });
@@ -134,7 +134,8 @@ function getMapLayers(maplayer) {
     } else if (maplayer.type === "group") {
         // it's a group
         mapLayerApi.name = maplayer.text
-        mapLayerApi.maplayers = maplayer.children.map(getMapLayers);
+        mapLayerApi.label = maplayer.text
+        mapLayerApi.children = maplayer.children.map(getMapLayers);
     }
 
     return mapLayerApi
