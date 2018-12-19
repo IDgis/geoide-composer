@@ -41,6 +41,65 @@ Meteor.setInterval(function(){
   console.log('Cleared WMS/WFS request caches');
 }, DELAY);
 
+
+let describeFeature = function(xml, ftName, ft) {
+  if (xml['ows:ExceptionReport']) {
+    console.log(`describeFeature ERROR xml`)
+    console.log(xml['ows:ExceptionReport']['ows:Exception']);
+  } else {
+
+    // find some common tag namespace prefixes
+    let namePrefix = '';
+    if (xml['xsd:schema']){
+      namePrefix = 'xsd:';
+    } else if (xml['xs:schema']){
+      namePrefix = 'xs:';
+    } else if (xml['wfs:schema']){
+      namePrefix = 'wfs:';
+    } else {
+      namePrefix = '';
+    }
+    _.each(xml,function(schema){
+      ft.targetNamespace = schema.$.targetNamespace;
+      _.each(schema,function(nextTag){
+        let complexType = null;
+        if (nextTag.length > 0) {
+          _.each(nextTag,function(element){
+            let searchName = ftName.split(':')[1]
+            if (element.$ && element.$.name && element.$.name.indexOf(searchName) !== -1) {
+              if (element[namePrefix+'complexType']) {
+                complexType = element[namePrefix+'complexType'];
+              } else if (element[namePrefix+'complexContent']){
+                complexType = nextTag;
+              } else {
+              // nothing to do
+              }
+            }
+          });
+        }
+        if ( (complexType) && (complexType[0]) && (complexType[0][namePrefix+'complexContent'])){
+          _.each(complexType[0],function(complexContent){   
+            if ((complexContent[0]) && (complexContent[0][namePrefix+'extension'])){
+              _.each(complexContent[0],function(extension){     
+                if ((extension[0]) && (extension[0][namePrefix+'sequence'])){
+                  _.each(extension[0],function(sequence){     
+                    if ((sequence[0]) && (sequence[0][namePrefix+'element'])){
+                      _.each(sequence[0][namePrefix+'element'],function(ftField){     
+                        ft.options.push({value:ftField.$.name, label:ftField.$.name});
+                        //console.log(ft.options)
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+    });
+  }
+}
+
 Meteor.methods({
   /**
    * Get image from a url. 
@@ -113,7 +172,7 @@ Meteor.methods({
     if (xml){
       return xml2js.parseStringSync(xml, {explicitArray:true, stripPrefix: true});
     } else {
-      return [];
+      return {};
     }
   },
 
@@ -432,56 +491,32 @@ Meteor.methods({
         const host = serv[0].endpoint;
         const version = serv[0].version;
         const xmlResponse = Meteor.call('getXml', host, {request: 'DescribeFeatureType', service:'WFS', version: version, typeName:ftName, typeNames:ftName});
-        const parseResponse = Meteor.call('parseXml', xmlResponse.content);
-        // find some common tag namespace prefixes
-        let namePrefix = '';
-        if (parseResponse['xsd:schema']){
-          namePrefix = 'xsd:';
-        } else if (parseResponse['xs:schema']){
-          namePrefix = 'xs:';
-        } else if (parseResponse['wfs:schema']){
-          namePrefix = 'wfs:';
+        if (xmlResponse.content) {
+          const parseResponse = Meteor.call('parseXml', xmlResponse.content);
+          if (Object.keys(parseResponse).length > 0) {
+            describeFeature(parseResponse, ftName, ft) // find the feature in the resulting xml
+
+            ft.options = _.sortBy(ft.options, 'title');
+            DESCRIBEFEATURETYPES_CACHE.set(DESCRIBEFEATURETYPESKEY, ft);
+          } else {
+            console.log(`DescribeFeatureType ERROR parseResponse`);
+            console.log(`Couldn't parse DescribeFeatureType response`)
+            console.log(`host: '${host}', request: 'DescribeFeatureType', service: 'WFS', version: '${version}', typeName: '${ftName}', typeNames: '${ftName}'`)
+            // console.log(xmlResponse.content)
+          }
         } else {
-          namePrefix = '';
+          console.log('DescribeFeatureType ERROR xmlResponse:', xmlResponse);
+          let errorMsg = xmlResponse.statusCode;
+          if (!errorMsg){
+            if (xmlResponse.response){
+              errorMsg = xmlResponse.response.statusCode;
+            } else {
+              errorMsg = xmlResponse.code;
+            }
+          }
+          console.log(errorMsg);
         }
-        _.each(parseResponse,function(schema){
-          ft.targetNamespace = schema.$.targetNamespace;
-          _.each(schema,function(nextTag){
-            let complexType = null;
-            if (nextTag.length > 0) {
-              _.each(nextTag,function(element){
-                if(ftName.indexOf(element.$.name) !== -1) {
-            	  if(element[namePrefix+'complexType']) {
-            		complexType = element[namePrefix+'complexType'];
-            	  } else if (element[namePrefix+'complexContent']){
-            		complexType = nextTag;
-            	  } else {
-            		// nothing to do
-            	  }
-            	}
-              });
-            }
-            if ( (complexType) && (complexType[0]) && (complexType[0][namePrefix+'complexContent'])){
-              _.each(complexType[0],function(complexContent){   
-                if ((complexContent[0]) && (complexContent[0][namePrefix+'extension'])){
-                  _.each(complexContent[0],function(extension){     
-                    if ((extension[0]) && (extension[0][namePrefix+'sequence'])){
-                      _.each(extension[0],function(sequence){     
-                        if ((sequence[0]) && (sequence[0][namePrefix+'element'])){
-                          _.each(sequence[0][namePrefix+'element'],function(ftField){     
-                            ft.options.push({value:ftField.$.name, label:ftField.$.name});
-                          });
-                        }
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          });
-        });
-        ft.options = _.sortBy(ft.options, 'title');
-        DESCRIBEFEATURETYPES_CACHE.set(DESCRIBEFEATURETYPESKEY, ft);
+        
       }
     }
     return ft;
