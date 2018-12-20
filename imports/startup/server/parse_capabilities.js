@@ -500,21 +500,14 @@ Meteor.methods({
             DESCRIBEFEATURETYPES_CACHE.set(DESCRIBEFEATURETYPESKEY, ft);
           } else {
             console.log(`DescribeFeatureType ERROR parseResponse`);
-            console.log(`Couldn't parse DescribeFeatureType response`)
-            console.log(`host: '${host}', request: 'DescribeFeatureType', service: 'WFS', version: '${version}', typeName: '${ftName}', typeNames: '${ftName}'`)
+            console.log(`Couldn't parse DescribeFeatureType response`);
+            console.log(`host: '${host}', request: 'DescribeFeatureType', service: 'WFS', version: '${version}', typeName: '${ftName}', typeNames: '${ftName}'`);
             // console.log(xmlResponse.content)
           }
         } else {
-          console.log('DescribeFeatureType ERROR xmlResponse:', xmlResponse);
-          let errorMsg = xmlResponse.statusCode;
-          if (!errorMsg){
-            if (xmlResponse.response){
-              errorMsg = xmlResponse.response.statusCode;
-            } else {
-              errorMsg = xmlResponse.code;
-            }
-          }
-          console.log(errorMsg);
+          console.log('DescribeFeatureType ERROR xmlResponse');
+          console.log(`Error in DescribeFeatureType request`);
+          console.log(`host: '${host}', request: 'DescribeFeatureType', service: 'WFS', version: '${version}', typeName: '${ftName}', typeNames: '${ftName}'`);
         }
         
       }
