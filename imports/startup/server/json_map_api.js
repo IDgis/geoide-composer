@@ -83,7 +83,7 @@ function createMapsApi(maps) {
             label: m.label,
             initial_extent: m.initial_extent,
         }
-        mapApi.maplayers = m.children.map(getMapLayers)
+        mapApi.children = m.children.map(getMapLayers)
 
         mapsApi.maps.push(mapApi);
     });
@@ -103,12 +103,12 @@ function createMapsApi(maps) {
  *  name: String, 
  *  label: String,
  *  properties: {initial_query: String}
- *  service_layers: []
+ *  service: {}
  *  maplayers: []
  * }
  * 
  * maplayers is onlye there if type.map = 'group'
- * type.layer, label, properties and service_layer are only there when type.map = 'layer'
+ * type.layer, label, properties and service are only there when type.map = 'layer'
  * properties is only there if type.layer = 'cosurvey-sql'
  */
 function getMapLayers(maplayer) {
@@ -130,11 +130,12 @@ function getMapLayers(maplayer) {
         if (layer.type === "cosurvey-sql") { // the layer could be set back to default, but still you would have the properties in the collection. We don't want them in the api.
             mapLayerApi.properties = layer.properties
         }
-        mapLayerApi.service_layers = layer.service_layers.map(getServiceLayers);
+        mapLayerApi.service = getServiceLayers(layer.service_layers[0]); // only use the first service_layer
     } else if (maplayer.type === "group") {
         // it's a group
         mapLayerApi.name = maplayer.text
-        mapLayerApi.maplayers = maplayer.children.map(getMapLayers);
+        mapLayerApi.label = maplayer.text
+        mapLayerApi.children = maplayer.children.map(getMapLayers);
     }
 
     return mapLayerApi
@@ -154,7 +155,11 @@ function getMapLayers(maplayer) {
  *  legendGraphic: String,
  *  layerInService: String,
  *  feature_types: [],
- *  service: {}
+ *  name: String
+ *  endpoint: String
+ *  type: {serivce: String}
+ *  version: String
+ *  printFormat: String
  * }
  * 
  */
@@ -170,7 +175,7 @@ function getServiceLayers(servicelayer) {
     if (servicelayer.featureType) {
         serviceLayerApi.feature_types = getFeatureTypes(servicelayer.featureType);
     }
-    serviceLayerApi.service = getService(servicelayer.service)
+    Object.assign(serviceLayerApi, getService(servicelayer.service)) // merge the service object into the serviceLayerApi
 
     return serviceLayerApi
 }
