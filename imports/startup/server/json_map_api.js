@@ -200,12 +200,9 @@ function getServiceLayers(servicelayer) {
 
 function getFeatureTypes(featureTypes) {
     return featureTypes.map(featureType => {
-        return {
-            label: featureType.label,
-            service: getService(featureType.service),
-            featureTypeInWfsService: featureType.nameInWfsService,
-            
-            properties: featureType.searchTemplates.map(property => {
+        let props = [];
+        if (featureType.searchTemplates && featureType.searchTemplates.length > 0) {
+            props = featureType.searchTemplates.map(property => {
                 return {
                     name: property.attribute_localname,
                     label: property.label,
@@ -213,7 +210,13 @@ function getFeatureTypes(featureTypes) {
                     enableInfo: property.enableInfo,
                     namespace: property.attribute_namespace,
                 }
-            }),
+            });
+        }
+        return {
+            label: featureType.label,
+            service: getService(featureType.service),
+            featureTypeInWfsService: featureType.nameInWfsService,
+            properties: props,
         }
     });
 }
