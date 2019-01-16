@@ -130,7 +130,7 @@ function getMapLayers(maplayer) {
         if (layer.type === "cosurvey-sql") { // the layer could be set back to default, but still you would have the properties in the collection. We don't want them in the api.
             mapLayerApi.properties = layer.properties
         }
-        mapLayerApi.service = getServiceLayers(layer.service_layers[0]); // only use the first service_layer
+        mapLayerApi.services = layer.service_layers.map(service_layer => getServiceLayers(service_layer)); // only use the first service_layer
     } else if (maplayer.type === "group") {
         // it's a group
         mapLayerApi.name = maplayer.text
