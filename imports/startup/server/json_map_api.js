@@ -169,6 +169,8 @@ function getServiceLayers(servicelayer) {
         metadataURL: servicelayer.metadataURL,
         maxScale: servicelayer.maxScale,
         minScale: servicelayer.minScale,
+        minZoom: calculateZoomFromScale(servicelayer.maxScale, 0.25),
+        maxZoom: calculateZoomFromScale(servicelayer.minScale, 0.25),
         legendGraphic: servicelayer.legendGraphic,
         layerInService: servicelayer.nameInService,
     }
