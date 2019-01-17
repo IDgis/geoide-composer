@@ -248,6 +248,9 @@ function getService(id) {
     if (service.type === 'WMS') {
         serviceApi.printFormat = service.printFormat
     }
+    if (service.type === 'TMS') {
+        serviceApi.tmsFormat = service.tmsFormat
+    }
     return serviceApi
 }
 

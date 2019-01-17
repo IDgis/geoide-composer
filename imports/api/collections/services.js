@@ -148,6 +148,17 @@ export const ServiceSchema = new SimpleSchema({
       'title': function(){ return i18n ('tooltips.services.autoform.fields.printFormat'); },
       'defaultValue': function() {return 'image/png'; }
     }
+  },
+  tmsFormat: {
+    type: String,
+    label: function(){ return i18n('collections.services.tmsFormat.label'); },
+    optional: false,
+    autoform: {
+      options: [{label:"png",value:"png"}, {label:"jpeg",value:"jpeg"}],
+      firstOption: function(){ return i18n('collections.firstOption'); },
+      'title': function(){ return i18n ('tooltips.services.autoform.fields.tmsFormat'); },
+      'defaultValue': function() {return 'png'; }
+    }
   }
 });
 
