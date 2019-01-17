@@ -130,7 +130,7 @@ function getMapLayers(maplayer) {
         if (layer.type === "cosurvey-sql") { // the layer could be set back to default, but still you would have the properties in the collection. We don't want them in the api.
             mapLayerApi.properties = layer.properties
         }
-        mapLayerApi.service = getServiceLayers(layer.service_layers[0]); // only use the first service_layer
+        mapLayerApi.services = layer.service_layers.map(service_layer => getServiceLayers(service_layer)); // only use the first service_layer
     } else if (maplayer.type === "group") {
         // it's a group
         mapLayerApi.name = maplayer.text
@@ -169,6 +169,8 @@ function getServiceLayers(servicelayer) {
         metadataURL: servicelayer.metadataURL,
         maxScale: servicelayer.maxScale,
         minScale: servicelayer.minScale,
+        minZoom: calculateZoomFromScale(servicelayer.maxScale, 0.25),
+        maxZoom: calculateZoomFromScale(servicelayer.minScale, 0.25),
         legendGraphic: servicelayer.legendGraphic,
         layerInService: servicelayer.nameInService,
     }
@@ -246,5 +248,47 @@ function getService(id) {
     if (service.type === 'WMS') {
         serviceApi.printFormat = service.printFormat
     }
+    if (service.type === 'TMS') {
+        serviceApi.tmsFormat = service.tmsFormat
+    }
     return serviceApi
 }
+
+/**
+ * 
+ * @param {Number} scale The scalefactor -> 1:'scalefactor'
+ * @param {Number} precision Multiple where the resulting zoom will be rounded to.
+ * 
+ * Calculates the zoom level (required by leaflet/openlayers) out of a given scalefactor (the number after 1:)
+ * If precision is set to 1, it rounds to integers.
+ * If scale is outside the range of 188 to 12288000 (see well known scale set for Rd new) the function returns false.
+ * 
+ * calculateZoomFromScale(750) // 14
+ * calculateZoomFromScale(1500) // 13
+ * calculateZoomFromScale(12000) // 10
+ */
+function calculateZoomFromScale(scale, precision=1) {
+    const maxScale = 12288000; // max scale (zoom = 0) within the RD new well known scale set
+    const minScale = 188; // min scale (zoom = 16) within the RD new well known scale set
+    if (!scale || scale > maxScale || scale < minScale) {
+      return false
+    } else {
+      const zoom = Math.log2(maxScale/scale);
+      return roundTo(zoom, precision);
+    }
+  }
+  
+  /**
+   * 
+   * @param {Number} x A Number to round
+   * @param {Number} f A number acting as multiple to round to.
+   * 
+   * The result will be a number closest to x that is a multiple of f
+   * 
+   * roundTo(10, 3); // 9
+   * roundTo(4, 5); // 5
+   *  
+   */
+  function roundTo(x, f) {
+    return Math.round(x/f) * f;
+  }
