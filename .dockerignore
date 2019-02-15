@@ -1,7 +1,11 @@
-.meteor/local/
 .git
+.meteor/local/
 .sonar
-.deploy.sh
-.docker-compose.yml
-sonar-project.properties
+.sonarlint
 node_modules
+
+.gitignore
+npm-debug.log
+settings.json
+sonar-project.properties
+
