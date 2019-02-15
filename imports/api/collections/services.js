@@ -152,7 +152,7 @@ export const ServiceSchema = new SimpleSchema({
   tmsFormat: {
     type: String,
     label: function(){ return i18n('collections.services.tmsFormat.label'); },
-    optional: false,
+    optional: true,
     autoform: {
       options: [{label:"png",value:"png"}, {label:"jpeg",value:"jpeg"}],
       firstOption: function(){ return i18n('collections.firstOption'); },
