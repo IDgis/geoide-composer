@@ -447,19 +447,17 @@ AutoForm.addHooks('mapForm',{
    * When the viewer reload fails, alert the user.
    */
   onSuccess : function() {
-    Meteor.call('triggerViewerReload', function(lError,
-        lResponse) {
+    Meteor.call('triggerViewerReload', function(lError, lResponse) {
       if (lError) {
         Modal.show('alert-geoide-viewer-refresh');
         Router.go('maps.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode !== 200 ){
+        if (lResponse && lResponse.statusCode !== 200 ){
           Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('maps.list');
       }
     });
   }
-
 });

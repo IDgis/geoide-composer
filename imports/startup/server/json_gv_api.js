@@ -148,7 +148,7 @@ Router.map(function () {
 	          const serviceLayer = layer.service_layers[index];
 	          layerServiceLayers.push(layer.name + '.' + serviceLayer.nameInService);
 	          // add searchfields to properties
-	          if ((layer.type !== 'default') && (serviceLayer.featureType)){
+	          if (serviceLayer.featureType){
 	            layerProps.searchFields = [];
 	            _.each(serviceLayer.featureType, function(ft){
 	              _.each(ft.searchTemplates, function(st){
@@ -231,6 +231,7 @@ Router.map(function () {
  *       label: ,
  *       name: ,
  *       service: ,
+ *       metadataURL: ,
  *       minZoom: ,
  *       maxZoom: ,
  *       minScale: ,
@@ -278,6 +279,7 @@ Router.map(function () {
                   label: (serviceLayer.label ? serviceLayer.label : ''),
                   name: serviceLayer.nameInService,
                   service: aService.name, //serviceLayer.service,
+                  metadataURL: serviceLayer.metadataURL,
                   minZoom: calculateZoomFromScale(serviceLayer.maxScale, 0.25),
                   maxZoom: calculateZoomFromScale(serviceLayer.minScale, 0.25),
                   minScale: serviceLayer.minScale,
@@ -335,6 +337,7 @@ Router.map(function () {
     action: function () {
       const cursor = Layers.find(); 
       const gvFeatureTypes = {featureTypes:[]};
+      const gvPropertyTypes = {propertyTypes:[]};
       cursor.forEach(function(layer){
         _.each(layer.service_layers, function(serviceLayer){
           if (serviceLayer.featureType){
@@ -346,12 +349,20 @@ Router.map(function () {
             }
             const aService = Services.findOne({_id: ft.service});
             if (aService){
+              if (ft.searchTemplates && ft.searchTemplates.length > 0) {
+                _.each(ft.searchTemplates, function(pt){
+                  gvPropertyTypes.propertyTypes.push({
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + pt.attribute_localname,
+                  });
+                });
+              }
               gvFeatureTypes.featureTypes.push(
                   {
                     id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService, 
-                    label: (ft.label.label ? ft.label.label : ''),
+                    label: (ft.label ? ft.label : ''),
                     name: ft.nameInWfsService,
-                    service: aService.name
+                    service: aService.name,
+                    propertyTypes: gvPropertyTypes.propertyTypes,
                   }
               );
             }
@@ -366,8 +377,68 @@ Router.map(function () {
 });
 
 /**
+ * PropertyTypes
+ * Deliver PropertyTypes from layers collection as json
  * 
+ * The propertTypes are called searchTemplates in the code and in the database schema.
+ * Before it was only used to search, but now it can be used to hide properties from an information request or show a different label for that property.
+ * 
+ * The json structure that Geoide-Viewer expects
+ * is assembled in the gvPropertyTypes object:
+ * 
+ * {propertyTypes:[
+ *     {
+ *       id: ,
+ *       name: ,
+ *       label: ,
+ *       enableSearch: ,
+ *       enableInfo: ,
+ *       namespace: ,
+ *     }
+ * ]}
  */
+
+Router.map(function(){
+  this.route('json-gv-api-propertytypes', {
+    path: '/json-gv-api-propertytypes',
+    where: 'server',
+    action: function () {
+      const gvPropertyTypes = {propertyTypes:[]};
+
+      const cursor = Layers.find();
+      cursor.forEach(function(layer){
+        _.each(layer.service_layers, function(serviceLayer){
+          if (serviceLayer.featureType){
+            let ft;
+            if (_.isArray(serviceLayer.featureType)){
+              ft = serviceLayer.featureType[0];
+            } else {
+              ft = serviceLayer.featureType;
+            }
+            if (ft.searchTemplates && ft.searchTemplates.length > 0) {
+              _.each(ft.searchTemplates, function(pt){
+                gvPropertyTypes.propertyTypes.push(
+                  {
+                    id: layer.name + '.' + serviceLayer.nameInService + '.' + ft.nameInWfsService + '.' + pt.attribute_localname,
+                    name:  pt.attribute_localname,
+                    label: pt.label,
+                    enableSearch: pt.enableSearch,
+                    enableInfo: pt.enableInfo,
+                    namespace: pt.attribute_namespace,
+                  }
+                );
+              });
+            }
+          }
+        });
+      });
+
+      this.response.setHeader('Content-Type', 'application/json');
+      // make this streaming instead of pushing the whole object at once ??
+      this.response.end(EJSON.stringify(gvPropertyTypes, {indent: true}));
+    }
+  });
+});
 
 /**
  * Maps
@@ -540,10 +611,10 @@ Router.map(function () {
  * calculateZoomFromScale(1500) // 13
  * calculateZoomFromScale(12000) // 10
  */
-function calculateZoomFromScale(scale, precision) {
+function calculateZoomFromScale(scale, precision=1) {
   const maxScale = 12288000; // max scale (zoom = 0) within the RD new well known scale set
   const minScale = 188; // min scale (zoom = 16) within the RD new well known scale set
-  if (scale > maxScale || scale < minScale) {
+  if (!scale || scale > maxScale || scale < minScale) {
     return false
   } else {
     const zoom = Math.log2(maxScale/scale);

@@ -220,7 +220,8 @@ Template.layer.onRendered(function(){
   const legendGraphicImage = this.$("img[name$='legendGraphic.img']");
   if ((legendGraphicImage[0].src) && 
       (_.isEmpty(legendGraphicImage[0].src) || 
-        (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0))){
+        (this.data &&
+        (legendGraphicImage[0].src.indexOf('/layer/'+this.data._id)>=0)))) {
     legendGraphicImage[0].src = '/images/empty-legendgraphic.png';
   }
 });
@@ -239,7 +240,7 @@ AutoForm.addHooks('layerform',{
         Router.go('layers.list');
       } else {
         // check op bepaalde inhoud van response of de refresh gelukt is
-        if (lResponse.statusCode !== 200 ){
+        if (lResponse && lResponse.statusCode !== 200 ){
           Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('layers.list');

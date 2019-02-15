@@ -27,14 +27,13 @@
        		{{> afQuickField name='version' type='select-radio-inline' options=wfsVersions  template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
 		{{/if}}
       	{{#if afFieldValueIs name="type" value="TMS"}}
-       		{{> afQuickField name='version' type='select-radio-inline' options=tmsVersions  template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
+			{{> afQuickField name='version' type='select-radio-inline' options=tmsVersions  template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-11"}}
+			{{> afQuickField name='tmsFormat' template="bootstrap3-horizontal" label-class="col-lg-1" input-col-class="col-lg-4"}}   
 		{{/if}}
        </fieldset> <br> 
        <button id="save" type="submit" class="btn btn-primary" title="{{i18n 'tooltips.services.autoform.button.save'}}">{{ i18n 'button.save' }}</button> 
        <a id="return" class="btn btn-primary" title="{{i18n 'tooltips.services.autoform.button.cancel'}}">{{ i18n 'button.cancel' }}</a>
        <a id="control" class="btn btn-primary" title="{{i18n 'tooltips.services.autoform.button.control'}}">{{ i18n 'button.control' }}</a> 
  {{/autoForm}}
- 
-
  
 </template>

@@ -167,7 +167,7 @@ AutoForm.addHooks('serviceform', {
         Router.go('services.list');
       } else {
         // check op bepaalde inhoud van response of refresh gelukt is
-        if (lResponse.statusCode !== 200 ){
+        if (lResponse && lResponse.statusCode !== 200 ){
           Modal.show('alert-geoide-viewer-refresh');
         }
         Router.go('services.list');

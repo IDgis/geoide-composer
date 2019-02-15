@@ -152,6 +152,7 @@
             main: "Servicelagen",
             service: "Kies de WMS of TMS service",
             nameInService: "Kies laag van de WMS / TMS",
+            metadataURL: "Geef de URL naar een pagina met metadata van deze laag",
             featureType: "Het featuretype bij deze laag",
             legendGraphic: "De legenda bij deze laag, kan worden vervangen door een eigen legenda afbeelding",
           },
@@ -163,8 +164,10 @@
 
           },
           searchTemplate: {
-            label: "Geef de titel van de zoekingang waarmee deze getond moet worden in de viewer",
+            label: "Geef een label op waarmee deze eigenschap getoond moet worden in een viewer",
             attributeLocalname: "Veld van het featuretype",
+            enableSearch: "Geeft aan of op deze eigenschap gezocht mag worden",
+            enableInfo: "Geeft aan of de waarde van deze eigenschap getoond mag worden in een informatievenster",
             attributeNamespace: "Namespace van het featuretype (wordt automatisch gevuld)",
           }
         },
@@ -190,6 +193,7 @@
           type: "Kies het service type",
           version: "Kies de versie van de service, controleer eventueel of de gekozen versie door de service wordt ondersteund.",
           printFormat: "Kies een print formaat uit de lijst, svg geeft de beste kwaliteit",
+          tmsFormat: "Kies een formaat uit de lijst, png is de standaard, jpeg voor luchtfoto's",
         },
         button: {
           save: 'Opslaan',
@@ -261,6 +265,9 @@
       printFormat : {
         label : 'Print formaat',
       },
+      tmsFormat : {
+        label : 'Tile type',
+      },
     },
     layers : {
       name : {
@@ -293,7 +300,10 @@
 				},
 				nameInService : {
 					label : 'Service laagnaam',
-				},
+        },
+        metadataURL : {
+          label : 'Metadata URL'
+        },
 				wfsService : {
 					label : 'WFS service',
         },
@@ -320,21 +330,27 @@
 						label : 'Service',
 					},
 					nameInService : {
-						label : 'FeatureType naam'
+						label : 'FeatureType'
 					},
 					searchTemplates : {
-						label : 'Zoekingangen'
+						label : 'Properties'
 					},
 					searchTemplate : {
 						label : {
 							label : 'Label',
 						},
 						attributeLocalname : {
-							label : 'Zoekveld',
+							label : 'Property',
 						},
 						attributeNamespace : {
 							label : 'Namespace',
 						},
+						enableSearch : {
+							label : 'Zoeken',
+						},
+						enableInfo : {
+							label : 'Info',
+            },
 					},
 				},
 			},
