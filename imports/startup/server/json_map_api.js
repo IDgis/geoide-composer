@@ -135,7 +135,7 @@ function getMapLayers(maplayer, request) {
         // it's a group
         mapLayerApi.name = maplayer.text
         mapLayerApi.label = maplayer.text
-        mapLayerApi.children = maplayer.children.map(getMapLayers);
+        mapLayerApi.children = maplayer.children.map(child => getMapLayers(child, request));
     }
 
     return mapLayerApi
@@ -164,7 +164,6 @@ function getMapLayers(maplayer, request) {
  * 
  */
 function getServiceLayers(servicelayer, request) {
-
     const protocol = request.headers['x-forwarded-proto'];
     const host = request.headers.host;
     let graphicUrl = servicelayer.legendGraphic;
