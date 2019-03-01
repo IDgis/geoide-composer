@@ -34,7 +34,7 @@ Router.map(function () {
             let mapsApi = {};
             const m = Maps.findOne({text: this.params.mapName})
             if (m) {
-                mapsApi = createMapsApi([m]);
+                mapsApi = createMapsApi([m], this.request);
             } else {
                 //maps = Maps.find().fetch();
                 // do nothing
@@ -51,7 +51,7 @@ Router.map(function () {
         path: '/json-map-api-maps/2.0',
         where: 'server',
         action: function () {
-            const mapsApi = createMapsApi(Maps.find().fetch());
+            const mapsApi = createMapsApi(Maps.find().fetch(), this.request);
             this.response.setHeader('Content-Type', 'application/json');
             this.response.end(EJSON.stringify(mapsApi, {indent: true}));
         }
@@ -71,7 +71,7 @@ Router.map(function () {
  * }
  * 
  */
-function createMapsApi(maps) {
+function createMapsApi(maps, request) {
     const mapsApi = {
         api_version: '2.0',
         maps: []
@@ -83,7 +83,7 @@ function createMapsApi(maps) {
             label: m.label,
             initial_extent: m.initial_extent,
         }
-        mapApi.children = m.children.map(getMapLayers)
+        mapApi.children = m.children.map(child => getMapLayers(child, request));
 
         mapsApi.maps.push(mapApi);
     });
@@ -111,7 +111,7 @@ function createMapsApi(maps) {
  * type.layer, label, properties and service are only there when type.map = 'layer'
  * properties is only there if type.layer = 'cosurvey-sql'
  */
-function getMapLayers(maplayer) {
+function getMapLayers(maplayer, request) {
     const mapLayerApi = {
         type: {},
         state: {}
@@ -130,12 +130,12 @@ function getMapLayers(maplayer) {
         if (layer.type === "cosurvey-sql") { // the layer could be set back to default, but still you would have the properties in the collection. We don't want them in the api.
             mapLayerApi.properties = layer.properties
         }
-        mapLayerApi.services = layer.service_layers.map(service_layer => getServiceLayers(service_layer)); // only use the first service_layer
+        mapLayerApi.services = layer.service_layers.map(service_layer => getServiceLayers(service_layer, request)); // only use the first service_layer
     } else if (maplayer.type === "group") {
         // it's a group
         mapLayerApi.name = maplayer.text
         mapLayerApi.label = maplayer.text
-        mapLayerApi.children = maplayer.children.map(getMapLayers);
+        mapLayerApi.children = maplayer.children.map(child => getMapLayers(child, request));
     }
 
     return mapLayerApi
@@ -163,7 +163,19 @@ function getMapLayers(maplayer) {
  * }
  * 
  */
-function getServiceLayers(servicelayer) {
+function getServiceLayers(servicelayer, request) {
+    const protocol = request.headers['x-forwarded-proto'];
+    const host = request.headers.host;
+    let graphicUrl = servicelayer.legendGraphic;
+    if ((graphicUrl) && (graphicUrl.indexOf('http') === -1)){
+      /*
+       * if the url does not contain http(s),
+       * then it only contains the name of an uploaded image.
+       * Change this into a full url.
+       */
+       graphicUrl = protocol + '://' + host + '/upload/' + graphicUrl;
+    }
+
     const serviceLayerApi = {
         label: servicelayer.label,
         metadataURL: servicelayer.metadataURL,
@@ -171,7 +183,7 @@ function getServiceLayers(servicelayer) {
         minScale: servicelayer.minScale,
         minZoom: calculateZoomFromScale(servicelayer.maxScale, 0.25),
         maxZoom: calculateZoomFromScale(servicelayer.minScale, 0.25),
-        legendGraphic: servicelayer.legendGraphic,
+        legendGraphic: graphicUrl,
         layerInService: servicelayer.nameInService,
     }
     if (servicelayer.featureType) {
