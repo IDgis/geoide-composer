@@ -81,6 +81,7 @@ function createMapsApi(maps, request) {
         const mapApi = {
             name: m.text,
             label: m.label,
+            crs: m.crs,
             initial_extent: m.initial_extent,
         }
         mapApi.children = m.children.map(child => getMapLayers(child, request));
