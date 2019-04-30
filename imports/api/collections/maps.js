@@ -152,6 +152,13 @@ export const MapSchema= new SimpleSchema({
     type: String,
     defaultValue: 'map'
   },
+  crs: {
+    type: String,
+    label: function(){ return i18n('collections.maps.crs.label'); },
+    autoform: {
+      'title': function(){ return i18n('tooltips.maps.autoform.fields.crs'); }
+    }
+  },
   initial_extent: {
     type: SimpleSchema.initialExtent,
     label: function(){ return i18n('collections.maps.initialExtent.label'); },
