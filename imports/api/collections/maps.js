@@ -176,8 +176,23 @@ export const MapSchema= new SimpleSchema({
     type: String,
     label: function(){ return i18n('collections.maps.crs.label'); },
     autoform: {
-      'title': function(){ return i18n('tooltips.maps.autoform.fields.crs'); }
-    }
+      // https://github.com/aldeed/meteor-autoform#affieldinput
+      title: function(){ return i18n('tooltips.maps.autoform.fields.crs'); },
+      afFieldInput: {
+        type: 'select',
+        firstOption: false,
+        options: [
+          { label: "Amersfoort / RD New - (EPSG:28992)", value: "EPSG:28992" },
+          { label: "ETRS89 - (EPSG:4258)", value: "EPSG:4258" },
+          { label: "Web Mercator - (EPSG:3857)", value: "EPSG:3857" },
+          { label: "WGS84 - (EPSG:4326)", value: "EPSG:4326" }
+        ],
+        defaultValue: 'EPSG:28992',
+      },
+      template: 'bootstrap3-horizontal',
+      'label-class': 'col-sm-4',
+      'input-col-class': 'col-sm-6',
+    },
   },
   initial_extent: {
     type: SimpleSchema.initialExtent,
