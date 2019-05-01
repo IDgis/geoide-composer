@@ -22,10 +22,9 @@ RUN cd /home/meteorapp/app \
   && cd / \
   && ./cleanup.sh
 
-RUN npm install -g forever
-
 RUN mkdir /usr/geoide-upload-folder/ \
     && chown -R meteor /usr/geoide-upload-folder
 VOLUME /usr/geoide-upload-folder
 USER meteor
-CMD ["forever", "--minUptime", "1000", "--spinSleepTime", "1000", "build/bundle/main.js"]
+
+CMD ["node", "/home/meteorapp/build/bundle/main.js"]

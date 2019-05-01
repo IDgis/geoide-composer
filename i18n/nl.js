@@ -80,6 +80,7 @@
       table: {
         name: 'Naam',
         label: 'Label',
+        crs: 'CRS',
         layers: 'Hoofdlagen',
       },
       button: {
@@ -215,6 +216,7 @@
           name: "Geef een (unieke) naam aan de kaart",
           label: "Geef de titel waarmee de kaart in de viewer getoond moet worden.",
           initial_visible : "Maak een laag of groep initieel (on)zichtbaar ",
+          crs: 'Selecteer een projectie voor de kaart',
           initial_extent: {
             label: "Omgrenzende rechthoek / extent van de kaart in RD coördinaten",
             minx: "minimum waarde van x",
@@ -361,6 +363,9 @@
       },
       label : {
         label: "Label",
+      },
+      crs: {
+        label: "Kies een CRS",
       },
       initialExtent: {
         label: "Initiële kaartuitsnede",

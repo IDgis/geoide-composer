@@ -70,8 +70,7 @@ Template.map.helpers({
     } else {
       return null;
     }
-  }
-
+  },
 });
 
 /**

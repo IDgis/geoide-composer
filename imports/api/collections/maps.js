@@ -8,6 +8,13 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
+SimpleSchema.messages({
+  minxError: 'Minx kan niet groter dan of gelijk zijn aan Maxx',
+  maxxError: 'Maxx kan niet kleiner dan of gelijk zijn aan Minx',
+  minyError: 'Miny kan niet groter dan of gelijk zijn aan Maxy',
+  maxyError: 'Maxy kan niet kleiner dan of gelijk zijn aan Miny',
+});
+
 /**
  * Definition of Map schema
  * 
@@ -47,6 +54,7 @@ SimpleSchema.mapLayerData = new SimpleSchema ({
     
   }
 });
+
 /*
  * Definition of initialExtent (bounding box)
  * 
@@ -56,43 +64,55 @@ SimpleSchema.mapLayerData = new SimpleSchema ({
 SimpleSchema.initialExtent = new SimpleSchema ({
     'minx': {
       type: Number,
-      min: 0,
-      max: 300000,
       defaultValue: 0,
       label:  function(){ return i18n('collections.maps.initial_extent.minX.label'); },
       autoform: {
         'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.minx'); }
-      }
+      },
+      custom: function() {
+        if (this.value >= this.field('initial_extent.maxx').value) {
+          return 'minxError';
+        }
+      },
     },
     'miny': {
       type: Number,
-      min: 300000,
-      max: 620000,
       defaultValue: 300000,
       label: function(){ return i18n('collections.maps.initial_extent.minY.label'); },
       autoform: {
         'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.miny'); }
-      }
+      },
+      custom: function() {
+        if (this.value >= this.field('initial_extent.maxy').value) {
+          return 'minyError';
+        }
+      },
      },
-     'maxx': {
+    'maxx': {
       type: Number,
-      min: 0,
-      max: 300000,
       defaultValue: 300000,
       label: function(){ return i18n('collections.maps.initial_extent.maxX.label'); },
       autoform: {
         'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxx'); }
-      }
+      },
+      custom: function() {
+        if (this.value <= this.field('initial_extent.minx').value) {
+          return 'maxxError';
+        }
+      },
     },
     'maxy':  {
       type: Number,
-       min: 300000,
-       max: 620000,
-       defaultValue: 620000,
-       label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
+      defaultValue: 620000,
+      label: function(){ return i18n('collections.maps.initial_extent.maxY.label'); },
       autoform: {
         'title': function(){ return i18n ('tooltips.maps.autoform.fields.initial_extent.maxy'); } 
-      }
+      },
+      custom: function() {
+        if (this.value <= this.field('initial_extent.miny').value) {
+          return 'maxyError';
+        }
+      },
     }
 });
 
@@ -151,6 +171,28 @@ export const MapSchema= new SimpleSchema({
   type: {
     type: String,
     defaultValue: 'map'
+  },
+  crs: {
+    type: String,
+    label: function(){ return i18n('collections.maps.crs.label'); },
+    autoform: {
+      // https://github.com/aldeed/meteor-autoform#affieldinput
+      title: function(){ return i18n('tooltips.maps.autoform.fields.crs'); },
+      afFieldInput: {
+        type: 'select',
+        firstOption: false,
+        options: [
+          { label: "Amersfoort / RD New - (EPSG:28992)", value: "EPSG:28992" },
+          { label: "ETRS89 - (EPSG:4258)", value: "EPSG:4258" },
+          { label: "Web Mercator - (EPSG:3857)", value: "EPSG:3857" },
+          { label: "WGS84 - (EPSG:4326)", value: "EPSG:4326" }
+        ],
+        defaultValue: 'EPSG:28992',
+      },
+      template: 'bootstrap3-horizontal',
+      'label-class': 'col-sm-4',
+      'input-col-class': 'col-sm-6',
+    },
   },
   initial_extent: {
     type: SimpleSchema.initialExtent,
