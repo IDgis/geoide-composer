@@ -71,26 +71,6 @@ Template.map.helpers({
       return null;
     }
   },
-
-  /**
-   * The default value for the projection select list
-   */
-  defaultCrs: function() {
-    return "EPSG:28992";
-  },
-
-  /**
-   * All projections options to choose from
-   */
-  crsOptions: function() {
-    return [
-      { label: "Amersfoort / RD New - (EPSG:28992)", value: "EPSG:28992" },
-      { label: "ETRS89 - (EPSG:4258)", value: "EPSG:4258" },
-      { label: "Web Mercator - (EPSG:3857)", value: "EPSG:3857" },
-      { label: "WGS84 - (EPSG:4326)", value: "EPSG:4326" }
-    ];
-  }
-
 });
 
 /**
