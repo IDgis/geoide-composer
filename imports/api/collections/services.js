@@ -35,7 +35,7 @@ export const ServiceSchema = new SimpleSchema({
   endpoint: {
     type: String,
     label: function(){ return i18n('collections.services.endpoint.label'); },
-    regEx: /^((http:|https:)\/\/[a-zA-Z0-9\.-]{2,}(:[0-9]{2,5})?(\/)(([a-zA-Z0-9_\-@:]+)(\/|\.)?){1,}([a-zA-Z0-9_\-@:]+)([\?]{0,1}))$/,
+    regEx: /^(((http:|https:)\/\/)(([a-zA-Z0-9\.-]{2,})(:[0-9]{2,5})?\/)(([a-zA-Z0-9_\-@:]+)(\/|\.)?)*([\?]?))$/,
     autoform: {
       'title': function(){ return i18n ('tooltips.services.autoform.fields.endpoint'); }
     }
