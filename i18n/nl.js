@@ -193,6 +193,7 @@
           endpoint: "Geef de basis url van de service, afgesloten met of zonder een '?'",
           type: "Kies het service type",
           version: "Kies de versie van de service, controleer eventueel of de gekozen versie door de service wordt ondersteund.",
+          inverty: "Y-as omdraaien?",
           printFormat: "Kies een print formaat uit de lijst, svg geeft de beste kwaliteit",
           tmsFormat: "Kies een formaat uit de lijst, png is de standaard, jpeg voor luchtfoto's",
         },
@@ -263,6 +264,9 @@
       },
       version : {
         label : 'Versie',
+      },
+      inverty : {
+        label : 'Y-as omkeren',
       },
       printFormat : {
         label : 'Print formaat',

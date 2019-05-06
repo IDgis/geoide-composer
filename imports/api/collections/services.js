@@ -119,6 +119,19 @@ export const ServiceSchema = new SimpleSchema({
       }
     }
   },
+  invertY: {
+    type: Boolean,
+    label: function() { return i18n('collections.services.inverty.label') },
+    optional: true,
+    defaultValue: true,
+    autoform: {
+      title: function() { return i18n('tooltips.services.autoform.fields.inverty'); },
+      defaultValue: true,
+      afFieldInput: {
+        type: 'boolean-checkbox',
+      },
+    }
+  },
   /*
    * Let the user choose a preferred format from the list of GetMap formats.
    * This value is used by Geoide-Viewer when performing a print.
