@@ -262,7 +262,8 @@ function getService(id) {
         serviceApi.printFormat = service.printFormat
     }
     if (service.type === 'TMS') {
-        serviceApi.tmsFormat = service.tmsFormat
+        serviceApi.tmsFormat = service.tmsFormat;
+        serviceApi.invertY = service.invertY;
     }
     return serviceApi
 }
