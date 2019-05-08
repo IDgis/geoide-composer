@@ -263,7 +263,7 @@ function getService(id) {
     }
     if (service.type === 'TMS') {
         serviceApi.tmsFormat = service.tmsFormat;
-        serviceApi.invertY = service.invertY;
+        serviceApi.invertY = (typeof service.invertY === 'undefined') ? true : service.invertY;
     }
     return serviceApi
 }
