@@ -273,14 +273,18 @@ Meteor.methods({
           capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
           break;
         }
-        _.each(capLayer,function(mainLayer){
+        _.each(capLayer, function(mainLayer){
           let level = 2;
-	      if (mainLayer.Name){
-	    	  servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
-	      } else {
-	    	  servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
-	      }
-          // sub layer(s)
+          if (mainLayer.Name && mainLayer.Title){
+            servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
+          } else if (mainLayer.Title) {
+            servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
+          } else if (mainLayer.Name) {
+            servoptions.push({value:mainLayer.Name[0], label:mainLayer.Name[0]});
+          } else {
+            servoptions.push({value:'', label:'', disabled:true});
+          }
+            // sub layer(s)
           servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
         });
         // do not sort
