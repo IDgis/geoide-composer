@@ -60,8 +60,9 @@ let describeFeature = function(xml, ftName, ft) {
       //
     }
 
+    // Remove namespace prefix for searchName
     let searchName = ''
-    if (namePrefix !== '' && ftName.startsWith(namePrefix)) {
+    if (ftName.indexOf(':') !== -1) {
       searchName = ftName.split(':')[1]
     } else {
       searchName = ftName;
