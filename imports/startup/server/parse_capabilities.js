@@ -59,13 +59,20 @@ let describeFeature = function(xml, ftName, ft) {
     } else {
       namePrefix = '';
     }
+
+    let searchName = ''
+    if (namePrefix !== '' && ftName.startsWith(namePrefix)) {
+      searchName = ftName.split(':')[1]
+    } else {
+      searchName = ftName;
+    }
+
     _.each(xml,function(schema){
       ft.targetNamespace = schema.$.targetNamespace;
       _.each(schema,function(nextTag){
         let complexType = null;
         if (nextTag.length > 0) {
           _.each(nextTag,function(element){
-            let searchName = ftName.split(':')[1]
             if (element.$ && element.$.name && element.$.name.indexOf(searchName) !== -1) {
               if (element[namePrefix+'complexType']) {
                 complexType = element[namePrefix+'complexType'];
