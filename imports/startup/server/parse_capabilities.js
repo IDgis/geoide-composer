@@ -57,15 +57,23 @@ let describeFeature = function(xml, ftName, ft) {
     } else if (xml['wfs:schema']){
       namePrefix = 'wfs:';
     } else {
-      namePrefix = '';
+      //
     }
+
+    // Remove namespace prefix for searchName
+    let searchName = ''
+    if (ftName.indexOf(':') !== -1) {
+      searchName = ftName.split(':')[1]
+    } else {
+      searchName = ftName;
+    }
+
     _.each(xml,function(schema){
       ft.targetNamespace = schema.$.targetNamespace;
       _.each(schema,function(nextTag){
         let complexType = null;
         if (nextTag.length > 0) {
           _.each(nextTag,function(element){
-            let searchName = ftName.split(':')[1]
             if (element.$ && element.$.name && element.$.name.indexOf(searchName) !== -1) {
               if (element[namePrefix+'complexType']) {
                 complexType = element[namePrefix+'complexType'];
@@ -273,14 +281,18 @@ Meteor.methods({
           capLayer= parseResponse.WMT_MS_Capabilities.Capability[0].Layer;
           break;
         }
-        _.each(capLayer,function(mainLayer){
+        _.each(capLayer, function(mainLayer){
           let level = 2;
-	      if (mainLayer.Name){
-	    	  servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
-	      } else {
-	    	  servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
-	      }
-          // sub layer(s)
+          if (mainLayer.Name && mainLayer.Title){
+            servoptions.push({value:mainLayer.Name[0], label:mainLayer.Title[0]});
+          } else if (mainLayer.Title) {
+            servoptions.push({value:'', label:mainLayer.Title[0], disabled:true});
+          } else if (mainLayer.Name) {
+            servoptions.push({value:mainLayer.Name[0], label:mainLayer.Name[0]});
+          } else {
+            servoptions.push({value:'', label:'', disabled:true});
+          }
+            // sub layer(s)
           servoptions = Meteor.call('getOptionsFromLayers', mainLayer, servoptions, level);
         });
         // do not sort
@@ -440,7 +452,7 @@ Meteor.methods({
         } else if (WFS_Capabilities['wfs:FeatureTypeList']){
           namePrefix = 'wfs:';
         } else {
-          namePrefix = '';
+          //
         }
         
         _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
@@ -804,4 +816,3 @@ Meteor.methods({
   
 
 });
-
