@@ -57,15 +57,23 @@ let describeFeature = function(xml, ftName, ft) {
     } else if (xml['wfs:schema']){
       namePrefix = 'wfs:';
     } else {
-      namePrefix = '';
+      //
     }
+
+    // Remove namespace prefix for searchName
+    let searchName = ''
+    if (ftName.indexOf(':') !== -1) {
+      searchName = ftName.split(':')[1]
+    } else {
+      searchName = ftName;
+    }
+
     _.each(xml,function(schema){
       ft.targetNamespace = schema.$.targetNamespace;
       _.each(schema,function(nextTag){
         let complexType = null;
         if (nextTag.length > 0) {
           _.each(nextTag,function(element){
-            let searchName = ftName.split(':')[1]
             if (element.$ && element.$.name && element.$.name.indexOf(searchName) !== -1) {
               if (element[namePrefix+'complexType']) {
                 complexType = element[namePrefix+'complexType'];
@@ -444,7 +452,7 @@ Meteor.methods({
         } else if (WFS_Capabilities['wfs:FeatureTypeList']){
           namePrefix = 'wfs:';
         } else {
-          namePrefix = '';
+          //
         }
         
         _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
@@ -808,4 +816,3 @@ Meteor.methods({
   
 
 });
-
