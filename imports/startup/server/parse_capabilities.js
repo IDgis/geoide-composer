@@ -57,7 +57,7 @@ let describeFeature = function(xml, ftName, ft) {
     } else if (xml['wfs:schema']){
       namePrefix = 'wfs:';
     } else {
-      namePrefix = '';
+      //
     }
 
     let searchName = ''
@@ -451,7 +451,7 @@ Meteor.methods({
         } else if (WFS_Capabilities['wfs:FeatureTypeList']){
           namePrefix = 'wfs:';
         } else {
-          namePrefix = '';
+          //
         }
         
         _.each(WFS_Capabilities[namePrefix+'FeatureTypeList'][0],function(ftList){
@@ -815,4 +815,3 @@ Meteor.methods({
   
 
 });
-
