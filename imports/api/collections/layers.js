@@ -27,6 +27,8 @@ import { Services } from '/imports/api/collections/services.js';
 
  // Constants
  const scaleOptions = [
+  {label: "200", value: 188},
+  {label: "375", value: 375},
   {label: "750", value: 750},
   {label: "1500", value: 1500},
   {label: "2500", value: 2500},
