@@ -13,7 +13,7 @@ export class Login extends Component {
         event.preventDefault();
         const username = this.inputUsername.value;
         const password = this.inputPassword.value;
-        Meteor.loginWithPassword(username, password, (error) => {
+        Meteor.loginWithLDAP(username, password, (error) => {
             if (error) {
                 this.setState({
                     wrongLogin: true,
