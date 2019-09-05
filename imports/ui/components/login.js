@@ -40,7 +40,7 @@ export class Login extends Component {
 
     render() {
         const formState = ''
-        const wrongLogin = this.state.wrongLogin ? <div id="wrong-login">Gebruikersnaam of wachtwoord onjuist!</div>: null
+        const wrongLogin = this.state.wrongLogin ? <div id="wrong-login">De combinatie van e-mailadres en wachtwoord is onjuist!</div>: null
         const gebruiker = Meteor.user()
         
         return (
@@ -53,15 +53,15 @@ export class Login extends Component {
                     </div> :
                     <form id="login-form" onSubmit={this.login}>
                         <div className="form-group">
-                            <label htmlFor="inputUsername">Username</label>
-                            <input type="text" className="form-control" ref={(input) => this.inputUsername = input} id="inputUsername" placeholder="Username" required disabled={formState}/>
+                            <label htmlFor="inputUsername">E-mail</label>
+                            <input type="text" id="inputUsername" className="form-control" ref={(input) => this.inputUsername = input} placeholder="E-mail" required disabled={formState}/>
                         </div>
                         <div className="form-group">
-                            <label htmlFor="inputPassword">Password</label>
-                            <input type="password" className="form-control" ref={(input) => this.inputPassword = input} id="inputPassword" placeholder="Password" required disabled={formState}/>
+                            <label htmlFor="inputPassword">Wachtwoord</label>
+                            <input type="password" className="form-control" ref={(input) => this.inputPassword = input} id="inputPassword" placeholder="Wachtwoord" required disabled={formState}/>
                         </div>
                         {wrongLogin}
-                        <button type="submit" className="btn btn-primary" style={{display: "block"}} >LOGIN</button>
+                        <button type="submit" className="btn btn-primary" style={{display: "block"}} >Inloggen</button>
                     </form>
                 }
             </div>
