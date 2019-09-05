@@ -1,3 +1,4 @@
+import { Meteor } from 'meteor/meteor'
 import React, { Component } from 'react';
 
 export class Login extends Component {
@@ -11,9 +12,11 @@ export class Login extends Component {
     
     login = (event) => {
         event.preventDefault();
+        let loginMethod = Meteor.settings.public.loginWithLdap ? Meteor.loginWithLDAP : Meteor.loginWithPassword;
+
         const username = this.inputUsername.value;
         const password = this.inputPassword.value;
-        Meteor.loginWithLDAP(username, password, (error) => {
+        loginMethod(username, password, (error) => {
             if (error) {
                 this.setState({
                     wrongLogin: true,
