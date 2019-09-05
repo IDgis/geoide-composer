@@ -1,0 +1,3 @@
+[submodule "packages/accounts-ldap"]
+	path = packages/accounts-ldap
+	url = https://github.com/IDgis/accounts-ldap
