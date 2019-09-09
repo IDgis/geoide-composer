@@ -1,4 +1,4 @@
-FROM idgis/meteor:1.7
+FROM idgis/meteor:1.8
 MAINTAINER IDgis bv
 
 RUN mkdir /home/meteorapp
