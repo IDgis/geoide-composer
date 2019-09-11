@@ -26,7 +26,6 @@ matdutour:popup-confirm
 meteor-platform
 meteor-base@1.4.0
 mizzao:bootstrap-3
-msavin:mongol
 npm-bcrypt@0.9.3
 peerlibrary:xml2js
 peppelg:bootstrap-3-modal
