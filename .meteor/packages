@@ -4,8 +4,8 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
-accounts-password
-accounts-ui
+accounts-password@1.5.1
+accounts-ui@1.3.1
 anti:i18n
 aldeed:autoform
 aldeed:autoform-bs-datepicker
@@ -15,27 +15,29 @@ aldeed:simple-schema
 aldeed:tabular
 aldeed:template-extension
 dguedry:autoform-jstree
-dynamic-import
-ecmascript
-http
+dynamic-import@0.5.1
+ecmascript@0.12.4
+http@1.4.2
 iron:router
 jss:jstree
 jss:jstree-proton-theme
 jquery
 matdutour:popup-confirm
 meteor-platform
-meteor-base
+meteor-base@1.4.0
 mizzao:bootstrap-3
-msavin:mongol
-npm-bcrypt
+npm-bcrypt@0.9.3
 peerlibrary:xml2js
 peppelg:bootstrap-3-modal
 rajit:bootstrap3-datepicker
 reywood:publish-composite
-session
+session@1.2.0
 simple:reactive-method
-shell-server
-tracker
+shell-server@0.4.0
+tracker@1.2.0
 tomi:upload-jquery
 tomi:upload-server
-underscore
+underscore@1.0.10
+idgis:accounts-ldap
+tinytest
+react-template-helper

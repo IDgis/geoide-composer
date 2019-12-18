@@ -4,6 +4,7 @@
 .sonarlint
 node_modules
 
+start_meteor_with_local_mongo.cmd
 .gitignore
 npm-debug.log
 settings.json

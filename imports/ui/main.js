@@ -6,9 +6,12 @@
 */
 
 import { Meteor } from 'meteor/meteor';
+import { Template } from 'meteor/templating';
 
 import './main.css';
 import './main.html';
+
+import { Login } from './components/login';
 
 Template.main.helpers({
   
@@ -19,5 +22,9 @@ Template.main.helpers({
    */
   version: function(){
     return ReactiveMethod.call('getVersion');
+  },
+
+  Login() {
+    return Login
   }
 });

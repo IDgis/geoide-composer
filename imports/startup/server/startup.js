@@ -27,6 +27,12 @@ Meteor.startup(function() {
     return Maps.find({},{sort:[['text', 'asc']]});
   });
 
+  // Listen to incoming HTTP requests, can only be used on the server
+  WebApp.rawConnectHandlers.use(function(req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    return next();
+  });
+
 });
 
 Meteor.methods({
@@ -48,7 +54,7 @@ Meteor.methods({
       return Meteor.settings.version;
     } else {
       // update before release
-      return '1.2.4';
+      return '1.3.0';
     }
   },
 

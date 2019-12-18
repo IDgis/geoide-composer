@@ -4,6 +4,7 @@ node_modules/
 public/.uploads
 public/uploads
 
+start_meteor_with_local_mongo.cmd
 settings.json
 npm-debug.log
 
