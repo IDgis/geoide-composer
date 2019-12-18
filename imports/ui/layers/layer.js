@@ -97,10 +97,10 @@ Template.layer.helpers({
    */
   adminLoggedIn: function(){
     let admin = false; 
-    if (Meteor.user()){
+    const user = Meteor.user()
+    if (user){
       // a user is logged in
-      const name = Meteor.user().username;
-      admin = _.isEqual(name, 'idgis-admin');
+      admin = (user.roles && user.roles.includes('ADMIN')) || _.isEqual(user.username, 'idgis-admin');
     }
     return admin;
   },
