@@ -292,8 +292,8 @@ Template.map.events({
         const lyr = Layers.findOne({_id : sel.data.layerid});
         if ((lyr) && (Meteor.user())) {
           // a user is logged in
-          const name = Meteor.user().username;
-          const adminLoggedIn = _.isEqual(name, 'idgis-admin');
+          const user = Meteor.user();
+          const adminLoggedIn = (user.roles && user.roles.includes('ADMIN')) || _.isEqual(user.username, 'idgis-admin');
           if (!adminLoggedIn && (lyr.type === 'cosurvey-sql')) {
             okToRemove = false;
           }

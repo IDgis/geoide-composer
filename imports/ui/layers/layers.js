@@ -18,17 +18,20 @@ Template.layers.helpers({
    * Get cursor of layers
    * 
    * @return {cursor} cursor of layers found
-   *    retrieve all layers when idgis-admin user is logged in,
+   *    retrieve all layers when an admin is logged in,
    *    otherwise retrieve only layers with type='default'
    *
    * Note:
    *  layers are sorted by name
    */
   layers: function(){
-      let adminLoggedIn = false; 
-      if (Meteor.user()){
-        const name = Meteor.user().username;
-        adminLoggedIn = _.isEqual(name, 'idgis-admin');
+      let adminLoggedIn = false;
+      const user = Meteor.user();
+      if (user){
+        console.log(user)
+        adminLoggedIn = (user.roles && user.roles.includes('ADMIN')) || _.isEqual(user.username, 'idgis-admin');
+        
+        console.log(adminLoggedIn)
       }
       if (adminLoggedIn){
         return Layers.find({},{sort:[['name', 'asc']]});
@@ -92,6 +95,3 @@ Template.layers.events({
     });
   }
 });
-
-
-
