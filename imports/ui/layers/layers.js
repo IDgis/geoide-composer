@@ -28,10 +28,7 @@ Template.layers.helpers({
       let adminLoggedIn = false;
       const user = Meteor.user();
       if (user){
-        console.log(user)
         adminLoggedIn = (user.roles && user.roles.includes('ADMIN')) || _.isEqual(user.username, 'idgis-admin');
-        
-        console.log(adminLoggedIn)
       }
       if (adminLoggedIn){
         return Layers.find({},{sort:[['name', 'asc']]});
