@@ -1,4 +1,4 @@
-FROM idgis/meteor:1.8 as builder
+FROM idgis/meteor:1.11 as builder
 
 RUN mkdir /home/meteorapp
 WORKDIR /home/meteorapp
@@ -13,7 +13,7 @@ RUN cd /home/meteorapp/app \
   && cd /home/meteorapp/build/bundle/programs/server \
   && npm install
 
-FROM node:8.15.1 as app
+FROM node:12.18.4 as app
 LABEL maintainer="IDgis bv"
 
 RUN mkdir -p /home/meteorapp/build
